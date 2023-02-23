@@ -34,7 +34,7 @@ public class Review implements Serializable {
     @Column
     private Integer rating;
     @Column
-    private List<Image> images; // might need to change or swap to front end?
+    private List<String> imagePaths; // might need to change or swap to front end?
     @Column
     private Date dateCreated; // maybe use sql.date
 
@@ -62,12 +62,12 @@ public class Review implements Serializable {
         this.rating = rating;
     }
 
-    public List<Image> getImages() {
-        return images;
+    public List<String> getImagePaths() {
+        return imagePaths;
     }
 
-    public void setImages(List<Image> images) {
-        this.images = images;
+    public void setImagePaths(List<String> imagePaths) {
+        this.imagePaths = imagePaths;
     }
 
     public Date getDateCreated() {

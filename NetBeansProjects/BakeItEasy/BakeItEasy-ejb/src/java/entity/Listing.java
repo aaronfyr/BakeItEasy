@@ -26,9 +26,9 @@ public class Listing implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long listingId;
-    
+
     @Column
-    private String name;    
+    private String name;
     @Column
     private BigDecimal price;
     @Column
@@ -36,9 +36,9 @@ public class Listing implements Serializable {
     @Column
     private String description;
     @Column
-    private List<Image> images; // might need to change or swap to front end?
-    //@Column
-    //private Video video; idk what class
+    private List<String> imagePaths; // might need to change or swap to front end?
+    /*@Column
+    private String videoPath;    */
 
     public String getName() {
         return name;
@@ -72,12 +72,12 @@ public class Listing implements Serializable {
         this.description = description;
     }
 
-    public List<Image> getImages() {
-        return images;
+    public List<String> getImages() {
+        return imagePaths;
     }
 
-    public void setImages(List<Image> images) {
-        this.images = images;
+    public void setImages(List<String> images) {
+        this.imagePaths = images;
     }
 
     public Long getListingId() {
@@ -112,5 +112,5 @@ public class Listing implements Serializable {
     public String toString() {
         return "entity.Listing[ id=" + listingId + " ]";
     }
-    
+
 }

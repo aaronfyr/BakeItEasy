@@ -5,6 +5,7 @@
  */
 package entity;
 
+import enumeration.OrderStatus;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -32,7 +33,15 @@ public class Order implements Serializable {
     @Column
     private String description;
     @Column
-    private boolean isAccepted;
+    private OrderStatus orderStatus;
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 
     public BigDecimal getPrice() {
         return price;
@@ -56,14 +65,6 @@ public class Order implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public boolean isIsAccepted() {
-        return isAccepted;
-    }
-
-    public void setIsAccepted(boolean isAccepted) {
-        this.isAccepted = isAccepted;
     }
 
     public Long getOrderId() {
