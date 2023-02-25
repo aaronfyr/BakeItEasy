@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -28,6 +30,27 @@ public class Report implements Serializable {
     private String title;
     @Column
     private String reason;
+    
+    @ManyToOne
+    private Buyer reporter;
+    @ManyToOne
+    private Seller reportee;
+
+    public Buyer getBuyer() {
+        return reporter;
+    }
+
+    public void setBuyer(Buyer reporter) {
+        this.reporter = reporter;
+    }
+
+    public Seller getSeller() {
+        return reportee;
+    }
+
+    public void setSeller(Seller reportee) {
+        this.reportee = reportee;
+    }
 
     public String getTitle() {
         return title;

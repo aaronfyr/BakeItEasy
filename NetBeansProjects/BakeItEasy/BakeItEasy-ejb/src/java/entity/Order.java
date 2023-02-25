@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -34,6 +36,49 @@ public class Order implements Serializable {
     private String description;
     @Column
     private OrderStatus orderStatus;
+
+    @ManyToOne
+    private Listing listing;
+
+    @OneToOne
+    private Buyer buyer;
+    @OneToOne
+    private Seller seller;
+    @OneToOne(optional = true)
+    private Review review;
+
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
+    }
+
+
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public Listing getListing() {
+        return listing;
+    }
+
+    public void setListing(Listing listing) {
+        this.listing = listing;
+    }
 
     public OrderStatus getOrderStatus() {
         return orderStatus;

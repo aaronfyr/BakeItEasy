@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -36,8 +37,18 @@ public class Appointment implements Serializable {
     @ManyToOne
     private Calendar calendar;
     
-    @ManyToOne
+    @OneToOne
     private Buyer buyer;
+    @OneToOne
+    private Order order;
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 
     public Calendar getCalendar() {
         return calendar;

@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -37,6 +39,50 @@ public class Review implements Serializable {
     private List<String> imagePaths; // might need to change or swap to front end?
     @Column
     private Date dateCreated; // maybe use sql.date
+    
+    
+    @OneToOne
+    private Buyer buyer;
+    @OneToOne
+    private Seller seller;
+    @OneToOne
+    private Order order;
+    
+    @ManyToOne
+    private Listing listing;
+
+    public Listing getListing() {
+        return listing;
+    }
+
+    public void setListing(Listing listing) {
+        this.listing = listing;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+    
+
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
 
     public String getTitle() {
         return title;

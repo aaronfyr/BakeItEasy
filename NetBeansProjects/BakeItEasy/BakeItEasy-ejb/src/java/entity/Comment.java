@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -24,11 +26,43 @@ public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
-    
+
     @Column
     private String title;
     @Column
     private Date dateCreated;
+
+    @ManyToOne
+    private Post post;
+
+    @OneToOne(optional = true)
+    private Buyer buyer;
+    @OneToOne(optional = true)
+    private Seller seller;
+
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
 
     public String getTitle() {
         return title;
@@ -78,5 +112,5 @@ public class Comment implements Serializable {
     public String toString() {
         return "entity.Comment[ id=" + commentId + " ]";
     }
-    
+
 }

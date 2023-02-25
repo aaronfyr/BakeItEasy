@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -39,9 +41,42 @@ public class Listing implements Serializable {
     private List<String> imagePaths; // might need to change or swap to front end?
     /*@Column
     private String videoPath;    */
-    
+
     @Column
     private ListingCategory listingCategory;
+
+    @OneToOne(optional = true)
+    private Seller seller;
+
+    @OneToMany(mappedBy = "listing")
+    private List<Order> orders;
+    @OneToMany(mappedBy = "listing")
+    private List<Review> reviews;
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+    
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
 
     public List<String> getImagePaths() {
         return imagePaths;

@@ -8,11 +8,14 @@ package entity;
 import enumeration.PostCategory;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -29,10 +32,41 @@ public class Post implements Serializable {
     @Column
     private String title;
     @Column
-    private Date dateCreated;
-    
+    private Date dateCreated;    
     @Column
     private PostCategory postCategory;
+    
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments;
+    
+    @OneToOne(optional = true)
+    private Buyer buyer;
+    @OneToOne(optional = true)
+    private Seller seller;
+
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     public PostCategory getPostCategory() {
         return postCategory;

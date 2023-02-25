@@ -6,11 +6,14 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -36,6 +39,68 @@ public class Seller implements Serializable {
     private String phoneNo;
     @Column
     private boolean isBanned;
+
+    @OneToMany(mappedBy = "seller")
+    private List<Review> reviews;
+    @OneToMany(mappedBy = "seller")
+    private List<Order> orders;
+    @OneToMany(mappedBy = "reportee")
+    private List<Report> reports;
+    @OneToMany(mappedBy = "seller")
+    private List<Post> posts;
+    @OneToMany(mappedBy = "seller")
+    private List<Comment> comments; // if we want to let them find which comments they made?
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    @OneToOne(optional = true)
+    private Address address;
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
+    }
 
     public String getName() {
         return name;
