@@ -5,7 +5,7 @@
  */
 package entity;
 
-import java.awt.Image;
+import enumeration.ListingCategory;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -39,6 +39,25 @@ public class Listing implements Serializable {
     private List<String> imagePaths; // might need to change or swap to front end?
     /*@Column
     private String videoPath;    */
+    
+    @Column
+    private ListingCategory listingCategory;
+
+    public List<String> getImagePaths() {
+        return imagePaths;
+    }
+
+    public void setImagePaths(List<String> imagePaths) {
+        this.imagePaths = imagePaths;
+    }
+
+    public ListingCategory getListingCategory() {
+        return listingCategory;
+    }
+
+    public void setListingCategory(ListingCategory listingCategory) {
+        this.listingCategory = listingCategory;
+    }
 
     public String getName() {
         return name;
