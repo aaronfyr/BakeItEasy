@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -31,6 +32,28 @@ public class Appointment implements Serializable {
     private String description;
     @Column
     private Date date; // maybe use sql.date
+    
+    @ManyToOne
+    private Calendar calendar;
+    
+    @ManyToOne
+    private Buyer buyer;
+
+    public Calendar getCalendar() {
+        return calendar;
+    }
+
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
+    }
+
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
+    }
 
     public String getTitle() {
         return title;

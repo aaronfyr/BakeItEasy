@@ -7,11 +7,14 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -24,13 +27,36 @@ public class Calendar implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long calendarId;
-    
+
     @Column
     private String name; // ??
     @Column
     private Date startDate; // ??
     @Column
     private Date endDate; //??
+
+    
+    @ManyToOne
+    private Seller seller;
+
+    @OneToMany(mappedBy = "calendar")
+    private List<Appointment> appointments;
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
+    }
 
     public String getName() {
         return name;
@@ -88,5 +114,5 @@ public class Calendar implements Serializable {
     public String toString() {
         return "entity.Calendar[ id=" + calendarId + " ]";
     }
-    
+
 }
