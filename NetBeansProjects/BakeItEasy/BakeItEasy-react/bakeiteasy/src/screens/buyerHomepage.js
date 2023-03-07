@@ -1,9 +1,8 @@
 import React from "react";
-import "./homepage.css";
+import "./resources/homepage.css";
 
-////<FaRecycle size={33} color="green" />
 function BuyerHomepage() {
-  return <div></div>;
+  return <div>buyer homepage</div>;
 }
 
 export default BuyerHomepage;
