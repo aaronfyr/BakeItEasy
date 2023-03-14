@@ -6,7 +6,7 @@ import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import fetchListings from "../api/listings";
 
-function BuyerHomepage() {
+function SellerHomepage() {
   //const [listings, setListings] = useState([]);
   //listings = useEffect(() => {setListings(fetchListings())});
 
@@ -15,8 +15,8 @@ function BuyerHomepage() {
     <>
       {" "}
       <Box>
-        <h1>Welcome to the Buyer Homepage</h1>
-        <Link to="/buyerLogin" color="teal.500" display="block">Login</Link>
+        <h1>Welcome to the Seller Homepage</h1>
+        <Link to="/sellerLogin" color="teal.500" display="block">Login</Link>
       </Box>
       <Box>
         <Listing />
@@ -26,4 +26,4 @@ function BuyerHomepage() {
   );
 }
 
-export default BuyerHomepage;
+export default SellerHomepage;

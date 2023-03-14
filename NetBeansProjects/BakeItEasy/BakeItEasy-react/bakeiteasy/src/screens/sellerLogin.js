@@ -2,7 +2,7 @@ import { FormControl, FormLabel, Input, Button, Box } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-function BuyerLogin() {
+function SellerLogin() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -15,7 +15,7 @@ function BuyerLogin() {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    const response = await fetch("http://localhost:8080/buyerLogin", {
+    const response = await fetch("http://localhost:8080/sellerLogin", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,8 +28,8 @@ function BuyerLogin() {
 
     if (response.ok) {
       const data = await response.json();
-      // redirect to BuyerHomepage component
-      navigate("/buyerhomepage");
+      // redirect to SellerHomepage component
+      navigate("/sellerhomepage");
     } else {
       // show error message
       setError("Invalid login credentials. Please try again.");
@@ -73,11 +73,11 @@ function BuyerLogin() {
           Login
         </Button>
         <Box mt={2}>
-          <Link href="/forgotBuyerPassword" color="teal.500" display="block">
+          <Link href="/forgotSellerPassword" color="teal.500" display="block">
             Forgot password?
           </Link>
           <Box mt={2}>
-            <Link href="/buyerSignup" color="teal.500" display="block">
+            <Link href="/sellerSignup" color="teal.500" display="block">
               Sign up here!
             </Link>
           </Box>
@@ -87,4 +87,4 @@ function BuyerLogin() {
   );
 }
 
-export default BuyerLogin;
+export default SellerLogin;

@@ -4,6 +4,9 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import BuyerHomepage from "./screens/buyerHomepage";
 import BuyerLogin from "./screens/buyerLogin";
+import SellerLogin from "./screens/sellerLogin";
+import SellerHomepage from "./screens/sellerHomePage";
+import fetchListings from "./api/listings";
 import { ChakraProvider } from "@chakra-ui/react";
 
 
@@ -12,8 +15,11 @@ function App() {
     <ChakraProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<BuyerHomepage />} />
+          <Route path="/buyerHomepage" element={<BuyerHomepage />} />
           <Route path="/buyerLogin" element={<BuyerLogin />} />
+          <Route path="/sellerLogin" element={<SellerLogin />} />
+          <Route path="/sellerHomepage" element={<SellerHomepage />} />
+
         </Routes>
       </Router>
     </ChakraProvider>
@@ -21,11 +27,3 @@ function App() {
 }
 
 export default App;
-
-// Fetch listings
-const fetchListings = async () => {
-  const res = await fetch("http://localhost:8080/listings");
-  const data = await res.json();
-
-  return data;
-};
