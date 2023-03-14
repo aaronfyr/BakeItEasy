@@ -1,12 +1,12 @@
-import { FormControl, FormLabel, Input, Button } from "@chakra-ui/react";
+import { FormControl, FormLabel, Input, Button, Box } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from 'react';
+import { useState } from "react";
 
 function BuyerLogin() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
   const handleSubmit = async (event) => {
@@ -37,15 +37,53 @@ function BuyerLogin() {
   };
 
   return (
-    <FormControl>
-      <FormLabel>Email address</FormLabel>
-      <Input type="email" placeholder="Enter email" />
-      <FormLabel>Password</FormLabel>
-      <Input type="password" placeholder="Enter password" />
-      <Button mt={4} colorScheme="teal" type="submit">
-        Login
-      </Button>
-    </FormControl>
+    <Box
+      maxW="xl"
+      mx="auto"
+      justifyContent="center"
+      alignItems="center"
+      h="xl"
+      marginTop="10%"
+    >
+      <form onSubmit={handleSubmit}>
+        <FormControl>
+          <FormLabel>Email address</FormLabel>
+          <Input
+            type="email"
+            placeholder="Enter email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel>Password</FormLabel>
+          <Input
+            type="password"
+            placeholder="Enter password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </FormControl>
+        {error && (
+          <FormControl>
+            <FormLabel color="red.500">{error}</FormLabel>
+          </FormControl>
+        )}
+        <Button mt={4} colorScheme="teal" type="submit">
+          Login
+        </Button>
+        <Box mt={2}>
+          <Link href="/forgotPassword" color="teal.500" display="block">
+            Forgot password?
+          </Link>
+          <Box mt={2}>
+            <Link href="/buyerSignup" color="teal.500" display="block">
+              Sign up here!
+            </Link>
+          </Box>
+        </Box>
+      </form>
+    </Box>
   );
 }
 
