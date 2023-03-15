@@ -45,7 +45,6 @@ export const NavigationBar = () => {
 
       <HStack spacing="15px">
         <IconContext.Provider value={{ color: "#7D7373", size: "2rem" }}>
-          <FiHeart size="2rem" />
           <Popover>
             <PopoverTrigger>
               <FiBell />
@@ -57,6 +56,8 @@ export const NavigationBar = () => {
               <PopoverBody>You have no new notifications.</PopoverBody>
             </PopoverContent>
           </Popover>
+          <FiMessageSquare size="2rem" />
+          <FiHeart size="2rem" />
 
           <Menu>
             <MenuButton>
