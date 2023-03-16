@@ -44,62 +44,24 @@ public class Seller implements Serializable {
     private List<Review> reviews;
     @OneToMany(mappedBy = "seller")
     private List<Order> orders;
+    @OneToMany(mappedBy = "seller")
+    private List<Listing> listings;
     @OneToMany(mappedBy = "reportee")
     private List<Report> reports;
     @OneToMany(mappedBy = "seller")
     private List<Post> posts;
     @OneToMany(mappedBy = "seller")
     private List<Comment> comments; // if we want to let them find which comments they made?
-
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
     @OneToOne(optional = true)
     private Address address;
 
-    public Address getAddress() {
-        return address;
+
+    public Long getSellerId() {
+        return sellerId;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    public List<Report> getReports() {
-        return reports;
-    }
-
-    public void setReports(List<Report> reports) {
-        this.reports = reports;
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
     }
 
     public String getName() {
@@ -150,12 +112,60 @@ public class Seller implements Serializable {
         this.isBanned = isBanned;
     }
 
-    public Long getSellerId() {
-        return sellerId;
+    public List<Review> getReviews() {
+        return reviews;
     }
 
-    public void setSellerId(Long sellerId) {
-        this.sellerId = sellerId;
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public List<Listing> getListings() {
+        return listings;
+    }
+
+    public void setListings(List<Listing> listings) {
+        this.listings = listings;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
+    }
+    
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     @Override
