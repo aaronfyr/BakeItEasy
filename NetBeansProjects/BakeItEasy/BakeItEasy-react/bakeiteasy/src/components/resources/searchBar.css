@@ -1,0 +1,189 @@
+:root {
+  --reg-font-family: Helvetica;
+
+  --beige-bg: #F8F5EF;
+  --logo: #7D7373;
+
+  --beige-text: #7D7373;
+  --dark-text: #3D3D3D;
+  --light-text: #676A6C;
+
+  --mid-orange: #E2725B;
+  --light-orange: #E9AEA2;
+  --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 20px;
+  height: 40px;
+  padding: 0px 30px 0px 30px;
+  margin-top: 5px;
+}
+
+.input {
+    width: 100%;
+    border: none;
+    border-radius: 20px;
+    border-radius: 20px;
+    height: 40px;
+    padding: 0px 30px 0px 30px;
+    color: var(--dark-text);
+    font-family: var(--reg-font-family);
+    font-size: 18px;
+
+}
+
+.button {
+    background-color: transparent;
+    border: none;
+    width: 25px;
+    border-radius: 20px;
+}
+
+.display {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    height: 50vh;
+    justify-content: center; /*delete this if not necessary*/
+}
+
+
+.product {
+    margin: 20px;
+    width: 200px;
+    height: 250px;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: white;
+    filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1));
+}
+
+.productSeller {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.productBottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  align-self: end;
+}
+
+h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  margin-top: 5px;
+}
+
+h4 {
+  font-family: var(--reg-font-family);
+  font-weight: 400;
+  font-size: 15px;
+}
+
+h5 {
+  font-family: var(--reg-font-family);
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--light-text);
+}
+
+.search {
+  font-family: var(--reg-font-family);
+  color: var(--dark-text);
+  font-size: 20px;
+  margin-top: 40px;
+}
+
+.shoppingHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  border-width: 2px;
+  border-radius: 20px;
+  height: 40px;
+  padding: 0px 30px 0px 30px;
+  margin-top: 5px;
+
+  font-family: var(--reg-font-family);
+  color: var(--dark-text);
+  font-size: 20px;
+  margin-top: 40px;
+  font-weight: 00;
+}
+
+.categoriesContainer {
+  display: flex;
+  height: 50px;
+  margin-top: 5px;
+}
+
+.categoriesDisplay {
+  display: flex;
+  overflow-x: scroll;
+  /*justify-content: center; delete this if not necessary*/
+}
+
+/*the following supposed to make sure scroll bar is seen at all times
+  but apparently this method doesn't work anymore since 2021 idk what to do
+*/
+.categoriesDisplay ::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+.categoriesDisplay ::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+/*scrollbar:done*/
+
+.category {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--dark-text);
+  border-width: 2px;
+  padding: 0px 20px 0px 20px;
+  margin: 0px 20px 0px 0px;
+}
+
+.category:hover {
+  background: var(--dark-text);
+  color: white;
+}
+
+img {
+
+}
+
+img.productImg {
+  width:100%;
+  height:100%;
+}
+
+.productImg {
+  margin-left: auto;
+  margin-right: auto;
+  width: 200px;
+  height: 120px;
+  border-radius: 10px;
+  object-fit: fill;
+}
