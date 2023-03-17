@@ -2,34 +2,31 @@ import { FormControl, FormLabel, Input, Button, Box } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-function SellerLogin() {
+function ForgotBuyerPassword() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const email = event.target.email.value;
-    const password = event.target.password.value;
 
-    const response = await fetch("http://localhost:8080/sellerLogin", {
+    const response = await fetch("http://localhost:8080/forgetBuyerPassword", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email,
-        password,
       }),
     });
 
     if (response.ok) {
       const data = await response.json();
-      // redirect to SellerHomepage component
-      navigate("/sellerhomepage");
+      // redirect
+      navigate("/buyerLogin");
     } else {
       // show error message
       setError("Invalid login credentials. Please try again.");
@@ -56,37 +53,17 @@ function SellerLogin() {
             required
           />
         </FormControl>
-        <FormControl>
-          <FormLabel>Password</FormLabel>
-          <Input
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
-        </FormControl>
         {error && (
           <FormControl>
             <FormLabel color="red.500">{error}</FormLabel>
           </FormControl>
         )}
         <Button mt={4} colorScheme="teal" type="submit">
-          Login
+          Reset
         </Button>
-        <Box mt={2}>
-          <Link to="/forgotSellerPassword" color="teal.500" display="block">
-            Forgot password?
-          </Link>
-          <Box mt={2}>
-            <Link to="/sellerSignup" color="teal.500" display="block">
-              Sign up here!
-            </Link>
-          </Box>
-        </Box>
       </form>
     </Box>
   );
 }
 
-export default SellerLogin;
+export default ForgotBuyerPassword;

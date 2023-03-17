@@ -5,21 +5,25 @@ import { useState } from "react";
 function ResetPassword() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [error, setError] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const email = event.target.email.value;
+    const password = event.target.password.value;
+    const confirmPassword = event.target.confirmPassword.value;
 
-    const response = await fetch("http://localhost:8080/resetPassword", {
+    const response = await fetch("http://localhost:8080/resettPassword", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email,
+        password,
+        confirmPassword,
       }),
     });
 
@@ -33,6 +37,24 @@ function ResetPassword() {
     }
   };
 
+
+  // Get token to compare
+  // const headers = {
+  //   Authorization: `Bearer ${token}`,
+  //   "Content-Type": "application/json",
+  // };
+
+  // fetch(url, {
+  //   method: "GET",
+  //   headers: headers,
+  // })
+  //   .then((response) => response.json())
+  //   .then((data) => console.log(data))
+  //   .catch((error) => console.error(error));
+
+
+
+    // page
   return (
     <Box
       maxW="xl"
@@ -44,12 +66,21 @@ function ResetPassword() {
     >
       <form onSubmit={handleSubmit}>
         <FormControl>
-          <FormLabel>Email address</FormLabel>
+          <FormLabel>Password</FormLabel>
           <Input
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            type="password"
+            placeholder="Enter password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel>Confirm Password</FormLabel>
+          <Input
+            type="password"
+            placeholder="Confirm password"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
           />
         </FormControl>
         {error && (
@@ -63,6 +94,7 @@ function ResetPassword() {
       </form>
     </Box>
   );
+  
 }
 
-export default ForgotPassword;
+export default ResetPassword;

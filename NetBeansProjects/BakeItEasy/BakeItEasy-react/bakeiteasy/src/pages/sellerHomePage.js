@@ -1,5 +1,4 @@
 import React from "react";
-import "./resources/homepage.css";
 import Listing from "../components/Listing";
 import { Link } from "react-router-dom";
 import { Box } from "@chakra-ui/react";

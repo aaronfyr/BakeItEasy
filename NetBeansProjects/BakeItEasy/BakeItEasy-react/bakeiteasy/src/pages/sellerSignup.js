@@ -62,6 +62,7 @@ function SellerSignup() {
             placeholder="Enter name"
             value={name}
             onChange={(event) => setName(event.target.value)}
+            required
           />
         </FormControl>
         <FormControl>
@@ -71,6 +72,7 @@ function SellerSignup() {
             placeholder="Enter username"
             value={username}
             onChange={(event) => setUsername(event.target.value)}
+            required
           />
         </FormControl>
         
@@ -81,6 +83,7 @@ function SellerSignup() {
             placeholder="Enter email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+            required
           />
         </FormControl>
         <FormControl>
@@ -90,6 +93,7 @@ function SellerSignup() {
             placeholder="Enter password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            required
           />
         </FormControl>
         <FormControl>
@@ -99,6 +103,7 @@ function SellerSignup() {
             placeholder="Enter phone number"
             value={phoneNo}
             onChange={(event) => setPhoneNo(event.target.value)}
+            required
           />
         </FormControl>
         {error && (
@@ -110,11 +115,11 @@ function SellerSignup() {
           Register
         </Button>
         <Box mt={2}>
-          <Link href="/forgotSellerPassword" color="teal.500" display="block">
+          <Link to="/forgotSellerPassword" color="teal.500" display="block">
             Forgot password?
           </Link>
           <Box mt={2}>
-            <Link href="/sellerLogin" color="teal.500" display="block">
+            <Link to="/sellerLogin" color="teal.500" display="block">
               Login
             </Link>
           </Box>

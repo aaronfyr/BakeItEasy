@@ -53,6 +53,7 @@ function BuyerLogin() {
             placeholder="Enter email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+            required
           />
         </FormControl>
         <FormControl>
@@ -62,6 +63,7 @@ function BuyerLogin() {
             placeholder="Enter password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            required
           />
         </FormControl>
         {error && (
@@ -73,11 +75,11 @@ function BuyerLogin() {
           Login
         </Button>
         <Box mt={2}>
-          <Link href="/forgotBuyerPassword" color="teal.500" display="block">
+          <Link to="/forgotBuyerPassword" color="teal.500" display="block">
             Forgot password?
           </Link>
           <Box mt={2}>
-            <Link href="/buyerSignup" color="teal.500" display="block">
+            <Link to="/buyerSignup" color="teal.500" display="block">
               Sign up here!
             </Link>
           </Box>

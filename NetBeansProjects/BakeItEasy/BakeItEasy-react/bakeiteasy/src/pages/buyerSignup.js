@@ -55,13 +55,14 @@ function BuyerSignup() {
       marginTop="10%"
     >
       <form onSubmit={handleSubmit}>
-      <FormControl>
+        <FormControl>
           <FormLabel>Name</FormLabel>
           <Input
             type="text"
             placeholder="Enter name"
             value={name}
             onChange={(event) => setName(event.target.value)}
+            required
           />
         </FormControl>
         <FormControl>
@@ -71,9 +72,10 @@ function BuyerSignup() {
             placeholder="Enter username"
             value={username}
             onChange={(event) => setUsername(event.target.value)}
+            required
           />
         </FormControl>
-        
+
         <FormControl>
           <FormLabel>Email address</FormLabel>
           <Input
@@ -81,6 +83,7 @@ function BuyerSignup() {
             placeholder="Enter email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+            required
           />
         </FormControl>
         <FormControl>
@@ -90,6 +93,7 @@ function BuyerSignup() {
             placeholder="Enter password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            required
           />
         </FormControl>
         <FormControl>
@@ -99,6 +103,7 @@ function BuyerSignup() {
             placeholder="Enter phone number"
             value={phoneNo}
             onChange={(event) => setPhoneNo(event.target.value)}
+            required
           />
         </FormControl>
         {error && (
@@ -110,11 +115,11 @@ function BuyerSignup() {
           Register
         </Button>
         <Box mt={2}>
-          <Link href="/forgotBuyerPassword" color="teal.500" display="block">
+          <Link to="/forgotBuyerPassword" color="teal.500" display="block">
             Forgot password?
           </Link>
           <Box mt={2}>
-            <Link href="/buyerLogin" color="teal.500" display="block">
+            <Link to="/buyerLogin" color="teal.500" display="block">
               Login
             </Link>
           </Box>
