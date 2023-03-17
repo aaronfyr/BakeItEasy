@@ -5,17 +5,14 @@
  */
 package ejb.session.stateless;
 
-import entity.Admin;
 import entity.Buyer;
 import entity.Listing;
 import entity.Order;
-import entity.Report;
-import entity.Review;
 import entity.Seller;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
+import error.exception.ListingNotFoundException;
 import error.exception.OrderNotFoundException;
-import error.exception.ReviewNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.List;
@@ -25,7 +22,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -33,60 +29,46 @@ import javax.validation.ValidatorFactory;
 
 /**
  *
- * @author elysia
+ * @author Nelson Choo
  */
 @Stateless
-public class ReviewSessionBean implements ReviewSessionBeanLocal {
-
-    @PersistenceContext(unitName = "BakeItEasy-ejbPU")
-    private EntityManager em;
-    
-    @EJB
-    private BuyerSessionBeanLocal buyerSessionBeanLocal;
+public class OrderSessionBean implements OrderSessionBeanLocal {
 
     @EJB
     private SellerSessionBeanLocal sellerSessionBeanLocal;
-
-    @EJB
-    private OrderSessionBeanLocal orderSessionBeanLocal;
     
     @EJB
-    private ReviewSessionBeanLocal reviewSessionBeanLocal;
+    private BuyerSessionBeanLocal buyerSessionBeanLocal;
+    
+    @EJB
+    private ListingSessionBeanLocal listingSessionBeanLocal;
+    
+    @PersistenceContext(unitName = "BakeItEasy-ejbPU")
+    private EntityManager em;
     
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
 
-    public ReviewSessionBean() {
+    public OrderSessionBean() {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
     }
-
+    
     @Override
-    public Review retrieveReviewById(Long reviewId) throws ReviewNotFoundException {
-        Review review = em.find(Review.class, reviewId);
-
-        if (review != null) {
-            return review;
-        } else {
-            throw new ReviewNotFoundException("Review does not exist: " + reviewId);
-        }
-    }
-
-    @Override
-    public Long createNewReview(Review review, Long buyerId, Long sellerId, Long orderId) throws BuyerNotFoundException, SellerNotFoundException, OrderNotFoundException, UnknownPersistenceException, InputDataValidationException {
-        Set<ConstraintViolation<Review>> constraintViolations = validator.validate(review);
+    public Long createNewOrder(Order order, Long buyerId, Long sellerId, Long listingId) throws SellerNotFoundException, BuyerNotFoundException, ListingNotFoundException, UnknownPersistenceException, InputDataValidationException {
+        Set<ConstraintViolation<Order>> constraintViolations = validator.validate(order);
 
         if (constraintViolations.isEmpty()) {
             try {
-                em.persist(review);
                 Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+                buyer.getOrders().add(order);
                 Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
-                Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
-                buyer.getReviews().add(review);
-                seller.getReviews().add(review);
-                order.setReview(review);
+                seller.getOrders().add(order);                
+                Listing listing = listingSessionBeanLocal.retrieveListingByListingId(listingId);
+                listing.getOrders().add(order);
+                em.persist(order);
                 em.flush();
-                return review.getReviewId();
+                return order.getOrderId();
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
@@ -102,26 +84,45 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-
+    
     @Override
-    public List<Review> retrieveAllReviews() {
-        Query query = em.createQuery("SELECT r FROM Review r");
-        return query.getResultList();
+    public Order retrieveOrderById(Long orderId) throws OrderNotFoundException {
+        Order order = em.find(Order.class, orderId);
+        
+        if (order != null) {
+            return order;
+        } else {
+            throw new OrderNotFoundException("Order " + orderId + " does not exist.");
+        }
     }
-
-    // remove report from db
+    
     @Override
-    public void removeReview(Long reviewId) throws ReviewNotFoundException {
-        Review review = reviewSessionBeanLocal.retrieveReviewById(reviewId);
-        Buyer buyer = review.getBuyer();
-        Seller seller = review.getSeller();
-        Order order = review.getOrder();
-        buyer.getReviews().remove(review);
-        seller.getReviews().remove(review);
-        order.setReview(null);
-        em.remove(review);
+    public void editOrder(Order order) throws OrderNotFoundException {
+        try {
+            Order orderToUpdate = retrieveOrderById(order.getOrderId());
+            
+            orderToUpdate.setPrice(order.getPrice());
+            orderToUpdate.setQuantity(order.getQuantity());
+            orderToUpdate.setDescription(order.getDescription());
+            orderToUpdate.setOrderStatus(order.getOrderStatus());
+        } catch (OrderNotFoundException ex) {
+            throw new OrderNotFoundException(ex.getMessage());
+        }
     }
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Review>> constraintViolations) {
+    
+    @Override
+    public void deleteOrder(Long orderId) throws OrderNotFoundException {
+        try {
+            Order order = retrieveOrderById(orderId);
+            
+            order.getListing().getOrders().remove(order);
+            em.remove(order);
+        } catch (OrderNotFoundException ex) {
+            throw new OrderNotFoundException(ex.getMessage());
+        }
+    }
+    
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Order>> constraintViolations) {
         String msg = "Input data validation error!:";
 
         for (ConstraintViolation constraintViolation : constraintViolations) {
@@ -130,5 +131,4 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
 
         return msg;
     }
-    
 }

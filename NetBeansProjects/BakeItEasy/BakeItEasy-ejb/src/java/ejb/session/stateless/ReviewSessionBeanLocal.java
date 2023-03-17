@@ -6,7 +6,12 @@
 package ejb.session.stateless;
 
 import entity.Review;
-import error.ReviewNotFoundException;
+import error.exception.BuyerNotFoundException;
+import error.exception.InputDataValidationException;
+import error.exception.OrderNotFoundException;
+import error.exception.ReviewNotFoundException;
+import error.exception.SellerNotFoundException;
+import error.exception.UnknownPersistenceException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -22,5 +27,6 @@ public interface ReviewSessionBeanLocal {
     public List<Review> retrieveAllReviews();
 
     public void removeReview(Long reviewId) throws ReviewNotFoundException;
-    
+
+    public Long createNewReview(Review review, Long buyerId, Long sellerId, Long orderId) throws BuyerNotFoundException, SellerNotFoundException, OrderNotFoundException, UnknownPersistenceException, InputDataValidationException;
 }

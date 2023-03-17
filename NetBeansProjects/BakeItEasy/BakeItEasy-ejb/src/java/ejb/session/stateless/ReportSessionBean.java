@@ -7,16 +7,28 @@ package ejb.session.stateless;
 
 import entity.Admin;
 import entity.Buyer;
+import entity.Listing;
+import entity.Post;
 import entity.Report;
 import entity.Seller;
-import error.AdminNotFoundException;
-import error.ReportNotFoundException;
+import error.exception.AdminNotFoundException;
+import error.exception.BuyerNotFoundException;
+import error.exception.InputDataValidationException;
+import error.exception.ReportNotFoundException;
+import error.exception.SellerNotFoundException;
+import error.exception.UnknownPersistenceException;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /**
  *
@@ -37,6 +49,17 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
     @EJB
     private AdminSessionBeanLocal adminSessionBeanLocal;
     
+    @EJB
+    private ReportSessionBeanLocal reportSessionBeanLocal;
+    
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
+
+    public ReportSessionBean() {
+        this.validatorFactory = Validation.buildDefaultValidatorFactory();
+        this.validator = validatorFactory.getValidator();
+    }
+    
     @Override
     public Report retrieveReportById(Long reportId) throws ReportNotFoundException {
         Report report = em.find(Report.class, reportId);
@@ -49,23 +72,33 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
     }
     
     @Override
-    public Long createNewReport(Report report, Long reporterId, Long reporteeId, Long adminId) throws BuyerNotFoundException, SellerNotFoundException, AdminNotFoundException {
-        try {
-            em.persist(report);
-            Buyer reporter = buyerSessionBeanLocal.retrieveBuyerById(reporterId);
-            Seller reportee = sellerSessionBeanLocal.retrieveSellerById(reporteeId);
-            Admin admin = adminSessionBeanLocal.retrieveAdminById(adminId);
-            reporter.getReports().add(report);
-            reportee.getReports().add(report);
-            admin.getReports().add(report);
-            em.flush();
-            return report.getReportId();
-        } catch (BuyerNotFoundException ex) {
-            throw new BuyerNotFoundException(ex.getMessage());
-        } catch (SellerNotFoundException ex) {
-            throw new SellerNotFoundException(ex.getMessage());
-        } catch (AdminNotFoundException ex) {
-            throw new AdminNotFoundException(ex.getMessage());
+    public Long createNewReport(Report report, Long reporterId, Long reporteeId, Long adminId) throws BuyerNotFoundException, SellerNotFoundException, AdminNotFoundException, UnknownPersistenceException, InputDataValidationException {   
+        Set<ConstraintViolation<Report>> constraintViolations = validator.validate(report);
+
+        if (constraintViolations.isEmpty()) {
+            try {
+                em.persist(report);
+                Buyer reporter = buyerSessionBeanLocal.retrieveBuyerById(reporterId);
+                Seller reportee = sellerSessionBeanLocal.retrieveSellerBySellerId(reporteeId);
+                Admin admin = adminSessionBeanLocal.retrieveAdminById(adminId);
+                reporter.getReports().add(report);
+                reportee.getReports().add(report);
+                admin.getReports().add(report);
+                em.flush();
+                return report.getReportId();
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            }
+        } else {
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
     
@@ -89,6 +122,16 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         reportee.getReports().remove(report);
         admin.getReports().remove(report);
         em.remove(report);
+    }
+    
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Report>> constraintViolations) {
+        String msg = "Input data validation error!:";
+
+        for (ConstraintViolation constraintViolation : constraintViolations) {
+            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
+        }
+
+        return msg;
     }
     
 }

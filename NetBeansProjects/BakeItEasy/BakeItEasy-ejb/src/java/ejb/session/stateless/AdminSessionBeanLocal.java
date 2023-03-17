@@ -6,9 +6,12 @@
 package ejb.session.stateless;
 
 import entity.Admin;
-import error.AdminNotFoundException;
-import error.AdminUsernameExistsException;
-import error.InvalidLoginCredentialException;
+import error.exception.AdminNotFoundException;
+import error.exception.AdminUsernameExistsException;
+import error.exception.InputDataValidationException;
+import error.exception.InvalidLoginCredentialException;
+import error.exception.ReportNotFoundException;
+import error.exception.UnknownPersistenceException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -21,13 +24,13 @@ public interface AdminSessionBeanLocal {
 
     public Admin retrieveAdminById(Long adminId) throws AdminNotFoundException;
 
-    public Long createNewAdmin(Admin admin) throws AdminUsernameExistsException;
+    public Long createNewAdmin(Admin admin) throws AdminUsernameExistsException, UnknownPersistenceException, InputDataValidationException;
 
     public Admin login(String userName, String password) throws InvalidLoginCredentialException;
 
     public List<Admin> retrieveAllAdmins();
 
-    public void removeAdminFromReport(Long reportId) throws AdminNotFoundException;
+    public void removeAdminFromReport(Long reportId) throws ReportNotFoundException;
 
     public void removeAdmin(Long adminId) throws AdminNotFoundException;
     

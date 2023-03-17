@@ -5,17 +5,15 @@
  */
 package ejb.session.stateless;
 
-import entity.Admin;
 import entity.Buyer;
+import entity.Comment;
 import entity.Listing;
 import entity.Order;
-import entity.Report;
-import entity.Review;
+import entity.Post;
 import entity.Seller;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
-import error.exception.OrderNotFoundException;
-import error.exception.ReviewNotFoundException;
+import error.exception.PostNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.List;
@@ -33,60 +31,37 @@ import javax.validation.ValidatorFactory;
 
 /**
  *
- * @author elysia
+ * @author Nelson Choo
  */
 @Stateless
-public class ReviewSessionBean implements ReviewSessionBeanLocal {
-
-    @PersistenceContext(unitName = "BakeItEasy-ejbPU")
-    private EntityManager em;
+public class PostSessionBean implements PostSessionBeanLocal {
     
     @EJB
     private BuyerSessionBeanLocal buyerSessionBeanLocal;
-
-    @EJB
-    private SellerSessionBeanLocal sellerSessionBeanLocal;
-
-    @EJB
-    private OrderSessionBeanLocal orderSessionBeanLocal;
     
     @EJB
-    private ReviewSessionBeanLocal reviewSessionBeanLocal;
+    private SellerSessionBeanLocal sellerSessionBeanLocal;
+    
+    @PersistenceContext(unitName = "BakeItEasy-ejbPU")
+    private EntityManager em;
     
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
 
-    public ReviewSessionBean() {
+    public PostSessionBean() {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
     }
-
+    
     @Override
-    public Review retrieveReviewById(Long reviewId) throws ReviewNotFoundException {
-        Review review = em.find(Review.class, reviewId);
-
-        if (review != null) {
-            return review;
-        } else {
-            throw new ReviewNotFoundException("Review does not exist: " + reviewId);
-        }
-    }
-
-    @Override
-    public Long createNewReview(Review review, Long buyerId, Long sellerId, Long orderId) throws BuyerNotFoundException, SellerNotFoundException, OrderNotFoundException, UnknownPersistenceException, InputDataValidationException {
-        Set<ConstraintViolation<Review>> constraintViolations = validator.validate(review);
+    public Long createNewPost(Post post) throws UnknownPersistenceException, InputDataValidationException {       
+        Set<ConstraintViolation<Post>> constraintViolations = validator.validate(post);
 
         if (constraintViolations.isEmpty()) {
-            try {
-                em.persist(review);
-                Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
-                Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
-                Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
-                buyer.getReviews().add(review);
-                seller.getReviews().add(review);
-                order.setReview(review);
+            try {                
+                em.persist(post);
                 em.flush();
-                return review.getReviewId();
+                return post.getPostId();
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
@@ -102,26 +77,61 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-
+    
     @Override
-    public List<Review> retrieveAllReviews() {
-        Query query = em.createQuery("SELECT r FROM Review r");
-        return query.getResultList();
+    public Post retrievePostById(Long postId) throws PostNotFoundException {
+        Post post = em.find(Post.class, postId);
+        
+        if (post != null) {
+            post.getComments().size();
+            return post;
+        } else {
+            throw new PostNotFoundException("Post " + postId + " not found.");
+        }
     }
-
-    // remove report from db
+    
     @Override
-    public void removeReview(Long reviewId) throws ReviewNotFoundException {
-        Review review = reviewSessionBeanLocal.retrieveReviewById(reviewId);
-        Buyer buyer = review.getBuyer();
-        Seller seller = review.getSeller();
-        Order order = review.getOrder();
-        buyer.getReviews().remove(review);
-        seller.getReviews().remove(review);
-        order.setReview(null);
-        em.remove(review);
+    public List<Post> searchPostsByTitle(String title) {
+        Query q;
+        if (title != null) {
+            q = em.createQuery("SELECT p FROM Post p WHERE LOWER(p.title) LIKE :inTitle");
+            q.setParameter("inTitle", "%" + title.toLowerCase() + "%");
+        } else {
+            q = em.createQuery("SELECT p FROM Post p");
+        }
+        
+        return q.getResultList();
     }
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Review>> constraintViolations) {
+    
+    @Override
+    public void editPost(Post post) throws PostNotFoundException {
+        try {
+            Post postToUpdate = retrievePostById(post.getPostId());
+            
+            postToUpdate.setTitle(post.getTitle());
+            postToUpdate.setPostCategory(post.getPostCategory());
+        } catch (PostNotFoundException ex) {
+            throw new PostNotFoundException(ex.getMessage());
+        }
+    }
+    
+    @Override
+    public void deletePost(Long postId) throws PostNotFoundException {
+        try {
+            Post post = retrievePostById(postId);
+            
+            List<Comment> comments = post.getComments();
+            
+            for (Comment comment: comments) {
+                em.remove(comment);
+            }
+            em.remove(post);
+        } catch (PostNotFoundException ex) {
+            throw new PostNotFoundException(ex.getMessage());
+        }
+    }
+    
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Post>> constraintViolations) {
         String msg = "Input data validation error!:";
 
         for (ConstraintViolation constraintViolation : constraintViolations) {
@@ -130,5 +140,4 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
 
         return msg;
     }
-    
 }

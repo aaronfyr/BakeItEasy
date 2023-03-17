@@ -6,7 +6,6 @@
 package ejb.session.stateless;
 
 import entity.Appointment;
-import entity.Buyer;
 import entity.Calendar;
 import error.exception.AppointmentNotFoundException;
 import error.exception.CalendarNotFoundException;

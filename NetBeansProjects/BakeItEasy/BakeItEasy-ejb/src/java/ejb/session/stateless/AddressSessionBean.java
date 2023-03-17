@@ -9,13 +9,24 @@ import entity.Address;
 import entity.Buyer;
 import entity.Order;
 import entity.Seller;
-import error.AddressNotFoundException;
+import error.exception.AddressNotFoundException;
+import error.exception.BuyerNotFoundException;
+import error.exception.InputDataValidationException;
+import error.exception.OrderNotFoundException;
+import error.exception.SellerNotFoundException;
+import error.exception.UnknownPersistenceException;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /**
  *
@@ -39,6 +50,14 @@ public class AddressSessionBean implements AddressSessionBeanLocal {
     @EJB
     private OrderSessionBeanLocal orderSessionBeanLocal;
     
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
+
+    public AddressSessionBean() {
+        this.validatorFactory = Validation.buildDefaultValidatorFactory();
+        this.validator = validatorFactory.getValidator();
+    }
+    
     @Override
     public Address retrieveAddressById(Long addressId) throws AddressNotFoundException {
         Address address = em.find(Address.class, addressId);
@@ -51,10 +70,28 @@ public class AddressSessionBean implements AddressSessionBeanLocal {
     }
     
     @Override
-    public Long createNewAddress(Address address) {
-        em.persist(address);
-        em.flush();
-        return address.getAddressId();
+    public Long createNewAddress(Address address) throws UnknownPersistenceException, InputDataValidationException {
+        Set<ConstraintViolation<Address>> constraintViolations = validator.validate(address);
+
+        if (constraintViolations.isEmpty()) {
+            try {
+                em.persist(address);
+                em.flush();
+                return address.getAddressId();
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            }
+        } else {
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+        }
     }
     
     @Override
@@ -65,25 +102,22 @@ public class AddressSessionBean implements AddressSessionBeanLocal {
     
     // remove address from buyer
     @Override
-    public void removeBuyerAddress(Long buyerId) throws AddressNotFoundException {
+    public void removeBuyerAddress(Long buyerId) throws BuyerNotFoundException {
         Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
-        Address address = buyer.getAddress();
         buyer.setAddress(null);
     }
     
     // remove address from seller
     @Override
-    public void removeSellerAddress(Long sellerId) throws AddressNotFoundException {
-        Seller seller = sellerSessionBeanLocal.retrieveSellerById(sellerId);
-        Address address = seller.getAddress();
+    public void removeSellerAddress(Long sellerId) throws SellerNotFoundException {
+        Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
         seller.setAddress(null);
     }
     
     // remove address from order
     @Override
-    public void removeOrderAddress(Long orderId) throws AddressNotFoundException {
+    public void removeOrderAddress(Long orderId) throws OrderNotFoundException {
         Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
-        Address address = order.getAddress();
         order.setAddress(null);
     }
     
@@ -114,6 +148,16 @@ public class AddressSessionBean implements AddressSessionBeanLocal {
         }
         
         em.remove(address);
+    }
+    
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Address>> constraintViolations) {
+        String msg = "Input data validation error!:";
+
+        for (ConstraintViolation constraintViolation : constraintViolations) {
+            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
+        }
+
+        return msg;
     }
     
 }

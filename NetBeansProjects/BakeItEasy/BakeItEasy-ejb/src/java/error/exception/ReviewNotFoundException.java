@@ -3,28 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package error;
+package error.exception;
 
 /**
  *
  * @author elysia
  */
-public class ReportNotFoundException extends Exception {
+public class ReviewNotFoundException extends Exception {
 
     /**
-     * Creates a new instance of <code>ReportNotFoundException</code> without
+     * Creates a new instance of <code>ReviewNotFoundException</code> without
      * detail message.
      */
-    public ReportNotFoundException() {
+    public ReviewNotFoundException() {
     }
 
     /**
-     * Constructs an instance of <code>ReportNotFoundException</code> with the
+     * Constructs an instance of <code>ReviewNotFoundException</code> with the
      * specified detail message.
      *
      * @param msg the detail message.
      */
-    public ReportNotFoundException(String msg) {
+    public ReviewNotFoundException(String msg) {
         super(msg);
     }
 }

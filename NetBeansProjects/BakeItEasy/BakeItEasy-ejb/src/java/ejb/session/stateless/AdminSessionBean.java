@@ -7,10 +7,14 @@ package ejb.session.stateless;
 
 import entity.Admin;
 import entity.Report;
-import error.AdminNotFoundException;
-import error.AdminUsernameExistsException;
-import error.InvalidLoginCredentialException;
+import error.exception.AdminNotFoundException;
+import error.exception.AdminUsernameExistsException;
+import error.exception.InputDataValidationException;
+import error.exception.InvalidLoginCredentialException;
+import error.exception.ReportNotFoundException;
+import error.exception.UnknownPersistenceException;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -18,6 +22,10 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /**
  *
@@ -35,6 +43,14 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
     @EJB
     private AdminSessionBeanLocal adminSessionBeanLocal;
     
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
+
+    public AdminSessionBean() {
+        this.validatorFactory = Validation.buildDefaultValidatorFactory();
+        this.validator = validatorFactory.getValidator();
+    }
+    
     @Override
     public Admin retrieveAdminById(Long adminId) throws AdminNotFoundException {
         Admin admin = em.find(Admin.class, adminId);
@@ -47,15 +63,28 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
     }
     
     @Override
-    public Long createNewAdmin(Admin admin) throws AdminUsernameExistsException {
-        try {
-            em.persist(admin);
-            em.flush();
-            return admin.getAdminId();
-        } catch (PersistenceException ex) {
-            throw new AdminUsernameExistsException(ex.getMessage());
+    public Long createNewAdmin(Admin admin) throws AdminUsernameExistsException, UnknownPersistenceException, InputDataValidationException {
+        Set<ConstraintViolation<Admin>> constraintViolations = validator.validate(admin);
+
+        if (constraintViolations.isEmpty()) {
+            try {
+                em.persist(admin);
+                em.flush();
+                return admin.getAdminId();
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            }
+        } else {
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
-      
     }
     
     @Override
@@ -83,7 +112,7 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
     
     // remove admin from report
     @Override
-    public void removeAdminFromReport(Long reportId) throws AdminNotFoundException {
+    public void removeAdminFromReport(Long reportId) throws ReportNotFoundException {
         Report report = reportSessionBeanLocal.retrieveReportById(reportId);
         Admin admin = report.getAdmin();
         report.setAdmin(null);
@@ -101,6 +130,15 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
         em.remove(admin);
     }
     
-    
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Admin>> constraintViolations) {
+        String msg = "Input data validation error!:";
+
+        for (ConstraintViolation constraintViolation : constraintViolations) {
+            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
+        }
+
+        return msg;
+    }
+
     
 }

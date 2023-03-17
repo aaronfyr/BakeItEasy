@@ -3,28 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package error;
+package error.exception;
 
 /**
  *
- * @author elysia
+ * @author Nelson Choo
  */
-public class AdminNotFoundException extends Exception {
+public class OrderNotFoundException extends Exception {
 
     /**
-     * Creates a new instance of <code>AdminNotFoundException</code> without
+     * Creates a new instance of <code>OrderNotFoundException</code> without
      * detail message.
      */
-    public AdminNotFoundException() {
+    public OrderNotFoundException() {
     }
 
     /**
-     * Constructs an instance of <code>AdminNotFoundException</code> with the
+     * Constructs an instance of <code>OrderNotFoundException</code> with the
      * specified detail message.
      *
      * @param msg the detail message.
      */
-    public AdminNotFoundException(String msg) {
+    public OrderNotFoundException(String msg) {
         super(msg);
     }
 }

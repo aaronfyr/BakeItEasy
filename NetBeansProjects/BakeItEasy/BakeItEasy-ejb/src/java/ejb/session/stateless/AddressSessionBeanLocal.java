@@ -6,7 +6,12 @@
 package ejb.session.stateless;
 
 import entity.Address;
-import error.AddressNotFoundException;
+import error.exception.AddressNotFoundException;
+import error.exception.BuyerNotFoundException;
+import error.exception.InputDataValidationException;
+import error.exception.OrderNotFoundException;
+import error.exception.SellerNotFoundException;
+import error.exception.UnknownPersistenceException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -19,16 +24,16 @@ public interface AddressSessionBeanLocal {
 
     public Address retrieveAddressById(Long addressId) throws AddressNotFoundException;
 
-    public Long createNewAddress(Address address);
+    public Long createNewAddress(Address address) throws UnknownPersistenceException, InputDataValidationException;
 
     public List<Address> retrieveAllAddresses();
 
-    public void removeBuyerAddress(Long buyerId) throws AddressNotFoundException;
+    public void removeBuyerAddress(Long buyerId) throws BuyerNotFoundException;
 
-    public void removeSellerAddress(Long sellerId) throws AddressNotFoundException;
+    public void removeSellerAddress(Long sellerId) throws SellerNotFoundException;
 
-    public void removeOrderAddress(Long orderId) throws AddressNotFoundException;
+    public void removeOrderAddress(Long orderId) throws OrderNotFoundException;
 
     public void removeAddress(Long addressId) throws AddressNotFoundException;
-    
+
 }

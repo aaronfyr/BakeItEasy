@@ -3,28 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package error;
+package error.exception;
 
 /**
  *
- * @author Nelson Choo
+ * @author elysia
  */
-public class PostNotFoundException extends Exception {
+public class AddressNotFoundException extends Exception {
 
     /**
-     * Creates a new instance of <code>PostNotFoundException</code> without
+     * Creates a new instance of <code>AddressNotFoundException</code> without
      * detail message.
      */
-    public PostNotFoundException() {
+    public AddressNotFoundException() {
     }
 
     /**
-     * Constructs an instance of <code>PostNotFoundException</code> with the
+     * Constructs an instance of <code>AddressNotFoundException</code> with the
      * specified detail message.
      *
      * @param msg the detail message.
      */
-    public PostNotFoundException(String msg) {
+    public AddressNotFoundException(String msg) {
         super(msg);
     }
 }

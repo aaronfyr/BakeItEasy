@@ -6,7 +6,12 @@
 package ejb.session.stateless;
 
 import entity.Report;
-import error.ReportNotFoundException;
+import error.exception.AdminNotFoundException;
+import error.exception.BuyerNotFoundException;
+import error.exception.InputDataValidationException;
+import error.exception.ReportNotFoundException;
+import error.exception.SellerNotFoundException;
+import error.exception.UnknownPersistenceException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -22,5 +27,6 @@ public interface ReportSessionBeanLocal {
     public void removeReport(Long reportId) throws ReportNotFoundException;
 
     public List<Report> retrieveAllReports();
-    
+
+    public Long createNewReport(Report report, Long reporterId, Long reporteeId, Long adminId) throws BuyerNotFoundException, SellerNotFoundException, AdminNotFoundException, UnknownPersistenceException, InputDataValidationException;
 }

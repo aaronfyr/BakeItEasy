@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package session;
+package ejb.session.stateless;
 
 import entity.Post;
-import error.PostNotFoundException;
+import error.exception.InputDataValidationException;
+import error.exception.PostNotFoundException;
+import error.exception.UnknownPersistenceException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -17,7 +19,7 @@ import javax.ejb.Local;
 @Local
 public interface PostSessionBeanLocal {
 
-    public Long createNewPost(Post post);
+    public Long createNewPost(Post post) throws UnknownPersistenceException, InputDataValidationException;
 
     public Post retrievePostById(Long postId) throws PostNotFoundException;
 
