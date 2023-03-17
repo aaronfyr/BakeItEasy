@@ -53,45 +53,12 @@ public class Listing implements Serializable {
     @OneToMany(mappedBy = "listing")
     private List<Review> reviews;
 
-    public List<Review> getReviews() {
-        return reviews;
+     public Long getListingId() {
+        return listingId;
     }
 
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-    
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
-
-    public List<String> getImagePaths() {
-        return imagePaths;
-    }
-
-    public void setImagePaths(List<String> imagePaths) {
-        this.imagePaths = imagePaths;
-    }
-
-    public ListingCategory getListingCategory() {
-        return listingCategory;
-    }
-
-    public void setListingCategory(ListingCategory listingCategory) {
-        this.listingCategory = listingCategory;
+    public void setListingId(Long listingId) {
+        this.listingId = listingId;
     }
 
     public String getName() {
@@ -126,20 +93,44 @@ public class Listing implements Serializable {
         this.description = description;
     }
 
-    public List<String> getImages() {
+    public List<String> getImagePaths() {
         return imagePaths;
     }
 
-    public void setImages(List<String> images) {
-        this.imagePaths = images;
+    public void setImagePaths(List<String> imagePaths) {
+        this.imagePaths = imagePaths;
     }
 
-    public Long getListingId() {
-        return listingId;
+    public ListingCategory getListingCategory() {
+        return listingCategory;
     }
 
-    public void setListingId(Long listingId) {
-        this.listingId = listingId;
+    public void setListingCategory(ListingCategory listingCategory) {
+        this.listingCategory = listingCategory;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     @Override
