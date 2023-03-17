@@ -3,7 +3,9 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 function ResetPassword() {
-  const type = new URLSearchParams(useLocation().search).get("type");
+  const params = new URLSearchParams(useLocation().search);
+  const type = params.get("type");
+  const email = params.get("email");
   const navigate = useNavigate();
 
   const [password, setPassword] = useState("");
@@ -17,6 +19,11 @@ function ResetPassword() {
     const password = event.target.password.value;
     const confirmPassword = event.target.confirmPassword.value;
 
+    if (password !== confirmPassword) {
+      setError("Passwords do not match. Please try again.");
+      return;
+    }
+
     const response = await fetch(`http://localhost:8080/reset${type}Password`, {
       method: "POST",
       headers: {
@@ -25,6 +32,8 @@ function ResetPassword() {
       body: JSON.stringify({
         password,
         confirmPassword,
+        type,
+        email,
       }),
     });
 
