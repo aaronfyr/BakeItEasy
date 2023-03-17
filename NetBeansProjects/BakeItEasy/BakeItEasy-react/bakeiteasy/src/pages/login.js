@@ -1,8 +1,9 @@
 import { FormControl, FormLabel, Input, Button, Box } from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
-function SellerLogin() {
+function Login() {
+  const type = new URLSearchParams(useLocation().search).get("type");
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -15,7 +16,7 @@ function SellerLogin() {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    const response = await fetch("http://localhost:8080/sellerLogin", {
+    const response = await fetch(`http://localhost:8080/${type}Login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,8 +29,8 @@ function SellerLogin() {
 
     if (response.ok) {
       const data = await response.json();
-      // redirect to SellerHomepage component
-      navigate("/sellerhomepage");
+      // redirect to homepage
+      navigate("${type}Homepage");
     } else {
       // show error message
       setError("Invalid login credentials. Please try again.");
@@ -75,11 +76,11 @@ function SellerLogin() {
           Login
         </Button>
         <Box mt={2}>
-          <Link to="/forgotSellerPassword" color="teal.500" display="block">
+          <Link to={`/forgotPassword?type=${type}`} color="teal.500" display="block">
             Forgot password?
           </Link>
           <Box mt={2}>
-            <Link to="/sellerSignup" color="teal.500" display="block">
+            <Link to={`/signup?type=${type}`} color="teal.500" display="block">
               Sign up here!
             </Link>
           </Box>
@@ -89,4 +90,4 @@ function SellerLogin() {
   );
 }
 
-export default SellerLogin;
+export default Login;

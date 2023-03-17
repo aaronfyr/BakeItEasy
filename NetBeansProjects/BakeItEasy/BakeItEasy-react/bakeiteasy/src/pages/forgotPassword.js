@@ -1,35 +1,39 @@
 import { FormControl, FormLabel, Input, Button, Box } from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
-function ForgotSellerPassword() {
+function ForgotPassword() {
+  const type = new URLSearchParams(useLocation().search).get("type");
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const email = event.target.email.value;
 
-    const response = await fetch("http://localhost:8080/forgetSellerPassword", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-      }),
-    });
+    const response = await fetch(
+      `http://localhost:8080/forget${type}Password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+        }),
+      }
+    );
 
     if (response.ok) {
-      const data = await response.json();
-      // redirect
-      navigate("/sellerLogin");
+      setSuccess("Please check your email for further instructions.");
+      setError(null);
     } else {
-      // show error message
-      setError("Invalid login credentials. Please try again.");
+      setError("Invalid email. Please try again.");
+      setSuccess(null);
     }
   };
 
@@ -66,4 +70,4 @@ function ForgotSellerPassword() {
   );
 }
 
-export default ForgotSellerPassword;
+export default ForgotPassword;

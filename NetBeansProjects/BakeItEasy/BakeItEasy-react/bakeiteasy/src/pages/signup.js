@@ -1,8 +1,9 @@
 import { FormControl, FormLabel, Input, Button, Box } from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
-function SellerSignup() {
+function Signup() {
+  const type = new URLSearchParams(useLocation().search).get("type");
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -21,7 +22,7 @@ function SellerSignup() {
     const password = event.target.password.value;
     const phoneNo = event.target.phoneNo.value;
 
-    const response = await fetch("http://localhost:8080/sellerSignup", {
+    const response = await fetch(`http://localhost:8080/${type}Signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,11 +38,11 @@ function SellerSignup() {
 
     if (response.ok) {
       const data = await response.json();
-      // redirect to SellerHomepage component
-      navigate("/sellerhomepage");
+      // redirect to homepage
+      navigate("${type}Homepage");
     } else {
       // show error message
-      setError("Invalid login credentials. Please try again.");
+      setError("Invalid details. Please try again.");
     }
   };
 
@@ -55,7 +56,7 @@ function SellerSignup() {
       marginTop="10%"
     >
       <form onSubmit={handleSubmit}>
-      <FormControl>
+        <FormControl>
           <FormLabel>Name</FormLabel>
           <Input
             type="text"
@@ -75,7 +76,7 @@ function SellerSignup() {
             required
           />
         </FormControl>
-        
+
         <FormControl>
           <FormLabel>Email address</FormLabel>
           <Input
@@ -115,11 +116,11 @@ function SellerSignup() {
           Register
         </Button>
         <Box mt={2}>
-          <Link to="/forgotSellerPassword" color="teal.500" display="block">
+          <Link to={`/forgotPassword?type=${type}`} color="teal.500" display="block">
             Forgot password?
           </Link>
           <Box mt={2}>
-            <Link to="/sellerLogin" color="teal.500" display="block">
+            <Link to={`/login?type=${type}`} color="teal.500" display="block">
               Login
             </Link>
           </Box>
@@ -129,4 +130,4 @@ function SellerSignup() {
   );
 }
 
-export default SellerSignup;
+export default Signup;

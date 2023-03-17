@@ -1,8 +1,9 @@
 import { FormControl, FormLabel, Input, Button, Box } from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 function ResetPassword() {
+  const type = new URLSearchParams(useLocation().search).get("type");
   const navigate = useNavigate();
 
   const [password, setPassword] = useState("");
@@ -16,7 +17,7 @@ function ResetPassword() {
     const password = event.target.password.value;
     const confirmPassword = event.target.confirmPassword.value;
 
-    const response = await fetch("http://localhost:8080/resettPassword", {
+    const response = await fetch(`http://localhost:8080/reset${type}Password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +38,6 @@ function ResetPassword() {
     }
   };
 
-
   // Get token to compare
   // const headers = {
   //   Authorization: `Bearer ${token}`,
@@ -52,9 +52,7 @@ function ResetPassword() {
   //   .then((data) => console.log(data))
   //   .catch((error) => console.error(error));
 
-
-
-    // page
+  // page
   return (
     <Box
       maxW="xl"
@@ -94,7 +92,6 @@ function ResetPassword() {
       </form>
     </Box>
   );
-  
 }
 
 export default ResetPassword;
