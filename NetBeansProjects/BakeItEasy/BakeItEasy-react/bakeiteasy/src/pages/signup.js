@@ -1,4 +1,11 @@
-import { FormControl, FormLabel, Input, Button, Box } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  Box,
+  Text,
+} from "@chakra-ui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
@@ -55,75 +62,105 @@ function Signup() {
       h="xl"
       marginTop="10%"
     >
+      <Box align="center">
+        <img
+          width="50px"
+          height="50px"
+          hspace="30px"
+          src={require("../assets/bakeiteasy-logo.png")}
+          alt="BakeItEasy"
+        ></img>
+        <div className="logo">BakeItEasy</div>
+      </Box>
+
       <form onSubmit={handleSubmit}>
-        <FormControl>
-          <FormLabel>Name</FormLabel>
+        <FormControl mt={4} variant="floating">
           <Input
             type="text"
-            placeholder="Enter name"
+            placeholder=" "
             value={name}
             onChange={(event) => setName(event.target.value)}
             required
           />
+          <FormLabel>Name</FormLabel>
         </FormControl>
-        <FormControl>
-          <FormLabel>Username</FormLabel>
+        <FormControl mt={4} variant="floating">
           <Input
             type="text"
-            placeholder="Enter username"
+            placeholder=" "
             value={username}
             onChange={(event) => setUsername(event.target.value)}
             required
           />
+          <FormLabel>Username</FormLabel>
         </FormControl>
 
-        <FormControl>
-          <FormLabel>Email address</FormLabel>
+        <FormControl mt={4} variant="floating">
           <Input
             type="email"
-            placeholder="Enter email"
+            placeholder=" "
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
           />
+          <FormLabel>Email address</FormLabel>
         </FormControl>
-        <FormControl>
-          <FormLabel>Password</FormLabel>
+        <FormControl mt={4} variant="floating">
           <Input
             type="password"
-            placeholder="Enter password"
+            placeholder=" "
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
           />
+          <FormLabel>Password</FormLabel>
         </FormControl>
-        <FormControl>
-          <FormLabel>Phone Number</FormLabel>
+        <FormControl mt={4} variant="floating">
           <Input
             type="tel"
-            placeholder="Enter phone number"
+            placeholder=" "
             value={phoneNo}
             onChange={(event) => setPhoneNo(event.target.value)}
             required
           />
+          <FormLabel>Phone Number</FormLabel>
         </FormControl>
         {error && (
           <FormControl>
             <FormLabel color="red.500">{error}</FormLabel>
           </FormControl>
         )}
-        <Button mt={4} colorScheme="teal" type="submit">
-          Register
-        </Button>
-        <Box mt={2}>
-          <Link to={`/forgotPassword?type=${type}`} color="teal.500" display="block">
+
+        <Box mt={4} display="flex" alignItems="center">
+          <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">
+            Register
+          </Button>
+        </Box>
+
+        <Box mt={4} display="flex" alignItems="center">
+          <Link
+            to={`/forgotPassword?type=${type}`}
+            style={{ color: "#E2725B", textDecoration: "underline" }}
+          >
             Forgot password?
           </Link>
-          <Box mt={2}>
-            <Link to={`/login?type=${type}`} color="teal.500" display="block">
-              Login
-            </Link>
-          </Box>
+        </Box>
+
+        <Box
+          maxW="xl"
+          mx="auto"
+          mt={20}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Text marginRight="2">Have an account?</Text>
+          <Link
+            to={`/login?type=${type}`}
+            style={{ color: "#E2725B", textDecoration: "underline" }}
+          >
+            Sign in here!
+          </Link>
         </Box>
       </form>
     </Box>

@@ -1,6 +1,13 @@
-import { FormControl, FormLabel, Input, Button, Box } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  Box,
+  Text,
+} from "@chakra-ui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { BuyerContext } from "../api/buyerProvider";
 import { SellerContext } from "../api/sellerProvider";
 
@@ -9,7 +16,6 @@ function Login() {
   const navigate = useNavigate();
   const { setBuyer } = useContext(BuyerContext);
   const { setSeller } = useContext(SellerContext);
-  
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +40,7 @@ function Login() {
 
     if (response.ok) {
       const user = await response.json();
-      if (type.equals("seller")) {
+      if (type === "seller") {
         setSeller(user);
       } else {
         setBuyer(user);
@@ -47,6 +53,11 @@ function Login() {
     }
   };
 
+  const handlePortalSwitch = () => {
+    // navigate to a different page when the button is clicked
+    navigate(`/login?type=${type === "seller" ? "buyer" : "seller"}`);
+  };
+
   return (
     <Box
       maxW="xl"
@@ -56,48 +67,88 @@ function Login() {
       h="xl"
       marginTop="10%"
     >
+      <Button
+        position="absolute"
+        top="20"
+        right="20"
+        size="lg"
+        mr="4"
+        variant="outline"
+        color="#E2725B"
+        borderColor="#E2725B"
+        onClick={handlePortalSwitch}
+      >
+        {type === "seller" ? "for Buyers" : "for Bakers"}
+      </Button>
+
+      <Box align="center">
+        <img
+          width="50px"
+          height="50px"
+          hspace="30px"
+          src={require("../assets/bakeiteasy-logo.png")}
+          alt="BakeItEasy"
+        ></img>
+        <div className="logo">BakeItEasy</div>
+      </Box>
+
       <form onSubmit={handleSubmit}>
-        <FormControl>
-          <FormLabel>Email address</FormLabel>
+        <FormControl mt={4} variant="floating">
           <Input
             type="email"
-            placeholder="Enter email"
+            placeholder=" "
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
           />
+          <FormLabel>Email</FormLabel>
         </FormControl>
-        <FormControl>
-          <FormLabel>Password</FormLabel>
+        <FormControl mt={4} variant="floating">
           <Input
             type="password"
-            placeholder="Enter password"
+            placeholder=" "
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
           />
+          <FormLabel>Password</FormLabel>
         </FormControl>
         {error && (
           <FormControl>
             <FormLabel color="red.500">{error}</FormLabel>
           </FormControl>
         )}
-        <Button mt={4} colorScheme="teal" type="submit">
-          Login
-        </Button>
-        <Box mt={2}>
+
+        <Box mt={4} display="flex" alignItems="center">
+          <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">
+            Log in
+          </Button>
+        </Box>
+
+        <Box mt={4} display="flex" alignItems="center">
           <Link
             to={`/forgotPassword?type=${type}`}
-            color="teal.500"
-            display="block"
+            style={{ color: "#E2725B", textDecoration: "underline" }}
           >
             Forgot password?
           </Link>
-          <Box mt={2}>
-            <Link to={`/signup?type=${type}`} color="teal.500" display="block">
-              Sign up here!
-            </Link>
-          </Box>
+        </Box>
+
+        <Box
+          maxW="xl"
+          mx="auto"
+          mt={20}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Text marginRight="2">No account with us?</Text>
+          <Link
+            to={`/signup?type=${type}`}
+            style={{ color: "#E2725B", textDecoration: "underline" }}
+          >
+            Sign up here!
+          </Link>
         </Box>
       </form>
     </Box>

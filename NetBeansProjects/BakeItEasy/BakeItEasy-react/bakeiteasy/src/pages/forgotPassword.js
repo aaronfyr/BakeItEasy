@@ -46,25 +46,40 @@ function ForgotPassword() {
       h="xl"
       marginTop="10%"
     >
+      <Box align="center">
+        <img
+          width="50px"
+          height="50px"
+          hspace="30px"
+          src={require("../assets/bakeiteasy-logo.png")}
+          alt="BakeItEasy"
+        ></img>
+        <div className="logo">BakeItEasy</div>
+      </Box>
+
       <form onSubmit={handleSubmit}>
-        <FormControl>
-          <FormLabel>Email address</FormLabel>
+        <FormControl mt={4} variant="floating">
           <Input
             type="email"
-            placeholder="Enter email"
+            placeholder=" "
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
           />
+          <FormLabel>Email address</FormLabel>
         </FormControl>
+        
         {error && (
           <FormControl>
             <FormLabel color="red.500">{error}</FormLabel>
           </FormControl>
         )}
-        <Button mt={4} colorScheme="teal" type="submit">
-          Reset
-        </Button>
+
+        <Box mt={4} display="flex" alignItems="center">
+          <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">
+            Reset
+          </Button>
+        </Box>
       </form>
     </Box>
   );

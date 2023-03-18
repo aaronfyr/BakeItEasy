@@ -6,6 +6,7 @@ import fetchListings from "./api/listings";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BuyerProvider } from "./api/buyerProvider";
 import { SellerProvider } from "./api/sellerProvider";
+import { theme } from "./components/floatingLabel";
 
 import Login from "./pages/login";
 import Signup from "./pages/signup";
@@ -18,7 +19,7 @@ import BuyerListingPage from "./pages/buyerListingPage";
 
 function App() {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <BuyerProvider>
         <SellerProvider>
           <Router>
