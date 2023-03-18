@@ -4,6 +4,8 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import fetchListings from "./api/listings";
 import { ChakraProvider } from "@chakra-ui/react";
+import { BuyerProvider } from "./api/buyerProvider";
+import { SellerProvider } from "./api/sellerProvider";
 
 import Login from "./pages/login";
 import Signup from "./pages/signup";
@@ -14,24 +16,24 @@ import SellerHomepage from "./pages/sellerHomePage";
 import BuyerHomepage from "./pages/buyerHomepage";
 import BuyerListingPage from "./pages/buyerListingPage";
 
-
-
 function App() {
   return (
     <ChakraProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<BuyerHomepage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgotPassword" element={<ForgotPassword />} />
-          <Route path="/resetPassword" element={<ResetPassword />} />
+      <BuyerProvider>
+        <SellerProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<BuyerHomepage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/forgotPassword" element={<ForgotPassword />} />
+              <Route path="/resetPassword" element={<ResetPassword />} />
 
-
-          <Route path="/sellerHomepage" element={<SellerHomepage />} />
-
-        </Routes>
-      </Router>
+              <Route path="/sellerHomepage" element={<SellerHomepage />} />
+            </Routes>
+          </Router>
+        </SellerProvider>
+      </BuyerProvider>
     </ChakraProvider>
   );
 }

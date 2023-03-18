@@ -1,10 +1,15 @@
 import { FormControl, FormLabel, Input, Button, Box } from "@chakra-ui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { BuyerContext } from "../api/buyerProvider";
+import { SellerContext } from "../api/sellerProvider";
 
 function Login() {
   const type = new URLSearchParams(useLocation().search).get("type");
   const navigate = useNavigate();
+  const { setBuyer } = useContext(BuyerContext);
+  const { setSeller } = useContext(SellerContext);
+  
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +33,12 @@ function Login() {
     });
 
     if (response.ok) {
-      const data = await response.json();
+      const user = await response.json();
+      if (type.equals("seller")) {
+        setSeller(user);
+      } else {
+        setBuyer(user);
+      }
       // redirect to homepage
       navigate("${type}Homepage");
     } else {
@@ -76,7 +86,11 @@ function Login() {
           Login
         </Button>
         <Box mt={2}>
-          <Link to={`/forgotPassword?type=${type}`} color="teal.500" display="block">
+          <Link
+            to={`/forgotPassword?type=${type}`}
+            color="teal.500"
+            display="block"
+          >
             Forgot password?
           </Link>
           <Box mt={2}>
