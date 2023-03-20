@@ -35,7 +35,7 @@ public class Calendar implements Serializable {
     @Column
     private Date endDate; //??
 
-    
+    // TO CLARIFY SHOULDN'T IT BE ONETOONE RELATIONSHIP?
     @ManyToOne
     private Seller seller;
 

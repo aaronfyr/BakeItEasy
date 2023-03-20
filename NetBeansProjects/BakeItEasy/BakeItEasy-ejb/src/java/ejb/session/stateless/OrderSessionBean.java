@@ -5,18 +5,23 @@
  */
 package ejb.session.stateless;
 
-import entity.Address;
 import entity.Buyer;
+import entity.Listing;
+import entity.Order;
+import entity.Seller;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
+import error.exception.ListingNotFoundException;
+import error.exception.OrderNotFoundException;
+import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.List;
 import java.util.Set;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -27,31 +32,43 @@ import javax.validation.ValidatorFactory;
  * @author Nelson Choo
  */
 @Stateless
-public class BuyerSessionBean implements BuyerSessionBeanLocal {
+public class OrderSessionBean implements OrderSessionBeanLocal {
 
+    @EJB
+    private SellerSessionBeanLocal sellerSessionBeanLocal;
+    
+    @EJB
+    private BuyerSessionBeanLocal buyerSessionBeanLocal;
+    
+    @EJB
+    private ListingSessionBeanLocal listingSessionBeanLocal;
+    
     @PersistenceContext(unitName = "BakeItEasy-ejbPU")
     private EntityManager em;
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
     
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
 
-    public BuyerSessionBean() {
+    public OrderSessionBean() {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
     }
     
     @Override
-    public Long createNewBuyer(Buyer buyer) throws UnknownPersistenceException, InputDataValidationException {
-        Set<ConstraintViolation<Buyer>> constraintViolations = validator.validate(buyer);
+    public Long createNewOrder(Order order, Long buyerId, Long sellerId, Long listingId) throws SellerNotFoundException, BuyerNotFoundException, ListingNotFoundException, UnknownPersistenceException, InputDataValidationException {
+        Set<ConstraintViolation<Order>> constraintViolations = validator.validate(order);
 
         if (constraintViolations.isEmpty()) {
             try {
-                em.persist(buyer);
+                Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+                buyer.getOrders().add(order);
+                Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
+                seller.getOrders().add(order);                
+                Listing listing = listingSessionBeanLocal.retrieveListingByListingId(listingId);
+                listing.getOrders().add(order);
+                em.persist(order);
                 em.flush();
-                return buyer.getBuyerId();
+                return order.getOrderId();
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
@@ -69,62 +86,43 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
     }
     
     @Override
-    public Buyer retrieveBuyerById(Long buyerId) throws BuyerNotFoundException {
-        Buyer buyer = em.find(Buyer.class, buyerId);
+    public Order retrieveOrderById(Long orderId) throws OrderNotFoundException {
+        Order order = em.find(Order.class, orderId);
         
-        if (buyer != null) {
-            buyer.getReviews().size();
-            buyer.getOrders().size();
-            buyer.getReports().size();
-            buyer.getPosts().size();
-            buyer.getComments().size();
-            return buyer;
+        if (order != null) {
+            return order;
         } else {
-            throw new BuyerNotFoundException("Buyer " + buyerId + " does not exist.");
+            throw new OrderNotFoundException("Order " + orderId + " does not exist.");
         }
     }
     
     @Override
-    public List<Buyer> searchBuyersByName(String name) {
-        Query q;
-        if (name != null) {
-            q = em.createQuery("SELECT b FROM Buyer b WHERE LOWER(b.name) LIKE :inName");
-            q.setParameter("inName", "%" + name.toLowerCase() + "%");
-        } else {
-            q = em.createQuery("SELECT b FROM Buyer b");
-        }
-        
-        return q.getResultList();
-    }
-    
-    @Override
-    public void editBuyer(Buyer buyer) throws BuyerNotFoundException {
+    public void editOrder(Order order) throws OrderNotFoundException {
         try {
-            Buyer buyerToUpdate = retrieveBuyerById(buyer.getBuyerId());
+            Order orderToUpdate = retrieveOrderById(order.getOrderId());
             
-            buyerToUpdate.setName(buyer.getName());
-            buyerToUpdate.setEmail(buyer.getEmail());
-            buyerToUpdate.setUsername(buyer.getUsername());
-            buyerToUpdate.setPassword(buyer.getPassword());
-            buyerToUpdate.setPhoneNo(buyer.getPhoneNo());
-            buyerToUpdate.setIsBanned(buyer.isIsBanned());
-        } catch (BuyerNotFoundException ex) {
-            throw new BuyerNotFoundException(ex.getMessage());
+            orderToUpdate.setPrice(order.getPrice());
+            orderToUpdate.setQuantity(order.getQuantity());
+            orderToUpdate.setDescription(order.getDescription());
+            orderToUpdate.setOrderStatus(order.getOrderStatus());
+        } catch (OrderNotFoundException ex) {
+            throw new OrderNotFoundException(ex.getMessage());
         }
     }
     
     @Override
-    public void deleteBuyer(Long buyerId) throws BuyerNotFoundException {
+    public void deleteOrder(Long orderId) throws OrderNotFoundException {
         try {
-            Buyer buyer = retrieveBuyerById(buyerId);
+            Order order = retrieveOrderById(orderId);
             
-            em.remove(buyer);
-        } catch (BuyerNotFoundException ex) {
-            throw new BuyerNotFoundException(ex.getMessage());
+            order.getListing().getOrders().remove(order);
+            em.remove(order);
+        } catch (OrderNotFoundException ex) {
+            throw new OrderNotFoundException(ex.getMessage());
         }
     }
     
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Buyer>> constraintViolations) {
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Order>> constraintViolations) {
         String msg = "Input data validation error!:";
 
         for (ConstraintViolation constraintViolation : constraintViolations) {
@@ -133,5 +131,4 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
 
         return msg;
     }
-
 }

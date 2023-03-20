@@ -35,21 +35,23 @@ public class Report implements Serializable {
     private Buyer reporter;
     @ManyToOne
     private Seller reportee;
+    @ManyToOne
+    private Admin admin;
 
     public Buyer getBuyer() {
-        return reporter;
+        return getReporter();
     }
 
     public void setBuyer(Buyer reporter) {
-        this.reporter = reporter;
+        this.setReporter(reporter);
     }
 
     public Seller getSeller() {
-        return reportee;
+        return getReportee();
     }
 
     public void setSeller(Seller reportee) {
-        this.reportee = reportee;
+        this.setReportee(reportee);
     }
 
     public String getTitle() {
@@ -101,6 +103,48 @@ public class Report implements Serializable {
     @Override
     public String toString() {
         return "entity.Report[ id=" + reportId + " ]";
+    }
+
+    /**
+     * @return the reporter
+     */
+    public Buyer getReporter() {
+        return reporter;
+    }
+
+    /**
+     * @param reporter the reporter to set
+     */
+    public void setReporter(Buyer reporter) {
+        this.reporter = reporter;
+    }
+
+    /**
+     * @return the reportee
+     */
+    public Seller getReportee() {
+        return reportee;
+    }
+
+    /**
+     * @param reportee the reportee to set
+     */
+    public void setReportee(Seller reportee) {
+        this.reportee = reportee;
+    }
+
+    /**
+     * @return the admin
+     */
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    /**
+     * @param admin the admin to set
+     */
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
     }
     
 }

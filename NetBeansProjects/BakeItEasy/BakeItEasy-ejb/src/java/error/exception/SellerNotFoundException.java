@@ -3,28 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package error;
+package error.exception;
 
 /**
  *
- * @author Nelson Choo
+ * @author aaronf
  */
-public class BuyerNotFoundException extends Exception {
+public class SellerNotFoundException extends Exception {
 
     /**
-     * Creates a new instance of <code>BuyerNotFoundException</code> without
+     * Creates a new instance of <code>SellerNotFoundException</code> without
      * detail message.
      */
-    public BuyerNotFoundException() {
+    public SellerNotFoundException() {
     }
 
     /**
-     * Constructs an instance of <code>BuyerNotFoundException</code> with the
+     * Constructs an instance of <code>SellerNotFoundException</code> with the
      * specified detail message.
      *
      * @param msg the detail message.
      */
-    public BuyerNotFoundException(String msg) {
+    public SellerNotFoundException(String msg) {
         super(msg);
     }
 }

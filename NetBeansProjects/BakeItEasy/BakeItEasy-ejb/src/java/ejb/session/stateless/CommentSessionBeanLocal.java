@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package session;
+package ejb.session.stateless;
 
 import entity.Comment;
-import error.CommentNotFoundException;
-import error.PostNotFoundException;
+import error.exception.CommentNotFoundException;
+import error.exception.InputDataValidationException;
+import error.exception.PostNotFoundException;
+import error.exception.UnknownPersistenceException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -18,8 +20,6 @@ import javax.ejb.Local;
 @Local
 public interface CommentSessionBeanLocal {
 
-    public Long createNewComment(Comment comment);
-
     public Comment retrieveCommentById(Long commentId) throws CommentNotFoundException;
 
     public List<Comment> getCommentsFromPost(Long postId) throws PostNotFoundException;
@@ -27,5 +27,7 @@ public interface CommentSessionBeanLocal {
     public void editComment(Comment comment) throws CommentNotFoundException;
 
     public void deleteComment(Long commentId) throws CommentNotFoundException;
+
+    public Long createNewComment(Comment comment, Long postId) throws UnknownPersistenceException, InputDataValidationException, PostNotFoundException;
     
 }

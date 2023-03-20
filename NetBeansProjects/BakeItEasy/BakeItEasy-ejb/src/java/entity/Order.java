@@ -46,6 +46,8 @@ public class Order implements Serializable {
     private Seller seller;
     @OneToOne(optional = true)
     private Review review;
+    @OneToOne
+    private Address address;
 
     public Review getReview() {
         return review;
@@ -143,6 +145,20 @@ public class Order implements Serializable {
     @Override
     public String toString() {
         return "entity.Order[ id=" + orderId + " ]";
+    }
+
+    /**
+     * @return the address
+     */
+    public Address getAddress() {
+        return address;
+    }
+
+    /**
+     * @param address the address to set
+     */
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
 }

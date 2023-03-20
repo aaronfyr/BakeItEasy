@@ -6,17 +6,19 @@
 package ejb.session.stateless;
 
 import entity.Address;
-import entity.Buyer;
-import error.exception.BuyerNotFoundException;
+import entity.Comment;
+import entity.Post;
+import error.exception.CommentNotFoundException;
 import error.exception.InputDataValidationException;
+import error.exception.PostNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.List;
 import java.util.Set;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -27,31 +29,33 @@ import javax.validation.ValidatorFactory;
  * @author Nelson Choo
  */
 @Stateless
-public class BuyerSessionBean implements BuyerSessionBeanLocal {
+public class CommentSessionBean implements CommentSessionBeanLocal {
+
+    @EJB
+    private PostSessionBeanLocal postSessionBeanLocal;
 
     @PersistenceContext(unitName = "BakeItEasy-ejbPU")
     private EntityManager em;
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
     
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
 
-    public BuyerSessionBean() {
+    public CommentSessionBean() {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
     }
-    
+
     @Override
-    public Long createNewBuyer(Buyer buyer) throws UnknownPersistenceException, InputDataValidationException {
-        Set<ConstraintViolation<Buyer>> constraintViolations = validator.validate(buyer);
+    public Long createNewComment(Comment comment, Long postId) throws UnknownPersistenceException, InputDataValidationException, PostNotFoundException { 
+        Set<ConstraintViolation<Comment>> constraintViolations = validator.validate(comment);
 
         if (constraintViolations.isEmpty()) {
             try {
-                em.persist(buyer);
+                Post post = postSessionBeanLocal.retrievePostById(postId);
+                em.persist(comment);
+                post.getComments().add(comment);
                 em.flush();
-                return buyer.getBuyerId();
+                return comment.getCommentId();
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
@@ -69,62 +73,51 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
     }
     
     @Override
-    public Buyer retrieveBuyerById(Long buyerId) throws BuyerNotFoundException {
-        Buyer buyer = em.find(Buyer.class, buyerId);
+    public Comment retrieveCommentById(Long commentId) throws CommentNotFoundException {
+        Comment comment = em.find(Comment.class, commentId);
         
-        if (buyer != null) {
-            buyer.getReviews().size();
-            buyer.getOrders().size();
-            buyer.getReports().size();
-            buyer.getPosts().size();
-            buyer.getComments().size();
-            return buyer;
+        if (comment != null) {
+            return comment;
         } else {
-            throw new BuyerNotFoundException("Buyer " + buyerId + " does not exist.");
+            throw new CommentNotFoundException("Comment " + commentId + " does not exist.");
         }
     }
     
     @Override
-    public List<Buyer> searchBuyersByName(String name) {
-        Query q;
-        if (name != null) {
-            q = em.createQuery("SELECT b FROM Buyer b WHERE LOWER(b.name) LIKE :inName");
-            q.setParameter("inName", "%" + name.toLowerCase() + "%");
-        } else {
-            q = em.createQuery("SELECT b FROM Buyer b");
-        }
-        
-        return q.getResultList();
-    }
-    
-    @Override
-    public void editBuyer(Buyer buyer) throws BuyerNotFoundException {
+    public List<Comment> getCommentsFromPost(Long postId) throws PostNotFoundException {
         try {
-            Buyer buyerToUpdate = retrieveBuyerById(buyer.getBuyerId());
+            Post post = postSessionBeanLocal.retrievePostById(postId);
             
-            buyerToUpdate.setName(buyer.getName());
-            buyerToUpdate.setEmail(buyer.getEmail());
-            buyerToUpdate.setUsername(buyer.getUsername());
-            buyerToUpdate.setPassword(buyer.getPassword());
-            buyerToUpdate.setPhoneNo(buyer.getPhoneNo());
-            buyerToUpdate.setIsBanned(buyer.isIsBanned());
-        } catch (BuyerNotFoundException ex) {
-            throw new BuyerNotFoundException(ex.getMessage());
+            return post.getComments();
+        } catch (PostNotFoundException ex) {
+            throw new PostNotFoundException(ex.getMessage());
         }
     }
     
     @Override
-    public void deleteBuyer(Long buyerId) throws BuyerNotFoundException {
+    public void editComment(Comment comment) throws CommentNotFoundException {
         try {
-            Buyer buyer = retrieveBuyerById(buyerId);
+            Comment commentToEdit = retrieveCommentById(comment.getCommentId());
             
-            em.remove(buyer);
-        } catch (BuyerNotFoundException ex) {
-            throw new BuyerNotFoundException(ex.getMessage());
+            commentToEdit.setTitle(comment.getTitle());
+        } catch (CommentNotFoundException ex) {
+            throw new CommentNotFoundException(ex.getMessage());
         }
     }
     
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Buyer>> constraintViolations) {
+    @Override
+    public void deleteComment(Long commentId) throws CommentNotFoundException {
+        try {
+            Comment comment = retrieveCommentById(commentId);
+            
+            comment.getPost().getComments().remove(comment);
+            em.remove(comment);
+        } catch (CommentNotFoundException ex) {
+            throw new CommentNotFoundException(ex.getMessage());
+        }
+    }
+
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Comment>> constraintViolations) {
         String msg = "Input data validation error!:";
 
         for (ConstraintViolation constraintViolation : constraintViolations) {
@@ -133,5 +126,4 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
 
         return msg;
     }
-
 }
