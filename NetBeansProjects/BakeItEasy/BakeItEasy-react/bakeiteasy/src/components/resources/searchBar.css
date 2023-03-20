@@ -100,8 +100,8 @@ h5 {
 .search {
   font-family: var(--reg-font-family);
   color: var(--dark-text);
-  font-size: 20px;
-  margin-top: 40px;
+  font-size: 15px;
+  margin-top: 15px;
 }
 
 .shoppingHeader {
@@ -110,16 +110,16 @@ h5 {
   justify-content: center;
   border-style: solid;
   border-color: var(--dark-text);
-  border-width: 2px;
+  border-width: 1px;
   border-radius: 20px;
-  height: 40px;
+  height: 30px;
   padding: 0px 30px 0px 30px;
   margin-top: 5px;
 
   font-family: var(--reg-font-family);
   color: var(--dark-text);
-  font-size: 20px;
-  margin-top: 40px;
+  font-size: 16px;
+  margin-top: 5px;
   font-weight: 00;
 }
 
@@ -160,7 +160,7 @@ h5 {
   border-style: solid;
   border-color: var(--dark-text);
   color: var(--dark-text);
-  border-width: 2px;
+  border-width: 1px;
   padding: 0px 20px 0px 20px;
   margin: 0px 20px 0px 0px;
 }
@@ -182,7 +182,7 @@ img.productImg {
 .productImg {
   margin-left: auto;
   margin-right: auto;
-  width: 200px;
+  width: 180px;
   height: 120px;
   border-radius: 10px;
   object-fit: fill;

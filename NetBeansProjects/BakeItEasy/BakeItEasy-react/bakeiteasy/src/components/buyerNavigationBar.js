@@ -1,6 +1,7 @@
 import "./resources/navigationBar.css";
 import {
   Avatar,
+  Button,
   Flex,
   Heading,
   HStack,
@@ -23,6 +24,7 @@ import { IconContext } from "react-icons";
 import { FaUser, FaUserCircle, FaBell } from "react-icons/fa";
 import { FiHeart, FiUser, FiBell, FiMessageSquare } from "react-icons/fi";
 import { IoLogOut } from "react-icons/io5";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export const NavigationBar = () => {
   return (
@@ -40,11 +42,12 @@ export const NavigationBar = () => {
 
       <Flex align="center">
         <navChoices>Shop</navChoices>
+
         <navChoices>My Orders</navChoices>
       </Flex>
 
       <HStack spacing="15px">
-        <IconContext.Provider value={{ color: "#7D7373", size: "2rem" }}>
+        <IconContext.Provider value={{ color: "#7D7373", size: "1.5rem" }}>
           <Popover>
             <PopoverTrigger>
               <FiBell />
@@ -56,15 +59,18 @@ export const NavigationBar = () => {
               <PopoverBody>You have no new notifications.</PopoverBody>
             </PopoverContent>
           </Popover>
-          <FiMessageSquare size="2rem" />
-          <FiHeart size="2rem" />
+          <FiMessageSquare />
+          <FiHeart />
 
           <Menu>
-            <MenuButton>
+            <MenuButton
+              variant="ghost"
+              as={Button}
+              rightIcon={<ChevronDownIcon />}
+            >
               <Flex align="center">
-                <Tooltip label="username" openDelay={200}>
-                  <FiUser />
-                </Tooltip>
+                <FiUser />
+
                 <h4>username here</h4>
               </Flex>
             </MenuButton>

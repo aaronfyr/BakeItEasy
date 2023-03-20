@@ -15,7 +15,7 @@
 
 body { /* background */
   background-color: var(--beige-bg);
-  padding: 50px 150px 50px 150px;
+  padding: 20px 120px 50px 120px;
 }
 
 a { 
@@ -32,5 +32,6 @@ h4 {
   font-family: var(--reg-font-family);
   color: var(--dark-text);
   font-size: 20px;
-  margin-top: 40px;
+  font-weight: 500;
+  margin-top: 30px;
 }

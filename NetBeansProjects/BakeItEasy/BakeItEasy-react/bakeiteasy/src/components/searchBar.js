@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import "./resources/searchBar.css";
 
 import { FiHeart } from "react-icons/fi";
@@ -174,6 +180,18 @@ export const SearchBar = () => {
     },
   ]);
 
+  let navigate = useNavigate();
+  const routeChangeToListing = (id) => {
+    let path = "listing/";
+    navigate(path + id);
+  };
+
+  /*
+  <li key={product.id}>
+    <Link to={`listing/${product.id}`}>Click here</Link>
+  </li>;
+  */
+
   const [search, setSearch] = useState("");
 
   const filteredProducts = products.filter((product) => {
@@ -227,11 +245,14 @@ export const SearchBar = () => {
 
       <div className="display">
         {filteredProducts.map((product) => (
-          <div className="product">
+          <div
+            className="product"
+            onClick={() => routeChangeToListing(product.id)}
+          >
             <div class="productSeller">
               <img
-                width="40px"
-                height="40px"
+                width="30px"
+                height="30px"
                 src={require("../assets/dummyuser.png")}
                 alt="listing product"
               />
@@ -246,9 +267,6 @@ export const SearchBar = () => {
             </div>
             <h3>{product.title}</h3>
             <h5>product details</h5>
-            <li key={product.id}>
-              <Link to={`listing/${product.id}`}>Click here</Link>
-            </li>
             <div class="productBottomRow">
               <FiHeart size="1.2rem" />
               <h3>${product.price}</h3>
@@ -260,11 +278,14 @@ export const SearchBar = () => {
       <div class="shoppingHeader">Explore More Bakers</div>
       <div className="display">
         {filteredProducts.map((product) => (
-          <div className="product">
+          <div
+            className="product"
+            onClick={() => routeChangeToListing(product.id)}
+          >
             <div class="productSeller">
               <img
-                width="50px"
-                height="50px"
+                width="30px"
+                height="30px"
                 src={require("../assets/dummyuser.png")}
                 alt="listing product"
               />
@@ -279,9 +300,6 @@ export const SearchBar = () => {
             </div>
             <h3>{product.title}</h3>
             <h5>product details</h5>
-            <li key={product.id}>
-              <Link to={`listing/${product.id}`}>Click here</Link>
-            </li>
             <div class="productBottomRow">
               <FiHeart size="1.2rem" />
               <h3>${product.price}</h3>

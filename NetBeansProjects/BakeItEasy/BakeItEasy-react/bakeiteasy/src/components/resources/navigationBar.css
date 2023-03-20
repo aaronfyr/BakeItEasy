@@ -27,11 +27,13 @@ h4 {
   font-size: 15px;
 }
 
+
 navChoices {
   font-family: var(--reg-font-family);
-  font-size: 22px;
+  font-size: 16px;
   width: 150px;
-  margin: 0px 20px 0px 20px;
+  margin-left: 0px 10px 0px 0px;
+  color: --var(--dark-text);
 }
 
 .navbar{
@@ -44,8 +46,10 @@ navChoices {
 .logo{
   color: var(--logo);
   font-family: Helvetica;
-  font-size: 25px;
+  font-size: 20px;
   font-weight: bold;
+  margin-left: 20px;
+  margin-right: 40px;
 }
 
 .logo_header{
