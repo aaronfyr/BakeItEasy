@@ -1,11 +1,18 @@
-import { FormControl, FormLabel, Input, Button, Box } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  Box,
+  FormErrorMessage,
+} from "@chakra-ui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 function ResetPassword() {
   const params = new URLSearchParams(useLocation().search);
   const type = params.get("type");
-  const email = params.get("email");
+  const id = params.get("id");
   const navigate = useNavigate();
 
   const [password, setPassword] = useState("");
@@ -32,34 +39,17 @@ function ResetPassword() {
       body: JSON.stringify({
         password,
         confirmPassword,
-        type,
-        email,
+        id,
       }),
     });
 
     if (response.ok) {
       const data = await response.json();
-      // redirect
-      navigate("/buyerLogin");
+      navigate(`/login?type=${type}`);
     } else {
-      // show error message
-      setError("Invalid login credentials. Please try again.");
+      setError("Passwords do not match. Please try again.");
     }
   };
-
-  // Get token to compare
-  // const headers = {
-  //   Authorization: `Bearer ${token}`,
-  //   "Content-Type": "application/json",
-  // };
-
-  // fetch(url, {
-  //   method: "GET",
-  //   headers: headers,
-  // })
-  //   .then((response) => response.json())
-  //   .then((data) => console.log(data))
-  //   .catch((error) => console.error(error));
 
   // page
   return (
@@ -71,33 +61,54 @@ function ResetPassword() {
       h="xl"
       marginTop="10%"
     >
+      <Box align="center">
+        <img
+          width="50px"
+          height="50px"
+          hspace="30px"
+          src={require("../assets/bakeiteasy-logo.png")}
+          alt="BakeItEasy"
+        ></img>
+        <div className="logo">BakeItEasy</div>
+      </Box>
+
       <form onSubmit={handleSubmit}>
-        <FormControl>
-          <FormLabel>Password</FormLabel>
+        <FormControl mt={4} variant="floating">
           <Input
             type="password"
-            placeholder="Enter password"
+            placeholder=" "
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            required
           />
+          <FormLabel>Password</FormLabel>
+
         </FormControl>
-        <FormControl>
-          <FormLabel>Confirm Password</FormLabel>
+        <FormControl mt={4} variant="floating"  isInvalid={password !== confirmPassword}>
           <Input
             type="password"
-            placeholder="Confirm password"
+            placeholder=" "
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
+            required
           />
+          <FormLabel>Confirm Password</FormLabel>
+          {password !== confirmPassword && (
+            <FormErrorMessage>Passwords do not match</FormErrorMessage>
+          )}
         </FormControl>
+
         {error && (
           <FormControl>
             <FormLabel color="red.500">{error}</FormLabel>
           </FormControl>
         )}
-        <Button mt={4} colorScheme="teal" type="submit">
-          Reset
-        </Button>
+
+        <Box mt={4} display="flex" alignItems="center">
+          <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">
+            Reset
+          </Button>
+        </Box>
       </form>
     </Box>
   );
