@@ -1,10 +1,9 @@
 import React from "react";
-import "./resources/homepage.css";
+import OrderSearch from "./searchBarSection";
 
 function BuyerHomepage() {
   return (
-        <h1>buyer homepage</h1>
-
+        <OrderSearch/>
   );
 }
 
