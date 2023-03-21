@@ -10,6 +10,7 @@ import { AdminProvider } from "./api/adminProvider";
 import { theme } from "./components/floatingLabel";
 
 import Login from "./pages/login";
+import AdminLogin from "./pages/adminLogin";
 import Signup from "./pages/signup";
 import ForgotPassword from "./pages/forgotPassword";
 import ResetPassword from "./pages/resetPassword";
@@ -28,6 +29,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<BuyerHomepage />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/adminLogin" element={<AdminLogin />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/forgotPassword" element={<ForgotPassword />} />
                 <Route path="/resetPassword" element={<ResetPassword />} />
