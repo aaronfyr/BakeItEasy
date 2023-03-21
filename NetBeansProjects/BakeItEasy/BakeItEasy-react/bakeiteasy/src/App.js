@@ -6,6 +6,7 @@ import fetchListings from "./api/listings";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BuyerProvider } from "./api/buyerProvider";
 import { SellerProvider } from "./api/sellerProvider";
+import { AdminProvider } from "./api/adminProvider";
 import { theme } from "./components/floatingLabel";
 
 import Login from "./pages/login";
@@ -22,17 +23,19 @@ function App() {
     <ChakraProvider theme={theme}>
       <BuyerProvider>
         <SellerProvider>
-          <Router>
-            <Routes>
-              <Route path="/" element={<BuyerHomepage />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/forgotPassword" element={<ForgotPassword />} />
-              <Route path="/resetPassword" element={<ResetPassword />} />
+          <AdminProvider>
+            <Router>
+              <Routes>
+                <Route path="/" element={<BuyerHomepage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/forgotPassword" element={<ForgotPassword />} />
+                <Route path="/resetPassword" element={<ResetPassword />} />
 
-              <Route path="/sellerHomepage" element={<SellerHomepage />} />
-            </Routes>
-          </Router>
+                <Route path="/sellerHomepage" element={<SellerHomepage />} />
+              </Routes>
+            </Router>
+          </AdminProvider>
         </SellerProvider>
       </BuyerProvider>
     </ChakraProvider>
