@@ -16,7 +16,7 @@ function ForgotPassword() {
     const email = event.target.email.value;
 
     const response = await fetch(
-      `http://localhost:8080/forget${type}Password`,
+      `http://localhost:8080/forget${type === "seller" ? "Buyer" : "Seller"}Password`,
       {
         method: "POST",
         headers: {
@@ -77,7 +77,7 @@ function ForgotPassword() {
 
         <Box mt={4} display="flex" alignItems="center">
           <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">
-            Reset
+            Send email
           </Button>
         </Box>
       </form>

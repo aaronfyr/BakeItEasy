@@ -5,6 +5,7 @@ import {
   Button,
   Box,
   Text,
+  Image,
 } from "@chakra-ui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useContext } from "react";
@@ -46,7 +47,7 @@ function Login() {
         setBuyer(user);
       }
       // redirect to homepage
-      navigate("${type}Homepage");
+      navigate(`${type}Homepage`);
     } else {
       // show error message
       setError("Invalid login credentials. Please try again.");
@@ -111,6 +112,7 @@ function Login() {
           alt="BakeItEasy"
         ></img>
         <div className="logo">BakeItEasy</div>
+        <div className="logo">{type === "seller" ? " \nBAKERS" : ""}</div>
       </Box>
 
       <form onSubmit={handleSubmit}>
@@ -172,6 +174,15 @@ function Login() {
           </Link>
         </Box>
       </form>
+
+      <Image
+        src={require("../assets/Lady.png")}
+        borderRadius="ml"
+        position="absolute"
+        bottom="39"
+        right="400"
+        maxWidth="250px"
+      />
     </Box>
   );
 }
