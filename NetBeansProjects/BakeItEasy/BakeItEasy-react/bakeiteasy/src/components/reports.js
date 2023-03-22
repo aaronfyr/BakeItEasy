@@ -15,17 +15,11 @@ function Reports() {
 
   useEffect(() => {
     async function fetchData() {
-    //   const response = await fetch(`/http://localhost:8080/getAllReports`, {});
+      const response = await fetch(`/http://localhost:8080/getAllReports`, {});
 
-      if (true) {
-        // const res = await response.json();
-        // setReports(res);
-        setReports([
-            { id: 1, title: "report 1", reason: "reason 1", reporter: "reporter 1", reported: "reported 1" },
-            { id: 2, title: "report 1", reason: "reason 1", reporter: "reporter 1", reported: "reported 1" },
-            { id: 3, title: "report 1", reason: "reason 1", reporter: "reporter 1", reported: "reported 1" },
-            { id: 4, title: "report 1", reason: "reason 1", reporter: "reporter 1", reported: "reported 1" },
-        ])
+      if (response.ok) {
+        const res = await response.json();
+        setReports(res);
       } else {
         setError("There is an error with the report loading");
       }
