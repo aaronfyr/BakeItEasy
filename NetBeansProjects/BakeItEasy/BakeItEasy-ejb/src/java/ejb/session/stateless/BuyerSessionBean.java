@@ -5,15 +5,17 @@
  */
 package ejb.session.stateless;
 
-import entity.Address;
 import entity.Buyer;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
+import error.exception.InvalidLoginCredentialException;
+import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
@@ -121,6 +123,28 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
             em.remove(buyer);
         } catch (BuyerNotFoundException ex) {
             throw new BuyerNotFoundException(ex.getMessage());
+        }
+    }
+    
+    @Override
+    public Buyer buyerLogin(String username, String password) throws InvalidLoginCredentialException, BuyerNotFoundException {
+        try {
+            Query query = em.createQuery("SELECT b FROM Buyer b WHERE b.username = :inUsername");
+            query.setParameter("inUsername", username);
+            Buyer buyer = (Buyer) query.getSingleResult();
+
+            if (buyer != null) {
+
+                if (buyer.getPassword().equals(password)) {
+                    return buyer;
+                } else {
+                    throw new InvalidLoginCredentialException("Invalid login credentials for: " + username);
+                }
+            } else {
+                throw new BuyerNotFoundException("Buyer with username " + username + " not found!");
+            }
+        } catch (NoResultException ex) {
+            throw new BuyerNotFoundException("Buyer with username " + username + " not found!");
         }
     }
     

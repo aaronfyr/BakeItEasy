@@ -21,6 +21,7 @@ import javax.persistence.OneToOne;
  * @author Uni
  */
 @Entity
+@javax.persistence.Table(name = "\"Order\"")
 public class Order implements Serializable {
 
     private static final long serialVersionUID = 1L;
