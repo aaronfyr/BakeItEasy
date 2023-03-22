@@ -65,15 +65,8 @@ function Login() {
   };
 
   return (
-    <Box
-      maxW="xl"
-      mx="auto"
-      justifyContent="center"
-      alignItems="center"
-      h="xl"
-      marginTop="10%"
-    >
-      <Button
+    <>
+    <Button
         position="absolute"
         top="20"
         right="20"
@@ -102,6 +95,17 @@ function Login() {
       >
         To Homepage
       </Button>
+      
+    <Box
+      maxW="xl"
+      mx="auto"
+      justifyContent="center"
+      alignItems="center"
+      h="xl"
+      marginTop="10%"
+      position="relative"
+    >
+      
 
       <Box align="center">
         <img
@@ -179,11 +183,12 @@ function Login() {
         src={require("../assets/Lady.png")}
         borderRadius="ml"
         position="absolute"
-        bottom="39"
-        right="400"
+        bottom="100"
+        right="-175"
         maxWidth="250px"
       />
     </Box>
+    </>
   );
 }
 
