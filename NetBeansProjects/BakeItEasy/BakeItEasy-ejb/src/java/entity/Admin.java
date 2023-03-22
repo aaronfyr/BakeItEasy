@@ -31,6 +31,8 @@ public class Admin implements Serializable {
     @Column
     private String username;
     @Column
+    private String email;
+    @Column
     private String password;
     
     @OneToMany(mappedBy = "admin")
@@ -105,6 +107,20 @@ public class Admin implements Serializable {
      */
     public void setReports(List<Report> reports) {
         this.reports = reports;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
     }
     
 }

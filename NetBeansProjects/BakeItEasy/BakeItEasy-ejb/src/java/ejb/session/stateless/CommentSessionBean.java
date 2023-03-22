@@ -5,7 +5,6 @@
  */
 package ejb.session.stateless;
 
-import entity.Address;
 import entity.Comment;
 import entity.Post;
 import error.exception.CommentNotFoundException;

@@ -37,6 +37,8 @@ public class Order implements Serializable {
     private String description;
     @Column
     private OrderStatus orderStatus;
+    @Column
+    private String address;
 
     @ManyToOne
     private Listing listing;
@@ -47,8 +49,6 @@ public class Order implements Serializable {
     private Seller seller;
     @OneToOne(optional = true)
     private Review review;
-    @OneToOne
-    private Address address;
 
     public Review getReview() {
         return review;
@@ -65,14 +65,6 @@ public class Order implements Serializable {
 
     public void setBuyer(Buyer buyer) {
         this.buyer = buyer;
-    }
-
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
     }
 
     public Listing getListing() {
@@ -151,15 +143,29 @@ public class Order implements Serializable {
     /**
      * @return the address
      */
-    public Address getAddress() {
+    public String getAddress() {
         return address;
     }
 
     /**
      * @param address the address to set
      */
-    public void setAddress(Address address) {
+    public void setAddress(String address) {
         this.address = address;
+    }
+
+    /**
+     * @return the seller
+     */
+    public Seller getSeller() {
+        return seller;
+    }
+
+    /**
+     * @param seller the seller to set
+     */
+    public void setSeller(Seller seller) {
+        this.seller = seller;
     }
 
 }
