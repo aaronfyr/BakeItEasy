@@ -15,7 +15,12 @@ function Reports() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(`/http://localhost:8080/getAllReports`, {});
+      const response = await fetch(`/http://localhost:8080/reports`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (response.ok) {
         const res = await response.json();

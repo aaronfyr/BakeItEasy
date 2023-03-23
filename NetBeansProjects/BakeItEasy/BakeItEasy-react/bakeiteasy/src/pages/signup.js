@@ -7,7 +7,10 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
+
+import { BuyerContext } from "../api/buyerProvider";
+import { SellerContext } from "../api/sellerProvider";
 
 function Signup() {
   const type = new URLSearchParams(useLocation().search).get("type");
@@ -20,6 +23,9 @@ function Signup() {
   const [phoneNo, setPhoneNo] = useState("");
   const [error, setError] = useState(null);
 
+  const { setBuyer } = useContext(BuyerContext);
+  const { setSeller } = useContext(SellerContext);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -29,24 +35,32 @@ function Signup() {
     const password = event.target.password.value;
     const phoneNo = event.target.phoneNo.value;
 
-    const response = await fetch(`http://localhost:8080/${type === "seller" ? "sellers" : "buyers"}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        username,
-        email,
-        password,
-        phoneNo,
-      }),
-    });
+    const response = await fetch(
+      `http://localhost:8080/${type === "seller" ? "sellers" : "buyers"}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          username,
+          email,
+          password,
+          phoneNo,
+        }),
+      }
+    );
 
     if (response.ok) {
-      const data = await response.json();
+      const user = await response.json();
+      if (type === "seller") {
+        setSeller(user);
+      } else {
+        setBuyer(user);
+      }
       // redirect to homepage
-      navigate("${type}Homepage");
+      navigate(`${type}Homepage`);
     } else {
       // show error message
       setError("Invalid details. Please try again.");
