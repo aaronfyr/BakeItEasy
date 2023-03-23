@@ -18,7 +18,9 @@ import ResetPassword from "./pages/resetPassword";
 import SellerHomepage from "./pages/sellerHomePage";
 import BuyerHomepage from "./pages/buyerHomepage";
 import AdminHomepage from "./pages/adminHomepage";
+
 import BuyerListingPage from "./pages/buyerListingPage";
+import BuyerProfile from "./pages/buyerProfile";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
             <Router>
               <Routes>
                 <Route path="/" element={<BuyerHomepage />} />
+                <Route path="listing/:id" element={<BuyerListingPage />} />
+                <Route path="/buyerProfile/:id" element={<BuyerProfile />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/adminLogin" element={<AdminLogin />} />
                 <Route path="/signup" element={<Signup />} />

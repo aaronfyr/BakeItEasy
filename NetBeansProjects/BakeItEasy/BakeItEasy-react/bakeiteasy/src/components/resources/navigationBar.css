@@ -28,12 +28,12 @@ h4 {
 }
 
 
-navChoices {
+#navChoices {
   font-family: var(--reg-font-family);
   font-size: 16px;
   width: 150px;
-  margin-left: 0px 10px 0px 0px;
   color: --var(--dark-text);
+  background-color: var(--mid-orange);
 }
 
 .navbar{

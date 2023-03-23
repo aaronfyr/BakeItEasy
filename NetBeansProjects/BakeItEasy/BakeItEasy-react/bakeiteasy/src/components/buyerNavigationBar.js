@@ -1,3 +1,13 @@
+import { React, useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
+
 import "./resources/navigationBar.css";
 import {
   Avatar,
@@ -18,6 +28,7 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
+  Spacer,
 } from "@chakra-ui/react";
 
 import { IconContext } from "react-icons";
@@ -27,6 +38,40 @@ import { IoLogOut } from "react-icons/io5";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export const NavigationBar = () => {
+  const [seller, setSeller] = useState(null);
+  const [buyer, setBuyer] = useState(null);
+  const navigate = useNavigate();
+
+  // dummy user
+  let userId = 1;
+
+  // Routing to Buyer Profile
+  const routeToProfile = () => {
+    let path = "/buyerProfile/" + userId;
+    return <Navigate to={path} />;
+  };
+
+  // Routing to Buyer Home Page
+  const routeToHomePage = () => {
+    return <Navigate to="/" />;
+  };
+
+  /*
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      if (parsedUser.type === "seller") {
+        setSeller(parsedUser);
+      } else {
+        setBuyer(parsedUser);
+      }
+    } else {
+      navigate("/login");
+    }
+  }, []);
+  */
+
   return (
     <div className="navbar">
       <Flex align="center">
@@ -41,9 +86,10 @@ export const NavigationBar = () => {
       </Flex>
 
       <Flex align="center">
-        <navChoices>Shop</navChoices>
-
-        <navChoices>My Orders</navChoices>
+        <div id="navChoices" onclick={() => routeToHomePage()}>
+          Shop
+        </div>
+        <div id="navChoices">My Orders</div>
       </Flex>
 
       <HStack spacing="15px">
@@ -76,7 +122,12 @@ export const NavigationBar = () => {
             </MenuButton>
 
             <MenuList>
-              <MenuItem gap="0.7rem">
+              <MenuItem
+                gap="0.7rem"
+                onClick={() => {
+                  routeToProfile();
+                }}
+              >
                 <FaUserCircle />
                 Your profile
               </MenuItem>

@@ -6,7 +6,7 @@ import {
   Link,
   useNavigate,
 } from "react-router-dom";
-import "./resources/searchBar.css";
+import "./resources/homepageShopping.css";
 
 import { FiHeart } from "react-icons/fi";
 

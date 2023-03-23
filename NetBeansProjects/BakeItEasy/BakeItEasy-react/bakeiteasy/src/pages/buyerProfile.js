@@ -9,7 +9,9 @@ import {
   useNavigate, // Be sure to add this import
 } from "react-router-dom";
 
-function BuyerHomepage() {
+import { Button } from "@chakra-ui/react";
+
+function BuyerProfile() {
   const [seller, setSeller] = useState(null);
   const [buyer, setBuyer] = useState(null);
   const navigate = useNavigate();
@@ -34,10 +36,9 @@ function BuyerHomepage() {
   return (
     <div className="background">
       <NavigationBar />
-      <h4 className="search">Search for baked goods:</h4>
-      <BuyerShopping />
+      <Button>Orders</Button>
     </div>
   );
 }
 
-export default BuyerHomepage;
+export default BuyerProfile;
