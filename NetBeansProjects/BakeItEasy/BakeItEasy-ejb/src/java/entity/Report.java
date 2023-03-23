@@ -38,22 +38,6 @@ public class Report implements Serializable {
     @ManyToOne
     private Admin admin;
 
-    public Buyer getBuyer() {
-        return getReporter();
-    }
-
-    public void setBuyer(Buyer reporter) {
-        this.setReporter(reporter);
-    }
-
-    public Seller getSeller() {
-        return getReportee();
-    }
-
-    public void setSeller(Seller reportee) {
-        this.setReportee(reportee);
-    }
-
     public String getTitle() {
         return title;
     }

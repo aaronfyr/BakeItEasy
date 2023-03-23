@@ -39,6 +39,8 @@ public class Buyer implements Serializable {
     private String phoneNo;
     @Column
     private boolean isBanned;
+    @Column(nullable = true)
+    private String address;
 
     @OneToMany(mappedBy = "buyer")
     private List<Review> reviews;
@@ -50,9 +52,6 @@ public class Buyer implements Serializable {
     private List<Post> posts;
     @OneToMany(mappedBy = "buyer")
     private List<Comment> comments; // if we want to let them find which comments they made?
-
-    @OneToOne(optional = true)
-    private Address address;
 
     public List<Post> getPosts() {
         return posts;
@@ -70,11 +69,11 @@ public class Buyer implements Serializable {
         this.comments = comments;
     }
 
-    public Address getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 

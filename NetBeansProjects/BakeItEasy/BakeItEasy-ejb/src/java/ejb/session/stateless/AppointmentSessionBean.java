@@ -6,17 +6,23 @@
 package ejb.session.stateless;
 
 import entity.Appointment;
-import entity.Calendar;
+import entity.Buyer;
+import entity.Order;
+import entity.Seller;
 import error.exception.AppointmentNotFoundException;
-import error.exception.CalendarNotFoundException;
+import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
+import error.exception.OrderNotFoundException;
+import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
+import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -29,8 +35,15 @@ import javax.validation.ValidatorFactory;
 @Stateless
 public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
 
-    @EJB(name = "CalendarSessionBeanLocal")
-    private CalendarSessionBeanLocal calendarSessionBeanLocal;
+    @EJB(name = "OrderSessionBeanLocal")
+    private OrderSessionBeanLocal orderSessionBeanLocal;
+
+    @EJB(name = "BuyerSessionBeanLocal")
+    private BuyerSessionBeanLocal buyerSessionBeanLocal;
+
+    @EJB(name = "SellerSessionBeanLocal")
+    private SellerSessionBeanLocal sellerSessionBeanLocal;
+
     
     // INJECT BUYER AND ORDER EJB
     
@@ -49,19 +62,21 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     }
     
     @Override
-    public Long createNewAppointment(Appointment newAppointment, Long sellerId, Long buyerId, Long orderId) throws UnknownPersistenceException, InputDataValidationException, CalendarNotFoundException {
+    public Long createNewAppointment(Appointment newAppointment, Long sellerId, Long buyerId, Long orderId) throws UnknownPersistenceException, InputDataValidationException, SellerNotFoundException, BuyerNotFoundException, OrderNotFoundException {
         Set<ConstraintViolation<Appointment>> constraintViolations = validator.validate(newAppointment);
         
         if (constraintViolations.isEmpty()) {
             try {
-                Calendar calendar = calendarSessionBeanLocal.retrieveCalendarBySellerId(sellerId);
-                // Buyer buyer = buyerSessionBeanLocal.retrieveBuyerByBuyerId(buyerId);
-                // Order order = orderSessionBeanLocal.retrieveOrderByOrderId(orderId);
-                newAppointment.setCalendar(calendar);
-                calendar.getAppointments().add(newAppointment);
-                calendarSessionBeanLocal.updateCalendar(calendar);
-//                newAppointment.setBuyer(buyer);
-//                newAppointment.setOrder(order);
+                Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+                newAppointment.setBuyer(buyer);
+                Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
+                newAppointment.setOrder(order);
+                
+                Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
+                newAppointment.setSeller(seller);
+                seller.getAppointments().add(newAppointment);
+                sellerSessionBeanLocal.updateSeller(seller);
+                
                 em.persist(newAppointment);
                 em.flush();
                 return newAppointment.getAppointmentId();
@@ -106,6 +121,30 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
         }
     }
     
+    @Override
+    public List<Appointment> retrieveAllAppointments() {
+        Query query = em.createQuery("SELECT a FROM Appointment a");
+        
+        return query.getResultList();
+    }
+    
+    @Override
+    public Appointment retrieveAppointmentBySellerIdAndAppointmentId(Long sellerId, Long appointmentId) {
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.seller.sellerId = :inSellerId AND a.appointmentId = :inAppointmentId");
+        query.setParameter("inSellerId", sellerId);
+        query.setParameter("inAppointmentId", appointmentId);
+        
+        return (Appointment) query.getSingleResult();
+    }
+    
+    @Override
+    public List<Appointment> retrieveSellerAppointments(Long sellerId) {
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.seller.sellerId = :inSellerId");
+        query.setParameter("inSellerId", sellerId);
+        
+        return query.getResultList();
+    }
+    
     // Should be no need for delete appointment, since deleting order is the more important one
     
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Appointment>> constraintViolations) {
@@ -116,6 +155,10 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
         }
 
         return msg;
+    }
+
+    public void persist(Object object) {
+        em.persist(object);
     }
 
 }

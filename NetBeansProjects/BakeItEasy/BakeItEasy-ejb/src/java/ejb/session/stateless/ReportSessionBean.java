@@ -22,6 +22,7 @@ import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
@@ -72,7 +73,7 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
     }
     
     @Override
-    public Long createNewReport(Report report, Long reporterId, Long reporteeId, Long adminId) throws BuyerNotFoundException, SellerNotFoundException, AdminNotFoundException, UnknownPersistenceException, InputDataValidationException {   
+    public Long createNewReport(Report report, Long reporterId, Long reporteeId) throws BuyerNotFoundException, SellerNotFoundException, UnknownPersistenceException, InputDataValidationException {   
         Set<ConstraintViolation<Report>> constraintViolations = validator.validate(report);
 
         if (constraintViolations.isEmpty()) {
@@ -80,10 +81,10 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
                 em.persist(report);
                 Buyer reporter = buyerSessionBeanLocal.retrieveBuyerById(reporterId);
                 Seller reportee = sellerSessionBeanLocal.retrieveSellerBySellerId(reporteeId);
-                Admin admin = adminSessionBeanLocal.retrieveAdminById(adminId);
+                report.setReporter(reporter);
+                report.setReportee(reportee);
                 reporter.getReports().add(report);
                 reportee.getReports().add(report);
-                admin.getReports().add(report);
                 em.flush();
                 return report.getReportId();
             } catch (PersistenceException ex) {
@@ -103,10 +104,30 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
     }
     
     @Override
+    public Long assignAdmin(Report report, Long adminId) throws AdminNotFoundException {
+        Admin admin = adminSessionBeanLocal.retrieveAdminById(adminId);
+        report.setAdmin(admin);
+        admin.getReports().add(report);
+        em.merge(report);
+        return report.getReportId();
+    }
+    
+    @Override
     public List<Report> retrieveAllReports() {
         Query query = em.createQuery("SELECT r FROM Report r");
         return query.getResultList();
     }
+    
+    @Override
+    public void updateReport(Report r) throws NoResultException, ReportNotFoundException {
+        Report oldR = retrieveReportById(r.getReportId());
+
+        oldR.setTitle(r.getTitle());
+        oldR.setReason(r.getReason());
+        oldR.setReporter(r.getReporter());
+        oldR.setReportee(r.getReportee());
+        oldR.setAdmin(r.getAdmin());
+    } //end updateReport
     
     // remove report from db
     @Override

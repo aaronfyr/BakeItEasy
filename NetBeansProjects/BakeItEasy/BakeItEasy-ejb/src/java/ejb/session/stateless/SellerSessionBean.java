@@ -5,7 +5,9 @@
  */
 package ejb.session.stateless;
 
+import entity.Appointment;
 import entity.Seller;
+import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
 import error.exception.SellerEmailExistException;
@@ -87,12 +89,22 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
+    
+//    public void deleteSeller(Long sellerId) throws SellerNotFoundException {
+//        try {
+//            Seller seller = retrieveSellerBySellerId(sellerId);
+//            
+//            em.remove(seller);
+//        } catch (SellerNotFoundException ex) {
+//            throw new SellerNotFoundException(ex.getMessage());
+//        }
+//    }
 
     @Override
-    public Seller sellerLogin(String username, String password) throws InvalidLoginCredentialException, SellerNotFoundException {
+    public Seller sellerLogin(String email, String password) throws InvalidLoginCredentialException, SellerNotFoundException {
         try {
-            Query query = em.createQuery("SELECT s FROM Seller s WHERE s.username = :inUsername");
-            query.setParameter("inUsername", username);
+            Query query = em.createQuery("SELECT s FROM Seller s WHERE s.email = :inEmail");
+            query.setParameter("inEmail", email);
             Seller seller = (Seller) query.getSingleResult();
 
             if (seller != null) {
@@ -100,13 +112,13 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
                 if (seller.getPassword().equals(password)) {
                     return seller;
                 } else {
-                    throw new InvalidLoginCredentialException("Invalid login credentials for: " + username);
+                    throw new InvalidLoginCredentialException("Invalid login credentials for: " + email);
                 }
             } else {
-                throw new SellerNotFoundException("Seller with username " + username + " not found!");
+                throw new SellerNotFoundException("Seller with email " + email + " not found!");
             }
         } catch (NoResultException ex) {
-            throw new SellerNotFoundException("Seller with username " + username + " not found!");
+            throw new SellerNotFoundException("Seller with email " + email + " not found!");
         }
     }
     
@@ -164,7 +176,19 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
     }
     
     // UPDATE TO SEE WHICH FIELDS CAN BE UPDATED
-    
+    public void updateSeller(Seller updatedSeller) throws InputDataValidationException, SellerNotFoundException {
+        Set<ConstraintViolation<Seller>> constraintViolations = validator.validate(updatedSeller);
+
+        if (constraintViolations.isEmpty()) {
+            Seller sellerToUpdate = retrieveSellerBySellerId(updatedSeller.getSellerId());
+            sellerToUpdate.setName(updatedSeller.getName());
+            sellerToUpdate.setPassword(updatedSeller.getPassword());
+            sellerToUpdate.setPhoneNo(updatedSeller.getPhoneNo());
+            sellerToUpdate.setAppointments(updatedSeller.getAppointments());
+        } else {
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+        }
+    }
     // DELETE TO SEE WHAT ORDER IMPLEMENTED (I.E. ORDER STATUS)
     // REMINDER TO DELETE CALENDAR AS WELL
     

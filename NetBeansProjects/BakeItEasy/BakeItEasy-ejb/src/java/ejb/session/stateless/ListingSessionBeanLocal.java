@@ -29,10 +29,16 @@ public interface ListingSessionBeanLocal {
     public void deleteListing(Long listingId) throws ListingNotFoundException;
 
     public Listing retrieveListingByListingId(Long listingId) throws ListingNotFoundException;
-
+    
+    public Listing retrieveListingBySellerIdAndListingId(Long sellerId, Long listingId);
+    
+    public List<Listing> retrieveAllListings();
+    
+    public List<Listing> retrieveSellerListings(Long sellerId);
+    
     public List<Listing> retrieveListingByListingCategory(ListingCategory listingCategory);
-
-    public List<Listing> retrieveListingByQuantity(Integer quantityLeft);
+    
+    public List<Listing> retrieveListingByListingCategoryAndSellerId(ListingCategory listingCategory, Long sellerId);
 
     public List<Listing> retrieveListingByQuantityGreater(Integer quantityGreaterThan);
 

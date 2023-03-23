@@ -5,15 +5,14 @@
  */
 package ejb.session.stateless;
 
-import entity.Admin;
 import entity.Buyer;
 import entity.Listing;
 import entity.Order;
-import entity.Report;
 import entity.Review;
 import entity.Seller;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
+import error.exception.ListingNotFoundException;
 import error.exception.OrderNotFoundException;
 import error.exception.ReviewNotFoundException;
 import error.exception.SellerNotFoundException;
@@ -23,6 +22,7 @@ import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
@@ -53,6 +53,9 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
     @EJB
     private ReviewSessionBeanLocal reviewSessionBeanLocal;
     
+    @EJB
+    private ListingSessionBeanLocal listingSessionBeanLocal;
+    
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
 
@@ -73,7 +76,7 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
     }
 
     @Override
-    public Long createNewReview(Review review, Long buyerId, Long sellerId, Long orderId) throws BuyerNotFoundException, SellerNotFoundException, OrderNotFoundException, UnknownPersistenceException, InputDataValidationException {
+    public Long createNewReview(Review review, Long buyerId, Long sellerId, Long orderId, Long listingId) throws BuyerNotFoundException, SellerNotFoundException, OrderNotFoundException, UnknownPersistenceException, InputDataValidationException, ListingNotFoundException {
         Set<ConstraintViolation<Review>> constraintViolations = validator.validate(review);
 
         if (constraintViolations.isEmpty()) {
@@ -82,9 +85,15 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
                 Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
                 Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
                 Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
+                Listing listing = listingSessionBeanLocal.retrieveListingByListingId(listingId);
+                review.setBuyer(buyer);
+                review.setSeller(seller);
+                review.setOrder(order);
+                review.setListing(listing);
                 buyer.getReviews().add(review);
                 seller.getReviews().add(review);
                 order.setReview(review);
+                listing.getReviews().add(review);
                 em.flush();
                 return review.getReviewId();
             } catch (PersistenceException ex) {
@@ -108,6 +117,21 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
         Query query = em.createQuery("SELECT r FROM Review r");
         return query.getResultList();
     }
+    
+    @Override
+    public void updateReview(Review r) throws NoResultException, ReviewNotFoundException {
+        Review oldR = retrieveReviewById(r.getReviewId());
+
+        oldR.setTitle(r.getTitle());
+        oldR.setReviewText(r.getReviewText());
+        oldR.setRating(r.getRating());
+        oldR.setImagePaths(r.getImagePaths());
+        oldR.setDateCreated(r.getDateCreated());
+        oldR.setBuyer(r.getBuyer());
+        oldR.setSeller(r.getSeller());
+        oldR.setOrder(r.getOrder());
+        oldR.setListing(r.getListing());
+    } //end updateReview
 
     // remove report from db
     @Override

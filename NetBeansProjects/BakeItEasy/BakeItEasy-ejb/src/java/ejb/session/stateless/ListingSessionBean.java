@@ -110,6 +110,31 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
             throw new ListingNotFoundException("Listing ID: " + listingId + " does not exist!");
         }
     }
+    
+    @Override
+    public Listing retrieveListingBySellerIdAndListingId(Long sellerId, Long listingId) {
+        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.seller.sellerId = :inSellerId AND l.listingId = :inListingId");
+        query.setParameter("inSellerId", sellerId);
+        query.setParameter("inListingId", listingId);
+        
+        return (Listing) query.getSingleResult();
+    }
+    
+    @Override
+    public List<Listing> retrieveAllListings() {
+        Query query = em.createQuery("SELECT l FROM Listing l");
+        
+        return query.getResultList();
+    }
+    
+    
+    @Override
+    public List<Listing> retrieveSellerListings(Long sellerId) {
+        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.seller.sellerId = :inSellerId");
+        query.setParameter("inSellerId", sellerId);
+        
+        return query.getResultList();
+    }
 
     @Override
     public List<Listing> retrieveListingByListingCategory(ListingCategory listingCategory) {
@@ -119,9 +144,10 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
     }
     
     @Override
-    public List<Listing> retrieveListingByQuantity(Integer quantityLeft) {
-        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.quantityLeft = :inQuantityLeft");
-        query.setParameter("inQuantityLeft", quantityLeft);
+    public List<Listing> retrieveListingByListingCategoryAndSellerId(ListingCategory listingCategory, Long sellerId) {
+        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.listingCategory = :inListingCategory AND l.seller.sellerId = :inSellerId");
+        query.setParameter("inListingCategory", listingCategory);
+        query.setParameter("inSellerId", sellerId);
         return query.getResultList();
     }
     

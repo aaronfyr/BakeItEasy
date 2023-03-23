@@ -105,6 +105,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
             orderToUpdate.setQuantity(order.getQuantity());
             orderToUpdate.setDescription(order.getDescription());
             orderToUpdate.setOrderStatus(order.getOrderStatus());
+            orderToUpdate.setAddress(order.getAddress());
         } catch (OrderNotFoundException ex) {
             throw new OrderNotFoundException(ex.getMessage());
         }

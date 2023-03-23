@@ -104,6 +104,7 @@ public class CalendarSessionBean implements CalendarSessionBeanLocal {
         }
     }
 
+    @Override
     public Calendar retrieveCalendarBySellerId(Long sellerId) throws CalendarNotFoundException {
         Query query = em.createQuery("SELECT c FROM Calendar c WHERE c.seller.sellerId = :inSellerId");
         query.setParameter("inSellerId", sellerId);

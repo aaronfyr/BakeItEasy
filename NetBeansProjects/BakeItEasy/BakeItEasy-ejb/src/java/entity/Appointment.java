@@ -35,35 +35,20 @@ public class Appointment implements Serializable {
     private Date date; // maybe use sql.date
     
     @ManyToOne
-    private Calendar calendar;
+    private Seller seller;
     
     @OneToOne
     private Buyer buyer;
+    
     @OneToOne
     private Order order;
-
-    public Order getOrder() {
-        return order;
+    
+    public Long getAppointmentId() {
+        return appointmentId;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public Calendar getCalendar() {
-        return calendar;
-    }
-
-    public void setCalendar(Calendar calendar) {
-        this.calendar = calendar;
-    }
-
-    public Buyer getBuyer() {
-        return buyer;
-    }
-
-    public void setBuyer(Buyer buyer) {
-        this.buyer = buyer;
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
     }
 
     public String getTitle() {
@@ -90,14 +75,30 @@ public class Appointment implements Serializable {
         this.date = date;
     }
 
-    public Long getAppointmentId() {
-        return appointmentId;
+    public Seller getSeller() {
+        return seller;
     }
 
-    public void setAppointmentId(Long appointmentId) {
-        this.appointmentId = appointmentId;
+    public void setSeller(Seller seller) {
+        this.seller = seller;
     }
 
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

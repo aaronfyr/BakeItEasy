@@ -14,6 +14,7 @@ import error.exception.ReportNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.List;
 import javax.ejb.Local;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -26,12 +27,14 @@ public interface AdminSessionBeanLocal {
 
     public Long createNewAdmin(Admin admin) throws AdminUsernameExistsException, UnknownPersistenceException, InputDataValidationException;
 
-    public Admin login(String userName, String password) throws InvalidLoginCredentialException;
+    public Admin login(String email, String password) throws InvalidLoginCredentialException;
 
     public List<Admin> retrieveAllAdmins();
 
     public void removeAdminFromReport(Long reportId) throws ReportNotFoundException;
 
     public void removeAdmin(Long adminId) throws AdminNotFoundException;
+
+    public void updateAdmin(Admin a) throws NoResultException, AdminNotFoundException;
     
 }

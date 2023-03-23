@@ -7,9 +7,13 @@ package ejb.session.stateless;
 
 import entity.Appointment;
 import error.exception.AppointmentNotFoundException;
+import error.exception.BuyerNotFoundException;
 import error.exception.CalendarNotFoundException;
 import error.exception.InputDataValidationException;
+import error.exception.OrderNotFoundException;
+import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -19,10 +23,16 @@ import javax.ejb.Local;
 @Local
 public interface AppointmentSessionBeanLocal {
 
-    public Long createNewAppointment(Appointment newAppointment, Long sellerId, Long buyerId, Long orderId) throws UnknownPersistenceException, InputDataValidationException, CalendarNotFoundException;
+    public Long createNewAppointment(Appointment newAppointment, Long sellerId, Long buyerId, Long orderId) throws UnknownPersistenceException, InputDataValidationException, SellerNotFoundException, BuyerNotFoundException, OrderNotFoundException;
 
     public void updateAppointment(Appointment updatedAppointment) throws AppointmentNotFoundException, InputDataValidationException;
 
+    public List<Appointment> retrieveAllAppointments();
+    
     public Appointment retrieveAppointmentByAppointmentId(Long appointmentId) throws AppointmentNotFoundException;
+
+    public Appointment retrieveAppointmentBySellerIdAndAppointmentId(Long sellerId, Long appointmentId);
+    
+    public List<Appointment> retrieveSellerAppointments(Long sellerId);
     
 }

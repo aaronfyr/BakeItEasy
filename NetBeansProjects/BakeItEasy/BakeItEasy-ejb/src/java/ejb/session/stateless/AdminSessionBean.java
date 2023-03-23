@@ -88,10 +88,10 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
     }
     
     @Override
-    public Admin login(String userName, String password) throws InvalidLoginCredentialException {
+    public Admin login(String email, String password) throws InvalidLoginCredentialException {
         try {
-            Query query = em.createQuery("SELECT a FROM Admin a WHERE a.userName = :inUserName");
-            query.setParameter("inUserName", userName);
+            Query query = em.createQuery("SELECT a FROM Admin a WHERE a.email = :inEmail");
+            query.setParameter("inEmail", email);
             Admin admin = (Admin) query.getSingleResult();
 
             if (admin.getPassword().equals(password)) {
@@ -108,6 +108,17 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
     public List<Admin> retrieveAllAdmins() {
         Query query = em.createQuery("SELECT a FROM Admin a");
         return query.getResultList();
+    }
+    
+    @Override
+    public void updateAdmin(Admin a) throws NoResultException, AdminNotFoundException {
+        Admin oldA = retrieveAdminById(a.getAdminId());
+
+        oldA.setName(a.getName());
+        oldA.setUsername(a.getUsername());
+        oldA.setEmail(a.getEmail());
+        oldA.setPassword(a.getPassword());
+        oldA.setReports(a.getReports());
     }
     
     // remove admin from report

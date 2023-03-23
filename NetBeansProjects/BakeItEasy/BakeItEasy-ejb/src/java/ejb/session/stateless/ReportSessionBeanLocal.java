@@ -14,6 +14,7 @@ import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.List;
 import javax.ejb.Local;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -28,5 +29,9 @@ public interface ReportSessionBeanLocal {
 
     public List<Report> retrieveAllReports();
 
-    public Long createNewReport(Report report, Long reporterId, Long reporteeId, Long adminId) throws BuyerNotFoundException, SellerNotFoundException, AdminNotFoundException, UnknownPersistenceException, InputDataValidationException;
+    public Long createNewReport(Report report, Long reporterId, Long reporteeId) throws BuyerNotFoundException, SellerNotFoundException, UnknownPersistenceException, InputDataValidationException;
+
+    public Long assignAdmin(Report report, Long adminId) throws AdminNotFoundException;
+
+    public void updateReport(Report r) throws NoResultException, ReportNotFoundException;
 }

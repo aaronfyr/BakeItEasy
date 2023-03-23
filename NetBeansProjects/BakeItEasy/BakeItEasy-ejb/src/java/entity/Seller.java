@@ -54,8 +54,6 @@ public class Seller implements Serializable {
     private List<Comment> comments; // if we want to let them find which comments they made?
     @OneToMany(mappedBy = "seller")
     private List<Appointment> appointments;
-    @OneToOne(optional = true)
-    private Address address;
 
 
     public Long getSellerId() {
@@ -145,7 +143,7 @@ public class Seller implements Serializable {
     public void setReports(List<Report> reports) {
         this.reports = reports;
     }
-    
+
     public List<Post> getPosts() {
         return posts;
     }
@@ -168,14 +166,6 @@ public class Seller implements Serializable {
 
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     @Override

@@ -36,5 +36,7 @@ public interface SellerSessionBeanLocal {
     public Seller retrieveSellerByPhoneNumber(String phoneNo) throws SellerNotFoundException;
 
     public List<Seller> retrieveAllSellers();
+
+    public void updateSeller(Seller updatedSeller) throws InputDataValidationException, SellerNotFoundException;
     
 }
