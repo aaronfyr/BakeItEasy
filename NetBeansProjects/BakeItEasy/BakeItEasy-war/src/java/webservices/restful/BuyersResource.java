@@ -25,9 +25,9 @@ public class BuyersResource {
     @EJB
     private BuyerSessionBeanLocal buyerSessionBeanLocal;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Buyer> getAllBuyers() {
-        return buyerSessionBeanLocal.searchBuyers(null);
-    }
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public List<Buyer> getAllBuyers() {
+//        return buyerSessionBeanLocal.searchBuyers(null);
+//    }
 }
