@@ -9,10 +9,12 @@ import {
 } from "@chakra-ui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useContext } from "react";
-import { BuyerContext } from "../api/buyerProvider";
-import { SellerContext } from "../api/sellerProvider";
+import { BuyerContext } from "../context/buyerProvider";
+import { SellerContext } from "../context/sellerProvider";
 
 function Login() {
+  const [isLoading, setIsLoading] = useState(null);
+
   const type = new URLSearchParams(useLocation().search).get("type");
   const navigate = useNavigate();
   const { setBuyer } = useContext(BuyerContext);
@@ -28,8 +30,8 @@ function Login() {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    const response = await fetch(`http://localhost:8080/${type}Login`, {
-      method: "POST",
+    const response = await fetch(`http://localhost:8080/${type === "seller" ? "sellers" : "buyers"}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
@@ -40,12 +42,15 @@ function Login() {
     });
 
     if (response.ok) {
+      setIsLoading(false);
       const user = await response.json();
       if (type === "seller") {
         setSeller(user);
       } else {
         setBuyer(user);
       }
+      localStorage.setItem("user", user);
+      console.log(user);
       // redirect to homepage
       navigate(`${type}Homepage`);
     } else {
@@ -65,14 +70,7 @@ function Login() {
   };
 
   return (
-    <Box
-      maxW="xl"
-      mx="auto"
-      justifyContent="center"
-      alignItems="center"
-      h="xl"
-      marginTop="10%"
-    >
+    <>
       <Button
         position="absolute"
         top="20"
@@ -103,87 +101,97 @@ function Login() {
         To Homepage
       </Button>
 
-      <Box align="center">
-        <img
-          width="50px"
-          height="50px"
-          hspace="30px"
-          src={require("../assets/bakeiteasy-logo.png")}
-          alt="BakeItEasy"
-        ></img>
-        <div className="logo">BakeItEasy</div>
-        <div className="logo">{type === "seller" ? " \nBAKERS" : ""}</div>
-      </Box>
+      <Box
+        maxW="xl"
+        mx="auto"
+        justifyContent="center"
+        alignItems="center"
+        h="xl"
+        marginTop="10%"
+        position="relative"
+      >
+        <Box align="center">
+          <img
+            width="50px"
+            height="50px"
+            hspace="30px"
+            src={require("../assets/bakeiteasy-logo.png")}
+            alt="BakeItEasy"
+          ></img>
+          <div className="logo">BakeItEasy</div>
+          <div className="logo">{type === "seller" ? " \nBAKERS" : ""}</div>
+        </Box>
 
-      <form onSubmit={handleSubmit}>
-        <FormControl mt={4} variant="floating">
-          <Input
-            type="email"
-            placeholder=" "
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
-          <FormLabel>Email</FormLabel>
-        </FormControl>
-        <FormControl mt={4} variant="floating">
-          <Input
-            type="password"
-            placeholder=" "
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
-          <FormLabel>Password</FormLabel>
-        </FormControl>
-        {error && (
-          <FormControl>
-            <FormLabel color="red.500">{error}</FormLabel>
+        <form onSubmit={handleSubmit}>
+          <FormControl mt={4} variant="floating">
+            <Input
+              type="email"
+              placeholder=" "
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+            <FormLabel>Email</FormLabel>
           </FormControl>
-        )}
+          <FormControl mt={4} variant="floating">
+            <Input
+              type="password"
+              placeholder=" "
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+            />
+            <FormLabel>Password</FormLabel>
+          </FormControl>
+          {error && (
+            <FormControl>
+              <FormLabel color="red.500">{error}</FormLabel>
+            </FormControl>
+          )}
 
-        <Box mt={4} display="flex" alignItems="center">
-          <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">
-            Log in
-          </Button>
-        </Box>
+          <Box mt={4} display="flex" alignItems="center">
+            <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">
+              Log in
+            </Button>
+          </Box>
 
-        <Box mt={4} display="flex" alignItems="center">
-          <Link
-            to={`/forgotPassword?type=${type}`}
-            style={{ color: "#E2725B", textDecoration: "underline" }}
+          <Box mt={4} display="flex" alignItems="center">
+            <Link
+              to={`/forgotPassword?type=${type}`}
+              style={{ color: "#E2725B", textDecoration: "underline" }}
+            >
+              Forgot password?
+            </Link>
+          </Box>
+
+          <Box
+            maxW="xl"
+            mx="auto"
+            mt={20}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
           >
-            Forgot password?
-          </Link>
-        </Box>
+            <Text marginRight="2">No account with us?</Text>
+            <Link
+              to={`/signup?type=${type}`}
+              style={{ color: "#E2725B", textDecoration: "underline" }}
+            >
+              Sign up here!
+            </Link>
+          </Box>
+        </form>
 
-        <Box
-          maxW="xl"
-          mx="auto"
-          mt={20}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Text marginRight="2">No account with us?</Text>
-          <Link
-            to={`/signup?type=${type}`}
-            style={{ color: "#E2725B", textDecoration: "underline" }}
-          >
-            Sign up here!
-          </Link>
-        </Box>
-      </form>
-
-      <Image
-        src={require("../assets/Lady.png")}
-        borderRadius="ml"
-        position="absolute"
-        bottom="39"
-        right="400"
-        maxWidth="250px"
-      />
-    </Box>
+        <Image
+          src={require("../assets/Lady.png")}
+          borderRadius="ml"
+          position="absolute"
+          bottom="100"
+          right="-175"
+          maxWidth="250px"
+        />
+      </Box>
+    </>
   );
 }
 

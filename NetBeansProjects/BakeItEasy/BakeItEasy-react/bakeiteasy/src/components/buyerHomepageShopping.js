@@ -10,7 +10,7 @@ import "./resources/searchBar.css";
 
 import { FiHeart } from "react-icons/fi";
 
-export const SearchBar = () => {
+export const BuyerShopping = () => {
   const [categories, setCategories] = useState([
     { name: "Cakes" },
     { name: "Cupcakes" },

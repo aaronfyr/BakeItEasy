@@ -2,11 +2,11 @@ import React from "react";
 //import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import fetchListings from "./api/listings";
+import fetchListings from "./context/listings";
 import { ChakraProvider } from "@chakra-ui/react";
-import { BuyerProvider } from "./api/buyerProvider";
-import { SellerProvider } from "./api/sellerProvider";
-import { AdminProvider } from "./api/adminProvider";
+import { BuyerProvider } from "./context/buyerProvider";
+import { SellerProvider } from "./context/sellerProvider";
+import { AdminProvider } from "./context/adminProvider";
 import { theme } from "./components/floatingLabel";
 
 import Login from "./pages/login";
@@ -17,6 +17,7 @@ import ResetPassword from "./pages/resetPassword";
 
 import SellerHomepage from "./pages/sellerHomePage";
 import BuyerHomepage from "./pages/buyerHomepage";
+import AdminHomepage from "./pages/adminHomepage";
 import BuyerListingPage from "./pages/buyerListingPage";
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/forgotPassword" element={<ForgotPassword />} />
                 <Route path="/resetPassword" element={<ResetPassword />} />
+                <Route path="/adminHomepage" element={<AdminHomepage />} />
 
                 <Route path="/sellerHomepage" element={<SellerHomepage />} />
               </Routes>

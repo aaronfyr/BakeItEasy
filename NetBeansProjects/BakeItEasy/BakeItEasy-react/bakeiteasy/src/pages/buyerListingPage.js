@@ -110,7 +110,18 @@ function BuyerListingPage() {
             culpa qui officia deserunt mollit anim id est laborum.
           </h4>
         </div>
-        <div id="rightListingContainer">right</div>
+        <div id="rightListingContainer">
+          <form>
+            <h3>Field1:</h3>
+            <input type="text" id="oneLineInput" name="lname" />
+            <h3>Field2:</h3>
+            <input type="text" id="oneLineInput" name="lname" />
+            <h3>Quantity:</h3>
+            <input type="text" id="oneLineInput" name="lname" />
+            <h3>Customisation:</h3>
+            <input type="text" id="customisationInput" name="lname" />
+          </form>
+        </div>
       </div>
     </div>
   );
