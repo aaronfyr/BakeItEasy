@@ -21,6 +21,7 @@ import AdminHomepage from "./pages/adminHomepage";
 
 import BuyerListingPage from "./pages/buyerListingPage";
 import BuyerProfile from "./pages/buyerProfile";
+import BuyerViewOrder from "./pages/buyerViewOrder";
 
 function App() {
   return (
@@ -32,7 +33,8 @@ function App() {
               <Routes>
                 <Route path="/" element={<BuyerHomepage />} />
                 <Route path="listing/:id" element={<BuyerListingPage />} />
-                <Route path="/buyerProfile/:id" element={<BuyerProfile />} />
+                <Route path="buyerProfile/:id" element={<BuyerProfile />} />
+                <Route path="buyerOrder/:id" element={<BuyerViewOrder />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/adminLogin" element={<AdminLogin />} />
                 <Route path="/signup" element={<Signup />} />

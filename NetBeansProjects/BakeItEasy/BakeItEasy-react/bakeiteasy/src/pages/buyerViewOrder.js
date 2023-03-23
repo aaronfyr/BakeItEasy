@@ -27,45 +27,8 @@ import "./resources/listing.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
 
-function BuyerListingPage() {
+function BuyerViewOrder() {
   const { id } = useParams();
-
-  /*
-  // for the image slideshow
-  let slideIndex = 1;
-  showSlides(slideIndex);
-
-  // Next/previous controls
-  const plusSlides = (n) => {
-    showSlides((slideIndex += n));
-  };
-
-  // Thumbnail image controls
-  const currentSlide = (n) => {
-    showSlides((slideIndex = n));
-  };
-
-  function showSlides(n) {
-    let i;
-    let slides = document.getElementsByClassName("mySlides");
-    let dots = document.getElementsByClassName("dot");
-    if (n > slides.length) {
-      slideIndex = 1;
-    }
-    if (n < 1) {
-      slideIndex = slides.length;
-    }
-    for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-    }
-    for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-    }
-    slides[slideIndex - 1].style.display = "block";
-    dots[slideIndex - 1].className += " active";
-  }
-  */
-
   return (
     <div>
       <NavigationBar />
@@ -87,7 +50,6 @@ function BuyerListingPage() {
           </Flex>
           <br />
           <h1>Listing name</h1>
-          <h4>Listing id: {id}</h4>
           <br />
           <div id="listingDetailsGrid">
             <h4>Posted on:</h4>
@@ -128,37 +90,4 @@ function BuyerListingPage() {
   );
 }
 
-export default BuyerListingPage;
-
-/*
-<div class="slideshow-container">
-            <div class="mySlides fade">
-              <div class="numbertext">1 / 3</div>
-              <img src={require("../assets/teracotta.jpg")} alt="dummyimage" />
-              <div class="text">Caption Text</div>
-            </div>
-            <div class="mySlides fade">
-              <div class="numbertext">2 / 3</div>
-              <img src={require("../assets/auburn.png")} alt="dummyimage" />
-              <div class="text">Caption Two</div>
-            </div>
-            <div class="mySlides fade">
-              <div class="numbertext">3 / 3</div>
-              <img src={require("../assets/cardinal.png")} alt="dummyimage" />
-              <div class="text">Caption Three</div>
-            </div>
-            <div class="prev" onClick={() => plusSlides(-1)}>
-              &#10094;
-            </div>
-            <div class="next" onClick={() => plusSlides(1)}>
-              &#10095;
-            </div>
-          </div>
-          <br />
-          <div>
-            <span class="dot" onClick={() => currentSlide(1)}></span>
-            <span class="dot" onClick={() => currentSlide(2)}></span>
-            <span class="dot" onClick={() => currentSlide(3)}></span>
-          </div>
-        </div>
-        */
+export default BuyerViewOrder;

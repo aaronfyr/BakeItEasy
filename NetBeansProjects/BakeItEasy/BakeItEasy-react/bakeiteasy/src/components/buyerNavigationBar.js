@@ -48,12 +48,15 @@ export const NavigationBar = () => {
   // Routing to Buyer Profile
   const routeToProfile = () => {
     let path = "/buyerProfile/" + userId;
-    return <Navigate to={path} />;
+    console.log("Navigate to: ", "profile");
+    navigate(path);
   };
 
   // Routing to Buyer Home Page
   const routeToHomePage = () => {
-    return <Navigate to="/" />;
+    console.log("Navigate to: ", "homepage");
+    navigate("/");
+    //return <Navigate to="/" />;
   };
 
   /*
