@@ -28,8 +28,8 @@ function Login() {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    const response = await fetch(`http://localhost:8080/${type}`, {
-      method: "POST",
+    const response = await fetch(`http://localhost:8080/${type === "seller" ? "sellers" : "buyers"}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },

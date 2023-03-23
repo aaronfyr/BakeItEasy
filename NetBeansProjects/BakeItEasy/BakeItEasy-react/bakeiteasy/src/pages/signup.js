@@ -29,7 +29,7 @@ function Signup() {
     const password = event.target.password.value;
     const phoneNo = event.target.phoneNo.value;
 
-    const response = await fetch(`http://localhost:8080/${type}Signup`, {
+    const response = await fetch(`http://localhost:8080/${type === "seller" ? "sellers" : "buyers"}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

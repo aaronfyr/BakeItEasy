@@ -24,8 +24,8 @@ function AdminLogin() {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    const response = await fetch(`http://localhost:8080/adminLogin`, {
-      method: "POST",
+    const response = await fetch(`http://localhost:8080/admins/login`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
