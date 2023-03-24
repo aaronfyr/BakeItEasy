@@ -29,11 +29,11 @@ function Signup() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const name = event.target.name.value;
-    const username = event.target.username.value;
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-    const phoneNo = event.target.phoneNo.value;
+    // const name = event.target.name.value;
+    // const username = event.target.username.value;
+    // const email = event.target.email.value;
+    // const password = event.target.password.value;
+    // const phoneNo = event.target.phoneNo.value;
 
     const response = await fetch(`http://localhost:8080/${type === "seller" ? "sellers" : "buyers"}`, {
       method: "POST",
