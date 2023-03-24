@@ -28,18 +28,11 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-
-    const response = await fetch(`http://localhost:8080/${type === "seller" ? "sellers" : "buyers"}`, {
+    const response = await fetch(`http://localhost:8080/BakeItEasy-war/webresources/${type === "seller" ? "sellers" : "buyers"}/${email}/${password}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
     });
 
     if (response.ok) {
@@ -53,7 +46,7 @@ function Login() {
       localStorage.setItem("user", user);
       console.log(user);
       // redirect to homepage
-      navigate(`${type}Homepage`);
+      navigate(`/`);
     } else {
       // show error message
       setError("Invalid login credentials. Please try again.");

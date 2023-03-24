@@ -9,7 +9,7 @@ function ViewAllReports() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(`/http://localhost:8080/reports`, {
+      const response = await fetch(`http://localhost:8080/reports`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -27,21 +27,40 @@ function ViewAllReports() {
     fetchData();
   }, []);
 
-  const handleBan = (reportedUser) => {
-    const updatedReports = reports.map((report) => {
-      if (report.reported.username === reportedUser.username) {
-        return {
-          ...report,
-          reported: {
-            ...reportedUser,
-            isBanned: true,
-          },
-        };
-      } else {
-        return report;
+  const handleBan = async (reportedUser) => {
+    const response = await fetch(
+      `http://localhost:8080/${
+        reportedUser.constructor.name === "Seller" ? "sellers" : "buyers"
+      }/ban`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          reportedUser,
+        }),
       }
-    });
-    setReports(updatedReports);
+    );
+
+    if (response.ok) {
+      const updatedReports = reports.map((report) => {
+        if (report.reported.username === reportedUser.username) {
+          return {
+            ...report,
+            reported: {
+              ...reportedUser,
+              isBanned: true,
+            },
+          };
+        } else {
+          return report;
+        }
+      });
+      setReports(updatedReports);
+    } else {
+      setError("There is an error with the ban request");
+    }
   };
 
   return (
