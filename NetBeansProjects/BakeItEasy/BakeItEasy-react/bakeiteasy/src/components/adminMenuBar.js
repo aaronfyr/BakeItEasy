@@ -15,7 +15,7 @@ function AdminMenuBar() {
         <div className="logo">BakeItEasy</div>
       </Flex>
       <Flex align="center">
-        <Link to="/viewAllBuyers">
+        <Link to="/viewAllBuyers" style={{marginRight:"20px"}}>
           <navChoices>View All Buyers</navChoices>
         </Link>
         <Link to="/viewAllSellers">

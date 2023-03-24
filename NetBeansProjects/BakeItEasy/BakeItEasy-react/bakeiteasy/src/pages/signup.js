@@ -7,7 +7,10 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
+
+import { BuyerContext } from "../context/buyerProvider";
+import { SellerContext } from "../context/sellerProvider";
 
 function Signup() {
   const type = new URLSearchParams(useLocation().search).get("type");
@@ -19,6 +22,9 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [error, setError] = useState(null);
+
+  const { setBuyer } = useContext(BuyerContext);
+  const { setSeller } = useContext(SellerContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -44,9 +50,14 @@ function Signup() {
     });
 
     if (response.ok) {
-      const data = await response.json();
+      const user = await response.json();
+      if (type === "seller") {
+        setSeller(user);
+      } else {
+        setBuyer(user);
+      }
       // redirect to homepage
-      navigate("${type}Homepage");
+      navigate(`${type}Homepage`);
     } else {
       // show error message
       setError("Invalid details. Please try again.");
