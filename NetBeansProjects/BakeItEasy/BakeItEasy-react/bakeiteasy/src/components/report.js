@@ -1,14 +1,12 @@
-import { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 import {
-  Image,
-  Stack,
-  Heading,
-  Text,
-  Divider,
-  ButtonGroup,
   Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Divider,
+  Heading,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
 
 const Report = ({ title, reason, reporter, reported }) => {
@@ -25,9 +23,6 @@ const Report = ({ title, reason, reporter, reported }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title,
-          reason,
-          reporter,
           reported,
         }),
       }
