@@ -13,6 +13,11 @@ const Buyer = ({ name, username, email, phoneNo, address, isBanned }) => {
   const handleClick = async (event) => {
     event.preventDefault();
 
+    const confirmed = window.confirm("Are you sure you want to ban this user?");
+    if (!confirmed) {
+      return;
+    }
+
     const response = await fetch(`http://localhost:8080/buyers/ban`, {
       method: "POST",
       headers: {

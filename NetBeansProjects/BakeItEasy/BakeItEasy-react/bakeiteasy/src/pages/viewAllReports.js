@@ -27,14 +27,31 @@ function ViewAllReports() {
     fetchData();
   }, []);
 
+  const handleBan = (reportedUser) => {
+    const updatedReports = reports.map((report) => {
+      if (report.reported.username === reportedUser.username) {
+        return {
+          ...report,
+          reported: {
+            ...reportedUser,
+            isBanned: true,
+          },
+        };
+      } else {
+        return report;
+      }
+    });
+    setReports(updatedReports);
+  };
+
   return (
     <div>
       <AdminMenuBar />
       <Box textAlign="center">
-          <Text fontSize="3xl" fontWeight="bold" mb={8}>
-           Reports
-          </Text>
-        </Box>
+        <Text fontSize="3xl" fontWeight="bold" mb={8}>
+          Reports
+        </Text>
+      </Box>
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
         {reports.map((report) => (
           <GridItem key={report.id} colSpan={1}>
@@ -43,6 +60,7 @@ function ViewAllReports() {
               reason={report.reason}
               reporter={report.reporter}
               reported={report.reported}
+              onBan={handleBan}
             />
           </GridItem>
         ))}

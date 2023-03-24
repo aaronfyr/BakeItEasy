@@ -9,25 +9,16 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const Report = ({ title, reason, reporter, reported }) => {
-  const handleClick = async (event) => {
+const Report = ({ title, reason, reporter, reported, onBan }) => {
+  const handleBanClick = async (event) => {
     event.preventDefault();
-
-    const response = await fetch(
-      `http://localhost:8080/${
-        reported.constructor.name === "Seller" ? "sellers" : "buyers"
-      }/ban`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          reported,
-        }),
-      }
-    );
+    const confirmed = window.confirm("Are you sure you want to ban this user?");
+    if (!confirmed) {
+      return;
+    }
+    await onBan(reported);
   };
+
   return (
     <Card maxW="sm">
       <CardBody>
@@ -38,7 +29,7 @@ const Report = ({ title, reason, reporter, reported }) => {
           <Text> {reported}</Text>
           <Button
             bg="#E2725B"
-            onClick={handleClick}
+            onClick={handleBanClick}
             visibility={reported.isBanned ? "hidden" : "visible"}
           >
             Ban reported user
