@@ -1,6 +1,7 @@
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Grid, GridItem, Box, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Report from "../components/report";
+import AdminMenuBar from "../components/adminMenuBar";
 
 function ViewAllReports() {
   const [reports, setReports] = useState([]);
@@ -28,7 +29,12 @@ function ViewAllReports() {
 
   return (
     <div>
-      <h1>Reports</h1>
+      <AdminMenuBar />
+      <Box textAlign="center">
+          <Text fontSize="3xl" fontWeight="bold" mb={8}>
+           Reports
+          </Text>
+        </Box>
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
         {reports.map((report) => (
           <GridItem key={report.id} colSpan={1}>

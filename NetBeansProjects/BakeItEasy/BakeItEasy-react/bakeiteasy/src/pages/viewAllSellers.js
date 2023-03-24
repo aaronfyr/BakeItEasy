@@ -1,6 +1,7 @@
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Grid, GridItem, Box, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Seller from "../components/seller";
+import AdminMenuBar from "../components/adminMenuBar";
 
 function ViewAllSellers() {
   const [sellers, setSellers] = useState([]);
@@ -28,7 +29,12 @@ function ViewAllSellers() {
 
   return (
     <div>
-      <h1>Sellers</h1>
+      <AdminMenuBar />
+      <Box textAlign="center">
+          <Text fontSize="3xl" fontWeight="bold" mb={8}>
+           Sellers
+          </Text>
+        </Box>
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
         {sellers.map((seller) => (
           <GridItem key={seller.id} colSpan={1}>

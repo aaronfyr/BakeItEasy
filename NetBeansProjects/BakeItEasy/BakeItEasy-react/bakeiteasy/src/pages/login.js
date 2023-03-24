@@ -11,6 +11,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useContext } from "react";
 import { BuyerContext } from "../context/buyerProvider";
 import { SellerContext } from "../context/sellerProvider";
+import  "./resources/login.css";
 
 function Login() {
   const [isLoading, setIsLoading] = useState(null);

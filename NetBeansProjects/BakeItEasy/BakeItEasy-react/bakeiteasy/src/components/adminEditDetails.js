@@ -71,6 +71,12 @@ function AdminEditDetails({
         marginTop="10%"
         position="relative"
       >
+        <Box textAlign="center">
+          <Text fontSize="3xl" fontWeight="bold" mb={8}>
+            Edit Your Details
+          </Text>
+        </Box>
+
         <form onSubmit={handleSubmit}>
           <FormControl mt={4} variant="floating">
             <Input
