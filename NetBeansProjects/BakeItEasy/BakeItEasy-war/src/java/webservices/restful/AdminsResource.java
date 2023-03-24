@@ -92,17 +92,18 @@ public class AdminsResource {
     "password": "password"
     }
     */
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Admin createAdmin(Admin a) {
-        try {
-            adminSessionBeanLocal.createNewAdmin(a);
-        } catch (AdminUsernameExistsException | UnknownPersistenceException | InputDataValidationException ex) {
-            Logger.getLogger(AdminsResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return a;
-    } //end createAdmin
+    
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Admin createAdmin(Admin a) {
+//        try {
+//            adminSessionBeanLocal.createNewAdmin(a);
+//        } catch (AdminUsernameExistsException | UnknownPersistenceException | InputDataValidationException ex) {
+//            Logger.getLogger(AdminsResource.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return a;
+//    } //end createAdmin
     
     // TODO: test
     // login
@@ -113,18 +114,17 @@ public class AdminsResource {
     "password": "password"
     }
      */
-    @GET
-    @Path("/${email}/${password}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Admin login(@PathParam("email") String email, @PathParam("password") String password, Admin a) {
-        try {
-            a = adminSessionBeanLocal.login(email, password);
-        } catch (InvalidLoginCredentialException ex) {
-            Logger.getLogger(AdminsResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return a;
-    }
+//    @GET
+//    @Path("/${email}/${password}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Admin login(@PathParam("email") String email, @PathParam("password") String password, Admin a) {
+//        try {
+//            a = adminSessionBeanLocal.login(email, password);
+//        } catch (InvalidLoginCredentialException ex) {
+//            Logger.getLogger(AdminsResource.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return a;
+//    }
     
     // TODO: test
     // logout

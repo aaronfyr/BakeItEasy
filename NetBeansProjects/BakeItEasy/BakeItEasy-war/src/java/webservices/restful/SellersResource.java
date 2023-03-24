@@ -294,59 +294,59 @@ public class SellersResource {
         }
     } // end delete listing for current seller
 
-    @GET
-    @Path("/{seller_id}/listings/query")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response searchListings(
-            @QueryParam("category") ListingCategory listingCategory,
-            @QueryParam("quantityGreater") Integer quantityGreater,
-            @QueryParam("quantityLesser") Integer quantityLesser,
-            @QueryParam("startPrice") BigDecimal startPrice,
-            @QueryParam("endPrice") BigDecimal endPrice
-    ) {
-        if (listingCategory != null) {
-            List<Listing> results = listingSessionBeanLocal.retrieveListingByListingCategory(listingCategory);
-
-            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-            };
-
-            return Response.status(200).entity(entity).build();
-        } else if (quantityGreater != null) {
-            List<Listing> results = listingSessionBeanLocal.retrieveListingByQuantityGreater(quantityGreater);
-
-            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-            };
-
-            return Response.status(200).entity(entity).build();
-        } else if (quantityLesser != null) {
-            List<Listing> results = listingSessionBeanLocal.retrieveListingByQuantityLesser(quantityGreater);
-
-            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-            };
-
-            return Response.status(200).entity(entity).build();
-        } else if (startPrice != null && endPrice != null) {
-            List<Listing> results = listingSessionBeanLocal.retrieveListingByPriceRange(startPrice, endPrice);
-
-            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-            };
-
-            return Response.status(200).entity(entity).build();
-        } else if (startPrice != null) {
-            List<Listing> results = listingSessionBeanLocal.retrieveListingByPrice(startPrice);
-
-            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-            };
-
-            return Response.status(200).entity(entity).build();
-        } else {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "No query conditions")
-                    .build();
-
-            return Response.status(400).entity(exception).build();
-        }
-
-    } // end query for seller's listings
+//    @GET
+//    @Path("/{seller_id}/listings/query")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response searchListings(
+//            @QueryParam("category") ListingCategory listingCategory,
+//            @QueryParam("quantityGreater") Integer quantityGreater,
+//            @QueryParam("quantityLesser") Integer quantityLesser,
+//            @QueryParam("startPrice") BigDecimal startPrice,
+//            @QueryParam("endPrice") BigDecimal endPrice
+//    ) {
+//        if (listingCategory != null) {
+//            List<Listing> results = listingSessionBeanLocal.retrieveListingByListingCategory(listingCategory);
+//
+//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
+//            };
+//
+//            return Response.status(200).entity(entity).build();
+//        } else if (quantityGreater != null) {
+//            List<Listing> results = listingSessionBeanLocal.retrieveListingByQuantityGreater(quantityGreater);
+//
+//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
+//            };
+//
+//            return Response.status(200).entity(entity).build();
+//        } else if (quantityLesser != null) {
+//            List<Listing> results = listingSessionBeanLocal.retrieveListingByQuantityLesser(quantityGreater);
+//
+//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
+//            };
+//
+//            return Response.status(200).entity(entity).build();
+//        } else if (startPrice != null && endPrice != null) {
+//            List<Listing> results = listingSessionBeanLocal.retrieveListingByPriceRange(startPrice, endPrice);
+//
+//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
+//            };
+//
+//            return Response.status(200).entity(entity).build();
+//        } else if (startPrice != null) {
+//            List<Listing> results = listingSessionBeanLocal.retrieveListingByPrice(startPrice);
+//
+//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
+//            };
+//
+//            return Response.status(200).entity(entity).build();
+//        } else {
+//            JsonObject exception = Json.createObjectBuilder()
+//                    .add("error", "No query conditions")
+//                    .build();
+//
+//            return Response.status(400).entity(exception).build();
+//        }
+//
+//    } // end query for seller's listings
 
 }

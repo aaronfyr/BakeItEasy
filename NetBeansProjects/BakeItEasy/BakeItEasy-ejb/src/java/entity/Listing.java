@@ -8,6 +8,7 @@ package entity;
 import enumeration.ListingCategory;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,6 +33,8 @@ public class Listing implements Serializable {
     @Column
     private String name;
     @Column
+    private ListingCategory listingCategory;
+    @Column
     private BigDecimal price;
     @Column
     private Integer quantityLeft;
@@ -42,18 +45,32 @@ public class Listing implements Serializable {
     /*@Column
     private String videoPath;    */
 
-    @Column
-    private ListingCategory listingCategory;
-
     @OneToOne(optional = true)
     private Seller seller;
 
     @OneToMany(mappedBy = "listing")
     private List<Order> orders;
+    
     @OneToMany(mappedBy = "listing")
     private List<Review> reviews;
 
-     public Long getListingId() {
+    public Listing() {
+        this.orders = new ArrayList<>();
+        this.reviews = new ArrayList<>();
+    }
+
+    public Listing(String name, ListingCategory listingCategory, BigDecimal price, Integer quantityLeft, String description, List<String> imagePaths) {
+        this();
+        
+        this.name = name;
+        this.listingCategory = listingCategory;
+        this.price = price;
+        this.quantityLeft = quantityLeft;
+        this.description = description;
+        this.imagePaths = imagePaths;
+    }
+
+    public Long getListingId() {
         return listingId;
     }
 
@@ -67,6 +84,14 @@ public class Listing implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ListingCategory getListingCategory() {
+        return listingCategory;
+    }
+
+    public void setListingCategory(ListingCategory listingCategory) {
+        this.listingCategory = listingCategory;
     }
 
     public BigDecimal getPrice() {
@@ -99,14 +124,6 @@ public class Listing implements Serializable {
 
     public void setImagePaths(List<String> imagePaths) {
         this.imagePaths = imagePaths;
-    }
-
-    public ListingCategory getListingCategory() {
-        return listingCategory;
-    }
-
-    public void setListingCategory(ListingCategory listingCategory) {
-        this.listingCategory = listingCategory;
     }
 
     public Seller getSeller() {

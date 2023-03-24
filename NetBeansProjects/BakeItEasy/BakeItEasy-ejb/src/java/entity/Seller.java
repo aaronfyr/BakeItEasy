@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -54,6 +54,29 @@ public class Seller implements Serializable {
     private List<Comment> comments; // if we want to let them find which comments they made?
     @OneToMany(mappedBy = "seller")
     private List<Appointment> appointments;
+
+    public Seller() {
+        this.isBanned = false;
+        this.reviews = new ArrayList<>();
+        this.orders = new ArrayList<>();
+        this.listings = new ArrayList<>();
+        this.reports = new ArrayList<>();
+        this.posts = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.appointments = new ArrayList<>();
+    }
+
+    public Seller(String name, String email, String username, String password, String phoneNo) {
+        this();
+        
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.phoneNo = phoneNo;
+    }
+    
+    
 
 
     public Long getSellerId() {
