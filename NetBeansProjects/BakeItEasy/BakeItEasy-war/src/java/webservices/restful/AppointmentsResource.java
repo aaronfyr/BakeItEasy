@@ -8,22 +8,15 @@ package webservices.restful;
 import ejb.session.stateless.AppointmentSessionBeanLocal;
 import entity.Appointment;
 import error.exception.AppointmentNotFoundException;
-import error.exception.InputDataValidationException;
-import error.exception.SellerNotFoundException;
-import error.exception.UnknownPersistenceException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Produces;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -32,7 +25,7 @@ import javax.ws.rs.core.Response;
  *
  * @author aaronf
  */
-@Path("appointment")
+@Path("appointments")
 @RequestScoped
 public class AppointmentsResource {
     @EJB

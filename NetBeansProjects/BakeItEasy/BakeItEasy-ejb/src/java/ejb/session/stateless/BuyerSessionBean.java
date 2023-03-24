@@ -128,10 +128,10 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
     }
     
     @Override
-    public Buyer buyerLogin(String username, String password) throws InvalidLoginCredentialException, BuyerNotFoundException {
+    public Buyer buyerLogin(String email, String password) throws InvalidLoginCredentialException, BuyerNotFoundException {
         try {
-            Query query = em.createQuery("SELECT b FROM Buyer b WHERE b.username = :inUsername");
-            query.setParameter("inUsername", username);
+            Query query = em.createQuery("SELECT b FROM Buyer b WHERE b.email = :inEmail");
+            query.setParameter("inEmail", email);
             Buyer buyer = (Buyer) query.getSingleResult();
 
             if (buyer != null) {
@@ -139,13 +139,13 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
                 if (buyer.getPassword().equals(password)) {
                     return buyer;
                 } else {
-                    throw new InvalidLoginCredentialException("Invalid login credentials for: " + username);
+                    throw new InvalidLoginCredentialException("Invalid login credentials for: " + email);
                 }
             } else {
-                throw new BuyerNotFoundException("Buyer with username " + username + " not found!");
+                throw new BuyerNotFoundException("Buyer with email " + email + " not found!");
             }
         } catch (NoResultException ex) {
-            throw new BuyerNotFoundException("Buyer with username " + username + " not found!");
+            throw new BuyerNotFoundException("Buyer with email " + email + " not found!");
         }
     }
     

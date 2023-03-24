@@ -30,6 +30,6 @@ public interface BuyerSessionBeanLocal {
 
     public void deleteBuyer(Long buyerId) throws BuyerNotFoundException;
 
-    public Buyer buyerLogin(String username, String password) throws InvalidLoginCredentialException, BuyerNotFoundException;
+    public Buyer buyerLogin(String email, String password) throws InvalidLoginCredentialException, BuyerNotFoundException;
     
 }

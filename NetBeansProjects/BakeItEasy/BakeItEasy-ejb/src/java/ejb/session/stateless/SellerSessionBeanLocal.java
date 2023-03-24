@@ -25,7 +25,7 @@ public interface SellerSessionBeanLocal {
 
     public Long createNewSeller(Seller newSeller) throws UnknownPersistenceException, InputDataValidationException, SellerUsernameExistException, SellerEmailExistException, SellerPhoneNumberExistException;
 
-    public Seller sellerLogin(String username, String password) throws InvalidLoginCredentialException, SellerNotFoundException;
+    public Seller sellerLogin(String email, String password) throws InvalidLoginCredentialException, SellerNotFoundException;
 
     public Seller retrieveSellerBySellerId(Long sellerId) throws SellerNotFoundException;
 

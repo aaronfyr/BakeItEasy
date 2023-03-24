@@ -47,11 +47,11 @@ public class BuyersResource {
     } //end createCustomer
     
     @GET
-    @Path("/{username}/{password}")
+    @Path("/{email}/{password}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response buyerLogin(@PathParam("username") String username, @PathParam("password") String password) {
+    public Response buyerLogin(@PathParam("email") String email, @PathParam("password") String password) {
         try {
-            Buyer buyer = buyerSessionBeanLocal.buyerLogin(username, password);
+            Buyer buyer = buyerSessionBeanLocal.buyerLogin(email, password);
             return Response.status(200).entity(buyer).type(MediaType.APPLICATION_JSON).build();
         } catch (Exception e) {
             JsonObject exception = Json.createObjectBuilder().add("error", "Login invalid").build();
