@@ -23,6 +23,9 @@ import BuyerListingPage from "./pages/buyerListingPage";
 import BuyerProfile from "./pages/buyerProfile";
 import BuyerViewOrder from "./pages/buyerViewOrder";
 
+import ViewAllBuyers from "./pages/viewAllBuyers";
+import ViewAllSellers from "./pages/viewAllSellers";
+import ViewAllReports from "./pages/viewAllReports";
 function App() {
   return (
     <ChakraProvider theme={theme}>
@@ -41,6 +44,10 @@ function App() {
                 <Route path="/forgotPassword" element={<ForgotPassword />} />
                 <Route path="/resetPassword" element={<ResetPassword />} />
                 <Route path="/adminHomepage" element={<AdminHomepage />} />
+                <Route path="/viewAllBuyers" element={<ViewAllBuyers />} />
+                <Route path="/viewAllSellers" element={<ViewAllSellers />} />
+                <Route path="/viewAllReports" element={<ViewAllReports />} />
+
 
                 <Route path="/sellerHomepage" element={<SellerHomepage />} />
               </Routes>

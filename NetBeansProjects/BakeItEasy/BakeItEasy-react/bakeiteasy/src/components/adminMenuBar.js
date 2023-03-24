@@ -15,10 +15,13 @@ function AdminMenuBar() {
         <div className="logo">BakeItEasy</div>
       </Flex>
       <Flex align="center">
-        <Link to="./pages/viewAllBuyers" style={{ marginRight: "20px" }}>
+        <Link to="/viewAllReports" style={{ marginRight: "20px" }}>
+          <navChoices>Reports</navChoices>
+        </Link>
+        <Link to="/viewAllBuyers" style={{ marginRight: "20px" }}>
           <navChoices>View All Buyers</navChoices>
         </Link>
-        <Link to="./pages/viewAllSellers">
+        <Link to="/viewAllSellers" style={{ marginRight: "20px" }}>
           <navChoices>View All Sellers</navChoices>
         </Link>
       </Flex>

@@ -1,8 +1,8 @@
 import { Grid, GridItem } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import Report from "./report";
+import Report from "../components/report";
 
-function Reports() {
+function ViewAllReports() {
   const [reports, setReports] = useState([]);
   const [error, setError] = useState(null);
 
@@ -45,4 +45,4 @@ function Reports() {
   );
 }
 
-export default Reports;
+export default ViewAllReports;
