@@ -9,18 +9,21 @@ function ViewAllBuyers() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(`/http://localhost:8080/buyers`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/buyers`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         const res = await response.json();
         setBuyers(res);
       } else {
-        setError("There is an error with the buyer loading");
+        setError("There is an error with loading buyers");
       }
     }
 
@@ -31,10 +34,10 @@ function ViewAllBuyers() {
     <div>
       <AdminMenuBar />
       <Box textAlign="center">
-          <Text fontSize="3xl" fontWeight="bold" mb={8}>
-           Buyers
-          </Text>
-        </Box>
+        <Text fontSize="3xl" fontWeight="bold" mb={8}>
+          Buyers
+        </Text>
+      </Box>
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
         {buyers.map((buyer) => (
           <GridItem key={buyer.id} colSpan={1}>

@@ -20,7 +20,7 @@ function ViewAllReports() {
         const res = await response.json();
         setReports(res);
       } else {
-        setError("There is an error with the report loading");
+        setError("There is an error with loading reports");
       }
     }
 
@@ -29,7 +29,7 @@ function ViewAllReports() {
 
   const handleBan = async (reportedUser) => {
     const response = await fetch(
-      `http://localhost:8080/${
+      `http://localhost:8080/BakeItEasy-war/webresources/${
         reportedUser.constructor.name === "Seller" ? "sellers" : "buyers"
       }/ban`,
       {

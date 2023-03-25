@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex , Text} from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 function AdminMenuBar() {
@@ -22,13 +22,13 @@ function AdminMenuBar() {
       </Flex>
       <Flex align="center">
         <Link to="/viewAllReports" style={{ marginRight: "50px" }}>
-          <navChoices>Reports</navChoices>
+          <Text>Reports</Text>
         </Link>
         <Link to="/viewAllBuyers" style={{ marginRight: "50px" }}>
-          <navChoices>View All Buyers</navChoices>
+          <Text>Buyers</Text>
         </Link>
         <Link to="/viewAllSellers" style={{ marginRight: "50px" }}>
-          <navChoices>View All Sellers</navChoices>
+          <Text>Sellers</Text>
         </Link>
       </Flex>
       <div style={{ width: "100px" }}></div>

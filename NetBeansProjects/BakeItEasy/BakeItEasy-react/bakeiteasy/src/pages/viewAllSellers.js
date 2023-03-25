@@ -9,18 +9,21 @@ function ViewAllSellers() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(`/http://localhost:8080/sellers`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/sellers`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         const res = await response.json();
         setSellers(res);
       } else {
-        setError("There is an error with the seller loading");
+        setError("There is an error with loading sellers");
       }
     }
 
@@ -31,10 +34,10 @@ function ViewAllSellers() {
     <div>
       <AdminMenuBar />
       <Box textAlign="center">
-          <Text fontSize="3xl" fontWeight="bold" mb={8}>
-           Sellers
-          </Text>
-        </Box>
+        <Text fontSize="3xl" fontWeight="bold" mb={8}>
+          Sellers
+        </Text>
+      </Box>
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
         {sellers.map((seller) => (
           <GridItem key={seller.id} colSpan={1}>
