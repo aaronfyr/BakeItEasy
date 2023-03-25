@@ -38,7 +38,7 @@ function ViewAllBuyers() {
           Buyers
         </Text>
       </Box>
-      <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+      <Grid templateColumns="repeat(4, 1fr)" gap={6}>
         {buyers.map((buyer) => (
           <GridItem key={buyer.id} colSpan={1}>
             <Buyer

@@ -71,7 +71,7 @@ function ViewAllReports() {
           Reports
         </Text>
       </Box>
-      <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+      <Grid templateColumns="repeat(4, 1fr)" gap={6}>
         {reports.map((report) => (
           <GridItem key={report.id} colSpan={1}>
             <Report

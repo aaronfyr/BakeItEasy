@@ -38,7 +38,7 @@ function ViewAllSellers() {
           Sellers
         </Text>
       </Box>
-      <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+      <Grid templateColumns="repeat(4, 1fr)" gap={6}>
         {sellers.map((seller) => (
           <GridItem key={seller.id} colSpan={1}>
             <Seller
