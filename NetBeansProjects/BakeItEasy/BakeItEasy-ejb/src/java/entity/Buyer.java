@@ -43,7 +43,7 @@ public class Buyer implements Serializable {
     private String address;
 
     @OneToMany(mappedBy = "buyer")
-    private List<Review> reviews;
+    private List<Review> reviews; // can access from orders
     @OneToMany(mappedBy = "buyer")
     private List<Order> orders;
     @OneToMany(mappedBy = "reporter")

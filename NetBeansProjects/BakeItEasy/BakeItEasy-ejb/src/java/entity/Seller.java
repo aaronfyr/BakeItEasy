@@ -41,9 +41,9 @@ public class Seller implements Serializable {
     private boolean isBanned;
 
     @OneToMany(mappedBy = "seller")
-    private List<Review> reviews;
+    private List<Review> reviews; // can access from listings
     @OneToMany(mappedBy = "seller")
-    private List<Order> orders;
+    private List<Order> orders; // can access from listings
     @OneToMany(mappedBy = "seller")
     private List<Listing> listings;
     @OneToMany(mappedBy = "reportee")

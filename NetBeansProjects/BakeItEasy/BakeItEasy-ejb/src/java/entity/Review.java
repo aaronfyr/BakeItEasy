@@ -49,7 +49,7 @@ public class Review implements Serializable {
     private Order order;
     
     @ManyToOne
-    private Listing listing;
+    private Listing listing; // can access from order
 
     public Listing getListing() {
         return listing;

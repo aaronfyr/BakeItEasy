@@ -52,7 +52,7 @@ public class Listing implements Serializable {
     private List<Order> orders;
     
     @OneToMany(mappedBy = "listing")
-    private List<Review> reviews;
+    private List<Review> reviews; // can access from orders
 
     public Listing() {
         this.orders = new ArrayList<>();
