@@ -21,6 +21,7 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
+  const [address, setAddress] = useState("");
   const [error, setError] = useState(null);
 
   const { setBuyer } = useContext(BuyerContext);
@@ -29,25 +30,25 @@ function Signup() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // const name = event.target.name.value;
-    // const username = event.target.username.value;
-    // const email = event.target.email.value;
-    // const password = event.target.password.value;
-    // const phoneNo = event.target.phoneNo.value;
-
-    const response = await fetch(`http://localhost:8080/${type === "seller" ? "sellers" : "buyers"}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        username,
-        email,
-        password,
-        phoneNo,
-      }),
-    });
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/${
+        type === "seller" ? "sellers" : "buyers"
+      }`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          username,
+          email,
+          password,
+          phoneNo,
+          address,
+        }),
+      }
+    );
 
     if (response.ok) {
       const user = await response.json();
@@ -57,7 +58,7 @@ function Signup() {
         setBuyer(user);
       }
       // redirect to homepage
-      navigate(`${type}Homepage`);
+      navigate(`/`);
     } else {
       // show error message
       setError("Invalid details. Please try again.");
@@ -135,6 +136,16 @@ function Signup() {
             required
           />
           <FormLabel>Phone Number</FormLabel>
+        </FormControl>
+        <FormControl mt={4} variant="floating">
+          <Input
+            type="address"
+            placeholder=" "
+            value={address}
+            onChange={(event) => setAddress(event.target.value)}
+            required
+          />
+          <FormLabel>Address</FormLabel>
         </FormControl>
         {error && (
           <FormControl>
