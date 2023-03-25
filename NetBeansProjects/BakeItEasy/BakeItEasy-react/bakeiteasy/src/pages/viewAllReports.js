@@ -9,7 +9,7 @@ function ViewAllReports() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(`http://localhost:8080/reports`, {
+      const response = await fetch(`http://localhost:8080/BakeItEasy-war/webresources/reports`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
