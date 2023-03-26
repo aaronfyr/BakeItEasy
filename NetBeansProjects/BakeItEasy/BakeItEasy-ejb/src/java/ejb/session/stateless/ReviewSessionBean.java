@@ -76,24 +76,15 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
     }
 
     @Override
-    public Long createNewReview(Review review, Long buyerId, Long sellerId, Long orderId, Long listingId) throws BuyerNotFoundException, SellerNotFoundException, OrderNotFoundException, UnknownPersistenceException, InputDataValidationException, ListingNotFoundException {
+    public Long createNewReview(Review review, Long orderId) throws OrderNotFoundException, UnknownPersistenceException, InputDataValidationException {
         Set<ConstraintViolation<Review>> constraintViolations = validator.validate(review);
 
         if (constraintViolations.isEmpty()) {
             try {
                 em.persist(review);
-                Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
-                Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
                 Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
-                Listing listing = listingSessionBeanLocal.retrieveListingByListingId(listingId);
-                review.setBuyer(buyer);
-                review.setSeller(seller);
                 review.setOrder(order);
-                review.setListing(listing);
-                buyer.getReviews().add(review);
-                seller.getReviews().add(review);
                 order.setReview(review);
-                listing.getReviews().add(review);
                 em.flush();
                 return review.getReviewId();
             } catch (PersistenceException ex) {
@@ -127,21 +118,14 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
         oldR.setRating(r.getRating());
         oldR.setImagePaths(r.getImagePaths());
         oldR.setDateCreated(r.getDateCreated());
-        oldR.setBuyer(r.getBuyer());
-        oldR.setSeller(r.getSeller());
         oldR.setOrder(r.getOrder());
-        oldR.setListing(r.getListing());
     } //end updateReview
 
     // remove report from db
     @Override
     public void removeReview(Long reviewId) throws ReviewNotFoundException {
         Review review = reviewSessionBeanLocal.retrieveReviewById(reviewId);
-        Buyer buyer = review.getBuyer();
-        Seller seller = review.getSeller();
         Order order = review.getOrder();
-        buyer.getReviews().remove(review);
-        seller.getReviews().remove(review);
         order.setReview(null);
         em.remove(review);
     }

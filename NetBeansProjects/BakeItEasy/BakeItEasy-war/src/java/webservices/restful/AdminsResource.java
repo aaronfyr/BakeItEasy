@@ -92,20 +92,18 @@ public class AdminsResource {
     "password": "password"
     }
     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Admin createAdmin(Admin a) {
+        try {
+            adminSessionBeanLocal.createNewAdmin(a);
+        } catch (AdminUsernameExistsException | UnknownPersistenceException | InputDataValidationException ex) {
+            Logger.getLogger(AdminsResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return a;
+    } //end createAdmin
     
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Admin createAdmin(Admin a) {
-//        try {
-//            adminSessionBeanLocal.createNewAdmin(a);
-//        } catch (AdminUsernameExistsException | UnknownPersistenceException | InputDataValidationException ex) {
-//            Logger.getLogger(AdminsResource.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return a;
-//    } //end createAdmin
-    
-    // TODO: test
     // login
     // request body:
     /*
@@ -114,29 +112,31 @@ public class AdminsResource {
     "password": "password"
     }
      */
-//    @GET
-//    @Path("/${email}/${password}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Admin login(@PathParam("email") String email, @PathParam("password") String password, Admin a) {
-//        try {
-//            a = adminSessionBeanLocal.login(email, password);
-//        } catch (InvalidLoginCredentialException ex) {
-//            Logger.getLogger(AdminsResource.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return a;
-//    }
+    @GET
+    @Path("/{email}/{password}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response login(@PathParam("email") String email, @PathParam("password") String password) {
+        try {
+            Admin a = adminSessionBeanLocal.login(email, password);
+            return Response.status(200).entity(a).type(MediaType.APPLICATION_JSON).build();
+        } catch (InvalidLoginCredentialException ex) {
+            System.out.println("hi");
+            JsonObject exception = Json.createObjectBuilder().add("error", "Login invalid").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end login
     
     // TODO: test
     // logout
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response logout() {
-        return Response.status(Response.Status.NO_CONTENT).build();
-    }
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response logout() {
+//        return Response.status(Response.Status.NO_CONTENT).build();
+//    }
     
     // TODO: test
-    // edit admin
+    // assign admin to a report
     @PUT
     @Path("/{admin_id}/reports/{report_id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -171,6 +171,14 @@ public class AdminsResource {
     } //end assignAdminToReport
     
     // edit admin
+    /*
+    {
+    "name" : "admin1",
+    "username": "admin",
+    "email": "admin@mail.com",
+    "password": "password"
+    }
+    */
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)

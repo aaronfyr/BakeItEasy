@@ -7,13 +7,19 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -31,17 +37,17 @@ public class Appointment implements Serializable {
     private String title;
     @Column
     private String description;
+    @Temporal(TemporalType.TIMESTAMP)
     @Column
     private Date date; // maybe use sql.date
     
-    @ManyToOne
-    private Seller seller;
-    
-    @OneToOne
-    private Buyer buyer;
-    
-    @OneToOne
+    @OneToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    @JsonbTransient
     private Order order;
+
+    public Appointment() {
+    }
     
     public Long getAppointmentId() {
         return appointmentId;
@@ -75,22 +81,7 @@ public class Appointment implements Serializable {
         this.date = date;
     }
 
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
-
-    public Buyer getBuyer() {
-        return buyer;
-    }
-
-    public void setBuyer(Buyer buyer) {
-        this.buyer = buyer;
-    }
-
+    @XmlTransient
     public Order getOrder() {
         return order;
     }

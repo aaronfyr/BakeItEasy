@@ -8,12 +8,15 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -40,30 +43,21 @@ public class Seller implements Serializable {
     @Column
     private boolean isBanned;
 
-    @OneToMany(mappedBy = "seller")
-    private List<Review> reviews; // can access from listings
-    @OneToMany(mappedBy = "seller")
-    private List<Order> orders; // can access from listings
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
+    @JsonbTransient
     private List<Listing> listings;
-    @OneToMany(mappedBy = "reportee")
+    @OneToMany(mappedBy = "reportee", fetch = FetchType.EAGER)
+    @JsonbTransient
     private List<Report> reports;
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
+    @JsonbTransient
     private List<Post> posts;
-    @OneToMany(mappedBy = "seller")
-    private List<Comment> comments; // if we want to let them find which comments they made?
-    @OneToMany(mappedBy = "seller")
-    private List<Appointment> appointments;
-
+    
     public Seller() {
         this.isBanned = false;
-        this.reviews = new ArrayList<>();
-        this.orders = new ArrayList<>();
         this.listings = new ArrayList<>();
         this.reports = new ArrayList<>();
         this.posts = new ArrayList<>();
-        this.comments = new ArrayList<>();
-        this.appointments = new ArrayList<>();
     }
 
     public Seller(String name, String email, String username, String password, String phoneNo) {
@@ -135,22 +129,7 @@ public class Seller implements Serializable {
         this.isBanned = isBanned;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
+    @XmlTransient
     public List<Listing> getListings() {
         return listings;
     }
@@ -159,6 +138,7 @@ public class Seller implements Serializable {
         this.listings = listings;
     }
 
+    @XmlTransient
     public List<Report> getReports() {
         return reports;
     }
@@ -167,28 +147,13 @@ public class Seller implements Serializable {
         this.reports = reports;
     }
 
+    @XmlTransient
     public List<Post> getPosts() {
         return posts;
     }
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-    
-    public List<Appointment> getAppointments() {
-        return appointments;
-    }
-
-    public void setAppointments(List<Appointment> appointments) {
-        this.appointments = appointments;
     }
 
     @Override
