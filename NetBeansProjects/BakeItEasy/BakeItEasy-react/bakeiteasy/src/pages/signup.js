@@ -5,6 +5,7 @@ import {
   Button,
   Box,
   Text,
+  Image,
 } from "@chakra-ui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useContext } from "react";
@@ -24,9 +25,21 @@ function Signup() {
   const [address, setAddress] = useState("");
   const [error, setError] = useState(null);
 
+  const [profilePic, setProfilePic] = useState(null);
+
   const { setBuyer } = useContext(BuyerContext);
   const { setSeller } = useContext(SellerContext);
-
+  
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setProfilePic(reader.result);
+      };
+    }
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -57,6 +70,12 @@ function Signup() {
       } else {
         setBuyer(user);
       }
+
+      if (profilePic) {
+        //saveProfilePic(type, user.id, profilePic);
+      }
+
+      
       // redirect to homepage
       navigate(`/`);
     } else {
@@ -147,6 +166,16 @@ function Signup() {
           />
           <FormLabel>Address</FormLabel>
         </FormControl>
+
+        <FormLabel mt={6}>Profile picture</FormLabel>
+        <Input
+          type="file"
+          placeholder=" "
+          onChange={handleImageChange}
+          accept="image/jpeg, image/png"
+        />
+        {profilePic && <Image src={profilePic} />}
+
         {error && (
           <FormControl>
             <FormLabel color="red.500">{error}</FormLabel>
