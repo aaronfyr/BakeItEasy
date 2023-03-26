@@ -22,6 +22,7 @@ import AdminHomepage from "./pages/adminHomepage";
 import BuyerListingPage from "./pages/buyerListingPage";
 import BuyerProfile from "./pages/buyerProfile";
 import BuyerViewOrder from "./pages/buyerViewOrder";
+import MakeReview from "./pages/makeReview";
 
 import ViewAllBuyers from "./pages/viewAllBuyers";
 import ViewAllSellers from "./pages/viewAllSellers";
@@ -47,6 +48,7 @@ function App() {
                 <Route path="/viewAllBuyers" element={<ViewAllBuyers />} />
                 <Route path="/viewAllSellers" element={<ViewAllSellers />} />
                 <Route path="/viewAllReports" element={<ViewAllReports />} />
+                <Route path="/makeReview" element={<MakeReview />} />
 
 
                 <Route path="/sellerHomepage" element={<SellerHomepage />} />
