@@ -76,8 +76,6 @@ public class ReportsResource {
     } //end getReport
 
     // TODO: TEST THIS
-    // assign admin during creation of report or after?
-    
     // create a new report
     // request body:
     /*

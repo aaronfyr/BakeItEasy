@@ -184,7 +184,6 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
             sellerToUpdate.setName(updatedSeller.getName());
             sellerToUpdate.setPassword(updatedSeller.getPassword());
             sellerToUpdate.setPhoneNo(updatedSeller.getPhoneNo());
-            sellerToUpdate.setAppointments(updatedSeller.getAppointments());
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }

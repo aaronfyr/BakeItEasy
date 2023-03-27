@@ -23,8 +23,6 @@ import javax.ejb.Local;
 @Local
 public interface AppointmentSessionBeanLocal {
 
-    public Long createNewAppointment(Appointment newAppointment, Long sellerId, Long buyerId, Long orderId) throws UnknownPersistenceException, InputDataValidationException, SellerNotFoundException, BuyerNotFoundException, OrderNotFoundException;
-
     public void updateAppointment(Appointment updatedAppointment) throws AppointmentNotFoundException, InputDataValidationException;
 
     public List<Appointment> retrieveAllAppointments();
@@ -34,5 +32,7 @@ public interface AppointmentSessionBeanLocal {
     public Appointment retrieveAppointmentBySellerIdAndAppointmentId(Long sellerId, Long appointmentId);
     
     public List<Appointment> retrieveSellerAppointments(Long sellerId);
+
+    public Long createNewAppointment(Appointment newAppointment, Long orderId) throws UnknownPersistenceException, InputDataValidationException, OrderNotFoundException;
     
 }

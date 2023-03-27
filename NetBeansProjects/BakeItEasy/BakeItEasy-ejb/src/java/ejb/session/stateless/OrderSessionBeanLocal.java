@@ -26,7 +26,7 @@ public interface OrderSessionBeanLocal {
     public void editOrder(Order order) throws OrderNotFoundException;
 
     public void deleteOrder(Long orderId) throws OrderNotFoundException;
-
-    public Long createNewOrder(Order order, Long buyerId, Long sellerId, Long listingId) throws SellerNotFoundException, BuyerNotFoundException, ListingNotFoundException, UnknownPersistenceException, InputDataValidationException;
+    
+    public Long createNewOrder(Order order, Long buyerId, Long listingId) throws BuyerNotFoundException, ListingNotFoundException, UnknownPersistenceException, InputDataValidationException;
     
 }

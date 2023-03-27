@@ -5,13 +5,16 @@
  */
 package ejb.session.singleton;
 
+import ejb.session.stateless.AdminSessionBeanLocal;
 import ejb.session.stateless.BuyerSessionBeanLocal;
 import ejb.session.stateless.ListingSessionBeanLocal;
 import ejb.session.stateless.SellerSessionBeanLocal;
+import entity.Admin;
 import entity.Buyer;
 import entity.Listing;
 import entity.Seller;
 import enumeration.ListingCategory;
+import error.exception.AdminUsernameExistsException;
 import error.exception.InputDataValidationException;
 import error.exception.SellerEmailExistException;
 import error.exception.SellerNotFoundException;
@@ -53,6 +56,9 @@ public class DataInitSessionBean {
 
     @EJB(name = "BuyerSessionBeanLocal")
     private BuyerSessionBeanLocal buyerSessionBeanLocal;
+    
+    @EJB(name = "AdminSessionBeanLocal")
+    private AdminSessionBeanLocal adminSessionBeanLocal;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -70,9 +76,11 @@ public class DataInitSessionBean {
             Seller seller1 = new Seller("test", "test", "test", "test", "test");
             sellerSessionBeanLocal.createNewSeller(seller1);
             List<String> newImagePath = new ArrayList<>();
-            Listing listing1 = new Listing("Most Delicious Cake", ListingCategory.CAKE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing1 = new Listing("Most Delicious Cake", ListingCategory.CAKE, BigDecimal.TEN, 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
             listingSessionBeanLocal.createNewListing(listing1, seller1.getSellerId());
-        } catch (UnknownPersistenceException | InputDataValidationException | SellerUsernameExistException | SellerEmailExistException | SellerPhoneNumberExistException | SellerNotFoundException ex) {
+            Admin admin1 = new Admin("admin1", "admin", "admin@mail.com", "password");
+            adminSessionBeanLocal.createNewAdmin(admin1);
+        } catch (UnknownPersistenceException | InputDataValidationException | SellerUsernameExistException | SellerEmailExistException | SellerPhoneNumberExistException | SellerNotFoundException | AdminUsernameExistsException ex) {
             System.out.println(ex.getMessage());
         }
     }

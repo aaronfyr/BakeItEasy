@@ -80,36 +80,6 @@ public class ReviewsResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end getReview
-
-    // TODO: TEST THIS
-    // create a new review
-    // request body:
-    /*
-    {
-    "title": "review 123",
-    "reviewText": "review text",
-    "rating": 5,
-    "dateCreated": "2023-03-03T00:00:00"
-    }
-     */
-    @POST
-    @Path("/orders/{order_id}/reviews")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Review createReview(Review r, @PathParam("order_id") Long orderId) {
-        try {
-            Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
-            Long buyerId = order.getBuyer().getBuyerId();
-            Long sellerId = order.getSeller().getSellerId();
-            Long listingId = order.getListing().getListingId();
-            reviewSessionBeanLocal.createNewReview(r, buyerId, sellerId, orderId, listingId);
-        } catch (InputDataValidationException ex) {
-            Logger.getLogger(AdminsResource.class.getName()).log(Level.SEVERE, null, ex); // not too sure how to catch this exception
-        } catch (BuyerNotFoundException | SellerNotFoundException | OrderNotFoundException | UnknownPersistenceException | ListingNotFoundException ex) {
-            Logger.getLogger(ReviewsResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return r;
-    } //end createReview
     
     // edit review
     @PUT

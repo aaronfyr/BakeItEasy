@@ -62,21 +62,13 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     }
     
     @Override
-    public Long createNewAppointment(Appointment newAppointment, Long sellerId, Long buyerId, Long orderId) throws UnknownPersistenceException, InputDataValidationException, SellerNotFoundException, BuyerNotFoundException, OrderNotFoundException {
+    public Long createNewAppointment(Appointment newAppointment, Long orderId) throws UnknownPersistenceException, InputDataValidationException, OrderNotFoundException {
         Set<ConstraintViolation<Appointment>> constraintViolations = validator.validate(newAppointment);
         
         if (constraintViolations.isEmpty()) {
             try {
-                Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
-                newAppointment.setBuyer(buyer);
                 Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
                 newAppointment.setOrder(order);
-                
-                Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
-                newAppointment.setSeller(seller);
-                seller.getAppointments().add(newAppointment);
-                sellerSessionBeanLocal.updateSeller(seller);
-                
                 em.persist(newAppointment);
                 em.flush();
                 return newAppointment.getAppointmentId();

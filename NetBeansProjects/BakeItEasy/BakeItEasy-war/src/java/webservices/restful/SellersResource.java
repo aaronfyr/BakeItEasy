@@ -71,13 +71,13 @@ public class SellersResource {
 
     // TODO: test
     // get all reviews for seller with id = {id}
-    @GET
-    @Path("/{seller_id}/reviews")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Review> getAllSellerReviews(@PathParam("seller_id") Long sellerId) throws SellerNotFoundException {
-        Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
-        return seller.getReviews();
-    } //end getAllSellerReviews
+//    @GET
+//    @Path("/{seller_id}/reviews")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public List<Review> getAllSellerReviews(@PathParam("seller_id") Long sellerId) throws SellerNotFoundException {
+//        Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
+//        return seller.getReviews();
+//    } //end getAllSellerReviews
 
     // TODO: test
     // get all reports for seller with id = {id}
