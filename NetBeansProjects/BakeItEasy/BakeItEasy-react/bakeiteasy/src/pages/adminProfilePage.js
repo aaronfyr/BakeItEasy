@@ -4,19 +4,19 @@ import AdminMenuBar from "../components/adminMenuBar";
 import AdminEditDetails from "../components/adminEditDetails";
 import "./resources/default.css";
 
-function AdminHomepage() {
+function AdminProfilePage() {
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
-      //const admin = localStorage.getItem("user");
-      setAdmin({
-        id: "1",
-        name: "test",
-        email: "email",
-        password: "password",
-      });
+      const admin = localStorage.getItem("user");
+      // setAdmin({
+      //   id: "1",
+      //   name: "test",
+      //   email: "email",
+      //   password: "password",
+      // });
       if (!admin) {
         //navigate("/adminLogin");
       } else {
@@ -42,4 +42,4 @@ function AdminHomepage() {
   );
 }
 
-export default AdminHomepage;
+export default AdminProfilePage;
