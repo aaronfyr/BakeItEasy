@@ -129,7 +129,10 @@ function MakeReview({ order }) {
             Price: <Text as="span">{order.price}</Text>
           </Text>
           <Text>
-            Date: <Text as="span">{order.date}</Text>
+            Order Date: <Text as="span">{order.creationDate}</Text>
+          </Text>
+          <Text>
+            Collection Date: <Text as="span">{order.collectionDate}</Text>
           </Text>
           <Text>
             Quantity: <Text as="span">{order.quantity}</Text>

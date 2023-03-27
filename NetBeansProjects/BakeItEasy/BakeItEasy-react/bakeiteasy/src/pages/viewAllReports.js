@@ -9,12 +9,15 @@ function ViewAllReports() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(`http://localhost:8080/BakeItEasy-war/webresources/reports`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/reports`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         const res = await response.json();
@@ -71,19 +74,25 @@ function ViewAllReports() {
           Reports
         </Text>
       </Box>
-      <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-        {reports.map((report) => (
-          <GridItem key={report.id} colSpan={1}>
-            <Report
-              title={report.title}
-              reason={report.reason}
-              reporter={report.reporter}
-              reported={report.reported}
-              onBan={handleBan}
-            />
-          </GridItem>
-        ))}
-      </Grid>
+      {reports.length === 0 ? (
+        <Box textAlign="center">
+          <Text>No reports found</Text>
+        </Box>
+      ) : (
+        <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+          {reports.map((report) => (
+            <GridItem key={report.id} colSpan={1}>
+              <Report
+                title={report.title}
+                reason={report.reason}
+                reporter={report.reporter}
+                reported={report.reported}
+                onBan={handleBan}
+              />
+            </GridItem>
+          ))}
+        </Grid>
+      )}
     </div>
   );
 }

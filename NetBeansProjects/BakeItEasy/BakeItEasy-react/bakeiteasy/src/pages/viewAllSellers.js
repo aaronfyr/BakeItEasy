@@ -38,20 +38,25 @@ function ViewAllSellers() {
           Sellers
         </Text>
       </Box>
-      <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-        {sellers.map((seller) => (
-          <GridItem key={seller.id} colSpan={1}>
-            <Seller
-              name={seller.name}
-              username={seller.username}
-              email={seller.email}
-              phoneNo={seller.phoneNo}
-              address={seller.address}
-              isBanned={seller.isBanned}
-            />
-          </GridItem>
-        ))}
-      </Grid>
+      {sellers.length === 0 ? (
+        <Box textAlign="center">
+          <Text>No sellers found</Text>
+        </Box>
+      ) : (
+        <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+          {sellers.map((seller) => (
+            <GridItem key={seller.id} colSpan={1}>
+              <Seller
+                name={seller.name}
+                username={seller.username}
+                email={seller.email}
+                phoneNo={seller.phoneNo}
+                isBanned={seller.isBanned}
+              />
+            </GridItem>
+          ))}
+        </Grid>
+      )}
     </div>
   );
 }
