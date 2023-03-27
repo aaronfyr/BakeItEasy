@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -33,6 +33,57 @@ export const BuyerShopping = () => {
     { name: "Graduation" },
   ]);
 
+  const [listings, setListings] = useState([]);
+
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/listings`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        );
+        const data = await response.json();
+        setListings(data);
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  /*
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/listings`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        const res = await response.json();
+        setListings(res);
+      } else {
+        console.log("error: ", ":(");
+      }
+    }
+
+    fetchData();
+  }, []);
+  */
+
+  /*
   const [products, setProducts] = useState([
     {
       id: 1,
@@ -179,6 +230,7 @@ export const BuyerShopping = () => {
       tags: "hoodie solid plain black long baggy hood",
     },
   ]);
+  */
 
   let navigate = useNavigate();
   const routeChangeToListing = (id) => {
@@ -194,7 +246,7 @@ export const BuyerShopping = () => {
 
   const [search, setSearch] = useState("");
 
-  const filteredProducts = products.filter((product) => {
+  const filteredListings = listings.filter((product) => {
     if (
       product.tags.toLowerCase().includes(search) ||
       product.title.toLowerCase().includes(search) ||
@@ -244,7 +296,7 @@ export const BuyerShopping = () => {
       <div class="shoppingHeader">Followed Bakers</div>
 
       <div className="display">
-        {filteredProducts.map((product) => (
+        {filteredListings.map((product) => (
           <div
             className="product"
             onClick={() => routeChangeToListing(product.id)}
@@ -277,7 +329,7 @@ export const BuyerShopping = () => {
 
       <div class="shoppingHeader">Explore More Bakers</div>
       <div className="display">
-        {filteredProducts.map((product) => (
+        {filteredListings.map((product) => (
           <div
             className="product"
             onClick={() => routeChangeToListing(product.id)}
@@ -298,8 +350,8 @@ export const BuyerShopping = () => {
                 alt="listing product"
               />
             </div>
-            <h3>{product.title}</h3>
-            <h5>product details</h5>
+            <h3>{product.name}</h3>
+            <h5>{product.description}</h5>
             <div class="productBottomRow">
               <FiHeart size="1.2rem" />
               <h3>${product.price}</h3>

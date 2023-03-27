@@ -67,11 +67,78 @@ public class DataInitSessionBean {
         try {
             Buyer buyer1 = new Buyer("test", "test", "test", "test", "test", "test");
             buyerSessionBeanLocal.createNewBuyer(buyer1);
+            
             Seller seller1 = new Seller("test", "test", "test", "test", "test");
+            Seller seller2 = new Seller("test2", "test2", "test2", "test2", "test2");
+            Seller seller3 = new Seller("test3", "test3", "test3", "test3", "test3");
+            Seller seller4 = new Seller("test4", "test4", "test4", "test4", "test4");
             sellerSessionBeanLocal.createNewSeller(seller1);
+            sellerSessionBeanLocal.createNewSeller(seller2);
+            sellerSessionBeanLocal.createNewSeller(seller3);
+            sellerSessionBeanLocal.createNewSeller(seller4);
+            
             List<String> newImagePath = new ArrayList<>();
             Listing listing1 = new Listing("Most Delicious Cake", ListingCategory.CAKE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing2 = new Listing("Savory Tart", ListingCategory.SAVORY, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing3 = new Listing("Bread", ListingCategory.BREAD, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing4 = new Listing("Muffin", ListingCategory.MUFFINCUPCAKE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing5 = new Listing("Pastry", ListingCategory.PASTRYTART, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing6 = new Listing("Savory Tart", ListingCategory.PIE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing7 = new Listing("Most Delicious Cake", ListingCategory.CAKE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing8 = new Listing("Savory Tart", ListingCategory.SAVORY, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing9 = new Listing("Savory Tart", ListingCategory.BREAD, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing10 =  new Listing("Savory Tart", ListingCategory.MUFFINCUPCAKE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing11 = new Listing("Savory Tart", ListingCategory.PASTRYTART, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing12 = new Listing("Savory Tart", ListingCategory.PIE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing13 = new Listing("Most Delicious Cake", ListingCategory.CAKE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing14 = new Listing("Savory Tart", ListingCategory.SAVORY, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing15 = new Listing("Savory Tart", ListingCategory.BREAD, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing16 = new Listing("Savory Tart", ListingCategory.MUFFINCUPCAKE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing17 = new Listing("Savory Tart", ListingCategory.PASTRYTART, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing18 = new Listing("Savory Tart", ListingCategory.PIE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing19 = new Listing("Most Delicious Cake", ListingCategory.CAKE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing20 = new Listing("Savory Tart", ListingCategory.SAVORY, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing21 = new Listing("Savory Tart", ListingCategory.BREAD, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing22 = new Listing("Savory Tart", ListingCategory.MUFFINCUPCAKE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing23 = new Listing("Savory Tart", ListingCategory.PASTRYTART, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing24 = new Listing("Savory Tart", ListingCategory.PIE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing25 = new Listing("Most Delicious Cake", ListingCategory.CAKE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing26 = new Listing("Savory Tart", ListingCategory.SAVORY, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing27 = new Listing("Savory Tart", ListingCategory.BREAD, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing28 = new Listing("Savory Tart", ListingCategory.MUFFINCUPCAKE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing29 = new Listing("Savory Tart", ListingCategory.PASTRYTART, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
+            Listing listing30 = new Listing("Savory Tart", ListingCategory.PIE, new BigDecimal(99.99), 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
             listingSessionBeanLocal.createNewListing(listing1, seller1.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing2, seller2.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing3, seller3.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing4, seller4.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing5, seller1.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing6, seller2.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing7, seller3.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing8, seller4.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing9, seller1.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing10, seller2.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing11, seller3.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing12, seller4.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing13, seller1.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing14, seller2.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing15, seller3.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing16, seller4.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing17, seller1.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing18, seller2.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing19, seller3.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing20, seller4.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing21, seller1.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing22, seller2.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing23, seller3.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing24, seller4.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing25, seller1.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing26, seller2.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing27, seller3.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing28, seller4.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing29, seller1.getSellerId());
+            listingSessionBeanLocal.createNewListing(listing30, seller2.getSellerId());
+            
         } catch (UnknownPersistenceException | InputDataValidationException | SellerUsernameExistException | SellerEmailExistException | SellerPhoneNumberExistException | SellerNotFoundException ex) {
             System.out.println(ex.getMessage());
         }
