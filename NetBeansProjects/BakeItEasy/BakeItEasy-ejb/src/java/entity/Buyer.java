@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -39,6 +39,8 @@ public class Buyer implements Serializable {
     private String phoneNo;
     @Column
     private boolean isBanned;
+    @Column(nullable = true)
+    private String address;
 
     @OneToMany(mappedBy = "buyer")
     private List<Review> reviews;
@@ -51,8 +53,29 @@ public class Buyer implements Serializable {
     @OneToMany(mappedBy = "buyer")
     private List<Comment> comments; // if we want to let them find which comments they made?
 
-    @OneToOne(optional = true)
-    private Address address;
+    public Buyer() {
+        this.isBanned = false;
+        this.reviews = new ArrayList<>();
+        this.orders = new ArrayList<>();
+        this.reports = new ArrayList<>();
+        this.posts = new ArrayList<>();
+        this.comments = new ArrayList<>();
+    }
+    
+    
+
+    public Buyer(String name, String email, String username, String password, String phoneNo, String address) {
+        this();
+        
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.phoneNo = phoneNo;
+        this.address = address;
+    }
+    
+    
 
     public List<Post> getPosts() {
         return posts;
@@ -70,11 +93,11 @@ public class Buyer implements Serializable {
         this.comments = comments;
     }
 
-    public Address getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 

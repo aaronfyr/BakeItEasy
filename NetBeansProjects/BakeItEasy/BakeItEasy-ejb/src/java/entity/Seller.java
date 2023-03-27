@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -44,62 +44,47 @@ public class Seller implements Serializable {
     private List<Review> reviews;
     @OneToMany(mappedBy = "seller")
     private List<Order> orders;
+    @OneToMany(mappedBy = "seller")
+    private List<Listing> listings;
     @OneToMany(mappedBy = "reportee")
     private List<Report> reports;
     @OneToMany(mappedBy = "seller")
     private List<Post> posts;
     @OneToMany(mappedBy = "seller")
     private List<Comment> comments; // if we want to let them find which comments they made?
+    @OneToMany(mappedBy = "seller")
+    private List<Appointment> appointments;
 
-    public List<Post> getPosts() {
-        return posts;
+    public Seller() {
+        this.isBanned = false;
+        this.reviews = new ArrayList<>();
+        this.orders = new ArrayList<>();
+        this.listings = new ArrayList<>();
+        this.reports = new ArrayList<>();
+        this.posts = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.appointments = new ArrayList<>();
     }
 
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
+    public Seller(String name, String email, String username, String password, String phoneNo) {
+        this();
+        
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.phoneNo = phoneNo;
+    }
+    
+    
+
+
+    public Long getSellerId() {
+        return sellerId;
     }
 
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    @OneToOne(optional = true)
-    private Address address;
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    public List<Report> getReports() {
-        return reports;
-    }
-
-    public void setReports(List<Report> reports) {
-        this.reports = reports;
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
     }
 
     public String getName() {
@@ -150,12 +135,60 @@ public class Seller implements Serializable {
         this.isBanned = isBanned;
     }
 
-    public Long getSellerId() {
-        return sellerId;
+    public List<Review> getReviews() {
+        return reviews;
     }
 
-    public void setSellerId(Long sellerId) {
-        this.sellerId = sellerId;
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public List<Listing> getListings() {
+        return listings;
+    }
+
+    public void setListings(List<Listing> listings) {
+        this.listings = listings;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+    
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
 
     @Override

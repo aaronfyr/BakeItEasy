@@ -8,6 +8,7 @@ package entity;
 import enumeration.ListingCategory;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,6 +33,8 @@ public class Listing implements Serializable {
     @Column
     private String name;
     @Column
+    private ListingCategory listingCategory;
+    @Column
     private BigDecimal price;
     @Column
     private Integer quantityLeft;
@@ -42,56 +45,37 @@ public class Listing implements Serializable {
     /*@Column
     private String videoPath;    */
 
-    @Column
-    private ListingCategory listingCategory;
-
     @OneToOne(optional = true)
     private Seller seller;
 
     @OneToMany(mappedBy = "listing")
     private List<Order> orders;
+    
     @OneToMany(mappedBy = "listing")
     private List<Review> reviews;
 
-    public List<Review> getReviews() {
-        return reviews;
+    public Listing() {
+        this.orders = new ArrayList<>();
+        this.reviews = new ArrayList<>();
     }
 
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-    
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
-
-    public List<String> getImagePaths() {
-        return imagePaths;
-    }
-
-    public void setImagePaths(List<String> imagePaths) {
+    public Listing(String name, ListingCategory listingCategory, BigDecimal price, Integer quantityLeft, String description, List<String> imagePaths) {
+        this();
+        
+        this.name = name;
+        this.listingCategory = listingCategory;
+        this.price = price;
+        this.quantityLeft = quantityLeft;
+        this.description = description;
         this.imagePaths = imagePaths;
     }
 
-    public ListingCategory getListingCategory() {
-        return listingCategory;
+    public Long getListingId() {
+        return listingId;
     }
 
-    public void setListingCategory(ListingCategory listingCategory) {
-        this.listingCategory = listingCategory;
+    public void setListingId(Long listingId) {
+        this.listingId = listingId;
     }
 
     public String getName() {
@@ -100,6 +84,14 @@ public class Listing implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ListingCategory getListingCategory() {
+        return listingCategory;
+    }
+
+    public void setListingCategory(ListingCategory listingCategory) {
+        this.listingCategory = listingCategory;
     }
 
     public BigDecimal getPrice() {
@@ -126,20 +118,36 @@ public class Listing implements Serializable {
         this.description = description;
     }
 
-    public List<String> getImages() {
+    public List<String> getImagePaths() {
         return imagePaths;
     }
 
-    public void setImages(List<String> images) {
-        this.imagePaths = images;
+    public void setImagePaths(List<String> imagePaths) {
+        this.imagePaths = imagePaths;
     }
 
-    public Long getListingId() {
-        return listingId;
+    public Seller getSeller() {
+        return seller;
     }
 
-    public void setListingId(Long listingId) {
-        this.listingId = listingId;
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     @Override
