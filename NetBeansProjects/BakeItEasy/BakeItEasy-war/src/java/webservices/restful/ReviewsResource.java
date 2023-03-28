@@ -7,18 +7,9 @@ package webservices.restful;
 
 import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
-import entity.Order;
 import entity.Review;
-import error.exception.BuyerNotFoundException;
-import error.exception.InputDataValidationException;
-import error.exception.ListingNotFoundException;
-import error.exception.OrderNotFoundException;
 import error.exception.ReviewNotFoundException;
-import error.exception.SellerNotFoundException;
-import error.exception.UnknownPersistenceException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -26,7 +17,6 @@ import javax.persistence.NoResultException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -82,6 +72,14 @@ public class ReviewsResource {
     } //end getReview
     
     // edit review
+    /*
+    {
+    "title": "review 123456789",
+    "reviewText": "review text",
+    "rating": 5,
+    "dateCreated": "2023-03-03T00:00:00"
+    }
+    */
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -89,8 +87,12 @@ public class ReviewsResource {
     public Response editReview(@PathParam("id") Long reviewId, Review review) {
         review.setReviewId(reviewId);
         try {
+            Review oldReview = reviewSessionBeanLocal.retrieveReviewById(reviewId);
+            review.setOrder(oldReview.getOrder());
             reviewSessionBeanLocal.updateReview(review);
-            return Response.status(204).build();
+            return Response.status(200).entity(
+                    review
+            ).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException e) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Not found")

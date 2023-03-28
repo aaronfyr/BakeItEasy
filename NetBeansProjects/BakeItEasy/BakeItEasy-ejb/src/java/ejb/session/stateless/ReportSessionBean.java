@@ -121,6 +121,8 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
     @Override
     public void updateReport(Report r) throws NoResultException, ReportNotFoundException {
         Report oldR = retrieveReportById(r.getReportId());
+        
+        System.out.println(r.getReporter());
 
         oldR.setTitle(r.getTitle());
         oldR.setReason(r.getReason());
@@ -136,9 +138,9 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         Buyer reporter = report.getReporter();
         Seller reportee = report.getReportee();
         Admin admin = report.getAdmin();
-        report.setReporter(null);
-        report.setReportee(null);
-        report.setAdmin(null);
+//        report.setReporter(null);
+//        report.setReportee(null);
+//        report.setAdmin(null);
         reporter.getReports().remove(report);
         reportee.getReports().remove(report);
         admin.getReports().remove(report);

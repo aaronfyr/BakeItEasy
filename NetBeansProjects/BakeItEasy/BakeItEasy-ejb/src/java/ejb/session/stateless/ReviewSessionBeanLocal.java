@@ -33,4 +33,6 @@ public interface ReviewSessionBeanLocal {
     public void updateReview(Review r) throws NoResultException, ReviewNotFoundException;
 
     public Long createNewReview(Review review, Long orderId) throws OrderNotFoundException, UnknownPersistenceException, InputDataValidationException;
+
+    public List<Review> retrieveSellerReviews(Long sellerId) throws SellerNotFoundException;
 }

@@ -40,7 +40,6 @@ public class OrdersResource {
     @EJB
     private OrderSessionBeanLocal orderSessionBeanLocal;
     
-    // TODO: TEST
     // create a new review
     // request body:
     /*
@@ -58,7 +57,6 @@ public class OrdersResource {
     public Review createReviewForOrder(@PathParam("id") Long orderId, Review r) {
         try {
             Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
-            Long listingId = order.getListing().getListingId();
             reviewSessionBeanLocal.createNewReview(r, orderId);
         } catch (UnknownPersistenceException | InputDataValidationException ex) {
             Logger.getLogger(AdminsResource.class.getName()).log(Level.SEVERE, null, ex);

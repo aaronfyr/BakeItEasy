@@ -72,6 +72,16 @@ public class Order implements Serializable {
     public Order() {
     }
 
+    public Order(BigDecimal price, Integer quantity, String description, String address, Date dateOfCreation, Date dateOfCollection) {
+        this.price = price;
+        this.quantity = quantity;
+        this.description = description;
+        this.orderStatus = OrderStatus.PENDING;
+        this.address = address;
+        this.dateOfCreation = dateOfCreation;
+        this.dateOfCollection = dateOfCollection;
+    }
+
     @XmlTransient
     public Review getReview() {
         return review;
