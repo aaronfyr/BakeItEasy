@@ -6,9 +6,14 @@
 package webservices.restful;
 
 import ejb.session.stateless.BuyerSessionBeanLocal;
+import ejb.session.stateless.ReportSessionBeanLocal;
 import entity.Buyer;
+import entity.Report;
 import error.exception.BuyerNotFoundException;
+import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
+import error.exception.SellerNotFoundException;
+import error.exception.UnknownPersistenceException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
@@ -33,6 +38,9 @@ public class BuyersResource {
 
     @EJB
     private BuyerSessionBeanLocal buyerSessionBeanLocal;
+    
+    @EJB
+    private ReportSessionBeanLocal reportSessionBeanLocal;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -93,4 +101,22 @@ public class BuyersResource {
             return Response.status(404).entity(exception).build();
         }
     } //end deleteCustomer
+    
+    /* request body:
+    {
+    "title": "report title",
+    "reason": "report reason"
+    }
+    */
+    @POST
+    @Path("/{buyer_id}/sellers/{seller_id}/reports")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Report createReport(@PathParam("buyer_id") Long buyerId, @PathParam("seller_id") Long sellerId, Report report) {
+        try {
+            reportSessionBeanLocal.createNewReport(report, buyerId, sellerId);
+        } catch (BuyerNotFoundException | InputDataValidationException | SellerNotFoundException | UnknownPersistenceException e) {
+        }
+        return report;
+    } //end createReport
 }

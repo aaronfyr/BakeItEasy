@@ -8,7 +8,11 @@ package ejb.session.stateless;
 import entity.Seller;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
+import error.exception.OrderIsNotAcceptedException;
+import error.exception.OrderIsNotPendingException;
+import error.exception.OrderNotFoundException;
 import error.exception.SellerEmailExistException;
+import error.exception.SellerHasOutstandingOrdersException;
 import error.exception.SellerNotFoundException;
 import error.exception.SellerPhoneNumberExistException;
 import error.exception.SellerUsernameExistException;
@@ -25,6 +29,8 @@ public interface SellerSessionBeanLocal {
 
     public Long createNewSeller(Seller newSeller) throws UnknownPersistenceException, InputDataValidationException, SellerUsernameExistException, SellerEmailExistException, SellerPhoneNumberExistException;
 
+    public void deleteSeller(Long sellerId) throws SellerNotFoundException, SellerHasOutstandingOrdersException;
+    
     public Seller sellerLogin(String email, String password) throws InvalidLoginCredentialException, SellerNotFoundException;
 
     public Seller retrieveSellerBySellerId(Long sellerId) throws SellerNotFoundException;
@@ -38,5 +44,11 @@ public interface SellerSessionBeanLocal {
     public List<Seller> retrieveAllSellers();
 
     public void updateSeller(Seller updatedSeller) throws InputDataValidationException, SellerNotFoundException;
+
+    public void acceptOrder(Long orderId) throws OrderNotFoundException, OrderIsNotPendingException;
+
+    public void rejectOrder(Long orderId) throws OrderNotFoundException, OrderIsNotPendingException;
+
+    public void completeOrder(Long orderId) throws OrderNotFoundException, OrderIsNotAcceptedException;
     
 }

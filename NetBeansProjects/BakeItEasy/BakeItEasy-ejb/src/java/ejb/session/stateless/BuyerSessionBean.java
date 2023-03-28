@@ -75,11 +75,9 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
         Buyer buyer = em.find(Buyer.class, buyerId);
         
         if (buyer != null) {
-            buyer.getReviews().size();
             buyer.getOrders().size();
             buyer.getReports().size();
             buyer.getPosts().size();
-            buyer.getComments().size();
             return buyer;
         } else {
             throw new BuyerNotFoundException("Buyer " + buyerId + " does not exist.");

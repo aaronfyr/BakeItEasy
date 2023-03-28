@@ -55,17 +55,18 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     }
     
     @Override
-    public Long createNewOrder(Order order, Long buyerId, Long sellerId, Long listingId) throws SellerNotFoundException, BuyerNotFoundException, ListingNotFoundException, UnknownPersistenceException, InputDataValidationException {
+    public Long createNewOrder(Order order, Long buyerId, Long listingId) throws BuyerNotFoundException, ListingNotFoundException, UnknownPersistenceException, InputDataValidationException {
         Set<ConstraintViolation<Order>> constraintViolations = validator.validate(order);
 
         if (constraintViolations.isEmpty()) {
             try {
                 Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
-                buyer.getOrders().add(order);
-                Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
-                seller.getOrders().add(order);                
+                buyer.getOrders().add(order);               
                 Listing listing = listingSessionBeanLocal.retrieveListingByListingId(listingId);
+                listing.setMaxQuantity(listing.getMaxQuantity() - order.getQuantity());
                 listing.getOrders().add(order);
+                order.setBuyer(buyer);
+                order.setListing(listing);
                 em.persist(order);
                 em.flush();
                 return order.getOrderId();

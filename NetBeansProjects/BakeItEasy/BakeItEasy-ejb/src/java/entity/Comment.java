@@ -7,13 +7,19 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,33 +35,19 @@ public class Comment implements Serializable {
 
     @Column
     private String title;
+    @Temporal(TemporalType.TIMESTAMP)
     @Column
     private Date dateCreated;
-
-    @ManyToOne
+    
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    @JsonbTransient
     private Post post;
 
-    @OneToOne(optional = true)
-    private Buyer buyer;
-    @OneToOne(optional = true)
-    private Seller seller;
-
-    public Buyer getBuyer() {
-        return buyer;
+    public Comment() {
     }
 
-    public void setBuyer(Buyer buyer) {
-        this.buyer = buyer;
-    }
-
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
-
+    @XmlTransient
     public Post getPost() {
         return post;
     }

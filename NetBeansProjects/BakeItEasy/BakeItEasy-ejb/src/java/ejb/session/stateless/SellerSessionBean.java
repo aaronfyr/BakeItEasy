@@ -5,18 +5,25 @@
  */
 package ejb.session.stateless;
 
-import entity.Appointment;
+import entity.Listing;
+import entity.Order;
+import entity.Report;
 import entity.Seller;
-import error.exception.BuyerNotFoundException;
+import enumeration.OrderStatus;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
+import error.exception.OrderIsNotAcceptedException;
+import error.exception.OrderIsNotPendingException;
+import error.exception.OrderNotFoundException;
 import error.exception.SellerEmailExistException;
+import error.exception.SellerHasOutstandingOrdersException;
 import error.exception.SellerNotFoundException;
 import error.exception.SellerPhoneNumberExistException;
 import error.exception.SellerUsernameExistException;
 import error.exception.UnknownPersistenceException;
 import java.util.List;
 import java.util.Set;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -35,6 +42,12 @@ import javax.validation.ValidatorFactory;
  */
 @Stateless
 public class SellerSessionBean implements SellerSessionBeanLocal {
+
+    @EJB(name = "ListingSessionBeanLocal")
+    private ListingSessionBeanLocal listingSessionBeanLocal;
+
+    @EJB(name = "OrderSessionBeanLocal")
+    private OrderSessionBeanLocal orderSessionBeanLocal;
 
     @PersistenceContext(unitName = "BakeItEasy-ejbPU")
     private EntityManager em;
@@ -89,16 +102,37 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
-//    public void deleteSeller(Long sellerId) throws SellerNotFoundException {
-//        try {
-//            Seller seller = retrieveSellerBySellerId(sellerId);
-//            
-//            em.remove(seller);
-//        } catch (SellerNotFoundException ex) {
-//            throw new SellerNotFoundException(ex.getMessage());
-//        }
-//    }
+
+    // seller must not have outstanding orders
+    @Override
+    public void deleteSeller(Long sellerId) throws SellerNotFoundException, SellerHasOutstandingOrdersException {
+        try {
+            Seller seller = retrieveSellerBySellerId(sellerId);
+
+            for (Listing individualListing : seller.getListings()) { // check that this listing is not tied to any outstanding orders first
+                if (listingSessionBeanLocal.doesListingHaveOutstandingOrders(individualListing)) {
+                    throw new SellerHasOutstandingOrdersException("Seller has outstanding orders (Pending/Accepted), please handle before deletion!");
+                }
+            }
+            
+            List<Listing> sellerListings = seller.getListings();
+            List<Report> sellerReports = seller.getReports();
+            
+            for (Listing individualListing : sellerListings) {
+                em.remove(individualListing);
+            }
+            
+            for (Report reportAgainst : sellerReports) {
+               em.remove(reportAgainst);
+            }
+
+            em.remove(seller);
+        } catch (SellerNotFoundException ex) {
+            throw new SellerNotFoundException(ex.getMessage());
+        } catch (SellerHasOutstandingOrdersException ex) {
+            throw new SellerHasOutstandingOrdersException(ex.getMessage());
+        }
+    }
 
     @Override
     public Seller sellerLogin(String email, String password) throws InvalidLoginCredentialException, SellerNotFoundException {
@@ -121,7 +155,7 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
             throw new SellerNotFoundException("Seller with email " + email + " not found!");
         }
     }
-    
+
     @Override
     public Seller retrieveSellerBySellerId(Long sellerId) throws SellerNotFoundException {
         Seller seller = em.find(Seller.class, sellerId);
@@ -132,50 +166,51 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
             throw new SellerNotFoundException("Seller ID: " + sellerId + " does not exist!");
         }
     }
-    
+
     @Override
     public Seller retrieveSellerByUsername(String username) throws SellerNotFoundException {
         Query query = em.createQuery("SELECT s FROM Seller s WHERE s.username = :inUsername");
         query.setParameter("inUsername", username);
-        
+
         try {
             return (Seller) query.getSingleResult();
-        } catch(NoResultException | NonUniqueResultException ex) {
+        } catch (NoResultException | NonUniqueResultException ex) {
             throw new SellerNotFoundException("Seller username: " + username + " does not exist!");
         }
     }
-    
+
     @Override
     public Seller retrieveSellerByEmail(String email) throws SellerNotFoundException {
         Query query = em.createQuery("SELECT s FROM Seller s WHERE s.email = :inEmail");
         query.setParameter("inEmail", email);
-        
+
         try {
             return (Seller) query.getSingleResult();
-        } catch(NoResultException | NonUniqueResultException ex) {
+        } catch (NoResultException | NonUniqueResultException ex) {
             throw new SellerNotFoundException("Seller email: " + email + " does not exist!");
         }
     }
-    
+
     @Override
     public Seller retrieveSellerByPhoneNumber(String phoneNo) throws SellerNotFoundException {
         Query query = em.createQuery("SELECT s FROM Seller s WHERE s.phoneNo = :inPhoneNumber");
         query.setParameter("inPhoneNumber", phoneNo);
-        
+
         try {
             return (Seller) query.getSingleResult();
-        } catch(NoResultException | NonUniqueResultException ex) {
+        } catch (NoResultException | NonUniqueResultException ex) {
             throw new SellerNotFoundException("Seller phone number: " + phoneNo + " does not exist!");
         }
     }
-    
+
     @Override
     public List<Seller> retrieveAllSellers() {
         Query query = em.createQuery("SELECT s FROM Seller s");
         return query.getResultList();
     }
-    
+
     // UPDATE TO SEE WHICH FIELDS CAN BE UPDATED
+    @Override
     public void updateSeller(Seller updatedSeller) throws InputDataValidationException, SellerNotFoundException {
         Set<ConstraintViolation<Seller>> constraintViolations = validator.validate(updatedSeller);
 
@@ -184,15 +219,45 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
             sellerToUpdate.setName(updatedSeller.getName());
             sellerToUpdate.setPassword(updatedSeller.getPassword());
             sellerToUpdate.setPhoneNo(updatedSeller.getPhoneNo());
-            sellerToUpdate.setAppointments(updatedSeller.getAppointments());
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
     // DELETE TO SEE WHAT ORDER IMPLEMENTED (I.E. ORDER STATUS)
-    // REMINDER TO DELETE CALENDAR AS WELL
-    
-    
+
+    // TO DO: CHANGE ORDER STATUS (WHEN SELLER ACCEPTS ORDER)
+    @Override
+    public void acceptOrder(Long orderId) throws OrderNotFoundException, OrderIsNotPendingException {
+        Order orderToAccept = orderSessionBeanLocal.retrieveOrderById(orderId);
+        if (orderToAccept.getOrderStatus() == OrderStatus.PENDING) {
+            orderToAccept.setOrderStatus(OrderStatus.ACCEPTED);
+            orderSessionBeanLocal.editOrder(orderToAccept);
+        } else {
+            throw new OrderIsNotPendingException("Order unable to be accepted as it is not in pending state!");
+        }
+    }
+
+    @Override
+    public void rejectOrder(Long orderId) throws OrderNotFoundException, OrderIsNotPendingException {
+        Order orderToReject = orderSessionBeanLocal.retrieveOrderById(orderId);
+        if (orderToReject.getOrderStatus() == OrderStatus.PENDING) {
+            orderToReject.setOrderStatus(OrderStatus.REJECTED);
+            orderSessionBeanLocal.editOrder(orderToReject);
+        } else {
+            throw new OrderIsNotPendingException("Order unable to be rejected as it is not in pending state!");
+        }
+    }
+
+    @Override
+    public void completeOrder(Long orderId) throws OrderNotFoundException, OrderIsNotAcceptedException {
+        Order orderToAccept = orderSessionBeanLocal.retrieveOrderById(orderId);
+        if (orderToAccept.getOrderStatus() == OrderStatus.ACCEPTED) {
+            orderToAccept.setOrderStatus(OrderStatus.COMPLETED);
+            orderSessionBeanLocal.editOrder(orderToAccept);
+        } else {
+            throw new OrderIsNotAcceptedException("Order unable to be accepted as it is not in pending state!");
+        }
+    }
 
     private boolean isUsernameAvailable(String username) {
         Query query = em.createQuery("SELECT s FROM Seller s WHERE s.username = :inUsername");

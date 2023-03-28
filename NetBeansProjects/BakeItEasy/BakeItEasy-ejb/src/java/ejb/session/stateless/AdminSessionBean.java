@@ -6,12 +6,16 @@
 package ejb.session.stateless;
 
 import entity.Admin;
+import entity.Buyer;
 import entity.Report;
+import entity.Seller;
 import error.exception.AdminNotFoundException;
 import error.exception.AdminUsernameExistsException;
+import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
 import error.exception.ReportNotFoundException;
+import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.List;
 import java.util.Set;
@@ -42,6 +46,12 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
 
     @EJB
     private AdminSessionBeanLocal adminSessionBeanLocal;
+    
+    @EJB
+    private BuyerSessionBeanLocal buyerSessionBeanLocal;
+    
+    @EJB
+    private SellerSessionBeanLocal sellerSessionBeanLocal;
     
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
@@ -139,6 +149,34 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
         }
         admin.getReports().clear();
         em.remove(admin);
+    }
+    
+    @Override
+    public Buyer banBuyer(Long buyerId) throws BuyerNotFoundException {
+        Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+        buyer.setIsBanned(true);
+        return buyer;
+    }
+    
+    @Override
+    public Seller banSeller(Long sellerId) throws SellerNotFoundException {
+        Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
+        seller.setIsBanned(true);
+        return seller;
+    }
+    
+    @Override
+    public Buyer unbanBuyer(Long buyerId) throws BuyerNotFoundException {
+        Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+        buyer.setIsBanned(false);
+        return buyer;
+    }
+
+    @Override
+    public Seller unbanSeller(Long sellerId) throws SellerNotFoundException {
+        Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
+        seller.setIsBanned(false);
+        return seller;
     }
     
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Admin>> constraintViolations) {
