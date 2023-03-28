@@ -15,13 +15,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author Uni
  */
-@Entity
-@javax.persistence.Table(name = "\"Order\"")
+@Entity(name = "TheOrder")
 public class Order implements Serializable {
 
     private static final long serialVersionUID = 1L;
