@@ -8,10 +8,12 @@ package webservices.restful;
 import ejb.session.stateless.AdminSessionBeanLocal;
 import ejb.session.stateless.AppointmentSessionBeanLocal;
 import ejb.session.stateless.ListingSessionBeanLocal;
+import ejb.session.stateless.PostSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.SellerSessionBeanLocal;
 import entity.Appointment;
 import entity.Listing;
+import entity.Post;
 import entity.Report;
 import entity.Review;
 import entity.Seller;
@@ -25,6 +27,7 @@ import error.exception.SellerPhoneNumberExistException;
 import error.exception.SellerUsernameExistException;
 import error.exception.UnknownPersistenceException;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,6 +68,9 @@ public class SellersResource {
 
     @EJB
     private ReviewSessionBeanLocal reviewSessionBeanLocal;
+    
+    @EJB
+    private PostSessionBeanLocal postSessionBeanLocal;
     
     @EJB
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
@@ -292,6 +298,19 @@ public class SellersResource {
             return Response.status(404).entity(exception).build();
         }
     } // end delete listing for current seller
+    
+    @POST
+    @Path("/{seller_id}/posts")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Post createPost(@PathParam("seller_id") Long sellerId, Post p) {
+        try {
+            p.setDateCreated(new Date(System.currentTimeMillis()));
+            postSessionBeanLocal.createNewSellerPost(p, sellerId);
+        } catch (Exception e) {
+        }
+        return p;
+    } //end createCustomer
 
 //    @GET
 //    @Path("/{seller_id}/listings/query")

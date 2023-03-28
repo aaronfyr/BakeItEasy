@@ -6,14 +6,17 @@
 package webservices.restful;
 
 import ejb.session.stateless.BuyerSessionBeanLocal;
+import ejb.session.stateless.PostSessionBeanLocal;
 import ejb.session.stateless.ReportSessionBeanLocal;
 import entity.Buyer;
+import entity.Post;
 import entity.Report;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
@@ -41,6 +44,9 @@ public class BuyersResource {
     
     @EJB
     private ReportSessionBeanLocal reportSessionBeanLocal;
+    
+    @EJB
+    private PostSessionBeanLocal postSessionBeanLocal;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -119,4 +125,17 @@ public class BuyersResource {
         }
         return report;
     } //end createReport
+    
+    @POST
+    @Path("/{buyer_id}/posts")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Post createPost(@PathParam("buyer_id") Long buyerId, Post p) {
+        try {
+            p.setDateCreated(new Date(System.currentTimeMillis()));
+            postSessionBeanLocal.createNewBuyerPost(p, buyerId);
+        } catch (Exception e) {
+        }
+        return p;
+    } //end createCustomer
 }
