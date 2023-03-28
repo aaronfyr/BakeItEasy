@@ -1,6 +1,20 @@
-import { Flex, Text } from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import {
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { FaUserCircle } from "react-icons/fa";
+import { FiHeart, FiUser, FiBell, FiMessageSquare } from "react-icons/fi";
+
+import { IoLogOut } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext, useState, useEffect } from "react";
+import "./resources/navigationBar.css";
 
 function AdminMenuBar() {
   const navigate = useNavigate();
@@ -18,6 +32,14 @@ function AdminMenuBar() {
     }
     fetchData();
   }, []);
+
+  const handleLogout = () => {
+    // Clear session/token data
+    localStorage.clear();
+
+    // Redirect to login page
+    navigate("/adminLogin");
+  };
 
   return (
     <div className="navbar">
@@ -38,27 +60,52 @@ function AdminMenuBar() {
         </Link>
       </Flex>
       <Flex align="center">
-        <Link to="/viewAllReports" style={{ marginRight: "50px" }}>
+        <Link to="/viewAllReports" style={{ marginRight: "100px" }}>
           <Text>Reports</Text>
         </Link>
-        <Link to="/viewAllBuyers" style={{ marginRight: "50px" }}>
+        <Link to="/viewAllBuyers" style={{ marginRight: "100px" }}>
           <Text>Buyers</Text>
         </Link>
-        <Link to="/viewAllSellers" style={{ marginRight: "50px" }}>
+        <Link to="/viewAllSellers" style={{ marginRight: "100px" }}>
           <Text>Sellers</Text>
         </Link>
 
         {admin && (
-          <Link to="/adminProfilePage" style={{ marginLeft: "200px" }}>
-            <Text fontWeight="bold">{admin.email}</Text>
-          </Link>
+          <>
+            <Menu>
+              <MenuButton
+                as={Button}
+                variant="ghost"
+                rightIcon={<ChevronDownIcon />}
+                type="submit"
+                fontWeight="bold"
+                ml="225px"
+              >
+                <Flex align="center">
+                  <FiUser style={{ marginRight: "10px" }} />
+                  {admin.email}
+                </Flex>
+              </MenuButton>
+              <MenuList>
+                <MenuItem>
+                  <Link
+                    to="/adminProfilePage"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <FaUserCircle style={{ marginRight: "10px" }} /> Edit
+                    Profile
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <IoLogOut style={{ marginRight: "10px" }} />
+                  Logout
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </>
         )}
-
-        <Link to="/viewAllSellers" style={{ marginRight: "50px" }}>
-          <Text>Sellers</Text>
-        </Link>
+        <div style={{ width: "150px" }}></div>
       </Flex>
-      <div style={{ width: "25px" }}></div>
     </div>
   );
 }
