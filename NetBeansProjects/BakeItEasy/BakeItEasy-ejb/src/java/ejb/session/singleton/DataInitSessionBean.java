@@ -8,14 +8,19 @@ package ejb.session.singleton;
 import ejb.session.stateless.AdminSessionBeanLocal;
 import ejb.session.stateless.BuyerSessionBeanLocal;
 import ejb.session.stateless.ListingSessionBeanLocal;
+import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.SellerSessionBeanLocal;
 import entity.Admin;
 import entity.Buyer;
 import entity.Listing;
+import entity.Order;
 import entity.Seller;
 import enumeration.ListingCategory;
+import enumeration.OrderStatus;
 import error.exception.AdminUsernameExistsException;
+import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
+import error.exception.ListingNotFoundException;
 import error.exception.SellerEmailExistException;
 import error.exception.SellerNotFoundException;
 import error.exception.SellerPhoneNumberExistException;
@@ -25,6 +30,7 @@ import java.awt.print.Book;
 import java.lang.reflect.Member;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,6 +65,9 @@ public class DataInitSessionBean {
     
     @EJB(name = "AdminSessionBeanLocal")
     private AdminSessionBeanLocal adminSessionBeanLocal;
+    
+    @EJB(name = "OrderSessionBeanLocal")
+    private OrderSessionBeanLocal orderSessionBeanLocal;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -78,10 +87,14 @@ public class DataInitSessionBean {
             List<String> newImagePath = new ArrayList<>();
             Listing listing1 = new Listing("Most Delicious Cake", ListingCategory.CAKE, BigDecimal.TEN, 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
             listingSessionBeanLocal.createNewListing(listing1, seller1.getSellerId());
+            Order order1 = new Order(BigDecimal.TEN, 2, "birthday cake", "123 house", new Date(), new Date());
+            orderSessionBeanLocal.createNewOrder(order1, buyer1.getBuyerId(), listing1.getListingId());
             Admin admin1 = new Admin("admin1", "admin", "admin@mail.com", "password");
             adminSessionBeanLocal.createNewAdmin(admin1);
         } catch (UnknownPersistenceException | InputDataValidationException | SellerUsernameExistException | SellerEmailExistException | SellerPhoneNumberExistException | SellerNotFoundException | AdminUsernameExistsException ex) {
             System.out.println(ex.getMessage());
+        } catch (BuyerNotFoundException | ListingNotFoundException ex) {
+            Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

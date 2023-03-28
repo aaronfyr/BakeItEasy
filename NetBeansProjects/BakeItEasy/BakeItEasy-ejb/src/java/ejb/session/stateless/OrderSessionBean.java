@@ -64,6 +64,8 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
                 buyer.getOrders().add(order);               
                 Listing listing = listingSessionBeanLocal.retrieveListingByListingId(listingId);
                 listing.getOrders().add(order);
+                order.setBuyer(buyer);
+                order.setListing(listing);
                 em.persist(order);
                 em.flush();
                 return order.getOrderId();

@@ -110,6 +110,15 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
     }
     
     @Override
+    public List<Review> retrieveSellerReviews(Long sellerId) throws SellerNotFoundException {
+        sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
+        Query query = em.createQuery("SELECT r FROM Review r WHERE r.order.listing.seller.sellerId = :inSellerId");
+        query.setParameter("inSellerId", sellerId);
+        List<Review> sellerReviews = query.getResultList();
+        return sellerReviews;
+    }
+    
+    @Override
     public void updateReview(Review r) throws NoResultException, ReviewNotFoundException {
         Review oldR = retrieveReviewById(r.getReviewId());
 

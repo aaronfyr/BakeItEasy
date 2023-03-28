@@ -6,14 +6,17 @@
 package webservices.restful;
 
 import ejb.session.stateless.AdminSessionBeanLocal;
+import ejb.session.stateless.BuyerSessionBeanLocal;
 import ejb.session.stateless.ReportSessionBeanLocal;
 import entity.Admin;
 import entity.Report;
 import error.exception.AdminNotFoundException;
 import error.exception.AdminUsernameExistsException;
+import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
 import error.exception.ReportNotFoundException;
+import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +50,9 @@ public class AdminsResource {
     
     @EJB
     private ReportSessionBeanLocal reportSessionBeanLocal;
+    
+    @EJB
+    private BuyerSessionBeanLocal buyerSessionBeanLocal;
     
     // get all admins
     @GET
@@ -126,16 +132,15 @@ public class AdminsResource {
         }
     } //end login
     
-    // TODO: test
     // logout
 //    @POST
+//    @Path("/logout")
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    @Produces(MediaType.APPLICATION_JSON)
 //    public Response logout() {
 //        return Response.status(Response.Status.NO_CONTENT).build();
 //    }
     
-    // TODO: test
     // assign admin to a report
     @PUT
     @Path("/{admin_id}/reports/{report_id}")
@@ -145,7 +150,9 @@ public class AdminsResource {
         try {
             Report report = reportSessionBeanLocal.retrieveReportById(rId);
             reportSessionBeanLocal.assignAdmin(report, aId);
-            return Response.status(204).build();
+            return Response.status(200).entity(
+                    report
+            ).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException e) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Not found")
@@ -227,5 +234,73 @@ public class AdminsResource {
             return Response.status(404).entity(exception).build();
         }
     } //end deleteAdmin
+    
+    // ban buyer of id = {id}
+    @PUT
+    @Path("/ban/buyers/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response banBuyer(@PathParam("id") Long buyerId) {
+        try {
+            adminSessionBeanLocal.banBuyer(buyerId);
+            return Response.status(204).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: buyer id " + buyerId)
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        }
+    }
+    
+    // unban buyer of id = {id}
+    @PUT
+    @Path("/unban/buyers/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unbanBuyer(@PathParam("id") Long buyerId) {
+        try {
+            adminSessionBeanLocal.unbanBuyer(buyerId);
+            return Response.status(204).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: buyer id " + buyerId)
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        }
+    }
+    
+    // ban seller of id = {id}
+    @PUT
+    @Path("/ban/sellers/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response banSeller(@PathParam("id") Long sellerId) {
+        try {
+            adminSessionBeanLocal.banSeller(sellerId);
+            return Response.status(204).build();
+        } catch (SellerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: seller id " + sellerId)
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        }
+    }
+    
+    // unban seller of id = {id}
+    @PUT
+    @Path("/unban/sellers/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unbanSeller(@PathParam("id") Long sellerId) {
+        try {
+            adminSessionBeanLocal.unbanSeller(sellerId);
+            return Response.status(204).build();
+        } catch (SellerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: seller id " + sellerId)
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        }
+    }
     
 }
