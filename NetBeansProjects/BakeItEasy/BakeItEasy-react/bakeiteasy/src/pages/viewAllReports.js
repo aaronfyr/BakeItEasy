@@ -83,6 +83,7 @@ function ViewAllReports() {
           {reports.map((report) => (
             <GridItem key={report.id} colSpan={1}>
               <Report
+                key={report.id}
                 title={report.title}
                 reason={report.reason}
                 reporter={report.reporter}

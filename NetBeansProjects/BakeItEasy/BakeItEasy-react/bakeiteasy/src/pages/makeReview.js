@@ -9,7 +9,7 @@ import {
   Input,
   Button,
   Image,
-  Text
+  Text,
 } from "@chakra-ui/react";
 
 function MakeReview({ order }) {
@@ -23,12 +23,14 @@ function MakeReview({ order }) {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+
     if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setPicture(reader.result);
-      };
+      const fileType = file.type;
+      if (fileType === "image/jpeg" || fileType === "image/png") {
+      } else {
+        // invalid file type, show an error message to the user
+        setError("Invalid picture format. Please try again.");
+      }
     }
   };
 
@@ -60,6 +62,7 @@ function MakeReview({ order }) {
     } else {
       // show error message
       setError("Invalid review. Please try again.");
+      setPicture(null);
     }
   };
 

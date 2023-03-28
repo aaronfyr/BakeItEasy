@@ -47,6 +47,7 @@ function ViewAllSellers() {
           {sellers.map((seller) => (
             <GridItem key={seller.id} colSpan={1}>
               <Seller
+                key={seller.id}
                 name={seller.name}
                 username={seller.username}
                 email={seller.email}

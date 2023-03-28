@@ -43,7 +43,7 @@ function Login() {
       } else {
         setBuyer(user);
       }
-      localStorage.setItem("user", user);
+      localStorage.setItem("user", JSON.stringify(user));
       console.log(user);
       // redirect to homepage
       navigate(`/`);

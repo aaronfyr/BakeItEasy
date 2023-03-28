@@ -32,8 +32,10 @@ function AdminLogin() {
     );
 
     if (response.ok) {
-      const user = await response.json();
-      setAdmin(user);
+      const admin = await response.json();
+
+      localStorage.setItem("admin", JSON.stringify(admin));
+      setAdmin(admin);
       // redirect to homepage
       navigate(`/viewAllReports`);
     } else {

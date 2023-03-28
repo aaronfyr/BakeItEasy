@@ -29,17 +29,21 @@ function Signup() {
 
   const { setBuyer } = useContext(BuyerContext);
   const { setSeller } = useContext(SellerContext);
-  
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+
     if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setProfilePic(reader.result);
-      };
+      const fileType = file.type;
+      if (fileType === "image/jpeg" || fileType === "image/png") {
+      } else {
+        // invalid file type, show an error message to the user
+        setError("Invalid picture format. Please try again.");
+        setProfilePic(null);
+      }
     }
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -75,7 +79,6 @@ function Signup() {
         //saveProfilePic(type, user.id, profilePic);
       }
 
-      
       // redirect to homepage
       navigate(`/`);
     } else {

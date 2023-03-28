@@ -1,26 +1,19 @@
 import { Flex, Text } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
-import { AdminContext } from "../context/adminProvider";
 
 function AdminMenuBar() {
-  const { admin } = useContext(AdminContext);
-  //const [admin, setAdmin] = useState(null);
+  const navigate = useNavigate();
+  const [admin, setAdmin] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
-      const admin = localStorage.getItem("user");
-      // setAdmin({
-      //   id: "1",
-      //   name: "test",
-      //   email: "email",
-      //   password: "password",
-      // });
+      const admin = localStorage.getItem("admin");
       if (!admin) {
-        //navigate("/adminLogin");
+        navigate("/adminLogin");
       } else {
-        //const parsedUser = JSON.parse(admin);
-        //setAdmin(parsedUser);
+        const parsedUser = JSON.parse(admin);
+        setAdmin(parsedUser);
       }
     }
     fetchData();
@@ -60,6 +53,10 @@ function AdminMenuBar() {
             <Text fontWeight="bold">{admin.email}</Text>
           </Link>
         )}
+
+        <Link to="/viewAllSellers" style={{ marginRight: "50px" }}>
+          <Text>Sellers</Text>
+        </Link>
       </Flex>
       <div style={{ width: "25px" }}></div>
     </div>

@@ -34,26 +34,25 @@ function AdminEditDetails({
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-
-    const response = await fetch(`http://localhost:8080/admins/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-      }),
-    });
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/admins/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      }
+    );
 
     if (response.ok) {
       setIsLoading(false);
-      const user = await response.json();
-      localStorage.setItem("user", user);
-      console.log(user);
+      const admin = await response.json();
+      localStorage.setItem("admin", JSON.stringify(admin));
     } else {
       // show error message
       setError("Invalid details. Please try again.");

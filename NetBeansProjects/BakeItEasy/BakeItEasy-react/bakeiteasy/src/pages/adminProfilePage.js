@@ -10,7 +10,7 @@ function AdminProfilePage() {
 
   useEffect(() => {
     async function fetchData() {
-      const admin = localStorage.getItem("user");
+      const admin = localStorage.getItem("admin");
       // setAdmin({
       //   id: "1",
       //   name: "test",
@@ -18,10 +18,10 @@ function AdminProfilePage() {
       //   password: "password",
       // });
       if (!admin) {
-        //navigate("/adminLogin");
+        navigate("/adminLogin");
       } else {
-        //const parsedUser = JSON.parse(admin);
-        //setAdmin(parsedUser);
+        const parsedUser = JSON.parse(admin);
+        setAdmin(parsedUser);
       }
     }
     fetchData();
@@ -32,7 +32,7 @@ function AdminProfilePage() {
       <AdminMenuBar />
       {admin && (
         <AdminEditDetails
-          id={admin.id}
+          id={admin.adminId}
           name={admin.name}
           email={admin.email}
           password={admin.password}
