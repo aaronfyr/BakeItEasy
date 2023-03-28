@@ -1,0 +1,378 @@
+:root {
+    --reg-font-family: Helvetica;
+
+    --beige-bg: #F8F5EF;
+    --logo: #7D7373;
+
+    --beige-text: #7D7373;
+    --dark-text: #3D3D3D;
+    --light-text: #676A6C;
+
+    --mid-orange: #E2725B;
+    --light-orange: #E9AEA2;
+    --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    height: 40px;
+    padding: 0px 30px 0px 30px;
+    margin-top: 5px;
+}
+
+
+
+.input {
+    width: 100%;
+    border: none;
+    border-radius: 20px;
+    border-radius: 20px;
+    height: 40px;
+    padding: 0px 30px 0px 30px;
+    color: var(--dark-text);
+    font-family: var(--reg-font-family);
+    font-size: 18px;
+    background-color: white;
+
+}
+
+.button {
+    background-color: transparent;
+    border: none;
+    width: 25px;
+    border-radius: 20px;
+}
+
+.ordersDisplay {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    height: 50vh;
+    justify-content: center;
+    /*delete this if not necessary*/
+}
+
+
+.product {
+    margin: 20px;
+    width: 200px;
+    height: 250px;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: white;
+    filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1));
+}
+
+.productSeller {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.productBottomRow {
+    width: 170px;
+    align-items: end;
+}
+
+.reviewBottomRow {
+    width: 250px;
+    align-items: end;
+    overflow-y: hidden;
+}
+
+.titleDetails {
+    margin-top: 20px;
+}
+
+.titleDetails h3 {
+    color: #8B3A3A;
+        font-weight: bold;
+}
+
+h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    margin-top: 5px;
+}
+
+h4 {
+    font-family: var(--reg-font-family);
+    font-weight: 400;
+    font-size: 15px;
+}
+
+h5 {
+    font-family: var(--reg-font-family);
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--light-text);
+}
+
+.search {
+    font-family: var(--reg-font-family);
+    color: var(--dark-text);
+    font-size: 15px;
+    margin-top: 15px;
+}
+
+.shoppingHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-style: solid;
+    border-color: var(--dark-text);
+    border-width: 1px;
+    border-radius: 20px;
+    height: 30px;
+    padding: 0px 30px 0px 30px;
+    margin-top: 5px;
+
+    font-family: var(--reg-font-family);
+    color: var(--dark-text);
+    font-size: 16px;
+    margin-top: 5px;
+    font-weight: 00;
+}
+
+.categoriesContainer {
+    display: flex;
+    height: 50px;
+    margin-top: 5px;
+}
+
+.categoriesDisplay {
+    display: flex;
+    overflow-x: scroll;
+    /*justify-content: center; delete this if not necessary*/
+}
+
+/*the following supposed to make sure scroll bar is seen at all times
+  but apparently this method doesn't work anymore since 2021 idk what to do
+*/
+.categoriesDisplay ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+.categoriesDisplay ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+/*scrollbar:done*/
+
+.category {
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-style: solid;
+    border-color: var(--dark-text);
+    color: var(--dark-text);
+    border-width: 1px;
+    padding: 0px 20px 0px 20px;
+    margin: 0px 20px 0px 0px;
+}
+
+.category:hover {
+    background: var(--dark-text);
+    color: white;
+}
+
+img {}
+
+img.productImg {
+    width: 100%;
+    height: 90%;
+    object-fit: cover;
+}
+
+.productImg {
+    margin-left: auto;
+    margin-right: auto;
+    width: 180px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: fill;
+    float: left;
+    margin-top: 5px;
+}
+
+#coverPhoto {
+    background-color: var(--light-orange);
+    height: 160px;
+    border-radius: 20px;
+    ;
+    width: 100%;
+
+}
+
+#profilePhoto {
+    background-color: var(--mid-orange);
+    height: 120px;
+    width: 120px;
+    border-radius: 60px;
+    transform: translate(40px, 100px);
+}
+
+#userDetails {
+    transform: translate(170px, 0px);
+    height: 60px;
+}
+
+.display {
+    display: flex;
+    width: 800px;
+    height: 70vh;
+    overflow-y: scroll;
+    justify-content: center;
+    /*delete this if not necessary*/
+}
+
+
+
+h1 {
+    font-family: var(--reg-font-family);
+    font-size: 16px;
+    font-weight: 500px;
+    color: var(--dark-text);
+}
+
+h2 {
+    font-family: var(--reg-font-family);
+    font-size: 14px;
+    font-weight: 800px;
+    color: var(--dark-text);
+}
+
+h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9px;
+    font-weight: 500px;
+    color: var(--dark-text);
+}
+
+.italic {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 500px;
+    color: var(--dark-text);
+    font-style: italic;
+}
+
+h4 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9px;
+    font-weight: 500px;
+    color: var(--dark-text);
+
+}
+
+.details {
+    font-family: var(--reg-font-family);
+    font-size: 9px;
+    font-weight: 600px;
+    color: var(--dark-text);
+
+}
+
+.italic {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9px;
+    font-weight: 500px;
+    color: var(--light-text);
+    font-style: italic;
+}
+
+#orderCard {
+    background-color: white;
+    width: 90vh;
+    height: 120px;
+    border-radius: 10px;
+    margin-top: 5px;
+    padding: 0px 10px 10px 10px;
+    overflow: hidden;
+    /* for horizontal aligning of child divs */
+    justify-content: center;
+}
+
+#orderDetailsGrid {
+    display: grid;
+    grid-template-rows: 70% 30%;
+    float: left;
+    height: 100%;
+    width: 50%;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.orderDetails_top {}
+
+.orderDetails_bottom {
+    display: flex;
+}
+
+.flexGrowBox {
+    width: 350px;
+
+}
+
+.flexBox {
+    display: flex;
+}
+
+.reviewDisplay {
+    width: 350px;
+    height: 65vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    justify-content: center;
+    /*delete this if not necessary*/
+}
+
+.review {
+    margin: 20px;
+    width: 300px;
+    height: 250px;
+    padding: 10px;
+    padding-left: 20px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.flexGrowBox h1 {
+    font-size: 20px;
+    color: #8B3A3A;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    text-align: center;
+        border-radius: 30%;
+}
+
+.sellerProducts {
+    height: 30px;
+    margin-top: 20px;
+}
+
+.sellerProducts h1 {
+    font-size: 20px;
+        color: #8B3A3A;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bolder;
+        margin-left: 40px;
+}
+
+.reviewTitle h2 {
+    color:#8B3A3A;
+    font-weight: bold;
+}
