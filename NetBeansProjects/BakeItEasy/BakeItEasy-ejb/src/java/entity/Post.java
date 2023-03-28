@@ -7,6 +7,7 @@ package entity;
 
 import enumeration.PostCategory;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.json.bind.annotation.JsonbTransient;
@@ -57,6 +58,14 @@ public class Post implements Serializable {
     private Seller seller;
 
     public Post() {
+        this.comments = new ArrayList<Comment>();
+    }
+    
+    public Post(String title, Date dateCreated, PostCategory postCategory) {
+        this.title = title;
+        this.dateCreated = dateCreated;
+        this.postCategory = postCategory;
+        this.comments = new ArrayList<Comment>();
     }
     
     @XmlTransient
