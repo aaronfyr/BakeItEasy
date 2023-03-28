@@ -9,6 +9,7 @@ import ejb.session.stateless.ListingSessionBeanLocal;
 import entity.Listing;
 import enumeration.ListingCategory;
 import error.exception.InputDataValidationException;
+import error.exception.ListingHasOngoingOrdersException;
 import error.exception.ListingNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
@@ -22,6 +23,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
@@ -135,6 +137,29 @@ public class ListingsResource {
     } // end create listing
     
     // CHECKED: AARON
+    @DELETE
+    @Path("/{listing_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteListing(@PathParam("listing_id") Long listingId) {
+        try {
+            listingSessionBeanLocal.deleteListing(listingId);
+            return Response.status(204).build();
+        } catch (ListingNotFoundException ex) {
+                        JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Listing not found")
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        } catch (ListingHasOngoingOrdersException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Listing has ongoing orders, please handle before deletion!")
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        }
+    } //end delete listing
+    
+    // CHECKED: AARON
     @PUT
     @Path("/{listing_id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -158,4 +183,6 @@ public class ListingsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end edit listing
+    
+    
 }

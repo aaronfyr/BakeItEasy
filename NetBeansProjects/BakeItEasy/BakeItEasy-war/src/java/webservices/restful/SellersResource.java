@@ -6,9 +6,11 @@
 package webservices.restful;
 
 import ejb.session.stateless.ListingSessionBeanLocal;
+import ejb.session.stateless.PostSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.SellerSessionBeanLocal;
 import entity.Listing;
+import entity.Post;
 import entity.Report;
 import entity.Review;
 import entity.Seller;
@@ -25,9 +27,8 @@ import error.exception.SellerPhoneNumberExistException;
 import error.exception.SellerUsernameExistException;
 import error.exception.UnknownPersistenceException;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import javax.enterprise.context.RequestScoped;
@@ -62,8 +63,10 @@ public class SellersResource {
 
     @EJB
     private ReviewSessionBeanLocal reviewSessionBeanLocal;
-
-    // CHECKED: ELYSIA
+    
+    @EJB
+    private PostSessionBeanLocal postSessionBeanLocal;
+    
     // get all reviews for seller with id = {id}
     @GET
     @Path("/{seller_id}/reviews")
@@ -296,7 +299,7 @@ public class SellersResource {
     
     // CHECKED: AARON
     @PUT
-    @Path("/{listing_id}")
+    @Path("/{order_id}/acceptorder")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response acceptOrder(@PathParam("order_id") Long orderId) {
@@ -320,7 +323,7 @@ public class SellersResource {
     
     // CHECKED: AARON
     @PUT
-    @Path("/{listing_id}")
+    @Path("/{order_id}/rejectorder")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response rejectOrder(@PathParam("order_id") Long orderId) {
@@ -340,11 +343,11 @@ public class SellersResource {
 
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         } 
-    } //end accept order
+    } //end reject order
     
     // CHECKED: AARON
     @PUT
-    @Path("/{listing_id}")
+    @Path("/{order_id}/completeorder")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response completeOrder(@PathParam("order_id") Long orderId) {
@@ -366,7 +369,29 @@ public class SellersResource {
         }
     } //end complete order
     
+    @POST
+    @Path("/{seller_id}/posts")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Post createPost(@PathParam("seller_id") Long sellerId, Post p) {
+        try {
+            p.setDateCreated(new Date(System.currentTimeMillis()));
+            postSessionBeanLocal.createNewSellerPost(p, sellerId);
+        } catch (Exception e) {
+        }
+        return p;
+    } //end create post
 }
+
+
+
+
+
+
+
+
+
+
 
 /*
 NOT USED FOR NOW
@@ -413,4 +438,5 @@ NOT USED FOR NOW
             return Response.status(404).entity(exception).build();
         }
     } // end delete listing for current seller
- */
+*/
+
