@@ -439,4 +439,3 @@ NOT USED FOR NOW
         }
     } // end delete listing for current seller
 */
-
