@@ -35,7 +35,7 @@ function AdminLogin() {
       const user = await response.json();
       setAdmin(user);
       // redirect to homepage
-      navigate(`viewAllReports`);
+      navigate(`/viewAllReports`);
     } else {
       // show error message
       setError("Invalid login credentials. Please try again.");
