@@ -65,4 +65,16 @@ public class OrdersResource {
         }
         return r;
     } //end createReviewForOrder
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{seller_id}/{listing_id}")
+    public Order createOrder(@PathParam("seller_id") Long seller_id, @PathParam("listing_id") Long listing_id, Order o) {
+        try {
+            orderSessionBeanLocal.createNewOrder(o, seller_id, listing_id);
+        } catch (Exception e) {
+        }
+        return o;
+    } //end createCustomer
 }
