@@ -9,7 +9,9 @@ import ejb.session.stateless.AdminSessionBeanLocal;
 import ejb.session.stateless.BuyerSessionBeanLocal;
 import ejb.session.stateless.ReportSessionBeanLocal;
 import entity.Admin;
+import entity.Buyer;
 import entity.Report;
+import entity.Seller;
 import error.exception.AdminNotFoundException;
 import error.exception.AdminUsernameExistsException;
 import error.exception.BuyerNotFoundException;
@@ -194,7 +196,9 @@ public class AdminsResource {
         a.setAdminId(aId);
         try {
             adminSessionBeanLocal.updateAdmin(a);
-            return Response.status(204).build();
+            return Response.status(200).entity(
+                    a
+            ).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException e) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Not found")
@@ -241,8 +245,10 @@ public class AdminsResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response banBuyer(@PathParam("id") Long buyerId) {
         try {
-            adminSessionBeanLocal.banBuyer(buyerId);
-            return Response.status(204).build();
+            Buyer buyer = adminSessionBeanLocal.banBuyer(buyerId);
+            return Response.status(200).entity(
+                    buyer
+            ).type(MediaType.APPLICATION_JSON).build();
         } catch (BuyerNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Not found: buyer id " + buyerId)
@@ -258,8 +264,10 @@ public class AdminsResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response unbanBuyer(@PathParam("id") Long buyerId) {
         try {
-            adminSessionBeanLocal.unbanBuyer(buyerId);
-            return Response.status(204).build();
+            Buyer buyer = adminSessionBeanLocal.unbanBuyer(buyerId);
+            return Response.status(200).entity(
+                    buyer
+            ).type(MediaType.APPLICATION_JSON).build();
         } catch (BuyerNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Not found: buyer id " + buyerId)
@@ -275,8 +283,10 @@ public class AdminsResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response banSeller(@PathParam("id") Long sellerId) {
         try {
-            adminSessionBeanLocal.banSeller(sellerId);
-            return Response.status(204).build();
+            Seller seller = adminSessionBeanLocal.banSeller(sellerId);
+            return Response.status(200).entity(
+                    seller
+            ).type(MediaType.APPLICATION_JSON).build();
         } catch (SellerNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Not found: seller id " + sellerId)
@@ -292,8 +302,10 @@ public class AdminsResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response unbanSeller(@PathParam("id") Long sellerId) {
         try {
-            adminSessionBeanLocal.unbanSeller(sellerId);
-            return Response.status(204).build();
+            Seller seller = adminSessionBeanLocal.unbanSeller(sellerId);
+            return Response.status(200).entity(
+                    seller
+            ).type(MediaType.APPLICATION_JSON).build();
         } catch (SellerNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Not found: seller id " + sellerId)
