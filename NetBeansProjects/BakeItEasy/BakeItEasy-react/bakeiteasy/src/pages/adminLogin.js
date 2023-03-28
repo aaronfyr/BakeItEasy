@@ -22,7 +22,7 @@ function AdminLogin() {
     event.preventDefault();
 
     const response = await fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/admins/login/${email}/${password}`,
+      `http://localhost:8080/BakeItEasy-war/webresources/admins/${email}/${password}`,
       {
         method: "GET",
         headers: {
