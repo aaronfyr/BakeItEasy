@@ -15,6 +15,9 @@ import entity.Seller;
 import enumeration.ListingCategory;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
+import error.exception.OrderIsNotAcceptedException;
+import error.exception.OrderIsNotPendingException;
+import error.exception.OrderNotFoundException;
 import error.exception.SellerEmailExistException;
 import error.exception.SellerHasOutstandingOrdersException;
 import error.exception.SellerNotFoundException;
@@ -23,6 +26,8 @@ import error.exception.SellerUsernameExistException;
 import error.exception.UnknownPersistenceException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import javax.enterprise.context.RequestScoped;
@@ -32,6 +37,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -288,6 +294,77 @@ public class SellersResource {
 
     } // end query for seller's listings
     
+    // CHECKED: AARON
+    @PUT
+    @Path("/{listing_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response acceptOrder(@PathParam("order_id") Long orderId) {
+        try {
+            sellerSessionBeanLocal.acceptOrder(orderId);
+            return Response.status(204).build();
+        } catch (OrderNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Order not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderIsNotPendingException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not able to accept order as it is not pending for acceptance")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } 
+    } //end accept order
+    
+    // CHECKED: AARON
+    @PUT
+    @Path("/{listing_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response rejectOrder(@PathParam("order_id") Long orderId) {
+        try {
+            sellerSessionBeanLocal.rejectOrder(orderId);
+            return Response.status(204).build();
+        } catch (OrderNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Order not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderIsNotPendingException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not able to accept order as it is not pending for acceptance")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } 
+    } //end accept order
+    
+    // CHECKED: AARON
+    @PUT
+    @Path("/{listing_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response completeOrder(@PathParam("order_id") Long orderId) {
+        try {
+            sellerSessionBeanLocal.completeOrder(orderId);
+            return Response.status(204).build();
+        } catch (OrderNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Order not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderIsNotAcceptedException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not able to complete order as it is not accepted yet")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end complete order
     
 }
 
