@@ -303,7 +303,9 @@ NOT USED FOR NOW
     public Response editListing(@PathParam("seller_id") Long sellerId, Listing listing) {
         try {
             listingSessionBeanLocal.updateListing(listing);
-            return Response.status(204).build();
+            return Response.status(200).entity(
+                    listing
+            ).type(MediaType.APPLICATION_JSON).build();
         } catch (InputDataValidationException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Input validation failed")

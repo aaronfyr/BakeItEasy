@@ -46,6 +46,11 @@ public class Comment implements Serializable {
 
     public Comment() {
     }
+    
+    public Comment(String title, Date dateCreated) {
+        this.title = title;
+        this.dateCreated = dateCreated;
+    }
 
     @XmlTransient
     public Post getPost() {

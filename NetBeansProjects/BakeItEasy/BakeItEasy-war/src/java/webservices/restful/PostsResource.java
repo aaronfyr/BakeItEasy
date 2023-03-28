@@ -27,15 +27,15 @@ public class PostsResource {
     @EJB
     PostSessionBeanLocal postSessionBeanLocal;
     
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Post createPost(Post p) {
-        try {
-            p.setDateCreated(new Date(System.currentTimeMillis()));
-            postSessionBeanLocal.createNewPost(p);
-        } catch (Exception e) {
-        }
-        return p;
-    } //end createCustomer
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Post createPost(Post p) {
+//        try {
+//            p.setDateCreated(new Date(System.currentTimeMillis()));
+//            postSessionBeanLocal.createNewBuyerPost(p);
+//        } catch (Exception e) {
+//        }
+//        return p;
+//    } //end createCustomer
 }

@@ -63,7 +63,6 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
                 Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
                 buyer.getOrders().add(order);               
                 Listing listing = listingSessionBeanLocal.retrieveListingByListingId(listingId);
-                listing.setMaxQuantity(listing.getMaxQuantity() - order.getQuantity());
                 listing.getOrders().add(order);
                 order.setBuyer(buyer);
                 order.setListing(listing);

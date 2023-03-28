@@ -54,6 +54,14 @@ public class Review implements Serializable {
 
     public Review() {
     }
+    
+    public Review(String title, String reviewText, Integer rating, List<String> imagePaths, Date dateCreated) {
+        this.title = title;
+        this.reviewText = reviewText;
+        this.rating = rating;
+        this.imagePaths = imagePaths;
+        this.dateCreated = dateCreated;
+    }
 
     @XmlTransient
     public Order getOrder() {

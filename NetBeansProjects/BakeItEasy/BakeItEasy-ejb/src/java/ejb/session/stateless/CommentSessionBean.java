@@ -51,6 +51,7 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
         if (constraintViolations.isEmpty()) {
             try {
                 Post post = postSessionBeanLocal.retrievePostById(postId);
+                comment.setPost(post);
                 em.persist(comment);
                 post.getComments().add(comment);
                 em.flush();
