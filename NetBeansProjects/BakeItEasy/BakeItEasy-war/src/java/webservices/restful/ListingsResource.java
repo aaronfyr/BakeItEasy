@@ -11,6 +11,7 @@ import enumeration.ListingCategory;
 import error.exception.InputDataValidationException;
 import error.exception.ListingHasOngoingOrdersException;
 import error.exception.ListingNotFoundException;
+import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.math.BigDecimal;
@@ -150,7 +151,7 @@ public class ListingsResource {
                     .build();
 
             return Response.status(404).entity(exception).build();
-        } catch (ListingHasOngoingOrdersException ex) {
+        } catch (ListingHasOngoingOrdersException | OrderNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Listing has ongoing orders, please handle before deletion!")
                     .build();
