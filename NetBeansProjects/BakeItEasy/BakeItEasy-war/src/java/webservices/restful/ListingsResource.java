@@ -11,10 +11,13 @@ import enumeration.ListingCategory;
 import error.exception.InputDataValidationException;
 import error.exception.ListingHasOngoingOrdersException;
 import error.exception.ListingNotFoundException;
+import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
@@ -153,6 +156,12 @@ public class ListingsResource {
         } catch (ListingHasOngoingOrdersException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Listing has ongoing orders, please handle before deletion!")
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        } catch (OrderNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "List has order that cannot be found!")
                     .build();
 
             return Response.status(404).entity(exception).build();
