@@ -13,6 +13,7 @@ import enumeration.OrderStatus;
 import error.exception.InputDataValidationException;
 import error.exception.ListingHasOngoingOrdersException;
 import error.exception.ListingNotFoundException;
+import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.math.BigDecimal;
@@ -35,6 +36,9 @@ import javax.validation.ValidatorFactory;
  */
 @Stateless
 public class ListingSessionBean implements ListingSessionBeanLocal {
+
+    @EJB(name = "OrderSessionBeanLocal")
+    private OrderSessionBeanLocal orderSessionBeanLocal;
 
     @EJB(name = "SellerSessionBeanLocal")
     private SellerSessionBeanLocal sellerSessionBeanLocal;
@@ -96,7 +100,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
     }
 
     @Override
-    public void deleteListing(Long listingId) throws ListingNotFoundException, ListingHasOngoingOrdersException {
+    public void deleteListing(Long listingId) throws ListingNotFoundException, ListingHasOngoingOrdersException, OrderNotFoundException {
         try {
             Listing listingToRemove = retrieveListingByListingId(listingId);
 
@@ -105,15 +109,26 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
             }
 
             listingToRemove.getSeller().getListings().remove(listingToRemove); // disassociate from seller's listing
-            List<Order> orders = listingToRemove.getOrders();
-            for (Order order : orders) {
+            
+            List<Order> ordersTaggedToListing = retrieveOrdersByListingId(listingId);
+            for (Order order : ordersTaggedToListing) { // orders have cascade to remove other children
+                listingToRemove.getOrders().remove(order);
                 em.remove(order);
             }
+            
 
             em.remove(listingToRemove);
         } catch (ListingHasOngoingOrdersException ex) {
             throw new ListingHasOngoingOrdersException(ex.getMessage());
         }
+    }
+    
+    @Override
+    public List<Order> retrieveOrdersByListingId(Long listingId) {
+        Query query = em.createQuery("SELECT o FROM Order o WHERE o.listing.listingId = :inListingId");
+        query.setParameter("inListingId", listingId);
+
+        return query.getResultList();
     }
 
     @Override
