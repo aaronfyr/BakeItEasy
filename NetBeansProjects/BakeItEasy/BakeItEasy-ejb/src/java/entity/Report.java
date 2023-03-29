@@ -6,13 +6,17 @@
 package entity;
 
 import java.io.Serializable;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -31,25 +35,25 @@ public class Report implements Serializable {
     @Column
     private String reason;
     
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    @JsonbTransient
     private Buyer reporter;
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    @JsonbTransient
     private Seller reportee;
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = true)
+    @JsonbTransient
+    private Admin admin;
 
-    public Buyer getBuyer() {
-        return reporter;
+    public Report() {
     }
 
-    public void setBuyer(Buyer reporter) {
-        this.reporter = reporter;
-    }
-
-    public Seller getSeller() {
-        return reportee;
-    }
-
-    public void setSeller(Seller reportee) {
-        this.reportee = reportee;
+    public Report(String title, String reason) {
+        this.title = title;
+        this.reason = reason;
     }
 
     public String getTitle() {
@@ -101,6 +105,51 @@ public class Report implements Serializable {
     @Override
     public String toString() {
         return "entity.Report[ id=" + reportId + " ]";
+    }
+
+    /**
+     * @return the reporter
+     */
+    @XmlTransient
+    public Buyer getReporter() {
+        return reporter;
+    }
+
+    /**
+     * @param reporter the reporter to set
+     */
+    public void setReporter(Buyer reporter) {
+        this.reporter = reporter;
+    }
+
+    /**
+     * @return the reportee
+     */
+    @XmlTransient
+    public Seller getReportee() {
+        return reportee;
+    }
+
+    /**
+     * @param reportee the reportee to set
+     */
+    public void setReportee(Seller reportee) {
+        this.reportee = reportee;
+    }
+
+    /**
+     * @return the admin
+     */
+    @XmlTransient
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    /**
+     * @param admin the admin to set
+     */
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
     }
     
 }
