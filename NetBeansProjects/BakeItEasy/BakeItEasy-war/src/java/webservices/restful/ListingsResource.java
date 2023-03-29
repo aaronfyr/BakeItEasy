@@ -153,7 +153,7 @@ public class ListingsResource {
                     .build();
 
             return Response.status(404).entity(exception).build();
-        } catch (ListingHasOngoingOrdersException ex) {
+        } catch (ListingHasOngoingOrdersException | OrderNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Listing has ongoing orders, please handle before deletion!")
                     .build();

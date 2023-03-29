@@ -24,6 +24,7 @@ import entity.Report;
 import entity.Review;
 import entity.Seller;
 import enumeration.ListingCategory;
+import enumeration.OrderStatus;
 import enumeration.PostCategory;
 import error.exception.AdminUsernameExistsException;
 import error.exception.BuyerNotFoundException;
@@ -102,13 +103,18 @@ public class DataInitSessionBean {
         try {
             Buyer buyer1 = new Buyer("test", "test", "test", "test", "test", "test");
             buyerSessionBeanLocal.createNewBuyer(buyer1);
+            
             Seller seller1 = new Seller("test", "test", "test", "test", "test");
             sellerSessionBeanLocal.createNewSeller(seller1);
+            
             List<String> newImagePath = new ArrayList<>();
             Listing listing1 = new Listing("Most Delicious Cake", ListingCategory.CAKE, BigDecimal.TEN, 99, "This is the most delicious cake ever. Please buy it.", newImagePath);
             listingSessionBeanLocal.createNewListing(listing1, seller1.getSellerId());
+            
             Order order1 = new Order(BigDecimal.TEN, 2, "birthday cake", "123 house", new Date(), new Date());
+            order1.setOrderStatus(OrderStatus.REJECTED);
             orderSessionBeanLocal.createNewOrder(order1, buyer1.getBuyerId(), listing1.getListingId());
+            
             Admin admin1 = new Admin("admin1", "admin", "admin@mail.com", "password");
             adminSessionBeanLocal.createNewAdmin(admin1);
             
