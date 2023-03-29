@@ -63,13 +63,11 @@ public class SellersResource {
 
     @EJB
     private ReviewSessionBeanLocal reviewSessionBeanLocal;
-    
+
     @EJB
     private PostSessionBeanLocal postSessionBeanLocal;
-    
-    @EJB
-    private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
-    
+
+    // CHECKED: ELYSIA
     // get all reviews for seller with id = {id}
     @GET
     @Path("/{seller_id}/reviews")
@@ -299,7 +297,7 @@ public class SellersResource {
         }
 
     } // end query for seller's listings
-    
+
     // CHECKED: AARON
     @PUT
     @Path("/{order_id}/acceptorder")
@@ -321,9 +319,9 @@ public class SellersResource {
                     .build();
 
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
-        } 
+        }
     } //end accept order
-    
+
     // CHECKED: AARON
     @PUT
     @Path("/{order_id}/rejectorder")
@@ -345,9 +343,9 @@ public class SellersResource {
                     .build();
 
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
-        } 
+        }
     } //end reject order
-    
+
     // CHECKED: AARON
     @PUT
     @Path("/{order_id}/completeorder")
@@ -371,7 +369,7 @@ public class SellersResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end complete order
-    
+
     @POST
     @Path("/{seller_id}/posts")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -386,21 +384,13 @@ public class SellersResource {
     } //end create post
 }
 
-
-
-
-
-
-
-
-
-
-
 /*
 NOT USED FOR NOW
  */
 
  /*
+
+
     @PUT
     @Path("/{seller_id}/listings")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -441,72 +431,8 @@ NOT USED FOR NOW
             return Response.status(404).entity(exception).build();
         }
     } // end delete listing for current seller
-    
-    @POST
-    @Path("/{seller_id}/posts")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Post createPost(@PathParam("seller_id") Long sellerId, Post p) {
-        try {
-            p.setDateCreated(new Date(System.currentTimeMillis()));
-            postSessionBeanLocal.createNewSellerPost(p, sellerId);
-        } catch (Exception e) {
-        }
-        return p;
-    } //end createCustomer
 
-//    @GET
-//    @Path("/{seller_id}/listings/query")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response searchListings(
-//            @QueryParam("category") ListingCategory listingCategory,
-//            @QueryParam("quantityGreater") Integer quantityGreater,
-//            @QueryParam("quantityLesser") Integer quantityLesser,
-//            @QueryParam("startPrice") BigDecimal startPrice,
-//            @QueryParam("endPrice") BigDecimal endPrice
-//    ) {
-//        if (listingCategory != null) {
-//            List<Listing> results = listingSessionBeanLocal.retrieveListingByListingCategory(listingCategory);
-//
-//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-//            };
-//
-//            return Response.status(200).entity(entity).build();
-//        } else if (quantityGreater != null) {
-//            List<Listing> results = listingSessionBeanLocal.retrieveListingByQuantityGreater(quantityGreater);
-//
-//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-//            };
-//
-//            return Response.status(200).entity(entity).build();
-//        } else if (quantityLesser != null) {
-//            List<Listing> results = listingSessionBeanLocal.retrieveListingByQuantityLesser(quantityGreater);
-//
-//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-//            };
-//
-//            return Response.status(200).entity(entity).build();
-//        } else if (startPrice != null && endPrice != null) {
-//            List<Listing> results = listingSessionBeanLocal.retrieveListingByPriceRange(startPrice, endPrice);
-//
-//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-//            };
-//
-//            return Response.status(200).entity(entity).build();
-//        } else if (startPrice != null) {
-//            List<Listing> results = listingSessionBeanLocal.retrieveListingByPrice(startPrice);
-//
-//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-//            };
-//
-//            return Response.status(200).entity(entity).build();
-//        } else {
-//            JsonObject exception = Json.createObjectBuilder()
-//                    .add("error", "No query conditions")
-//                    .build();
-//
-//            return Response.status(400).entity(exception).build();
-//        }
-//
-//    } // end query for seller's listings
 }
+
+
+ */
