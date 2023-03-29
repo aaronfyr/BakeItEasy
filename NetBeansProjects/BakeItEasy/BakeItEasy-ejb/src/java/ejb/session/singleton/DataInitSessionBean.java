@@ -112,7 +112,6 @@ public class DataInitSessionBean {
             listingSessionBeanLocal.createNewListing(listing1, seller1.getSellerId());
             
             Order order1 = new Order(BigDecimal.TEN, 2, "birthday cake", "123 house", new Date(), new Date());
-            order1.setOrderStatus(OrderStatus.REJECTED);
             orderSessionBeanLocal.createNewOrder(order1, buyer1.getBuyerId(), listing1.getListingId());
             
             Admin admin1 = new Admin("admin1", "admin", "admin@mail.com", "password");
