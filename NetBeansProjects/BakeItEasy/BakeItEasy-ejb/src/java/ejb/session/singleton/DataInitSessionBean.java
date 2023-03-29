@@ -229,11 +229,7 @@ public class DataInitSessionBean {
             reportSessionBeanLocal.createNewReport(report, buyer1.getBuyerId(), seller1.getSellerId());
 
         } catch (UnknownPersistenceException | InputDataValidationException | SellerUsernameExistException
-                | SellerEmailExistException | SellerPhoneNumberExistException | SellerNotFoundException ex) {
-            System.out.println("Error initialising data: " + ex.getMessage());
-        } catch (UnknownPersistenceException | InputDataValidationException | SellerUsernameExistException
-                | SellerEmailExistException | SellerPhoneNumberExistException | SellerNotFoundException
-                | AdminUsernameExistsException | PostNotFoundException | OrderNotFoundException ex) {
+                | SellerEmailExistException | SellerPhoneNumberExistException | PostNotFoundException | OrderNotFoundException | AdminUsernameExistsException | SellerNotFoundException ex) {
             System.out.println("Error initialising data: " + ex.getMessage());
         } catch (BuyerNotFoundException | ListingNotFoundException ex) {
             Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);

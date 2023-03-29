@@ -8,10 +8,10 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { BuyerContext } from "../context/buyerProvider";
 import { SellerContext } from "../context/sellerProvider";
-import  "./resources/login.css";
+import "./resources/login.css";
 
 function Login() {
   const [isLoading, setIsLoading] = useState(null);
@@ -28,30 +28,55 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await fetch(`http://localhost:8080/BakeItEasy-war/webresources/${type === "seller" ? "sellers" : "buyers"}/${email}/${password}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/${
+        type === "seller" ? "sellers" : "buyers"
+      }/${email}/${password}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("handle submit", "");
 
     if (response.ok) {
       setIsLoading(false);
       const user = await response.json();
       if (type === "seller") {
         setSeller(user);
+        localStorage.setItem("seller", JSON.stringify(user));
+        console.log("seller set: ", user);
       } else {
         setBuyer(user);
+        localStorage.setItem("buyer", JSON.stringify(user));
+        console.log("buyer set: ", user);
       }
-      localStorage.setItem("user", user);
-      console.log(user);
+
       // redirect to homepage
+
       navigate(`/`);
     } else {
       // show error message
       setError("Invalid login credentials. Please try again.");
     }
   };
+
+  /*
+  useEffect(() => {
+    console.log("fetchBuyer useEffect", "");
+    async function fetchBuyer() {
+      const buyer = localStorage.getItem("buyer");
+      if (buyer) {
+        console.log("useEffect detect: ", "buyer present");
+        navigate(`/`);
+      }
+    }
+    fetchBuyer();
+  }, []);
+*/
 
   const handlePortalSwitch = () => {
     // navigate to a different page when the button is clicked

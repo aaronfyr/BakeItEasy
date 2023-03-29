@@ -11,226 +11,64 @@ import "./resources/homepageShopping.css";
 import { FiHeart } from "react-icons/fi";
 
 export const BuyerShopping = () => {
+  const [buyer, setBuyer] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const buyer = localStorage.getItem("buyer");
+      if (!buyer) {
+        console.log("homepage: ", "has no buyer");
+        navigate("/login");
+      } else {
+        console.log("homepage: ", "has buyer");
+        const parsedUser = JSON.parse(buyer);
+        setBuyer(parsedUser);
+      }
+    }
+    fetchData();
+  }, []);
+
   const [categories, setCategories] = useState([
+    { name: "Savory" },
+    { name: "Breads" },
     { name: "Cakes" },
     { name: "Cupcakes" },
-    { name: "Bread" },
-    { name: "CNY" },
-    { name: "Pies" },
     { name: "Tarts" },
-    { name: "Christmas" },
-    { name: "Birthday" },
+    { name: "Pies" },
     { name: "Wedding" },
     { name: "Graduation" },
     { name: "Cookies" },
     { name: "Halal" },
     { name: "Fried" },
     { name: "Fruits" },
-    { name: "Unique" },
-    { name: "Christmas" },
-    { name: "Birthday" },
-    { name: "Wedding" },
-    { name: "Graduation" },
   ]);
 
   const [listings, setListings] = useState([]);
-
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/BakeItEasy-war/webresources/listings`,
+          `http://localhost:8080/BakeItEasy-war/webresources/listings/`,
           {
             method: "GET",
             mode: "cors",
             headers: {
-              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
             },
           }
         );
         const data = await response.json();
         setListings(data);
+        console.log(`HTTP Response Code: ${response?.status}`);
       } catch (error) {
-        console.log("error: ", error);
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        }
       }
     };
     fetchData();
   }, []);
-
-  /*
-  useEffect(() => {
-    async function fetchData() {
-      const response = await fetch(
-        `http://localhost:8080/BakeItEasy-war/webresources/listings`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.ok) {
-        const res = await response.json();
-        setListings(res);
-      } else {
-        console.log("error: ", ":(");
-      }
-    }
-
-    fetchData();
-  }, []);
-  */
-
-  /*
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      image: "./cakeImage.jpeg",
-    },
-    {
-      id: 2,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-    },
-    {
-      id: 3,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-    },
-    {
-      id: 4,
-      title: "Blueberry Pie",
-      category: "Pie",
-      price: "55.4",
-      tags: "hoodie solid plain purple long baggy hood",
-    },
-    {
-      id: 5,
-      title: "Brownie box (set of 10)",
-      category: "Brownies",
-      price: "55.4",
-      tags: "hoodie solid plain black long baggy hood",
-    },
-    {
-      id: 6,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      image: "./cakeImage.jpeg",
-    },
-    {
-      id: 7,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-    },
-    {
-      id: 8,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-    },
-    {
-      id: 9,
-      title: "Blueberry Pie",
-      category: "Pie",
-      price: "55.4",
-      tags: "hoodie solid plain purple long baggy hood",
-    },
-    {
-      id: 10,
-      title: "Brownie box (set of 10)",
-      category: "Brownies",
-      price: "55.4",
-      tags: "hoodie solid plain black long baggy hood",
-    },
-    {
-      id: 11,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      image: "./cakeImage.jpeg",
-    },
-    {
-      id: 12,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-    },
-    {
-      id: 13,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-    },
-    {
-      id: 14,
-      title: "Blueberry Pie",
-      category: "Pie",
-      price: "55.4",
-      tags: "hoodie solid plain purple long baggy hood",
-    },
-    {
-      id: 15,
-      title: "Brownie box (set of 10)",
-      category: "Brownies",
-      price: "55.4",
-      tags: "hoodie solid plain black long baggy hood",
-    },
-    {
-      id: 16,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      image: "./cakeImage.jpeg",
-    },
-    {
-      id: 17,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-    },
-    {
-      id: 18,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-    },
-    {
-      id: 19,
-      title: "Blueberry Pie",
-      category: "Pie",
-      price: "55.4",
-      tags: "hoodie solid plain purple long baggy hood",
-    },
-    {
-      id: 20,
-      title: "Brownie box (set of 10)",
-      category: "Brownies",
-      price: "55.4",
-      tags: "hoodie solid plain black long baggy hood",
-    },
-  ]);
-  */
 
   let navigate = useNavigate();
   const routeChangeToListing = (id) => {
@@ -238,24 +76,21 @@ export const BuyerShopping = () => {
     navigate(path + id);
   };
 
-  /*
-  <li key={product.id}>
-    <Link to={`listing/${product.id}`}>Click here</Link>
-  </li>;
-  */
-
   const [search, setSearch] = useState("");
 
   const filteredListings = listings.filter((product) => {
     if (
-      product.tags.toLowerCase().includes(search) ||
-      product.title.toLowerCase().includes(search) ||
-      product.category.toLowerCase().includes(search)
+      product.name.toLowerCase().includes(search) ||
+      product.description.toLowerCase().includes(search)
     ) {
       return product;
     }
     return null;
   });
+
+  const handleLogout = () => {
+    localStorage.setItem("buyer", null);
+  };
 
   return (
     <div>
@@ -275,9 +110,9 @@ export const BuyerShopping = () => {
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             ></path>
           </svg>
@@ -317,8 +152,8 @@ export const BuyerShopping = () => {
                 alt="listing product"
               />
             </div>
-            <h3>{product.title}</h3>
-            <h5>product details</h5>
+            <h3>{product.name}</h3>
+            <h5>{product.description}</h5>
             <div class="productBottomRow">
               <FiHeart size="1.2rem" />
               <h3>${product.price}</h3>
