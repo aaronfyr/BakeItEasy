@@ -8,13 +8,21 @@ package entity;
 import enumeration.OrderStatus;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -39,17 +47,39 @@ public class Order implements Serializable {
     private OrderStatus orderStatus;
     @Column
     private String address;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column
+    private Date dateOfCreation;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column
+    private Date dateOfCollection;
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    @JsonbTransient
     private Listing listing;
-
-    @OneToOne
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    @JsonbTransient
     private Buyer buyer;
-    @OneToOne
-    private Seller seller;
-    @OneToOne(optional = true)
+    @OneToOne(mappedBy = "order", fetch = FetchType.EAGER)
+    @JsonbTransient
     private Review review;
 
+    public Order() {
+    }
+
+    public Order(BigDecimal price, Integer quantity, String description, String address, Date dateOfCreation, Date dateOfCollection) {
+        this.price = price;
+        this.quantity = quantity;
+        this.description = description;
+        this.orderStatus = OrderStatus.PENDING;
+        this.address = address;
+        this.dateOfCreation = dateOfCreation;
+        this.dateOfCollection = dateOfCollection;
+    }
+
+    @XmlTransient
     public Review getReview() {
         return review;
     }
@@ -58,7 +88,7 @@ public class Order implements Serializable {
         this.review = review;
     }
 
-
+    @XmlTransient
     public Buyer getBuyer() {
         return buyer;
     }
@@ -67,6 +97,7 @@ public class Order implements Serializable {
         this.buyer = buyer;
     }
 
+    @XmlTransient
     public Listing getListing() {
         return listing;
     }
@@ -155,17 +186,31 @@ public class Order implements Serializable {
     }
 
     /**
-     * @return the seller
+     * @return the dateOfCreation
      */
-    public Seller getSeller() {
-        return seller;
+    public Date getDateOfCreation() {
+        return dateOfCreation;
     }
 
     /**
-     * @param seller the seller to set
+     * @param dateOfCreation the dateOfCreation to set
      */
-    public void setSeller(Seller seller) {
-        this.seller = seller;
+    public void setDateOfCreation(Date dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
+    }
+
+    /**
+     * @return the dateOfCollection
+     */
+    public Date getDateOfCollection() {
+        return dateOfCollection;
+    }
+
+    /**
+     * @param dateOfCollection the dateOfCollection to set
+     */
+    public void setDateOfCollection(Date dateOfCollection) {
+        this.dateOfCollection = dateOfCollection;
     }
 
 }

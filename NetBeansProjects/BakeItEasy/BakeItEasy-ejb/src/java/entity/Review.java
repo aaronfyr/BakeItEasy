@@ -9,13 +9,19 @@ import java.awt.Image;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -37,51 +43,33 @@ public class Review implements Serializable {
     private Integer rating;
     @Column
     private List<String> imagePaths; // might need to change or swap to front end?
+    @Temporal(TemporalType.TIMESTAMP)
     @Column
     private Date dateCreated; // maybe use sql.date
     
-    
-    @OneToOne
-    private Buyer buyer;
-    @OneToOne
-    private Seller seller;
-    @OneToOne
+    @OneToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    @JsonbTransient
     private Order order;
+
+    public Review() {
+    }
     
-    @ManyToOne
-    private Listing listing;
-
-    public Listing getListing() {
-        return listing;
+    public Review(String title, String reviewText, Integer rating, List<String> imagePaths, Date dateCreated) {
+        this.title = title;
+        this.reviewText = reviewText;
+        this.rating = rating;
+        this.imagePaths = imagePaths;
+        this.dateCreated = dateCreated;
     }
 
-    public void setListing(Listing listing) {
-        this.listing = listing;
-    }
-
+    @XmlTransient
     public Order getOrder() {
         return order;
     }
 
     public void setOrder(Order order) {
         this.order = order;
-    }
-    
-
-    public Buyer getBuyer() {
-        return buyer;
-    }
-
-    public void setBuyer(Buyer buyer) {
-        this.buyer = buyer;
-    }
-
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
     }
 
     public String getTitle() {

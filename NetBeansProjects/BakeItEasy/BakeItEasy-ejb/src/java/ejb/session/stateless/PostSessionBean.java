@@ -54,11 +54,14 @@ public class PostSessionBean implements PostSessionBeanLocal {
     }
     
     @Override
-    public Long createNewPost(Post post) throws UnknownPersistenceException, InputDataValidationException {       
+    public Long createNewBuyerPost(Post post, Long buyerId) throws UnknownPersistenceException, InputDataValidationException, BuyerNotFoundException {       
         Set<ConstraintViolation<Post>> constraintViolations = validator.validate(post);
 
         if (constraintViolations.isEmpty()) {
-            try {                
+            try {
+                Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+                post.setBuyer(buyer);
+                buyer.getPosts().add(post);
                 em.persist(post);
                 em.flush();
                 return post.getPostId();
@@ -72,6 +75,38 @@ public class PostSessionBean implements PostSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
+            } catch (BuyerNotFoundException ex) {
+                throw new BuyerNotFoundException(ex.getMessage());
+            }
+        } else {
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+        }
+    }
+    
+    @Override
+    public Long createNewSellerPost(Post post, Long sellerId) throws UnknownPersistenceException, InputDataValidationException, SellerNotFoundException {       
+        Set<ConstraintViolation<Post>> constraintViolations = validator.validate(post);
+
+        if (constraintViolations.isEmpty()) {
+            try {
+                Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
+                post.setSeller(seller);
+                seller.getPosts().add(post);
+                em.persist(post);
+                em.flush();
+                return post.getPostId();
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    } else {
+                        throw new UnknownPersistenceException(ex.getMessage());
+                    }
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            } catch (SellerNotFoundException ex) {
+                throw new SellerNotFoundException(ex.getMessage());
             }
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));

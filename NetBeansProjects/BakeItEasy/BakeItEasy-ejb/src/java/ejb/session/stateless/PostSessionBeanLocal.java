@@ -6,8 +6,10 @@
 package ejb.session.stateless;
 
 import entity.Post;
+import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.PostNotFoundException;
+import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.List;
 import javax.ejb.Local;
@@ -19,7 +21,7 @@ import javax.ejb.Local;
 @Local
 public interface PostSessionBeanLocal {
 
-    public Long createNewPost(Post post) throws UnknownPersistenceException, InputDataValidationException;
+    public Long createNewBuyerPost(Post post, Long buyerId) throws UnknownPersistenceException, InputDataValidationException, BuyerNotFoundException;
 
     public Post retrievePostById(Long postId) throws PostNotFoundException;
 
@@ -28,5 +30,7 @@ public interface PostSessionBeanLocal {
     public void editPost(Post post) throws PostNotFoundException;
 
     public void deletePost(Long postId) throws PostNotFoundException;
+
+    public Long createNewSellerPost(Post post, Long sellerId) throws UnknownPersistenceException, InputDataValidationException, SellerNotFoundException;
     
 }

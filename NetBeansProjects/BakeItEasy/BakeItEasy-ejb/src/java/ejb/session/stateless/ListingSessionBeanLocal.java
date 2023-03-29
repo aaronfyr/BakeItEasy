@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.Listing;
 import enumeration.ListingCategory;
 import error.exception.InputDataValidationException;
+import error.exception.ListingHasOngoingOrdersException;
 import error.exception.ListingNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
@@ -26,7 +27,7 @@ public interface ListingSessionBeanLocal {
 
     public void updateListing(Listing updatedListing) throws InputDataValidationException, ListingNotFoundException;
 
-    public void deleteListing(Long listingId) throws ListingNotFoundException;
+    public void deleteListing(Long listingId) throws ListingNotFoundException, ListingHasOngoingOrdersException;
 
     public Listing retrieveListingByListingId(Long listingId) throws ListingNotFoundException;
     
@@ -47,5 +48,7 @@ public interface ListingSessionBeanLocal {
     public List<Listing> retrieveListingByPrice(BigDecimal price);
 
     public List<Listing> retrieveListingByPriceRange(BigDecimal startPrice, BigDecimal endPrice);
+
+    public Boolean doesListingHaveOutstandingOrders(Listing listing);
     
 }

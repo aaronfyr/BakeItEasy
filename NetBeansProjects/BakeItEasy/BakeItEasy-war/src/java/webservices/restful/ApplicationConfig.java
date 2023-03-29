@@ -30,9 +30,9 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(webservices.restful.AdminsResource.class);
-        resources.add(webservices.restful.AppointmentsResource.class);
         resources.add(webservices.restful.BuyersResource.class);
         resources.add(webservices.restful.CORSFilter.class);
+        resources.add(webservices.restful.CommentsResource.class);
         resources.add(webservices.restful.ListingsResource.class);
         resources.add(webservices.restful.OrdersResource.class);
         resources.add(webservices.restful.PostsResource.class);

@@ -6,19 +6,17 @@
 package webservices.restful;
 
 import ejb.session.stateless.CommentSessionBeanLocal;
-import ejb.session.stateless.PostSessionBeanLocal;
 import entity.Comment;
 import entity.Post;
+import error.exception.CommentNotFoundException;
 import error.exception.PostNotFoundException;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.persistence.NoResultException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -30,40 +28,35 @@ import javax.ws.rs.core.Response;
  *
  * @author Nelson Choo
  */
-
-@Path("posts")
-@RequestScoped
-public class PostsResource {
-    
-    @EJB
-    private PostSessionBeanLocal postSessionBeanLocal;
+@Path("comments")
+public class CommentsResource {
     
     @EJB
     private CommentSessionBeanLocal commentSessionBeanLocal;
-
+    
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPost(@PathParam("id") Long pId) {
+    public Response getComment(@PathParam("id") Long cId) {
         try {
-            Post post = postSessionBeanLocal.retrievePostById(pId);
-            return Response.status(200).entity(post).type(MediaType.APPLICATION_JSON).build();
-        } catch (PostNotFoundException e) {
+            Comment comment = commentSessionBeanLocal.retrieveCommentById(cId);
+            return Response.status(200).entity(comment).type(MediaType.APPLICATION_JSON).build();
+        } catch (CommentNotFoundException e) {
             JsonObject exception = Json.createObjectBuilder().add("error", "Not found").build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
-    } //end getPost
+    } //end getComment
     
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response editPost(@PathParam("id") Long postId, Post post) {
-        post.setPostId(postId);
+    public Response editComment(@PathParam("id") Long commentId, Comment comment) {
+        comment.setCommentId(commentId);
         try {
-            postSessionBeanLocal.editPost(post);
+            commentSessionBeanLocal.editComment(comment);
             return Response.status(200).entity(
-                    post
+                    comment
             ).type(MediaType.APPLICATION_JSON).build();
         } catch (NoResultException e) {
             JsonObject exception = Json.createObjectBuilder()
@@ -72,22 +65,22 @@ public class PostsResource {
 
             return Response.status(404).entity(exception)
                     .type(MediaType.APPLICATION_JSON).build();
-        } catch (PostNotFoundException ex) {
+        } catch (CommentNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "Not found: post id " + postId)
+                    .add("error", "Not found: comment id " + commentId)
                     .build();
 
             return Response.status(404).entity(exception)
                     .type(MediaType.APPLICATION_JSON).build();
         }
-    } //end editPost
+    } //end editComment
     
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deletePost(@PathParam("id") Long postId) {
+    public Response deleteComment(@PathParam("id") Long commentId) {
         try {
-            postSessionBeanLocal.deletePost(postId);
+            commentSessionBeanLocal.deleteComment(commentId);
             return Response.status(204).build();
         } catch (NoResultException e) {
             JsonObject exception = Json.createObjectBuilder()
@@ -95,24 +88,12 @@ public class PostsResource {
                     .build();
 
             return Response.status(404).entity(exception).build();
-        } catch (PostNotFoundException ex) {
+        } catch (CommentNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "Not found: post id " + postId)
+                    .add("error", "Not found: comment id " + commentId)
                     .build();
 
             return Response.status(404).entity(exception).build();
         }
-    } //end deletePost
-    
-    @POST
-    @Path("/{id}/comments")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Comment createPost(@PathParam("id") Long pId, Comment c) {
-        try {
-            commentSessionBeanLocal.createNewComment(c, pId);
-        } catch (Exception e) {
-        }
-        return c;
-    } //end createComment
+    } //end deleteComment
 }

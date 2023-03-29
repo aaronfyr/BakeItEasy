@@ -6,9 +6,12 @@
 package ejb.session.stateless;
 
 import entity.Listing;
+import entity.Order;
 import entity.Seller;
 import enumeration.ListingCategory;
+import enumeration.OrderStatus;
 import error.exception.InputDataValidationException;
+import error.exception.ListingHasOngoingOrdersException;
 import error.exception.ListingNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
@@ -83,7 +86,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
             Listing listingToUpdate = retrieveListingByListingId(updatedListing.getListingId());
             listingToUpdate.setName(updatedListing.getName());
             listingToUpdate.setPrice(updatedListing.getPrice());
-            listingToUpdate.setQuantityLeft(updatedListing.getQuantityLeft());
+            listingToUpdate.setMaxQuantity(updatedListing.getMaxQuantity());
             listingToUpdate.setDescription(updatedListing.getDescription());
             listingToUpdate.setImagePaths(updatedListing.getImagePaths());
             listingToUpdate.setListingCategory(updatedListing.getListingCategory());
@@ -93,11 +96,24 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
     }
 
     @Override
-    public void deleteListing(Long listingId) throws ListingNotFoundException {
-        Listing listingToRemove = retrieveListingByListingId(listingId);
-        listingToRemove.getSeller().getListings().remove(listingToRemove);
-        // loop through listingToRemove's orders and reviews and delete them
-        em.remove(listingToRemove);
+    public void deleteListing(Long listingId) throws ListingNotFoundException, ListingHasOngoingOrdersException {
+        try {
+            Listing listingToRemove = retrieveListingByListingId(listingId);
+
+            if (doesListingHaveOutstandingOrders(listingToRemove)) {
+                throw new ListingHasOngoingOrdersException("Listing has ongoing orders (Pending/Accepted), please handle before deletion!");
+            }
+
+            listingToRemove.getSeller().getListings().remove(listingToRemove); // disassociate from seller's listing
+            List<Order> orders = listingToRemove.getOrders();
+            for (Order order : orders) {
+                em.remove(order);
+            }
+
+            em.remove(listingToRemove);
+        } catch (ListingHasOngoingOrdersException ex) {
+            throw new ListingHasOngoingOrdersException(ex.getMessage());
+        }
     }
 
     @Override
@@ -110,29 +126,28 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
             throw new ListingNotFoundException("Listing ID: " + listingId + " does not exist!");
         }
     }
-    
+
     @Override
     public Listing retrieveListingBySellerIdAndListingId(Long sellerId, Long listingId) {
         Query query = em.createQuery("SELECT l FROM Listing l WHERE l.seller.sellerId = :inSellerId AND l.listingId = :inListingId");
         query.setParameter("inSellerId", sellerId);
         query.setParameter("inListingId", listingId);
-        
+
         return (Listing) query.getSingleResult();
     }
-    
+
     @Override
     public List<Listing> retrieveAllListings() {
         Query query = em.createQuery("SELECT l FROM Listing l");
-        
+
         return query.getResultList();
     }
-    
-    
+
     @Override
     public List<Listing> retrieveSellerListings(Long sellerId) {
         Query query = em.createQuery("SELECT l FROM Listing l WHERE l.seller.sellerId = :inSellerId");
         query.setParameter("inSellerId", sellerId);
-        
+
         return query.getResultList();
     }
 
@@ -142,7 +157,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         query.setParameter("inListingCategory", listingCategory);
         return query.getResultList();
     }
-    
+
     @Override
     public List<Listing> retrieveListingByListingCategoryAndSellerId(ListingCategory listingCategory, Long sellerId) {
         Query query = em.createQuery("SELECT l FROM Listing l WHERE l.listingCategory = :inListingCategory AND l.seller.sellerId = :inSellerId");
@@ -150,17 +165,17 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         query.setParameter("inSellerId", sellerId);
         return query.getResultList();
     }
-    
+
     @Override
     public List<Listing> retrieveListingByQuantityGreater(Integer quantityGreaterThan) {
-        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.quantityLeft >= :inQuantityGreaterThan");
+        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.maxQuantity >= :inQuantityGreaterThan");
         query.setParameter("inQuantityGreaterThan", quantityGreaterThan);
         return query.getResultList();
     }
-    
+
     @Override
     public List<Listing> retrieveListingByQuantityLesser(Integer quantityLesserThan) {
-        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.quantityLeft <= :inQuantityLesserThan");
+        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.maxQuantity <= :inQuantityLesserThan");
         query.setParameter("inQuantityLesserThan", quantityLesserThan);
         return query.getResultList();
     }
@@ -178,6 +193,16 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         query.setParameter("inStartPrice", startPrice);
         query.setParameter("inEndPrice", endPrice);
         return query.getResultList();
+    }
+
+    @Override
+    public Boolean doesListingHaveOutstandingOrders(Listing listing) {
+        for (Order order : listing.getOrders()) {
+            if (order.getOrderStatus() == OrderStatus.PENDING || order.getOrderStatus() == OrderStatus.ACCEPTED) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Listing>> constraintViolations) {

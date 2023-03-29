@@ -7,15 +7,23 @@ package entity;
 
 import enumeration.PostCategory;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -31,19 +39,36 @@ public class Post implements Serializable {
     
     @Column
     private String title;
+    @Temporal(TemporalType.TIMESTAMP)
     @Column
     private Date dateCreated;    
     @Column
     private PostCategory postCategory;
     
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @JsonbTransient
     private List<Comment> comments;
-    
-    @OneToOne(optional = true)
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = true)
+    @JsonbTransient
     private Buyer buyer;
-    @OneToOne(optional = true)
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = true)
+    @JsonbTransient
     private Seller seller;
 
+    public Post() {
+        this.comments = new ArrayList<Comment>();
+    }
+    
+    public Post(String title, Date dateCreated, PostCategory postCategory) {
+        this.title = title;
+        this.dateCreated = dateCreated;
+        this.postCategory = postCategory;
+        this.comments = new ArrayList<Comment>();
+    }
+    
+    @XmlTransient
     public Buyer getBuyer() {
         return buyer;
     }
@@ -52,6 +77,7 @@ public class Post implements Serializable {
         this.buyer = buyer;
     }
 
+    @XmlTransient
     public Seller getSeller() {
         return seller;
     }
@@ -60,6 +86,7 @@ public class Post implements Serializable {
         this.seller = seller;
     }
 
+    @XmlTransient
     public List<Comment> getComments() {
         return comments;
     }

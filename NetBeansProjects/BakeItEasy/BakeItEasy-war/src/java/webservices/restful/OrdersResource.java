@@ -40,7 +40,16 @@ public class OrdersResource {
     @EJB
     private OrderSessionBeanLocal orderSessionBeanLocal;
     
-    // TODO: TEST
+    // create a new review
+    // request body:
+    /*
+    {
+    "title": "review 123",
+    "reviewText": "review text",
+    "rating": 5,
+    "dateCreated": "2023-03-03T00:00:00"
+    }
+     */
     @POST
     @Path("/{id}/reviews")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -48,15 +57,24 @@ public class OrdersResource {
     public Review createReviewForOrder(@PathParam("id") Long orderId, Review r) {
         try {
             Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
-            Long buyerId = order.getBuyer().getBuyerId();
-            Long sellerId = order.getSeller().getSellerId();
-            Long listingId = order.getListing().getListingId();
-            reviewSessionBeanLocal.createNewReview(r, buyerId, sellerId, orderId, listingId);
+            reviewSessionBeanLocal.createNewReview(r, orderId);
         } catch (UnknownPersistenceException | InputDataValidationException ex) {
             Logger.getLogger(AdminsResource.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (OrderNotFoundException | BuyerNotFoundException | SellerNotFoundException | ListingNotFoundException ex) {
+        } catch (OrderNotFoundException ex) {
             Logger.getLogger(OrdersResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         return r;
     } //end createReviewForOrder
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{seller_id}/{listing_id}")
+    public Order createOrder(@PathParam("seller_id") Long seller_id, @PathParam("listing_id") Long listing_id, Order o) {
+        try {
+            orderSessionBeanLocal.createNewOrder(o, seller_id, listing_id);
+        } catch (Exception e) {
+        }
+        return o;
+    } //end createCustomer
 }

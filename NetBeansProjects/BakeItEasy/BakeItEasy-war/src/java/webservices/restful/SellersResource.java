@@ -5,37 +5,35 @@
  */
 package webservices.restful;
 
-import ejb.session.stateless.AdminSessionBeanLocal;
-import ejb.session.stateless.AppointmentSessionBeanLocal;
 import ejb.session.stateless.ListingSessionBeanLocal;
+import ejb.session.stateless.PostSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.SellerSessionBeanLocal;
-import entity.Appointment;
 import entity.Listing;
+import entity.Post;
 import entity.Report;
 import entity.Review;
 import entity.Seller;
 import enumeration.ListingCategory;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
-import error.exception.ListingNotFoundException;
+import error.exception.OrderIsNotAcceptedException;
+import error.exception.OrderIsNotPendingException;
+import error.exception.OrderNotFoundException;
 import error.exception.SellerEmailExistException;
+import error.exception.SellerHasOutstandingOrdersException;
 import error.exception.SellerNotFoundException;
 import error.exception.SellerPhoneNumberExistException;
 import error.exception.SellerUsernameExistException;
 import error.exception.UnknownPersistenceException;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -65,21 +63,20 @@ public class SellersResource {
 
     @EJB
     private ReviewSessionBeanLocal reviewSessionBeanLocal;
-    
-    @EJB
-    private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
 
-    // TODO: test
+    @EJB
+    private PostSessionBeanLocal postSessionBeanLocal;
+
+    // CHECKED: ELYSIA
     // get all reviews for seller with id = {id}
     @GET
     @Path("/{seller_id}/reviews")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Review> getAllSellerReviews(@PathParam("seller_id") Long sellerId) throws SellerNotFoundException {
-        Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
-        return seller.getReviews();
+        return reviewSessionBeanLocal.retrieveSellerReviews(sellerId);
     } //end getAllSellerReviews
 
-    // TODO: test
+    // CHECKED: ELYSIA
     // get all reports for seller with id = {id}
     @GET
     @Path("/{seller_id}/reports")
@@ -89,6 +86,7 @@ public class SellersResource {
         return seller.getReports();
     } //end getAllSellerReports
 
+    // CHECKED: AARON
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -97,23 +95,31 @@ public class SellersResource {
         sellerSessionBeanLocal.createNewSeller(seller);
         return seller;
     } // end create seller
-    
-//    @DELETE
-//    @Path("/{seller_id}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response deleteSeller(@PathParam("seller_id") Long sellerId) {
-//        try {
-//            sellerSessionBeanLocal;
-//            return Response.status(204).build();
-//        } catch (SellerNotFoundException e) {
-//            JsonObject exception = Json.createObjectBuilder()
-//                    .add("error", "Customer not found")
-//                    .build();
-//            
-//            return Response.status(404).entity(exception).build();
-//        }
-//    } //end delete seller
 
+    // CHECKED: AARON
+    @DELETE
+    @Path("/{seller_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteSeller(@PathParam("seller_id") Long sellerId) {
+        try {
+            sellerSessionBeanLocal.deleteSeller(sellerId);
+            return Response.status(204).build();
+        } catch (SellerNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Seller not found")
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        } catch (SellerHasOutstandingOrdersException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Seller has outstanding orders, please handle before deletion!")
+                    .build();
+
+            return Response.status(404).entity(exception).build();
+        }
+    } //end delete seller
+
+    // CHECKED: AARON
     @GET
     @Path("/{email}/{password}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -127,12 +133,14 @@ public class SellersResource {
         }
     } //end loginSeller
 
+    // CHECKED: AARON
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Seller> getAllSellers() {
         return sellerSessionBeanLocal.retrieveAllSellers();
     } // end get all sellers
 
+    // CHECKED: AARON
     @GET
     @Path("/{seller_id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -150,18 +158,29 @@ public class SellersResource {
         }
     } // end get specific seller
 
+    // CHECKED: AARON
     @GET
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response searchSeller(@QueryParam("username") String username) throws SellerNotFoundException {
+    public Response searchSeller(@QueryParam("username") String username) {
 
-        if (username != null) {
-            Seller result = sellerSessionBeanLocal.retrieveSellerByUsername(username);
-            GenericEntity<Seller> entity = new GenericEntity<Seller>(result) {
-            };
+        try {
 
-            return Response.status(200).entity(entity).build();
-        } else {
+            if (username != null) {
+                Seller result = sellerSessionBeanLocal.retrieveSellerByUsername(username);
+                GenericEntity<Seller> entity = new GenericEntity<Seller>(result) {
+                };
+
+                return Response.status(200).entity(entity).build();
+            } else {
+                JsonObject exception = Json.createObjectBuilder()
+                        .add("error", "No query conditions")
+                        .build();
+
+                return Response.status(400).entity(exception).build();
+            }
+
+        } catch (SellerNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "No query conditions")
                     .build();
@@ -170,6 +189,7 @@ public class SellersResource {
         }
     } // end search for a seller
 
+    // CHECKED: AARON
     @GET
     @Path("/{seller_id}/listings")
     @Produces(MediaType.APPLICATION_JSON)
@@ -179,7 +199,8 @@ public class SellersResource {
 
     /*
     Is this method necessary?
-    */
+     */
+    // CHECKED: AARON
     @GET
     @Path("/{seller_id}/listings/{listing_id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -187,42 +208,8 @@ public class SellersResource {
         Listing listing = listingSessionBeanLocal.retrieveListingBySellerIdAndListingId(sellerId, listingId);
         return Response.status(200).entity(listing).type(MediaType.APPLICATION_JSON).build();
     } // end get specific listing for current seller
-    
-    @GET
-    @Path("/{seller_id}/listings/query")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response searchSellerListings(@PathParam("seller_id") Long sellerId, @QueryParam("category") ListingCategory listingCategory) {
 
-        if (listingCategory != null) {
-            List<Listing> result = listingSessionBeanLocal.retrieveListingByListingCategoryAndSellerId(listingCategory, sellerId);
-            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(result) {
-            };
-
-            return Response.status(200).entity(entity).build();
-        } else {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "No query conditions")
-                    .build();
-
-            return Response.status(400).entity(exception).build();
-        }
-    } // end search seller listings
-    
-    @GET
-    @Path("/{seller_id}/appointments")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Appointment> getAllSellerAppointments(@PathParam("seller_id") Long sellerId) {
-        return appointmentSessionBeanLocal.retrieveSellerAppointments(sellerId);
-    } // end get all appointments for current seller
-    
-    @GET
-    @Path("/{seller_id}/appointments/{appointment_id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getSellerSpecificAppointment(@PathParam("seller_id") Long sellerId, @PathParam("appointment_id") Long appointmentId) {
-        Appointment appointment = appointmentSessionBeanLocal.retrieveAppointmentBySellerIdAndAppointmentId(sellerId, appointmentId);
-        return Response.status(200).entity(appointment).type(MediaType.APPLICATION_JSON).build();
-    } // end get specific appointment for current seller
-
+    // CHECKED: AARON
     @POST
     @Path("/{seller_id}/listings")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -255,14 +242,165 @@ public class SellersResource {
         }
     } // end create listing for current seller
 
+    // CHECKED: AARON
+    @GET
+    @Path("/{seller_id}/listings/query")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchListings(
+            @QueryParam("listingCategory") ListingCategory listingCategory,
+            @QueryParam("quantityGreater") Integer quantityGreater,
+            @QueryParam("quantityLesser") Integer quantityLesser,
+            @QueryParam("startPrice") BigDecimal startPrice,
+            @QueryParam("endPrice") BigDecimal endPrice
+    ) {
+        if (listingCategory != null) {
+            List<Listing> results = listingSessionBeanLocal.retrieveListingByListingCategory(listingCategory);
+
+            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } else if (quantityGreater != null) {
+            List<Listing> results = listingSessionBeanLocal.retrieveListingByQuantityGreater(quantityGreater);
+
+            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } else if (quantityLesser != null) {
+            List<Listing> results = listingSessionBeanLocal.retrieveListingByQuantityLesser(quantityLesser);
+
+            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } else if (startPrice != null && endPrice != null) {
+            List<Listing> results = listingSessionBeanLocal.retrieveListingByPriceRange(startPrice, endPrice);
+
+            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } else if (startPrice != null) {
+            List<Listing> results = listingSessionBeanLocal.retrieveListingByPrice(startPrice);
+
+            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
+            };
+
+            return Response.status(200).entity(entity).build();
+        } else {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "No query conditions")
+                    .build();
+
+            return Response.status(400).entity(exception).build();
+        }
+
+    } // end query for seller's listings
+
+    // CHECKED: AARON
+    @PUT
+    @Path("/{order_id}/acceptorder")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response acceptOrder(@PathParam("order_id") Long orderId) {
+        try {
+            sellerSessionBeanLocal.acceptOrder(orderId);
+            return Response.status(204).build();
+        } catch (OrderNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Order not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderIsNotPendingException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not able to accept order as it is not pending for acceptance")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end accept order
+
+    // CHECKED: AARON
+    @PUT
+    @Path("/{order_id}/rejectorder")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response rejectOrder(@PathParam("order_id") Long orderId) {
+        try {
+            sellerSessionBeanLocal.rejectOrder(orderId);
+            return Response.status(204).build();
+        } catch (OrderNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Order not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderIsNotPendingException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not able to accept order as it is not pending for acceptance")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end reject order
+
+    // CHECKED: AARON
+    @PUT
+    @Path("/{order_id}/completeorder")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response completeOrder(@PathParam("order_id") Long orderId) {
+        try {
+            sellerSessionBeanLocal.completeOrder(orderId);
+            return Response.status(204).build();
+        } catch (OrderNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Order not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderIsNotAcceptedException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not able to complete order as it is not accepted yet")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end complete order
+
+    @POST
+    @Path("/{seller_id}/posts")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Post createPost(@PathParam("seller_id") Long sellerId, Post p) {
+        try {
+            p.setDateCreated(new Date(System.currentTimeMillis()));
+            postSessionBeanLocal.createNewSellerPost(p, sellerId);
+        } catch (Exception e) {
+        }
+        return p;
+    } //end create post
+}
+
+/*
+NOT USED FOR NOW
+ */
+
+ /*
+
+
     @PUT
     @Path("/{seller_id}/listings")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response editListing(Listing listing) {
+    public Response editListing(@PathParam("seller_id") Long sellerId, Listing listing) {
         try {
             listingSessionBeanLocal.updateListing(listing);
-            return Response.status(204).build();
+            return Response.status(200).entity(
+                    listing
+            ).type(MediaType.APPLICATION_JSON).build();
         } catch (InputDataValidationException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Input validation failed")
@@ -281,7 +419,7 @@ public class SellersResource {
     @DELETE
     @Path("{seller_id}/listings/{listing_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteListing(@PathParam("id") Long listingId) {
+    public Response deleteListing(@PathParam("seller_id") Long sellerId, @PathParam("listing_id") Long listingId) {
         try {
             listingSessionBeanLocal.deleteListing(listingId);
             return Response.status(204).build();
@@ -294,59 +432,7 @@ public class SellersResource {
         }
     } // end delete listing for current seller
 
-//    @GET
-//    @Path("/{seller_id}/listings/query")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response searchListings(
-//            @QueryParam("category") ListingCategory listingCategory,
-//            @QueryParam("quantityGreater") Integer quantityGreater,
-//            @QueryParam("quantityLesser") Integer quantityLesser,
-//            @QueryParam("startPrice") BigDecimal startPrice,
-//            @QueryParam("endPrice") BigDecimal endPrice
-//    ) {
-//        if (listingCategory != null) {
-//            List<Listing> results = listingSessionBeanLocal.retrieveListingByListingCategory(listingCategory);
-//
-//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-//            };
-//
-//            return Response.status(200).entity(entity).build();
-//        } else if (quantityGreater != null) {
-//            List<Listing> results = listingSessionBeanLocal.retrieveListingByQuantityGreater(quantityGreater);
-//
-//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-//            };
-//
-//            return Response.status(200).entity(entity).build();
-//        } else if (quantityLesser != null) {
-//            List<Listing> results = listingSessionBeanLocal.retrieveListingByQuantityLesser(quantityGreater);
-//
-//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-//            };
-//
-//            return Response.status(200).entity(entity).build();
-//        } else if (startPrice != null && endPrice != null) {
-//            List<Listing> results = listingSessionBeanLocal.retrieveListingByPriceRange(startPrice, endPrice);
-//
-//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-//            };
-//
-//            return Response.status(200).entity(entity).build();
-//        } else if (startPrice != null) {
-//            List<Listing> results = listingSessionBeanLocal.retrieveListingByPrice(startPrice);
-//
-//            GenericEntity<List<Listing>> entity = new GenericEntity<List<Listing>>(results) {
-//            };
-//
-//            return Response.status(200).entity(entity).build();
-//        } else {
-//            JsonObject exception = Json.createObjectBuilder()
-//                    .add("error", "No query conditions")
-//                    .build();
-//
-//            return Response.status(400).entity(exception).build();
-//        }
-//
-//    } // end query for seller's listings
-
 }
+
+
+ */
