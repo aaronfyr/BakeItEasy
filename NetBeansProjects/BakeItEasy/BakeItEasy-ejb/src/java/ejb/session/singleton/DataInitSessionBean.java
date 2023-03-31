@@ -24,6 +24,7 @@ import entity.Report;
 import entity.Review;
 import entity.Seller;
 import enumeration.ListingCategory;
+import enumeration.OrderStatus;
 import enumeration.PostCategory;
 import error.exception.AdminUsernameExistsException;
 import error.exception.BuyerNotFoundException;
@@ -103,6 +104,7 @@ public class DataInitSessionBean {
             Buyer buyer1 = new Buyer("test", "test", "test", "test", "test", "test");
             buyerSessionBeanLocal.createNewBuyer(buyer1);
 
+            
             Seller seller1 = new Seller("test", "test", "test", "test", "test");
             Seller seller2 = new Seller("test2", "test2", "test2", "test2", "test2");
             Seller seller3 = new Seller("test3", "test3", "test3", "test3", "test3");
@@ -112,6 +114,7 @@ public class DataInitSessionBean {
             sellerSessionBeanLocal.createNewSeller(seller3);
             sellerSessionBeanLocal.createNewSeller(seller4);
 
+            
             List<String> newImagePath = new ArrayList<>();
             Listing listing1 = new Listing("Most Delicious Cake", ListingCategory.CAKE, new BigDecimal(99.99), 99,
                     "This is the most delicious cake ever. Please buy it.", newImagePath);
@@ -204,8 +207,10 @@ public class DataInitSessionBean {
             listingSessionBeanLocal.createNewListing(listing29, seller1.getSellerId());
             listingSessionBeanLocal.createNewListing(listing30, seller2.getSellerId());
 
+            
             Order order1 = new Order(BigDecimal.TEN, 2, "birthday cake", "123 house", new Date(), new Date());
             orderSessionBeanLocal.createNewOrder(order1, buyer1.getBuyerId(), listing1.getListingId());
+            
             Admin admin1 = new Admin("admin1", "admin", "admin@mail.com", "password");
             adminSessionBeanLocal.createNewAdmin(admin1);
 

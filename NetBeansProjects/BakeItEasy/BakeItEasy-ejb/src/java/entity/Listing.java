@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +21,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -54,7 +54,7 @@ public class Listing implements Serializable {
     @JoinColumn(nullable = false)
     @JsonbTransient
     private Seller seller;
-    @OneToMany(mappedBy = "listing", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "listing", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JsonbTransient
     private List<Order> orders;
     

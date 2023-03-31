@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -62,7 +63,7 @@ public class Order implements Serializable {
     @JoinColumn(nullable = false)
     @JsonbTransient
     private Buyer buyer;
-    @OneToOne(mappedBy = "order", fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "order", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JsonbTransient
     private Review review;
 
