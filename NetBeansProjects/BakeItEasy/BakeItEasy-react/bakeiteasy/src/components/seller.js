@@ -43,31 +43,43 @@ const Seller = ({
   return (
     <Card maxW="sm">
       <CardBody>
-        <Stack mt="6" spacing="3">
-          <Heading size="md">{name}</Heading>
-          <Text> {username}</Text>
-          <Text> {email}</Text>
-          <Text> {phoneNo}</Text>
-          <Text>Is Banned: {isBanned ? "Yes" : "No"}</Text>
+        <Stack spacing="3">
+          <Text>
+            <strong>Name: </strong>
+            {name}
+          </Text>
+          <Text>
+            <strong>Username: </strong>
+            {username}
+          </Text>
+          <Text>
+            <strong>Email: </strong>
+            {email}
+          </Text>
+          <Text>
+            <strong>Phone Number: </strong>
+            {phoneNo}
+          </Text>
 
           {isBanned ? (
-            <Button bg="#E2725B" onClick={handleUnban}>
+            <Button bg="#E2725B" colorScheme="white" onClick={handleUnban}>
               Unban seller
             </Button>
           ) : (
-            <Button bg="#E2725B" onClick={handleBan}>
+            <Button bg="#E2725B" colorScheme="white" onClick={handleBan}>
               Ban seller
             </Button>
           )}
         </Stack>
       </CardBody>
 
-      {isBanned ? (
-        <CardFooter bg="red.500"></CardFooter>
-      ) : (
-        <CardFooter></CardFooter>
+      {isBanned && (
+        <CardFooter bg="red.500" textAlign="center">
+          <Text color="white" fontSize="sm" width="100%">
+            This seller is banned
+          </Text>
+        </CardFooter>
       )}
-
       <Divider />
     </Card>
   );

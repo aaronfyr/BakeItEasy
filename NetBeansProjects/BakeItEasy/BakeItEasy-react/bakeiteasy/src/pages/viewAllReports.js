@@ -32,17 +32,14 @@ function ViewAllReports() {
 
   const handleBan = async (reportedUser) => {
     const response = await fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/${
+      `http://localhost:8080/BakeItEasy-war/webresources/admins/ban/${
         reportedUser.constructor.name === "Seller" ? "sellers" : "buyers"
-      }/ban`,
+      }`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          reportedUser,
-        }),
       }
     );
 
@@ -66,6 +63,39 @@ function ViewAllReports() {
     }
   };
 
+  const handleUnban = async (reportedUser) => {
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/admins/unban/${
+        reportedUser.constructor.name === "Seller" ? "sellers" : "buyers"
+      }`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.ok) {
+      const updatedReports = reports.map((report) => {
+        if (report.reportee.username === reportedUser.username) {
+          return {
+            ...report,
+            reportee: {
+              ...reportedUser,
+              isBanned: false,
+            },
+          };
+        } else {
+          return report;
+        }
+      });
+      setReports(updatedReports);
+    } else {
+      setError("There is an error with the unban request");
+    }
+  };
+
   return (
     <div>
       <AdminMenuBar />
@@ -83,11 +113,13 @@ function ViewAllReports() {
           {reports.map((report) => (
             <GridItem key={report.reportId} colSpan={1}>
               <Report
+                reportId={report.reportId}
                 title={report.title}
                 reason={report.reason}
                 reporter={report.reporter}
                 reported={report.reportee}
                 onBan={handleBan}
+                onUnban={handleUnban}
               />
             </GridItem>
           ))}
