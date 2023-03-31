@@ -9,25 +9,39 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const Buyer = ({ name, username, email, phoneNo, address, isBanned }) => {
-  const handleClick = async (event) => {
+const Buyer = ({
+  buyerId,
+  name,
+  username,
+  email,
+  phoneNo,
+  address,
+  isBanned,
+  onBan,
+  onUnban,
+}) => {
+  const handleBan = async (event) => {
     event.preventDefault();
 
     const confirmed = window.confirm("Are you sure you want to ban this user?");
     if (!confirmed) {
       return;
     }
-
-    const response = await fetch(`http://localhost:8080/buyers/ban`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-      }),
-    });
+    onBan({ buyerId, name, username, email, phoneNo, address, isBanned });
   };
+
+  const handleUnban = async (event) => {
+    event.preventDefault();
+
+    const confirmed = window.confirm(
+      "Are you sure you want to unban this user?"
+    );
+    if (!confirmed) {
+      return;
+    }
+    onUnban({ buyerId, name, username, email, phoneNo, address, isBanned });
+  };
+
   return (
     <Card maxW="sm">
       <CardBody>
@@ -39,17 +53,25 @@ const Buyer = ({ name, username, email, phoneNo, address, isBanned }) => {
           <Text> {address}</Text>
           <Text>Is Banned: {isBanned ? "Yes" : "No"}</Text>
 
-          <Button
-            bg="#E2725B"
-            onClick={handleClick}
-            visibility={isBanned ? "hidden" : "visible"}
-          >
-            Ban buyer
-          </Button>
+          {isBanned ? (
+            <Button bg="#E2725B" onClick={handleUnban}>
+              Unban buyer
+            </Button>
+          ) : (
+            <Button bg="#E2725B" onClick={handleBan}>
+              Ban buyer
+            </Button>
+          )}
         </Stack>
       </CardBody>
+
+      {isBanned ? (
+        <CardFooter bg="red.500"></CardFooter>
+      ) : (
+        <CardFooter></CardFooter>
+      )}
+
       <Divider />
-      <CardFooter></CardFooter>
     </Card>
   );
 };

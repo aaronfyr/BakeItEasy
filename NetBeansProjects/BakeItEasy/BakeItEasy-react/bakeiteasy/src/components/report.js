@@ -9,14 +9,14 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const Report = ({ title, reason, reporter, reported, onBan }) => {
+const Report = ({ title, reason, reporter, reportee, onBan }) => {
   const handleBanClick = async (event) => {
     event.preventDefault();
     const confirmed = window.confirm("Are you sure you want to ban this user?");
     if (!confirmed) {
       return;
     }
-    await onBan(reported);
+    await onBan(reportee);
   };
 
   return (
@@ -26,14 +26,14 @@ const Report = ({ title, reason, reporter, reported, onBan }) => {
           <Heading size="md">{title}</Heading>
           <Text> {reason}</Text>
           <Text> {reporter}</Text>
-          <Text> {reported}</Text>
-          <Button
+          <Text> {reportee}</Text>
+          {/* <Button
             bg="#E2725B"
             onClick={handleBanClick}
-            visibility={reported.isBanned ? "hidden" : "visible"}
+            visibility={reportee.isBanned ? "hidden" : "visible"}
           >
             Ban reported user
-          </Button>
+          </Button> */}
         </Stack>
       </CardBody>
       <Divider />

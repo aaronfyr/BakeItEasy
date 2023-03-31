@@ -9,24 +9,36 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const Seller = ({ name, username, email, phoneNo, address, isBanned }) => {
-  const handleClick = async (event) => {
+const Seller = ({
+  sellerId,
+  name,
+  username,
+  email,
+  phoneNo,
+  isBanned,
+  onBan,
+  onUnban,
+}) => {
+  const handleBan = async (event) => {
     event.preventDefault();
 
     const confirmed = window.confirm("Are you sure you want to ban this user?");
     if (!confirmed) {
       return;
     }
+    onBan({ sellerId, name, username, email, phoneNo, isBanned });
+  };
 
-    const response = await fetch(`http://localhost:8080/sellers/ban`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-      }),
-    });
+  const handleUnban = async (event) => {
+    event.preventDefault();
+
+    const confirmed = window.confirm(
+      "Are you sure you want to unban this user?"
+    );
+    if (!confirmed) {
+      return;
+    }
+    onUnban({ sellerId, name, username, email, phoneNo, isBanned });
   };
   return (
     <Card maxW="sm">
@@ -36,20 +48,27 @@ const Seller = ({ name, username, email, phoneNo, address, isBanned }) => {
           <Text> {username}</Text>
           <Text> {email}</Text>
           <Text> {phoneNo}</Text>
-          <Text> {address}</Text>
           <Text>Is Banned: {isBanned ? "Yes" : "No"}</Text>
 
-          <Button
-            bg="#E2725B"
-            onClick={handleClick}
-            visibility={isBanned ? "hidden" : "visible"}
-          >
-            Ban seller
-          </Button>
+          {isBanned ? (
+            <Button bg="#E2725B" onClick={handleUnban}>
+              Unban seller
+            </Button>
+          ) : (
+            <Button bg="#E2725B" onClick={handleBan}>
+              Ban seller
+            </Button>
+          )}
         </Stack>
       </CardBody>
+
+      {isBanned ? (
+        <CardFooter bg="red.500"></CardFooter>
+      ) : (
+        <CardFooter></CardFooter>
+      )}
+
       <Divider />
-      <CardFooter></CardFooter>
     </Card>
   );
 };

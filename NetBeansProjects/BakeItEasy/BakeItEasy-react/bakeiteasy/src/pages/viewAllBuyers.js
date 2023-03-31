@@ -30,6 +30,62 @@ function ViewAllBuyers() {
     fetchData();
   }, []);
 
+  const handleBan = async (bannedBuyer) => {
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/admins/ban/buyers/${bannedBuyer.buyerId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.ok) {
+      const updatedBuyers = buyers.map((buyer) => {
+        if (buyer.buyerId === bannedBuyer.buyerId) {
+          return {
+            ...buyer,
+            isBanned: true,
+          };
+        } else {
+          return buyer;
+        }
+      });
+      setBuyers(updatedBuyers);
+    } else {
+      setError("There is an error with the ban request");
+    }
+  };
+
+  const handleUnban = async (unbannedBuyer) => {
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/admins/unban/buyers/${unbannedBuyer.buyerId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.ok) {
+      const updatedBuyers = buyers.map((buyer) => {
+        if (buyer.buyerId === unbannedBuyer.buyerId) {
+          return {
+            ...buyer,
+            isBanned: false,
+          };
+        } else {
+          return buyer;
+        }
+      });
+      setBuyers(updatedBuyers);
+    } else {
+      setError("There is an error with the unban request");
+    }
+  };
+
   return (
     <div>
       <AdminMenuBar />
@@ -45,15 +101,17 @@ function ViewAllBuyers() {
       ) : (
         <Grid templateColumns="repeat(4, 1fr)" gap={6}>
           {buyers.map((buyer) => (
-            <GridItem key={buyer.id} colSpan={1}>
+            <GridItem key={buyer.buyerId} colSpan={1}>
               <Buyer
-                key={buyer.id}
+                buyerId={buyer.buyerId}
                 name={buyer.name}
                 username={buyer.username}
                 email={buyer.email}
                 phoneNo={buyer.phoneNo}
                 address={buyer.address}
                 isBanned={buyer.isBanned}
+                onBan={handleBan}
+                onUnban={handleUnban}
               />
             </GridItem>
           ))}

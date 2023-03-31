@@ -48,10 +48,10 @@ function ViewAllReports() {
 
     if (response.ok) {
       const updatedReports = reports.map((report) => {
-        if (report.reported.username === reportedUser.username) {
+        if (report.reportee.username === reportedUser.username) {
           return {
             ...report,
-            reported: {
+            reportee: {
               ...reportedUser,
               isBanned: true,
             },
@@ -81,13 +81,12 @@ function ViewAllReports() {
       ) : (
         <Grid templateColumns="repeat(4, 1fr)" gap={6}>
           {reports.map((report) => (
-            <GridItem key={report.id} colSpan={1}>
+            <GridItem key={report.reportId} colSpan={1}>
               <Report
-                key={report.id}
                 title={report.title}
                 reason={report.reason}
                 reporter={report.reporter}
-                reported={report.reported}
+                reported={report.reportee}
                 onBan={handleBan}
               />
             </GridItem>
