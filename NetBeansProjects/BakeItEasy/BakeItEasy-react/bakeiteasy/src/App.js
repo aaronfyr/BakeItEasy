@@ -27,6 +27,7 @@ import MakeReview from "./pages/makeReview";
 import ViewAllBuyers from "./pages/viewAllBuyers";
 import ViewAllSellers from "./pages/viewAllSellers";
 import ViewAllReports from "./pages/viewAllReports";
+
 function App() {
   return (
     <ChakraProvider theme={theme}>
@@ -44,12 +45,14 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/forgotPassword" element={<ForgotPassword />} />
                 <Route path="/resetPassword" element={<ResetPassword />} />
-                <Route path="/adminProfilePage" element={<AdminProfilePage />} />
+                <Route
+                  path="/adminProfilePage"
+                  element={<AdminProfilePage />}
+                />
                 <Route path="/viewAllBuyers" element={<ViewAllBuyers />} />
                 <Route path="/viewAllSellers" element={<ViewAllSellers />} />
                 <Route path="/viewAllReports" element={<ViewAllReports />} />
                 <Route path="/makeReview" element={<MakeReview />} />
-
 
                 <Route path="/sellerHomepage" element={<SellerHomepage />} />
               </Routes>

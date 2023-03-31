@@ -59,4 +59,22 @@
         <local>ejb.session.stateless.BuyerSessionBeanLocal</local>
         <ejb-link>BakeItEasy-ejb.jar#BuyerSessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>PostSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.PostSessionBeanLocal</local>
+        <ejb-link>BakeItEasy-ejb.jar#PostSessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>AdminSessionBeanLocal</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.AdminSessionBeanLocal</local>
+        <ejb-link>BakeItEasy-ejb.jar#AdminSessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>PostSessionBean1</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.PostSessionBeanLocal</local>
+        <ejb-link>BakeItEasy-ejb.jar#PostSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>

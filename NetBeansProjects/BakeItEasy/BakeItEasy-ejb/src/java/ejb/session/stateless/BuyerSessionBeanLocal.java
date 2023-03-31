@@ -6,16 +6,30 @@
 package ejb.session.stateless;
 
 import entity.Buyer;
+import error.exception.BuyerNotFoundException;
+import error.exception.InputDataValidationException;
+import error.exception.InvalidLoginCredentialException;
+import error.exception.UnknownPersistenceException;
 import java.util.List;
 import javax.ejb.Local;
 
 /**
  *
- * @author Uni
+ * @author Nelson Choo
  */
 @Local
 public interface BuyerSessionBeanLocal {
 
-    public List<Buyer> searchBuyers(String name);
+    public Long createNewBuyer(Buyer buyer) throws UnknownPersistenceException, InputDataValidationException;
+
+    public Buyer retrieveBuyerById(Long buyerId) throws BuyerNotFoundException;
+
+    public List<Buyer> searchBuyersByName(String name);
+
+    public void editBuyer(Buyer buyer) throws BuyerNotFoundException;
+
+    public void deleteBuyer(Long buyerId) throws BuyerNotFoundException;
+
+    public Buyer buyerLogin(String email, String password) throws InvalidLoginCredentialException, BuyerNotFoundException;
     
 }

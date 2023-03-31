@@ -6,11 +6,17 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,7 +35,24 @@ public class Admin implements Serializable {
     @Column
     private String username;
     @Column
+    private String email;
+    @Column
     private String password;
+    
+    @JsonbTransient
+    @OneToMany(mappedBy = "admin", fetch = FetchType.EAGER)
+    private List<Report> reports;
+
+    public Admin(String name, String username, String email, String password) {
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.reports = new ArrayList<>();
+    }
+
+    public Admin() {
+    }
 
     public Long getAdminId() {
         return adminId;
@@ -86,6 +109,34 @@ public class Admin implements Serializable {
     @Override
     public String toString() {
         return "entity.Admin[ id=" + adminId + " ]";
+    }
+
+    /**
+     * @return the reports
+     */
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    /**
+     * @param reports the reports to set
+     */
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
     }
     
 }

@@ -8,14 +8,20 @@ package entity;
 import enumeration.ListingCategory;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -32,9 +38,11 @@ public class Listing implements Serializable {
     @Column
     private String name;
     @Column
+    private ListingCategory listingCategory;
+    @Column
     private BigDecimal price;
     @Column
-    private Integer quantityLeft;
+    private Integer maxQuantity;
     @Column
     private String description;
     @Column
@@ -42,56 +50,34 @@ public class Listing implements Serializable {
     /*@Column
     private String videoPath;    */
 
-    @Column
-    private ListingCategory listingCategory;
-
-    @OneToOne(optional = true)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    @JsonbTransient
     private Seller seller;
-
-    @OneToMany(mappedBy = "listing")
+    @OneToMany(mappedBy = "listing", fetch = FetchType.EAGER)
+    @JsonbTransient
     private List<Order> orders;
-    @OneToMany(mappedBy = "listing")
-    private List<Review> reviews;
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
     
-
-    public List<Order> getOrders() {
-        return orders;
+    public Listing() {
+        this.orders = new ArrayList<>();
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
-
-    public List<String> getImagePaths() {
-        return imagePaths;
-    }
-
-    public void setImagePaths(List<String> imagePaths) {
+    public Listing(String name, ListingCategory listingCategory, BigDecimal price, Integer quantityLeft, String description, List<String> imagePaths) {
+        this();
+        this.name = name;
+        this.listingCategory = listingCategory;
+        this.price = price;
+        this.maxQuantity = quantityLeft;
+        this.description = description;
         this.imagePaths = imagePaths;
     }
 
-    public ListingCategory getListingCategory() {
-        return listingCategory;
+    public Long getListingId() {
+        return listingId;
     }
 
-    public void setListingCategory(ListingCategory listingCategory) {
-        this.listingCategory = listingCategory;
+    public void setListingId(Long listingId) {
+        this.listingId = listingId;
     }
 
     public String getName() {
@@ -102,6 +88,14 @@ public class Listing implements Serializable {
         this.name = name;
     }
 
+    public ListingCategory getListingCategory() {
+        return listingCategory;
+    }
+
+    public void setListingCategory(ListingCategory listingCategory) {
+        this.listingCategory = listingCategory;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }
@@ -110,12 +104,12 @@ public class Listing implements Serializable {
         this.price = price;
     }
 
-    public Integer getQuantityLeft() {
-        return quantityLeft;
+    public Integer getMaxQuantity() {
+        return maxQuantity;
     }
 
-    public void setQuantityLeft(Integer quantityLeft) {
-        this.quantityLeft = quantityLeft;
+    public void setMaxQuantity(Integer maxQuantity) {
+        this.maxQuantity = maxQuantity;
     }
 
     public String getDescription() {
@@ -126,20 +120,30 @@ public class Listing implements Serializable {
         this.description = description;
     }
 
-    public List<String> getImages() {
+    public List<String> getImagePaths() {
         return imagePaths;
     }
 
-    public void setImages(List<String> images) {
-        this.imagePaths = images;
+    public void setImagePaths(List<String> imagePaths) {
+        this.imagePaths = imagePaths;
     }
 
-    public Long getListingId() {
-        return listingId;
+    @XmlTransient
+    public Seller getSeller() {
+        return seller;
     }
 
-    public void setListingId(Long listingId) {
-        this.listingId = listingId;
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    @XmlTransient
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     @Override

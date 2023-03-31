@@ -12,6 +12,31 @@ import {
 import { Flex, Button } from "@chakra-ui/react";
 
 function BuyerProfile() {
+  const [buyer, setBuyer] = useState(null);
+  const [buyerName, setBuyerName] = useState("Log In");
+
+  useEffect(() => {
+    async function fetchData() {
+      const fetchedBuyer = localStorage.getItem("buyer");
+      if (!fetchedBuyer) {
+        console.log("profile", "no buyer");
+        navigate("/login");
+      } else {
+        console.log("profile", "has buyer");
+        try {
+          const parsedUser = JSON.parse(fetchedBuyer);
+          setBuyer(parsedUser);
+          console.log("parsedUser: ", parsedUser);
+          console.log("parsedUser.name: ", parsedUser.name);
+          setBuyerName(parsedUser.name);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+    fetchData();
+  }, []);
+
   const [orders, setOrders] = useState([
     {
       id: 1,
@@ -65,8 +90,6 @@ function BuyerProfile() {
 
   const { id } = useParams();
 
-  const [seller, setSeller] = useState(null);
-  const [buyer, setBuyer] = useState(null);
   const [search, setSearch] = useState("");
 
   let navigate = useNavigate();
@@ -99,7 +122,7 @@ function BuyerProfile() {
         <div id="profilePhoto"></div>
       </div>
       <div id="userDetails">
-        <h1>name</h1>
+        <h1>{buyerName}</h1>
         <h4>details</h4>
       </div>
       <h2>Search for order:</h2>

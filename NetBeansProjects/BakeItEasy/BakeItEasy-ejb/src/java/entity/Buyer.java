@@ -6,14 +6,17 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -39,21 +42,37 @@ public class Buyer implements Serializable {
     private String phoneNo;
     @Column
     private boolean isBanned;
+    @Column(nullable = true)
+    private String address;
 
-    @OneToMany(mappedBy = "buyer")
-    private List<Review> reviews;
-    @OneToMany(mappedBy = "buyer")
+    @OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER)
+    @JsonbTransient
     private List<Order> orders;
-    @OneToMany(mappedBy = "reporter")
+    @OneToMany(mappedBy = "reporter", fetch = FetchType.EAGER)
+    @JsonbTransient
     private List<Report> reports;
-    @OneToMany(mappedBy = "buyer")
+    @OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER)
+    @JsonbTransient
     private List<Post> posts;
-    @OneToMany(mappedBy = "buyer")
-    private List<Comment> comments; // if we want to let them find which comments they made?
 
-    @OneToOne(optional = true)
-    private Address address;
+    public Buyer() {
+        this.isBanned = false;
+        this.orders = new ArrayList<>();
+        this.reports = new ArrayList<>();
+        this.posts = new ArrayList<>();
+    }
 
+    public Buyer(String name, String email, String username, String password, String phoneNo, String address) {
+        this();
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.phoneNo = phoneNo;
+        this.address = address;
+    }
+    
+    @XmlTransient
     public List<Post> getPosts() {
         return posts;
     }
@@ -62,30 +81,15 @@ public class Buyer implements Serializable {
         this.posts = posts;
     }
 
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public Address getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
+    @XmlTransient
     public List<Order> getOrders() {
         return orders;
     }
@@ -94,6 +98,7 @@ public class Buyer implements Serializable {
         this.orders = orders;
     }
 
+    @XmlTransient
     public List<Report> getReports() {
         return reports;
     }
