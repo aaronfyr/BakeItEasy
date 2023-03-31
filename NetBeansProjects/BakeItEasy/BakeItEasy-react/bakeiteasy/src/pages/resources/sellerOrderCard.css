@@ -13,13 +13,23 @@
 
 }
 
-.sellerOrderCardBodyNormal {
+.sellerOrderCardBodyStatus {
+    width: 400px;
+}
 
+.sellerOrderCardBodyStatus h2 {
+    text-align: right;
+    color: green;
+    font-family: 'Montserrat',sans-serif;
 }
 
 .sellerOrderCardHeader {
     display: flex;
     align-items: flex-start;
+}
+
+.cardBody {
+    background-color: white;
 }
 
 .buyerName {
@@ -30,4 +40,9 @@
 
 .cardTitle {
 color: blue;
+}
+
+body {
+    padding: 10px;
+    background-color: white;
 }
