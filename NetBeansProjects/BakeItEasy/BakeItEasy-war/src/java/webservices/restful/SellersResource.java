@@ -6,10 +6,12 @@
 package webservices.restful;
 
 import ejb.session.stateless.ListingSessionBeanLocal;
+import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.PostSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.SellerSessionBeanLocal;
 import entity.Listing;
+import entity.Order;
 import entity.Post;
 import entity.Report;
 import entity.Review;
@@ -66,6 +68,9 @@ public class SellersResource {
 
     @EJB
     private PostSessionBeanLocal postSessionBeanLocal;
+    
+    @EJB
+    private OrderSessionBeanLocal orderSessionBeanLocal;
 
     // CHECKED: ELYSIA
     // get all reviews for seller with id = {id}
@@ -382,6 +387,25 @@ public class SellersResource {
         }
         return p;
     } //end create post
+    
+    @GET
+    @Path("/{seller_id}/orders")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOrders(@PathParam("seller_id") Long sellerId) {
+        try {
+            List<Order> orders = orderSessionBeanLocal.getSellerOrders(sellerId);
+            return Response.status(200).entity(
+                    orders
+            ).type(MediaType.APPLICATION_JSON).build();
+        } catch (SellerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: seller id " + sellerId)
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getOrders
 }
 
 /*

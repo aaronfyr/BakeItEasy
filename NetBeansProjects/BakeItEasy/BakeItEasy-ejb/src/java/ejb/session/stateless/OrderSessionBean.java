@@ -15,6 +15,7 @@ import error.exception.ListingNotFoundException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -120,6 +121,36 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
             em.remove(order);
         } catch (OrderNotFoundException ex) {
             throw new OrderNotFoundException(ex.getMessage());
+        }
+    }
+    
+    @Override
+    public List<Order> getBuyerOrders(Long buyerId) throws BuyerNotFoundException {
+        try {
+            Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+            
+            return buyer.getOrders();
+        } catch (BuyerNotFoundException ex) {
+            throw new BuyerNotFoundException(ex.getMessage());
+        }
+    }
+    
+    @Override
+    public List<Order> getSellerOrders(Long sellerId) throws SellerNotFoundException {
+        try {
+            Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
+            
+            List<Order> result = new ArrayList<Order>();
+            
+            for (Listing listing: seller.getListings()) {
+                List<Order> orders = listing.getOrders();
+                
+                result.addAll(orders);
+            }
+            
+            return result;
+        } catch (SellerNotFoundException ex) {
+            throw new SellerNotFoundException(ex.getMessage());
         }
     }
     

@@ -12,6 +12,7 @@ import error.exception.ListingNotFoundException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -28,5 +29,9 @@ public interface OrderSessionBeanLocal {
     public void deleteOrder(Long orderId) throws OrderNotFoundException;
     
     public Long createNewOrder(Order order, Long buyerId, Long listingId) throws BuyerNotFoundException, ListingNotFoundException, UnknownPersistenceException, InputDataValidationException;
+
+    public List<Order> getBuyerOrders(Long buyerId) throws BuyerNotFoundException;
+
+    public List<Order> getSellerOrders(Long sellerId) throws SellerNotFoundException;
     
 }

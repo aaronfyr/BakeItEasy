@@ -6,9 +6,11 @@
 package webservices.restful;
 
 import ejb.session.stateless.BuyerSessionBeanLocal;
+import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.PostSessionBeanLocal;
 import ejb.session.stateless.ReportSessionBeanLocal;
 import entity.Buyer;
+import entity.Order;
 import entity.Post;
 import entity.Report;
 import error.exception.BuyerNotFoundException;
@@ -47,6 +49,9 @@ public class BuyersResource {
     
     @EJB
     private PostSessionBeanLocal postSessionBeanLocal;
+    
+    @EJB
+    private OrderSessionBeanLocal orderSessionBeanLocal;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -138,4 +143,23 @@ public class BuyersResource {
         }
         return p;
     } //end createCustomer
+    
+    @GET
+    @Path("/{buyer_id}/orders")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOrders(@PathParam("buyer_id") Long buyerId) {
+        try {
+            List<Order> orders = orderSessionBeanLocal.getBuyerOrders(buyerId);
+            return Response.status(200).entity(
+                    orders
+            ).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: buyer id " + buyerId)
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getOrders
 }
