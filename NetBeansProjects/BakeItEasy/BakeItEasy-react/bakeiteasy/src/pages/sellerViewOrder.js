@@ -23,67 +23,63 @@ import {
 import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
 
 import "./resources/default.css";
-import "./resources/listing.css";
+import "./resources/sellerViewOrder.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
 
 function SellerViewOrder() {
   const { id } = useParams();
+
+
+
   return (
     <div>
       <NavigationBar />
+      <br/>
+      <h1>Order ID #order.id</h1>
       <div id="listingContainer">
         <div id="leftListingContainer">
           <div class="slideshow-container"></div>
           <Flex justifyContent={"space-between"}>
-            <Flex>
-              <div className="button1">Share</div>
-              <div className="button1">
-                <FaHeart />
-                Likes
-              </div>
-            </Flex>
-            <div className="button1">
-              <FaRegCommentAlt />
-              Chat
-            </div>
           </Flex>
           <br />
-          <h1>Listing name</h1>
+
           <br />
           <div id="listingDetailsGrid">
-            <h4>Posted on:</h4>
-            <h4 className="details">date</h4>
+            {/*    this.price = price;
+        this.quantity = quantity;
+        this.description = description;
+        this.orderStatus = OrderStatus.PENDING;
+        this.address = address;
+        this.dateOfCreation = dateOfCreation;
+        this.dateOfCollection = dateOfCollection; */}
 
-            <h4>Quantity Available:</h4>
-            <h4 className="details">quantity</h4>
-
-            <h4>Minimum Preparation Time:</h4>
-            <h4 className="details">time</h4>
           </div>
           <br />
-          <h3 className="italic">Description:</h3>
-          <h4 className="details">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </h4>
         </div>
         <div id="rightListingContainer">
-          <form>
-            <h3>Field1:</h3>
-            <input type="text" id="oneLineInput" name="lname" />
-            <h3>Field2:</h3>
-            <input type="text" id="oneLineInput" name="lname" />
+            <h3>Price:</h3>
+            <h2>order.price</h2>
             <h3>Quantity:</h3>
-            <input type="text" id="oneLineInput" name="lname" />
-            <h3>Customisation:</h3>
-            <input type="text" id="customisationInput" name="lname" />
-          </form>
+            <h2>order.quantity</h2>
+            <h3>Description:</h3>
+            <h2>order.description</h2>
+            <h3>Order status:</h3>
+            <h2>order.status</h2>
+            <h3>Address:</h3>
+            <h2>order.address</h2>
+            <h3>Collection Date:</h3>
+            <h2>order.dateOfCollection</h2>
+            <h3>Buyer:</h3>
+            <h2>order.buyer.username</h2>
+            <br></br>
+            <Flex>
+                <div className="button1">Approve</div>
+                <div className="button1">
+                <FaRegCommentAlt />
+                Chat
+                </div>
+            </Flex>
         </div>
       </div>
     </div>

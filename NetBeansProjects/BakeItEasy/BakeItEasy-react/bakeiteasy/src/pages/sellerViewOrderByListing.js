@@ -1,62 +1,73 @@
 import { color } from "framer-motion";
-import React, {useState} from "react";
-import "./resources/searchBarSection.css";
+import React, {useState, useEffect} from "react";
+import "./resources/sellerVOBL.css";
 import SellerOrderCard from "./sellerOrderCard.js";
-import CategoryDropdown from "../components/categoryDropdown";
 import { NavigationBar } from "../components/buyerNavigationBar";
-import {FaListUl} from "react-icons/fa";
+import { FaCheck } from "react-icons/fa"
 import {
   BrowserRouter as Router,
   useNavigate,
   useParams,
+  Link
 } from "react-router-dom";
 
 
 /*const orderResponse = await fetch(``)*/
 
-const SearchBarSection = () => {
+const SellerViewOrderByListing = () => {
 
-  const [products, setProducts] = useState(data);
+  const [orders, setOrders] = useState([]);
 
   const [search, setSearch] = useState("");
 
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const id = 1;
 
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category.toLowerCase());
-    console.log({selectedCategory});
-  };
-
-  const filteredProducts = products.filter((product) => {
+  const filteredOrders = orders.filter((order) => {
     if (
-      (product.tags.toLowerCase().includes(search) ||
+      /*(product.tags.toLowerCase().includes(search) ||
       product.title.toLowerCase().includes(search) ||
       product.category.toLowerCase().includes(search) ||
       product.buyerName.toLowerCase().includes(search) ||
-      product.notes.toLowerCase().includes(search)) ||
-      product.category.toLowerCase().includes({selectedCategory})
+      product.notes.toLowerCase().includes(search))*/true
         // cant get the frickin filter to work
     ) {
-      return product;
+      return order;
     }
   });
+
+     useEffect(() => {
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${id}/orders`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+        "Content-Type": "application/json",
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => setOrders(data));
+    }, []);
 
 
    let navigate = useNavigate();
   const routeChangeToOrder = (id) => {
-    let path = "listing/";
+    let path = "/sellerOrder/";
+    /*<Link to={{
+    pathname: "path",
+    state: products.filter((product) => {if (product.id === id) {return product}}) // your data array of objects
+    }}>
+    </Link> */
     navigate(path + id);
   };
+
+
 
   return (
     <div>
         <NavigationBar/>
         <div className="dropdownRow">
             <div className="heading">
-                <h1>My listings with orders</h1>
+                <h1>My Orders</h1>
             </div>
-        <CategoryDropdown onCategoryChange={handleCategoryChange}/>
-        <body style={{fontFamily: 'Montserrat'}}>Selected category: {selectedCategory}</body>
     </div>
     <div className="searchBarSection">
       <div class="searchBar">
@@ -84,28 +95,50 @@ const SearchBarSection = () => {
         </button>
       </div>
       <div className="orderDisplay">
-        {filteredProducts.map((product) => (
-          <div className="listingComponent" onClick={() => routeChangeToOrder(product.id)}>
-            <SellerOrderCard>
-            <div className="sellerOrderCardHeader">
-            <img style={pfpStyle} alt="profile pic" width="50" src="https://st.depositphotos.com/1597387/1984/i/950/depositphotos_19841901-stock-photo-asian-young-business-man-close.jpg"></img>
-            <h3 className="buyerName">{product.buyerName}</h3>
+          <SellerOrderCard>
+            <div className="cardTextBlock" style={{width: 1000}}>
+                <h2>listing name</h2>
             </div>
             <div className="sellerOrderCardBodyFlex">
                 <div className="sellerOrderCardBodyFlex">
-                    <img alt="cake" style={imgStyle} src={product.url}/>
+                    <img alt="cake" style={imgStyle} src="https://www.recipetineats.com/wp-content/uploads/2018/03/Chocolate-Cake_9-SQ.jpg?w=500&h=500&crop=1"/>
                 </div>
 
-                <div style={{width: 400}} className="cardTextBlock">
-                    <h2>{product.title} [${product.price}]</h2>
-                    <h4>{product.category}</h4>
-                    <h3>no. of orders: (number) </h3>
-                    <div className="flexBox">
-                        <div className="searchBarButton1">
-                            <FaListUl style={{alignSelf: "center"}}/>
-                            <h3>view orders</h3>
-                        </div>
-                    </div>
+                <div style={{width: 500}} className="cardTextBlock">
+                    <body>product.category</body>
+                    <body>note: product.notes</body>
+                    <body>amount due: $product.price</body>
+                </div>
+            </div>
+        </SellerOrderCard>
+      </div>
+
+      <div className="orderDisplay">
+        {filteredOrders.map((order) => (
+          <div className="orderComponent" onClick={() => routeChangeToOrder(order.id)}>
+            <SellerOrderCard>
+            <div className="sellerOrderCardHeader">
+                <img style={pfpStyle} alt="profile pic" width="50" src="https://st.depositphotos.com/1597387/1984/i/950/depositphotos_19841901-stock-photo-asian-young-business-man-close.jpg"></img>
+                <h3>{order.id}</h3>
+            </div>
+            <div className="sellerOrderCardBodyFlex">
+                <div className="sellerOrderCardBodyFlex">
+                </div>
+
+                <div style={{width: 350, margin: 5}} className="cardTextBlock">
+                    <h4>note: product.notes</h4>
+                    <h4>amount due: $product.price</h4>
+                    <h4>date due</h4>
+                </div>
+
+                <div className="orderStatus">
+                    <h2>product.status</h2>
+                </div>
+            </div>
+            <div className="sellerOrderCardBodyFlex">
+                <div className="searchBarButton1">
+                    <FaCheck style={{alignSelf: "center"}}/>
+                    <h5>approve order</h5>
                 </div>
             </div>
         </SellerOrderCard>
@@ -187,8 +220,8 @@ const data = [{
 const pfpStyle = {padding: 0.5, borderRadius: "50%", width: 30, height: 30,
                     objectFit: "cover", background: "grey", display:"block" }
 
-const imgStyle = {height: 150, width: 150, objectFit:"cover", borderRadius: 10}
+const imgStyle = {height: 250, width: 350, objectFit:"cover", borderRadius: 10}
 
 
 
-export default SearchBarSection;
+export default SellerViewOrderByListing;

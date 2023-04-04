@@ -40,6 +40,7 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 export const NavigationBar = () => {
   const [seller, setSeller] = useState(null);
   const [buyer, setBuyer] = useState(null);
+
   const navigate = useNavigate();
 
   // dummy user
