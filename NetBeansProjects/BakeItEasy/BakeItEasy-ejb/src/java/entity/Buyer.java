@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -54,6 +55,9 @@ public class Buyer implements Serializable {
     @OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Post> posts;
+    @ManyToMany(mappedBy = "likers", fetch = FetchType.EAGER)
+    @JsonbTransient
+    private List<Listing> likedListings;
 
     public Buyer() {
         this.isBanned = false;
@@ -186,6 +190,14 @@ public class Buyer implements Serializable {
     @Override
     public String toString() {
         return "entity.Placeholder[ id=" + buyerId + " ]";
+    }
+
+    public List<Listing> getLikedListings() {
+        return likedListings;
+    }
+
+    public void setLikedListings(List<Listing> likedListings) {
+        this.likedListings = likedListings;
     }
 
 }

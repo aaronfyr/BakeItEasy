@@ -95,7 +95,7 @@ public class DataInitSessionBean {
     @PostConstruct
     public void postConstruct() {
         if (em.find(Buyer.class, 1l) == null) {
-            //initialiseData();
+            initialiseData();
         }
     }
 

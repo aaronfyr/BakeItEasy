@@ -17,6 +17,7 @@ import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerEmailExistException;
 import error.exception.SellerHasOutstandingOrdersException;
+import error.exception.SellerIsBannedException;
 import error.exception.SellerNotFoundException;
 import error.exception.SellerPhoneNumberExistException;
 import error.exception.SellerUsernameExistException;
@@ -135,7 +136,7 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
     }
 
     @Override
-    public Seller sellerLogin(String email, String password) throws InvalidLoginCredentialException, SellerNotFoundException {
+    public Seller sellerLogin(String email, String password) throws SellerIsBannedException, InvalidLoginCredentialException, SellerNotFoundException {
         try {
             Query query = em.createQuery("SELECT s FROM Seller s WHERE s.email = :inEmail");
             query.setParameter("inEmail", email);
@@ -144,7 +145,11 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
             if (seller != null) {
 
                 if (seller.getPassword().equals(password)) {
+                    if (!seller.getIsBanned()) {
                     return seller;
+                    } else {
+                        throw new SellerIsBannedException("Seller with email " + email + " is banned!");
+                    }
                 } else {
                     throw new InvalidLoginCredentialException("Invalid login credentials for: " + email);
                 }

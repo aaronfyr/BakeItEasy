@@ -13,6 +13,7 @@ import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerEmailExistException;
 import error.exception.SellerHasOutstandingOrdersException;
+import error.exception.SellerIsBannedException;
 import error.exception.SellerNotFoundException;
 import error.exception.SellerPhoneNumberExistException;
 import error.exception.SellerUsernameExistException;
@@ -31,7 +32,7 @@ public interface SellerSessionBeanLocal {
 
     public void deleteSeller(Long sellerId) throws SellerNotFoundException, SellerHasOutstandingOrdersException;
     
-    public Seller sellerLogin(String email, String password) throws InvalidLoginCredentialException, SellerNotFoundException;
+    public Seller sellerLogin(String email, String password) throws SellerIsBannedException, InvalidLoginCredentialException, SellerNotFoundException;
 
     public Seller retrieveSellerBySellerId(Long sellerId) throws SellerNotFoundException;
 

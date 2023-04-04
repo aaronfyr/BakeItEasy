@@ -121,7 +121,7 @@ public class Seller implements Serializable {
         this.phoneNo = phoneNo;
     }
 
-    public boolean isIsBanned() {
+    public boolean getIsBanned() {
         return isBanned;
     }
 
