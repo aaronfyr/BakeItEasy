@@ -40,16 +40,38 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 export const NavigationBar = () => {
   const [seller, setSeller] = useState(null);
   const [buyer, setBuyer] = useState(null);
-
+  const [buyerName, setBuyerName] = useState("Log In");
+  const [buyerId, setBuyerId] = useState(null);
   const navigate = useNavigate();
 
-  // dummy user
-  let userId = 1;
+  useEffect(() => {
+    async function fetchData() {
+      const fetchedBuyer = localStorage.getItem("buyer");
+      if (!fetchedBuyer) {
+        console.log("navbar", "no buyer");
+        navigate("/login");
+      } else {
+        console.log("navbar", "has buyer");
+        try {
+          const parsedUser = JSON.parse(fetchedBuyer);
+          setBuyer(parsedUser);
+          console.log("parsedUser: ", parsedUser);
+          console.log("parsedUser.name: ", parsedUser.name);
+          setBuyerName(parsedUser.name);
+          console.log("parsedUser.id: ", parsedUser.buyerId);
+          setBuyerId(parsedUser.buyerId);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+    fetchData();
+  }, []);
 
   // Routing to Buyer Profile
   const routeToProfile = () => {
-    let path = "/buyerProfile/" + userId;
-    console.log("Navigate to: ", "profile");
+    let path = "/buyerProfile/" + buyerId;
+    console.log("Navigate to profile of: ", buyer.id);
     navigate(path);
   };
 
@@ -57,6 +79,14 @@ export const NavigationBar = () => {
   const routeToHomePage = () => {
     console.log("Navigate to: ", "homepage");
     navigate("/");
+    //return <Navigate to="/" />;
+  };
+
+  // Handle log out
+  const handleLogOut = () => {
+    console.log("Navigate to: ", "login");
+    localStorage.clear();
+    navigate("/login");
     //return <Navigate to="/" />;
   };
 
@@ -121,7 +151,7 @@ export const NavigationBar = () => {
               <Flex align="center">
                 <FiUser />
 
-                <h4>username here</h4>
+                <h4>{buyerName}</h4>
               </Flex>
             </MenuButton>
 
@@ -135,7 +165,12 @@ export const NavigationBar = () => {
                 <FaUserCircle />
                 Your profile
               </MenuItem>
-              <MenuItem gap="0.7rem">
+              <MenuItem
+                gap="0.7rem"
+                onClick={() => {
+                  handleLogOut();
+                }}
+              >
                 <IoLogOut />
                 Logout
               </MenuItem>

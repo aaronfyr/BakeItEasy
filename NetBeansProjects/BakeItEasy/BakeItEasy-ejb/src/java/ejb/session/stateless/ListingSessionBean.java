@@ -219,6 +219,17 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         }
         return false;
     }
+    
+    @Override
+    public List<Order> getListingOrders(Long listingId) throws ListingNotFoundException {
+        try {
+            Listing listing = retrieveListingByListingId(listingId);
+            
+            return listing.getOrders();
+        } catch (ListingNotFoundException ex) {
+            throw new ListingNotFoundException(ex.getMessage());
+        }
+    }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Listing>> constraintViolations) {
         String msg = "Input data validation error!:";

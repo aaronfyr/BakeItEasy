@@ -7,25 +7,24 @@ package webservices.restful;
 
 import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
-import entity.Admin;
 import entity.Order;
 import entity.Review;
-import error.exception.AdminUsernameExistsException;
-import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
-import error.exception.ListingNotFoundException;
 import error.exception.OrderNotFoundException;
-import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -77,4 +76,23 @@ public class OrdersResource {
         }
         return o;
     } //end createCustomer
+    
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOrder(@PathParam("id") Long orderId) {
+        try {
+            Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
+            return Response.status(200).entity(
+                    order
+            ).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: report id " + orderId)
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getReport
 }

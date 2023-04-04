@@ -9,82 +9,74 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const Report = ({
-  reportId,
-  title,
-  reason,
-  reporter,
-  reportee,
+const Seller = ({
+  sellerId,
+  name,
+  username,
+  email,
+  phoneNo,
+  isBanned,
   onBan,
   onUnban,
 }) => {
-  const handleBanClick = async (event) => {
+  const handleBan = async (event) => {
     event.preventDefault();
+
     const confirmed = window.confirm("Are you sure you want to ban this user?");
     if (!confirmed) {
       return;
     }
-    await onBan(reportee);
-  };
-
-  const handleBan = async (event) => {
-    event.preventDefault();
-
-    const confirmed = window.confirm(
-      "Are you sure you want to ban the reported user?"
-    );
-    if (!confirmed) {
-      return;
-    }
-    onBan({ reportId, title, reason, reporter, reportee });
+    onBan({ sellerId, name, username, email, phoneNo, isBanned });
   };
 
   const handleUnban = async (event) => {
     event.preventDefault();
 
     const confirmed = window.confirm(
-      "Are you sure you want to unban the reported user?"
+      "Are you sure you want to unban this user?"
     );
     if (!confirmed) {
       return;
     }
-    onUnban({ reportId, title, reason, reporter, reportee });
+    onUnban({ sellerId, name, username, email, phoneNo, isBanned });
   };
-
   return (
     <Card maxW="sm">
       <CardBody>
         <Stack spacing="3">
-          <Heading size="md">{title}</Heading>
           <Text>
-            <strong>Reason: </strong>
-            {reason}
+            <strong>Name: </strong>
+            {name}
           </Text>
           <Text>
-            <strong>Reporter: </strong>
-            {reporter}
+            <strong>Username: </strong>
+            {username}
           </Text>
           <Text>
-            <strong>Reported: </strong>
-            {reportee}
+            <strong>Email: </strong>
+            {email}
+          </Text>
+          <Text>
+            <strong>Phone Number: </strong>
+            {phoneNo}
           </Text>
 
-          {reportee.isBanned ? (
+          {isBanned ? (
             <Button bg="#E2725B" colorScheme="white" onClick={handleUnban}>
-              Unban
+              Unban seller
             </Button>
           ) : (
             <Button bg="#E2725B" colorScheme="white" onClick={handleBan}>
-              Ban
+              Ban seller
             </Button>
           )}
         </Stack>
       </CardBody>
 
-      {reportee.isBanned && (
+      {isBanned && (
         <CardFooter bg="red.500" textAlign="center">
           <Text color="white" fontSize="sm" width="100%">
-            This reported user is banned
+            This seller is banned
           </Text>
         </CardFooter>
       )}
@@ -93,4 +85,4 @@ const Report = ({
   );
 };
 
-export default Report;
+export default Seller;

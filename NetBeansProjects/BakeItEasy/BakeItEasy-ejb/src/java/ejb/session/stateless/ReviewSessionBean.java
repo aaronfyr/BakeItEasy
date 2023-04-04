@@ -130,7 +130,7 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
         oldR.setOrder(r.getOrder());
     } //end updateReview
 
-    // remove report from db
+    // remove review from db
     @Override
     public void removeReview(Long reviewId) throws ReviewNotFoundException {
         Review review = reviewSessionBeanLocal.retrieveReviewById(reviewId);
@@ -138,6 +138,7 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
         order.setReview(null);
         em.remove(review);
     }
+    
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Review>> constraintViolations) {
         String msg = "Input data validation error!:";
 

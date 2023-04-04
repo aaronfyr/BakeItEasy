@@ -17,11 +17,16 @@ import ResetPassword from "./pages/resetPassword";
 
 import SellerHomepage from "./pages/sellerHomePage";
 import BuyerHomepage from "./pages/buyerHomepage";
-import AdminHomepage from "./pages/adminHomepage";
+import AdminProfilePage from "./pages/adminProfilePage";
 
 import BuyerListingPage from "./pages/buyerListingPage";
 import BuyerProfile from "./pages/buyerProfile";
 import BuyerViewOrder from "./pages/buyerViewOrder";
+import MakeReview from "./pages/makeReview";
+
+import ViewAllBuyers from "./pages/viewAllBuyers";
+import ViewAllSellers from "./pages/viewAllSellers";
+import ViewAllReports from "./pages/viewAllReports";
 
 import SellerOrderMgmt from "./pages/sellerOrderMgmt";
 import SellerProfile from "./pages/sellerProfile"
@@ -49,7 +54,14 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/forgotPassword" element={<ForgotPassword />} />
                 <Route path="/resetPassword" element={<ResetPassword />} />
-                <Route path="/adminHomepage" element={<AdminHomepage />} />
+                <Route
+                  path="/adminProfilePage"
+                  element={<AdminProfilePage />}
+                />
+                <Route path="/viewAllBuyers" element={<ViewAllBuyers />} />
+                <Route path="/viewAllSellers" element={<ViewAllSellers />} />
+                <Route path="/viewAllReports" element={<ViewAllReports />} />
+                <Route path="/makeReview" element={<MakeReview />} />
 
                 <Route path="/sellerHomepage" element={<SellerHomepage />} />
                 <Route path="/sellerProfile" element={<SellerProfile/>}/>

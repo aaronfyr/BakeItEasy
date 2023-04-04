@@ -1,9 +1,7 @@
-import React from "react";
-import Listing from "../components/Listing";
-import { Link } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import fetchListings from "../context/listings";
+import React from "react";
+import { Link } from "react-router-dom";
+import Listing from "../components/Listing";
 
 function SellerHomepage() {
   //const [listings, setListings] = useState([]);

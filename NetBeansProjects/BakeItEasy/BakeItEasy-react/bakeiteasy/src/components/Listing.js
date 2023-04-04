@@ -1,13 +1,14 @@
-import { useState } from "react";
-import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 import {
+  Button,
+  ButtonGroup,
+  Card,
+  CardBody,
+  CardFooter,
+  Divider,
+  Heading,
   Image,
   Stack,
-  Heading,
   Text,
-  Divider,
-  ButtonGroup,
-  Button,
 } from "@chakra-ui/react";
 
 const Listing = ({ listing }) => {

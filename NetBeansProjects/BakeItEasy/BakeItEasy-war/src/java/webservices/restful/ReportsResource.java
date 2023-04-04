@@ -6,7 +6,9 @@
 package webservices.restful;
 
 import ejb.session.stateless.ReportSessionBeanLocal;
+import entity.Buyer;
 import entity.Report;
+import entity.Seller;
 import error.exception.AdminNotFoundException;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
@@ -137,4 +139,60 @@ public class ReportsResource {
             return Response.status(404).entity(exception).build();
         }
     } //end deleteReport
+    
+    // get Reporter for report with id = {id}
+    @GET
+    @Path("/{id}/reporter")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getReporter(@PathParam("id") Long reportId) {
+        try {
+            Report report = reportSessionBeanLocal.retrieveReportById(reportId);
+            Buyer reporter = report.getReporter();
+            return Response.status(200).entity(
+                    reporter
+            ).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        } catch (ReportNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: report id " + reportId)
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getReporter
+    
+    // get Reportee for report with id = {id}
+    @GET
+    @Path("/{id}/reportee")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getReportee(@PathParam("id") Long reportId) {
+        try {
+            Report report = reportSessionBeanLocal.retrieveReportById(reportId);
+            Seller reportee = report.getReportee();
+            return Response.status(200).entity(
+                    reportee
+            ).type(MediaType.APPLICATION_JSON).build();
+        } catch (NoResultException e) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        } catch (ReportNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: report id " + reportId)
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getReportee
 }

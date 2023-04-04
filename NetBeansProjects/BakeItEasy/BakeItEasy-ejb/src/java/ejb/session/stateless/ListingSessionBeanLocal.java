@@ -54,5 +54,7 @@ public interface ListingSessionBeanLocal {
     public List<Listing> retrieveListingByPriceRange(BigDecimal startPrice, BigDecimal endPrice);
 
     public Boolean doesListingHaveOutstandingOrders(Listing listing);
+
+    public List<Order> getListingOrders(Long listingId) throws ListingNotFoundException;
     
 }

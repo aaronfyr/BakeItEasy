@@ -5,9 +5,13 @@ import {
   Button,
   Box,
   Text,
+  Image,
 } from "@chakra-ui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
+
+import { BuyerContext } from "../context/buyerProvider";
+import { SellerContext } from "../context/sellerProvider";
 
 function Signup() {
   const type = new URLSearchParams(useLocation().search).get("type");
@@ -18,35 +22,65 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
+  const [address, setAddress] = useState("");
   const [error, setError] = useState(null);
+
+  const [profilePic, setProfilePic] = useState(null);
+
+  const { setBuyer } = useContext(BuyerContext);
+  const { setSeller } = useContext(SellerContext);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const fileType = file.type;
+      if (fileType === "image/jpeg" || fileType === "image/png") {
+      } else {
+        // invalid file type, show an error message to the user
+        setError("Invalid picture format. Please try again.");
+        setProfilePic(null);
+      }
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const name = event.target.name.value;
-    const username = event.target.username.value;
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-    const phoneNo = event.target.phoneNo.value;
-
-    const response = await fetch(`http://localhost:8080/${type === "seller" ? "sellers" : "buyers"}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        username,
-        email,
-        password,
-        phoneNo,
-      }),
-    });
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/${
+        type === "seller" ? "sellers" : "buyers"
+      }`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          username,
+          email,
+          password,
+          phoneNo,
+          address,
+        }),
+      }
+    );
 
     if (response.ok) {
-      const data = await response.json();
+      const user = await response.json();
+      if (type === "seller") {
+        setSeller(user);
+      } else {
+        setBuyer(user);
+      }
+
+      if (profilePic) {
+        //saveProfilePic(type, user.id, profilePic);
+      }
+
       // redirect to homepage
-      navigate("${type}Homepage");
+      navigate(`/`);
     } else {
       // show error message
       setError("Invalid details. Please try again.");
@@ -125,6 +159,26 @@ function Signup() {
           />
           <FormLabel>Phone Number</FormLabel>
         </FormControl>
+        <FormControl mt={4} variant="floating">
+          <Input
+            type="address"
+            placeholder=" "
+            value={address}
+            onChange={(event) => setAddress(event.target.value)}
+            required
+          />
+          <FormLabel>Address</FormLabel>
+        </FormControl>
+
+        <FormLabel mt={6}>Profile picture</FormLabel>
+        <Input
+          type="file"
+          placeholder=" "
+          onChange={handleImageChange}
+          accept="image/jpeg, image/png"
+        />
+        {profilePic && <Image src={profilePic} />}
+
         {error && (
           <FormControl>
             <FormLabel color="red.500">{error}</FormLabel>

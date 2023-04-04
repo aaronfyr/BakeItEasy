@@ -21,25 +21,23 @@ function AdminLogin() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-
-    const response = await fetch(`http://localhost:8080/admins/login`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/admins/${email}/${password}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (response.ok) {
-      const user = await response.json();
-      setAdmin(user);
+      const admin = await response.json();
+
+      localStorage.setItem("admin", JSON.stringify(admin));
+      setAdmin(admin);
       // redirect to homepage
-      navigate(`adminHomepage`);
+      navigate(`/viewAllReports`);
     } else {
       // show error message
       setError("Invalid login credentials. Please try again.");
