@@ -152,6 +152,10 @@ a {}
     margin: 0px 20px 0px 0px;
 }
 
+.button1:hover {
+    background-color:lightgray;
+}
+
 .button2:hover {
     background: var(--dark-text);
     color: white;

@@ -11,16 +11,15 @@ import {
   Link
 } from "react-router-dom";
 
-
-/*const orderResponse = await fetch(``)*/
-
 const SellerViewOrderByListing = () => {
 
   const [orders, setOrders] = useState([]);
 
   const [search, setSearch] = useState("");
 
-  const id = 1;
+  const [listing, setListing] = useState([]);
+
+  const {id} = useParams();
 
   const filteredOrders = orders.filter((order) => {
     if (
@@ -35,8 +34,10 @@ const SellerViewOrderByListing = () => {
     }
   });
 
+    //get orders of seller
      useEffect(() => {
-    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${id}/orders`, {
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/1/orders`, {
+        //get seller id from storage
         method: "GET",
         mode: "cors",
         headers: {
@@ -46,6 +47,19 @@ const SellerViewOrderByListing = () => {
         .then((response) => response.json())
         .then((data) => setOrders(data));
     }, []);
+
+    //get listing
+    useEffect(() => {
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setListing(data));
+  }, []);
 
 
    let navigate = useNavigate();
@@ -66,7 +80,7 @@ const SellerViewOrderByListing = () => {
         <NavigationBar/>
         <div className="dropdownRow">
             <div className="heading">
-                <h1>My Orders</h1>
+                <h1 style={{fontWeight: "bolder", fontSize: 20}}>My Orders</h1>
             </div>
     </div>
     <div className="searchBarSection">
@@ -97,17 +111,20 @@ const SellerViewOrderByListing = () => {
       <div className="orderDisplay">
           <SellerOrderCard>
             <div className="cardTextBlock" style={{width: 1000}}>
-                <h2>listing name</h2>
+                <h2>{listing.name}</h2>
             </div>
             <div className="sellerOrderCardBodyFlex">
                 <div className="sellerOrderCardBodyFlex">
-                    <img alt="cake" style={imgStyle} src="https://www.recipetineats.com/wp-content/uploads/2018/03/Chocolate-Cake_9-SQ.jpg?w=500&h=500&crop=1"/>
+                    <img alt="cake" style={imgStyle} src={""}/*listing.imagePaths[0]*//>
                 </div>
 
-                <div style={{width: 500}} className="cardTextBlock">
-                    <body>product.category</body>
-                    <body>note: product.notes</body>
-                    <body>amount due: $product.price</body>
+                <div style={{width: 500, marginLeft:20}} className="cardTextBlock">
+                    <h1>CATEGORY:  {listing.listingCategory}</h1>
+                    <br></br>
+                    <h1>DESCRIPTION:</h1>
+                    <body>{listing.description}</body>
+                    <h1>PRICE:</h1>
+                    <body>${listing.price}</body>
                 </div>
             </div>
         </SellerOrderCard>
@@ -115,7 +132,7 @@ const SellerViewOrderByListing = () => {
 
       <div className="orderDisplay">
         {filteredOrders.map((order) => (
-          <div className="orderComponent" onClick={() => routeChangeToOrder(order.id)}>
+          <div className="orderComponent" onClick={() => routeChangeToOrder(order.orderId)}>
             <SellerOrderCard>
             <div className="sellerOrderCardHeader">
                 <img style={pfpStyle} alt="profile pic" width="50" src="https://st.depositphotos.com/1597387/1984/i/950/depositphotos_19841901-stock-photo-asian-young-business-man-close.jpg"></img>
@@ -126,19 +143,18 @@ const SellerViewOrderByListing = () => {
                 </div>
 
                 <div style={{width: 350, margin: 5}} className="cardTextBlock">
-                    <h4>note: product.notes</h4>
-                    <h4>amount due: $product.price</h4>
-                    <h4>date due</h4>
+                    <h4>note: {order.description}</h4>
+                    <h4>amount due: {order.price}</h4>
+                    <h4>date due: {order.dateOfCollection}</h4>
                 </div>
 
                 <div className="orderStatus">
-                    <h2>product.status</h2>
+                    <h2>{order.orderStatus}</h2>
                 </div>
             </div>
             <div className="sellerOrderCardBodyFlex">
                 <div className="searchBarButton1">
-                    <FaCheck style={{alignSelf: "center"}}/>
-                    <h5>approve order</h5>
+                    <h5>click to view order</h5>
                 </div>
             </div>
         </SellerOrderCard>
