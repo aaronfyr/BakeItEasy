@@ -119,8 +119,10 @@ public class DataInitSessionBean {
 
             
             List<String> newImagePath = new ArrayList<>();
+            newImagePath.add("https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80");
             Listing listing1 = new Listing("Most Delicious Cake", ListingCategory.CAKE, new BigDecimal(99.99), 99,
                     "This is the most delicious cake ever. Please buy it.", newImagePath);
+            newImagePath.clear();
             Listing listing2 = new Listing("Savory Tart", ListingCategory.SAVORY, new BigDecimal(99.99), 99,
                     "This is the most delicious cake ever. Please buy it.", newImagePath);
             Listing listing3 = new Listing("Bread", ListingCategory.BREAD, new BigDecimal(99.99), 99,

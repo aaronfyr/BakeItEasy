@@ -34,6 +34,7 @@ h4 {
   width: 150px;
   color: --var(--dark-text);
   background-color: var(--mid-orange);
+  cursor: pointer;
 }
 
 .navbar{
@@ -50,6 +51,7 @@ h4 {
   font-weight: bold;
   margin-left: 20px;
   margin-right: 40px;
+  cursor: pointer;
 }
 
 .logo_header{

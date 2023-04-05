@@ -1,5 +1,5 @@
 import { color } from "framer-motion";
-import React, {useState} from "react";
+import React, {useState, useEffect } from "react";
 import "./resources/searchBarSection.css";
 import SellerOrderCard from "./sellerOrderCard.js";
 import CategoryDropdown from "../components/categoryDropdown";
@@ -15,31 +15,70 @@ import {
 /*const orderResponse = await fetch(``)*/
 
 const SearchBarSection = () => {
-
-  const [products, setProducts] = useState(data);
-
   const [search, setSearch] = useState("");
+  const [listings, setListings] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [filteredListings, setFilteredListings] = useState([]);
 
-  const [selectedCategory, setSelectedCategory] = useState("");
+  //get listings of seller
+async function fetchListings() {
+  try {
+    const response = await fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/1/listings`, {
+      //get seller id from storage !!!!!!!!!!!!!!
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    setListings(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category.toLowerCase());
-    console.log({selectedCategory});
-  };
-
-  const filteredProducts = products.filter((product) => {
-    if (
-      (product.tags.toLowerCase().includes(search) ||
-      product.title.toLowerCase().includes(search) ||
-      product.category.toLowerCase().includes(search) ||
-      product.buyerName.toLowerCase().includes(search) ||
-      product.notes.toLowerCase().includes(search)) ||
-      product.category.toLowerCase().includes({selectedCategory})
-        // cant get the frickin filter to work
-    ) {
-      return product;
+function filterListings(listings, search, selectedCategory) {
+  return listings.filter((listing) => {
+    if (selectedCategory === "") {
+      return (
+        listing.name.toLowerCase().includes(search) ||
+        listing.description.toLowerCase().includes(search) ||
+        listing.listingCategory.toLowerCase().includes(search)
+      );
+    } else {
+      return (
+        listing.name.toLowerCase().includes(search) &&
+        listing.listingCategory.toLowerCase().includes(selectedCategory)
+      );
     }
   });
+}
+
+useEffect(() => {
+  fetchListings();
+}, []);
+
+useEffect(() => {
+  fetchListings();
+}, []);
+
+useEffect(() => {
+  fetchListings();
+  if (listings.length > 0) {
+    const filteredData = filterListings(listings, search, "");
+    setFilteredListings(filteredData);
+  }
+}, [listings, search]);
+
+
+const handleCategoryChange = (category) => {
+  const newSelectedCategory = category.toLowerCase();
+  setSelectedCategory(newSelectedCategory);
+  const filteredData = filterListings(listings, "", newSelectedCategory);
+  setFilteredListings(filteredData);
+};
+
 
 
    let navigate = useNavigate();
@@ -84,22 +123,19 @@ const SearchBarSection = () => {
         </button>
       </div>
       <div className="orderDisplay">
-        {filteredProducts.map((product) => (
-          <div className="listingComponent" onClick={() => routeChangeToOrder(product.id)}>
+        {filteredListings.map((listing) => (
+          <div className="listingComponent" onClick={() => routeChangeToOrder(listing.listingId)}>
             <SellerOrderCard>
             <div className="sellerOrderCardHeader">
-            <img style={pfpStyle} alt="profile pic" width="50" src="https://st.depositphotos.com/1597387/1984/i/950/depositphotos_19841901-stock-photo-asian-young-business-man-close.jpg"></img>
-            <h3 className="buyerName">{product.buyerName}</h3>
             </div>
             <div className="sellerOrderCardBodyFlex">
                 <div className="sellerOrderCardBodyFlex">
-                    <img alt="cake" style={imgStyle} src={product.url}/>
+                    <img alt="cake" style={imgStyle} src={""}/>
                 </div>
 
                 <div style={{width: 400}} className="cardTextBlock">
-                    <h2>{product.title} [${product.price}]</h2>
-                    <h4>{product.category}</h4>
-                    <h3>no. of orders: (number) </h3>
+                    <h2>{listing.name} [${listing.price}]</h2>
+                    <h4>{listing.listingCategory}</h4>
                     <div className="flexBox">
                         <div className="searchBarButton1">
                             <FaListUl style={{alignSelf: "center"}}/>
