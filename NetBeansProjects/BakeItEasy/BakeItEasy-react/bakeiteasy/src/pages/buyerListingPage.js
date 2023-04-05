@@ -1,5 +1,5 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Avatar,
   Button,
@@ -19,9 +19,24 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
+  FormControl,
+  FormLabel,
+  Input,
+  Box,
+  Select,
+  Text,
+  Image,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  useNumberInput,
 } from "@chakra-ui/react";
 import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
+import DatePicker from "react-datepicker";
 
+import "react-datepicker/dist/react-datepicker.css";
 import "./resources/default.css";
 import "./resources/listing.css";
 
@@ -29,6 +44,113 @@ import { NavigationBar } from "../components/buyerNavigationBar";
 
 function BuyerListingPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  // get Buyer info
+  const [buyer, setBuyer] = useState(null);
+  const [buyerId, setBuyerId] = useState(null);
+  const [address, setAddress] = useState("");
+  useEffect(() => {
+    async function fetchData() {
+      const fetchedBuyer = localStorage.getItem("buyer");
+      if (!fetchedBuyer) {
+        console.log("navbar", "no buyer");
+        navigate("/login");
+      } else {
+        console.log("navbar", "has buyer");
+        try {
+          const parsedUser = JSON.parse(fetchedBuyer);
+          setBuyer(parsedUser);
+          setBuyerId(parsedUser.buyerId);
+          setAddress(parsedUser.address);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+    fetchData();
+  }, []);
+
+  // get Listing info
+  const [listing, setListing] = useState(null);
+  const [listingName, setListingName] = useState(null);
+  const [listingDescription, setListingDescription] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [listingMaxQty, setListingMaxQty] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        console.log("fetched data: ", data);
+        setListing(data);
+        setListingName(data.name);
+        setListingDescription(data.description);
+        setPrice(data.price);
+        setListingMaxQty(data.maxQuantity);
+        console.log(`HTTP Response Code: ${response?.status}`);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        } else {
+          console.log("Other error: ", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log(listing);
+
+  // FUNCTIONS
+  // handle submit order
+  const dateOfCreation = new Date();
+  const [quantity, setQuantity] = useState(0);
+  const [dateOfCollection, setDateOfCollection] = useState(new Date());
+  const [description, setDescription] = useState("");
+  const [orderFieldValues, addOrderFieldValue] = useState([]);
+  const [error, setError] = useState(null);
+
+  const handleSubmitOrder = async (event) => {
+    event.preventDefault();
+
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/orders/${buyerId}/${id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          price,
+          quantity,
+          description,
+          address,
+          dateOfCreation,
+          dateOfCollection,
+        }),
+      }
+    );
+
+    if (response.ok) {
+      // redirect to homepage
+      navigate(`/`);
+    } else {
+      // show error message
+      setError("Invalid details. Please try again.");
+    }
+  };
 
   /*
   // for the image slideshow
@@ -66,6 +188,21 @@ function BuyerListingPage() {
   }
   */
 
+  // quantity input
+  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+    useNumberInput({
+      step: 1,
+      defaultValue: 1,
+      min: 1,
+      max: listingMaxQty,
+    });
+
+  const inc = getIncrementButtonProps();
+  const dec = getDecrementButtonProps();
+  const input = getInputProps();
+
+  const datePickerMinDate = new Date();
+
   return (
     <div>
       <NavigationBar />
@@ -86,7 +223,7 @@ function BuyerListingPage() {
             </div>
           </Flex>
           <br />
-          <h1>Listing name</h1>
+          <h1>{listingName}</h1>
           <h4>Listing id: {id}</h4>
           <br />
           <div id="listingDetailsGrid">
@@ -94,33 +231,73 @@ function BuyerListingPage() {
             <h4 className="details">date</h4>
 
             <h4>Quantity Available:</h4>
-            <h4 className="details">quantity</h4>
+            <h4 className="details">{listingMaxQty}</h4>
 
             <h4>Minimum Preparation Time:</h4>
             <h4 className="details">time</h4>
           </div>
           <br />
           <h3 className="italic">Description:</h3>
-          <h4 className="details">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </h4>
+          <h4 className="details">{listingDescription}</h4>
         </div>
         <div id="rightListingContainer">
-          <form>
-            <h3>Field1:</h3>
-            <input type="text" id="oneLineInput" name="lname" />
-            <h3>Field2:</h3>
-            <input type="text" id="oneLineInput" name="lname" />
+          <form onSubmit={handleSubmitOrder}>
+            <FormControl mt={4} variant="floating">
+              <Input
+                type="text"
+                placeholder=" "
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                required
+              />
+              <FormLabel>Customisation Notes</FormLabel>
+            </FormControl>
+
+            <FormControl mt={4} variant="floating">
+              <Select
+                placeholder="Select Variant"
+                onChange={(event) => addOrderFieldValue(event.target.value)}
+              >
+                <option>Red</option>
+                <option>Orange</option>
+                <option>Yellow</option>
+                <option>Blue (Limited)</option>
+              </Select>
+              <FormLabel>Variation</FormLabel>
+            </FormControl>
+
+            <FormControl mt={4} variant="floating">
+              <Select
+                placeholder="Select Decoration Colour"
+                onChange={(event) => addOrderFieldValue(event.target.value)}
+              >
+                <option>Red</option>
+                <option>Orange</option>
+                <option>Yellow</option>
+                <option>Blue (Limited)</option>
+              </Select>
+              <FormLabel>Decoration Colour</FormLabel>
+            </FormControl>
+
             <h3>Quantity:</h3>
-            <input type="text" id="oneLineInput" name="lname" />
-            <h3>Customisation:</h3>
-            <input type="text" id="customisationInput" name="lname" />
+            <HStack maxW="320px">
+              <Button {...inc}>+</Button>
+              <Input {...input} />
+              <Button {...dec}>-</Button>
+            </HStack>
+
+            <h3>Date of Collection:</h3>
+            <DatePicker
+              selected={dateOfCollection}
+              onChange={(date) => setDateOfCollection(date)}
+              minDate={datePickerMinDate}
+            />
+
+            <Box mt={4} display="flex" alignItems="center">
+              <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">
+                Send Order
+              </Button>
+            </Box>
           </form>
         </div>
       </div>

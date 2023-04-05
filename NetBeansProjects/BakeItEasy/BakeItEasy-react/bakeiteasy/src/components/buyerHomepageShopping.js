@@ -71,14 +71,17 @@ export const BuyerShopping = () => {
   }, []);
 
   let navigate = useNavigate();
-  const routeChangeToListing = (id) => {
+  const routeChangeToListing = (listingId) => {
+    console.log("routechangetolisting: ", listingId);
     let path = "listing/";
-    navigate(path + id);
+    navigate(path + listingId);
   };
 
   const [search, setSearch] = useState("");
 
+  /*
   const filteredListings = listings.filter((product) => {
+    console.log("changing filteredListings");
     if (
       product.name.toLowerCase().includes(search) ||
       product.description.toLowerCase().includes(search)
@@ -87,21 +90,33 @@ export const BuyerShopping = () => {
     }
     return null;
   });
+*/
 
-  const handleLogout = () => {
-    localStorage.setItem("buyer", null);
+  const handleSearch = async () => {
+    const results = listings.filter((product) => {
+      if (
+        product.name.toLowerCase().includes(search) ||
+        product.description.toLowerCase().includes(search)
+      ) {
+        return product;
+      }
+      return null;
+    });
+    console.log("search by " + search);
+    console.log("filtered listings: ", listings);
+    setListings(results);
   };
 
   return (
     <div>
-      <div class="searchBar">
+      <div className="searchBar">
         <input
           className="input"
           onChange={(e) => {
             setSearch(e.target.value.toLowerCase());
           }}
         />
-        <button className="button">
+        <button className="button" onClick={handleSearch}>
           <svg
             className="w-6 h-6"
             fill="none"
@@ -130,11 +145,11 @@ export const BuyerShopping = () => {
 
       <div class="shoppingHeader">Followed Bakers</div>
 
-      <div className="display">
-        {filteredListings.map((product) => (
+      <div className="listingsDisplay">
+        {listings.map((product) => (
           <div
             className="product"
-            onClick={() => routeChangeToListing(product.id)}
+            onClick={() => routeChangeToListing(product.listingId)}
           >
             <div class="productSeller">
               <img
@@ -163,11 +178,11 @@ export const BuyerShopping = () => {
       </div>
 
       <div class="shoppingHeader">Explore More Bakers</div>
-      <div className="display">
-        {filteredListings.map((product) => (
+      <div className="listingsDisplay">
+        {listings.map((product) => (
           <div
             className="product"
-            onClick={() => routeChangeToListing(product.id)}
+            onClick={() => routeChangeToListing(product.listingId)}
           >
             <div class="productSeller">
               <img

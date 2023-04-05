@@ -16,9 +16,9 @@
 .searchBar {
   display: flex;
   align-items: center;
-  background-color: white;
+  background-color: black;
   border-radius: 20px;
-  height: 40px;
+  height: 20px;
   padding: 0px 30px 0px 30px;
   margin-top: 5px;
 }
@@ -28,13 +28,12 @@
     border: none;
     border-radius: 20px;
     border-radius: 20px;
-    height: 40px;
+    height: 100%;
     padding: 0px 30px 0px 30px;
     color: var(--dark-text);
     font-family: var(--reg-font-family);
     font-size: 18px;
-    background-color: white;
-
+    background-color: black;
 }
 
 .button {
@@ -44,7 +43,7 @@
     border-radius: 20px;
 }
 
-.display {
+.listingsDisplay {
     display: flex;
     flex-wrap: wrap;
     overflow-y: scroll;
@@ -61,6 +60,7 @@
     border-radius: 20px;
     background-color: white;
     filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1));
+    cursor: pointer;
 }
 
 .productSeller {

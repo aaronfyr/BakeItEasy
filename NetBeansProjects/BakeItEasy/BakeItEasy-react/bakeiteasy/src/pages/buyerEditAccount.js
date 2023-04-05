@@ -19,9 +19,9 @@ import {
 } from "@chakra-ui/react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaArrowRight } from "react-icons/fa";
 
-function BuyerProfile() {
+function BuyerEditAccount() {
   const [buyer, setBuyer] = useState(null);
   const [buyerName, setBuyerName] = useState("Log In");
   const [buyerId, setBuyerId] = useState(null);
@@ -89,59 +89,6 @@ function BuyerProfile() {
     fetchData();
   }, []);
 
-  /*
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-      status: "Paid",
-    },
-    {
-      id: 3,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-      status: "Cancelled By Seller",
-    },
-    {
-      id: 1,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-      status: "Paid",
-    },
-    {
-      id: 3,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-      status: "Cancelled By Seller",
-    },
-  ]);
-  */
-
   const { id } = useParams();
 
   const [search, setSearch] = useState("");
@@ -176,9 +123,9 @@ function BuyerProfile() {
     event.preventDefault();
   };
 
-  const routeChangeToEditAccountDetails = (buyerId) => {
-    console.log("routeChangeToEditAccountDetails: ", buyerId);
-    let path = "/buyerEditAccount/";
+  const routeChangeToProfile = (buyerId) => {
+    console.log("routeChangeToProfile: ", buyerId);
+    let path = "/buyerProfile/";
     navigate(path + buyerId);
   };
 
@@ -229,66 +176,14 @@ function BuyerProfile() {
           <h4>details</h4>
         </div>
         <Flex>
-          <div
-            className="button1"
-            onClick={() => routeChangeToEditAccountDetails()}
-          >
-            Edit Account Details
-            <FaEdit />
+          <div className="button1" onClick={() => routeChangeToProfile()}>
+            Back to Profile
+            <FaArrowRight />
           </div>
         </Flex>
       </Flex>
-      <h2>Search for order:</h2>
-      <div class="searchBar">
-        <input
-          className="input"
-          onChange={(e) => {
-            setSearch(e.target.value.toLowerCase());
-          }}
-        />
-        <button className="button">
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            ></path>
-          </svg>
-        </button>
-      </div>
-      <div class="ordersDisplay">
-        {orders.map((order) => (
-          <div id="orderCard" onClick={() => routeChangeToOrder(order.id)}>
-            <div className="productImg">
-              <img
-                className="productImg"
-                src={require("../assets/scones.jpg")}
-                alt="listing product"
-              />
-            </div>
-            <div id="orderDetailsGrid">
-              <div className="orderDetails_top">
-                <h2>{order.title}</h2>
-                <h4 className="details">details</h4>
-                <h4 className="italic">more details</h4>
-              </div>
-              <div className="orderDetails_bottom">
-                <h2>{order.status}</h2>
-                <h2>${order.price}</h2>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
 
-export default BuyerProfile;
+export default BuyerEditAccount;

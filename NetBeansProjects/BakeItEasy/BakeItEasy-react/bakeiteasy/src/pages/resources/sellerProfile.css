@@ -23,23 +23,20 @@
     height: 40px;
     padding: 0px 30px 0px 30px;
     margin-top: 5px;
-}
-
-
-
-.input {
-    width: 100%;
-    border: none;
-    border-radius: 20px;
-    border-radius: 20px;
-    height: 40px;
-    padding: 0px 30px 0px 30px;
-    color: var(--dark-text);
-    font-family: var(--reg-font-family);
-    font-size: 18px;
-    background-color: white;
-
-}
+  }
+  
+  .input {
+      width: 100%;
+      border: none;
+      border-radius: 20px;
+      border-radius: 20px;
+      height: 100%;
+      padding: 0px 30px 0px 30px;
+      color: var(--dark-text);
+      font-family: var(--reg-font-family);
+      font-size: 18px;
+      background-color: white;
+  }
 
 .button {
     background-color: transparent;

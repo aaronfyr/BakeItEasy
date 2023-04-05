@@ -21,6 +21,7 @@ import AdminProfilePage from "./pages/adminProfilePage";
 
 import BuyerListingPage from "./pages/buyerListingPage";
 import BuyerProfile from "./pages/buyerProfile";
+import BuyerEditAccount from "./pages/buyerEditAccount";
 import BuyerViewOrder from "./pages/buyerViewOrder";
 import MakeReview from "./pages/makeReview";
 
@@ -29,14 +30,11 @@ import ViewAllSellers from "./pages/viewAllSellers";
 import ViewAllReports from "./pages/viewAllReports";
 
 import SellerOrderMgmt from "./pages/sellerOrderMgmt";
-import SellerProfile from "./pages/sellerProfile"
+import SellerProfile from "./pages/sellerProfile";
 import SellerViewOrder from "./pages/sellerViewOrder";
 
-
 function App() {
-
-
-   return (
+  return (
     <ChakraProvider theme={theme}>
       <BuyerProvider>
         <SellerProvider>
@@ -46,6 +44,10 @@ function App() {
                 <Route path="/" element={<BuyerHomepage />} />
                 <Route path="listing/:id" element={<BuyerListingPage />} />
                 <Route path="buyerProfile/:id" element={<BuyerProfile />} />
+                <Route
+                  path="buyerEditAccount/:id"
+                  element={<BuyerEditAccount />}
+                />
                 <Route path="buyerOrder/:id" element={<BuyerViewOrder />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/adminLogin" element={<AdminLogin />} />
@@ -62,9 +64,9 @@ function App() {
                 <Route path="/makeReview" element={<MakeReview />} />
 
                 <Route path="/sellerHomepage" element={<SellerHomepage />} />
-                <Route path="/sellerProfile" element={<SellerProfile/>}/>
-                <Route path="/sellerViewOrder" element={<SellerViewOrder/>}/>
-                <Route path="/sellerOrderMgmt" element={<SellerOrderMgmt/>}/>
+                <Route path="/sellerProfile" element={<SellerProfile />} />
+                <Route path="/sellerViewOrder" element={<SellerViewOrder />} />
+                <Route path="/sellerOrderMgmt" element={<SellerOrderMgmt />} />
               </Routes>
             </Router>
           </AdminProvider>
