@@ -27,13 +27,12 @@
 .searchBar {
     display: flex;
     align-items: center;
-    background-color: white;
     border: 1px solid;
     border-radius: 20px;
 }
 
 .input {
-    width: 250px;
+    width: 100%;
     border: none;
     border-radius: 20px;
 }

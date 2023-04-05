@@ -34,6 +34,7 @@ import SellerProfile from "./pages/sellerProfile";
 import SellerViewOrder from "./pages/sellerViewOrder";
 import SellerViewOrderByListing from "./pages/sellerViewOrderByListing";
 import SellerListingPage from "./pages/sellerListing";
+import SellerAppointments from "./pages/sellerAppointments";
 
 function App() {
   return (
@@ -76,6 +77,10 @@ function App() {
                 <Route
                   path="/sellerListing/:id"
                   element={<SellerListingPage />}
+                />
+                <Route
+                  path="/sellerAppointments"
+                  element={<SellerAppointments />}
                 />
               </Routes>
             </Router>

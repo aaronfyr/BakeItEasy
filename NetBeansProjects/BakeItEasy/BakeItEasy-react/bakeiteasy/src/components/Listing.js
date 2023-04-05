@@ -23,7 +23,7 @@ const Listing = ({ listing }) => {
         <Stack mt="6" spacing="3">
           <Heading
             size="md"
-            src={listing.title.value}
+            src={listing.name.value}
             alt="Listing title"
           ></Heading>
           <Text src={listing.description.value} alt="Description"></Text>
