@@ -14,8 +14,12 @@ import entity.Order;
 import entity.Post;
 import entity.Report;
 import error.exception.BuyerNotFoundException;
+import error.exception.BuyerPhoneNumberExistException;
+import error.exception.BuyerUsernameExistException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
+import error.exception.OrderIsNotPendingException;
+import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.Date;
@@ -27,6 +31,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -162,4 +167,63 @@ public class BuyersResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end getOrders
+    
+    @PUT
+    @Path("/{order_id}/cancelorder")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response cancelOrder(@PathParam("order_id") Long orderId) {
+        try {
+            buyerSessionBeanLocal.cancelOrder(orderId);
+            return Response.status(204).build();
+        } catch (OrderNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Order not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderIsNotPendingException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not able to accept order as it is not pending for acceptance")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end cancel order
+    
+    @PUT
+    @Path("/{buyer_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editBuyer(@PathParam("buyer_id") Long buyerId, Buyer buyer) {
+        buyer.setBuyerId(buyerId);
+        try {
+            buyerSessionBeanLocal.updateBuyer(buyer);
+            return Response.status(204).build();
+        } catch (InputDataValidationException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Input data validation exception")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerPhoneNumberExistException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer new phone number exist!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerUsernameExistException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer new username exist!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end edit seller
 }

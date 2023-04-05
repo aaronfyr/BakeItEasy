@@ -27,7 +27,10 @@ import enumeration.ListingCategory;
 import enumeration.OrderStatus;
 import enumeration.PostCategory;
 import error.exception.AdminUsernameExistsException;
+import error.exception.BuyerEmailExistException;
 import error.exception.BuyerNotFoundException;
+import error.exception.BuyerPhoneNumberExistException;
+import error.exception.BuyerUsernameExistException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingNotFoundException;
 import error.exception.OrderIsNotAcceptedException;
@@ -244,7 +247,7 @@ public class DataInitSessionBean {
             reportSessionBeanLocal.createNewReport(report, buyer1.getBuyerId(), seller1.getSellerId());
 
         } catch (UnknownPersistenceException | InputDataValidationException | SellerUsernameExistException
-                | SellerEmailExistException | SellerPhoneNumberExistException | PostNotFoundException | OrderNotFoundException | AdminUsernameExistsException | SellerNotFoundException | BuyerNotFoundException | ListingNotFoundException | OrderIsNotPendingException | OrderIsNotAcceptedException | OrderIsNotCompletedException ex) {
+                | SellerEmailExistException | SellerPhoneNumberExistException | PostNotFoundException | OrderNotFoundException | AdminUsernameExistsException | SellerNotFoundException | BuyerNotFoundException | ListingNotFoundException | OrderIsNotPendingException | OrderIsNotAcceptedException | OrderIsNotCompletedException | BuyerPhoneNumberExistException | BuyerEmailExistException | BuyerUsernameExistException ex) {
             System.out.println("Error initialising data: " + ex.getMessage());
         }
     }
