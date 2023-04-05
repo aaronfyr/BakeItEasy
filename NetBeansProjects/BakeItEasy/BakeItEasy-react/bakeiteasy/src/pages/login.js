@@ -55,7 +55,6 @@ function Login() {
         console.log("buyer set: ", user);
       }
       // redirect to homepage
-
       navigate(`/`);
     } else {
       // show error message

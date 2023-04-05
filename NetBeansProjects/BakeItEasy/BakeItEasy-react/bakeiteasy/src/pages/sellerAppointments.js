@@ -1,7 +1,8 @@
 import { React, useEffect, useState } from "react";
 import "./resources/profile.css";
 
-import { NavigationBar } from "../components/buyerNavigationBar";
+import { SellerNavigationBar } from "../components/sellerNavigationBar";
+import { SellerCalendar } from "../components/sellerCalendar.js";
 
 import {
   BrowserRouter as Router,
@@ -21,7 +22,7 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { FaEdit } from "react-icons/fa";
 
-function BuyerProfile() {
+function SellerAppointments() {
   const [buyer, setBuyer] = useState(null);
   const [buyerName, setBuyerName] = useState("Log In");
   const [buyerId, setBuyerId] = useState(null);
@@ -89,59 +90,6 @@ function BuyerProfile() {
     fetchData();
   }, []);
 
-  /*
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-      status: "Paid",
-    },
-    {
-      id: 3,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-      status: "Cancelled By Seller",
-    },
-    {
-      id: 1,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-      status: "Paid",
-    },
-    {
-      id: 3,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-      status: "Cancelled By Seller",
-    },
-  ]);
-  */
-
   const { id } = useParams();
 
   const [search, setSearch] = useState("");
@@ -185,6 +133,7 @@ function BuyerProfile() {
   return (
     <div className="background">
       <NavigationBar />
+      <SellerCalendar />
       <div id="coverPhoto">
         <div id="profilePhoto"></div>
       </div>
@@ -291,4 +240,4 @@ function BuyerProfile() {
   );
 }
 
-export default BuyerProfile;
+export default SellerAppointments;

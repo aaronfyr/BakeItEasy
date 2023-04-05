@@ -37,29 +37,29 @@ import { FiHeart, FiUser, FiBell, FiMessageSquare } from "react-icons/fi";
 import { IoLogOut } from "react-icons/io5";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
-export const NavigationBar = () => {
+export const SellerNavigationBar = () => {
   const [seller, setSeller] = useState(null);
-  const [buyer, setBuyer] = useState(null);
-  const [buyerName, setBuyerName] = useState("Log In");
-  const [buyerId, setBuyerId] = useState(null);
+
+  const [sellerName, setSellerName] = useState("Log In");
+  const [sellerId, setSellerId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
-      const fetchedBuyer = localStorage.getItem("buyer");
-      if (!fetchedBuyer) {
-        console.log("navbar", "no buyer");
-        navigate("/login");
+      const fetchedSeller = localStorage.getItem("seller");
+      if (!fetchedSeller) {
+        console.log("navbar", "no seller");
+        navigate("/sellerlogin");
       } else {
-        console.log("navbar", "has buyer");
+        console.log("navbar", "has seller");
         try {
-          const parsedUser = JSON.parse(fetchedBuyer);
-          setBuyer(parsedUser);
+          const parsedUser = JSON.parse(fetchedSeller);
+          setSeller(parsedUser);
           console.log("parsedUser: ", parsedUser);
           console.log("parsedUser.name: ", parsedUser.name);
-          setBuyerName(parsedUser.name);
-          console.log("parsedUser.id: ", parsedUser.buyerId);
-          setBuyerId(parsedUser.buyerId);
+          setSellerName(parsedUser.name);
+          console.log("parsedUser.id: ", parsedUser.sellerId);
+          setSellerId(parsedUser.sellerId);
         } catch (error) {
           console.log(error);
         }
@@ -70,22 +70,22 @@ export const NavigationBar = () => {
 
   // Routing to Buyer Profile
   const routeToProfile = () => {
-    let path = "/buyerProfile/" + buyerId;
-    console.log("Navigate to profile of: ", buyer.id);
+    let path = "/sellerrofile/" + sellerId;
+    console.log("Navigate to profile of: ", seller.id);
     navigate(path);
   };
 
   // Routing to Buyer Home Page
   const routeToHomePage = () => {
     console.log("Navigate to: ", "homepage");
-    navigate("/");
+    navigate("seller/");
   };
 
   // Handle log out
   const handleLogOut = () => {
     console.log("Navigate to: ", "login");
     localStorage.clear();
-    navigate("/login");
+    navigate("/sellerlogin");
     //return <Navigate to="/" />;
   };
 
@@ -121,10 +121,7 @@ export const NavigationBar = () => {
       </Flex>
 
       <Flex align="center">
-        <div id="navChoices" onClick={() => routeToHomePage()}>
-          Shop
-        </div>
-        <div id="navChoices">My Orders</div>
+        <div id="navChoices">My Listings</div>
       </Flex>
 
       <HStack spacing="15px">
@@ -152,7 +149,7 @@ export const NavigationBar = () => {
               <Flex align="center">
                 <FiUser />
 
-                <h4>{buyerName}</h4>
+                <h4>{sellerName}</h4>
               </Flex>
             </MenuButton>
 
@@ -164,7 +161,7 @@ export const NavigationBar = () => {
                 }}
               >
                 <FaUserCircle />
-                Your profile
+                Your shop
               </MenuItem>
               <MenuItem
                 gap="0.7rem"
