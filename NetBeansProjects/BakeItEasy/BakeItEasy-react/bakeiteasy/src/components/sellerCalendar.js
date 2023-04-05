@@ -50,6 +50,7 @@ const events = [
   { title: "finish", start: getDate("YEAR-MONTH-18T20:00:00+00:00") },
 ];
 
+console.log("events: ", events);
 function getDate(dayString) {
   const today = new Date();
   const year = today.getFullYear().toString();
@@ -63,6 +64,18 @@ function getDate(dayString) {
 }
 
 export const SellerCalendar = () => {
+  function getDate(dayString) {
+    const today = new Date();
+    const year = today.getFullYear().toString();
+    let month = (today.getMonth() + 1).toString();
+
+    if (month.length === 1) {
+      month = "0" + month;
+    }
+
+    return dayString.replace("YEAR", year).replace("MONTH", month);
+  }
+
   const navigate = useNavigate();
 
   // Fetch this seller details
@@ -75,7 +88,7 @@ export const SellerCalendar = () => {
       const fetchedSeller = localStorage.getItem("seller");
       if (!fetchedSeller) {
         console.log("navbar", "no seller");
-        navigate("/sellerlogin");
+        navigate("/login");
       } else {
         console.log("navbar", "has seller");
         try {
@@ -96,6 +109,9 @@ export const SellerCalendar = () => {
 
   // fetch orders
   const [orders, setOrders] = useState([]);
+  console.log("sellerId:", sellerId);
+
+  /*
   useEffect(() => {
     fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/orders`,
@@ -110,7 +126,58 @@ export const SellerCalendar = () => {
       .then((response) => response.json())
       .then((data) => setOrders(data));
   }, []);
+*/
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // fetch array of orders as objects
+        let sellerId = null;
+        const fetchedSeller = localStorage.getItem("seller");
+        if (!fetchedSeller) {
+          console.log("calendar", "no seller");
+          navigate("/login");
+        } else {
+          const parsedUser = JSON.parse(fetchedSeller);
+          sellerId = parsedUser.sellerId;
+          console.log("buyerId to get orders", sellerId);
+        }
+
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/orders`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        setOrders(data);
+        console.log(`HTTP Response Code: ${response?.status}`);
+
+        // process array of orders as objects
+        const processedData = data.map((obj) => {
+          return {
+            title: obj.orderId.toString(),
+            start: obj.dateOfCollection.substring(0, 10),
+          };
+        });
+        setOrders(processedData);
+
+        console.log("processedData: ", processedData);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log("orders: ", orders);
   return (
     <div>
       <FullCalendar
@@ -122,7 +189,7 @@ export const SellerCalendar = () => {
         }}
         themeSystem="Simplex"
         plugins={[dayGridPlugin]}
-        events={events}
+        events={orders}
       />
       <FullCalendar
         defaultView="dayGridMonth"

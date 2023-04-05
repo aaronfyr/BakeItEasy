@@ -9,6 +9,7 @@ import entity.Buyer;
 import entity.Listing;
 import entity.Order;
 import entity.Seller;
+import enumeration.OrderStatus;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingNotFoundException;
@@ -67,6 +68,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
                 listing.getOrders().add(order);
                 order.setBuyer(buyer);
                 order.setListing(listing);
+                order.setOrderStatus(OrderStatus.PENDING);
                 em.persist(order);
                 em.flush();
                 return order.getOrderId();

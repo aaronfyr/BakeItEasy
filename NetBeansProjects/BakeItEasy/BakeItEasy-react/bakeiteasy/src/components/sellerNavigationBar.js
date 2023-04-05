@@ -50,7 +50,7 @@ export const SellerNavigationBar = () => {
       const fetchedSeller = localStorage.getItem("seller");
       if (!fetchedSeller) {
         console.log("navbar", "no seller");
-        navigate("/sellerlogin");
+        navigate("/login");
       } else {
         console.log("navbar", "has seller");
         try {
@@ -92,7 +92,7 @@ export const SellerNavigationBar = () => {
   const handleLogOut = () => {
     console.log("Navigate to: ", "login");
     localStorage.clear();
-    navigate("/sellerlogin");
+    navigate("/login");
     //return <Navigate to="/" />;
   };
 

@@ -35,7 +35,7 @@ function SellerAppointments() {
       const fetchedSeller = localStorage.getItem("seller");
       if (!fetchedSeller) {
         console.log("navbar", "no seller");
-        navigate("/sellerlogin");
+        navigate("/login");
       } else {
         console.log("navbar", "has seller");
         try {
@@ -46,29 +46,13 @@ function SellerAppointments() {
           setSellerName(parsedUser.name);
           console.log("parsedUser.id: ", parsedUser.sellerId);
           setSellerId(parsedUser.sellerId);
+          console.log("seller ", sellerId);
         } catch (error) {
           console.log(error);
         }
       }
     }
     fetchData();
-  }, []);
-
-  // fetch orders
-  const [orders, setOrders] = useState([]);
-  useEffect(() => {
-    fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/orders`,
-      {
-        method: "GET",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => setOrders(data));
   }, []);
 
   return (

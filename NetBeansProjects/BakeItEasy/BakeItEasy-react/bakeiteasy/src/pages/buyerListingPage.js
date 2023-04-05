@@ -282,7 +282,11 @@ function BuyerListingPage() {
             <h3>Quantity:</h3>
             <HStack maxW="320px">
               <Button {...inc}>+</Button>
-              <Input {...input} />
+              <Input
+                value={quantity}
+                onChange={(event) => setQuantity(event.target.value)}
+                {...input}
+              />
               <Button {...dec}>-</Button>
             </HStack>
 

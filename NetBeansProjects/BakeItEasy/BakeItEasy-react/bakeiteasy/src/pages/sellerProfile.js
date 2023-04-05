@@ -33,7 +33,7 @@ function SellerProfile() {
       } else {*/
       if (!fetchedSeller) {
         console.log("sellerProfile", "no seller");
-        navigate("/sellerlogin");
+        navigate("/login");
       } else {
         console.log("sellerProfile", "has seller");
         try {

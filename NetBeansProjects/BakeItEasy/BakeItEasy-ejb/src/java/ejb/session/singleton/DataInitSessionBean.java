@@ -105,10 +105,10 @@ public class DataInitSessionBean {
             buyerSessionBeanLocal.createNewBuyer(buyer1);
 
             
-            Seller seller1 = new Seller("test", "test", "test", "test", "test");
-            Seller seller2 = new Seller("test2", "test2", "test2", "test2", "test2");
-            Seller seller3 = new Seller("test3", "test3", "test3", "test3", "test3");
-            Seller seller4 = new Seller("test4", "test4", "test4", "test4", "test4");
+            Seller seller1 = new Seller("test", "test@mail.com", "test", "test", "test");
+            Seller seller2 = new Seller("test2", "test2@mail.com", "test2", "test2", "test2");
+            Seller seller3 = new Seller("test3", "test3@mail.com", "test3", "test3", "test3");
+            Seller seller4 = new Seller("test4", "test4@mail.com", "test4", "test4", "test4");
             sellerSessionBeanLocal.createNewSeller(seller1);
             sellerSessionBeanLocal.createNewSeller(seller2);
             sellerSessionBeanLocal.createNewSeller(seller3);
