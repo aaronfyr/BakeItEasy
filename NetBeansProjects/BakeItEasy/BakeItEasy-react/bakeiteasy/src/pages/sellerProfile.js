@@ -3,216 +3,115 @@ import "./resources/sellerProfile.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
 
-import {
-  BrowserRouter as Router,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
 import { FiHeart } from "react-icons/fi";
 import { Flex, flexbox } from "@chakra-ui/react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  useNavigate,
+  Navigate,
+  useParams,
+} from "react-router-dom";
 
 function SellerProfile() {
 
+
     const [search, setSearch] = useState("");
 
-    const [products, setProducts] = useState([
-    {
-      id: 1,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      image: "./cakeImage.jpeg",
-    },
-    {
-      id: 2,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-    },
-    {
-      id: 3,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-    },
-    {
-      id: 4,
-      title: "Blueberry Pie",
-      category: "Pie",
-      price: "55.4",
-      tags: "hoodie solid plain purple long baggy hood",
-    },
-    {
-      id: 5,
-      title: "Brownie box (set of 10)",
-      category: "Brownies",
-      price: "55.4",
-      tags: "hoodie solid plain black long baggy hood",
-    },
-    {
-      id: 6,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      image: "./cakeImage.jpeg",
-    },
-    {
-      id: 7,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-    },
-    {
-      id: 8,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-    },
-    {
-      id: 9,
-      title: "Blueberry Pie",
-      category: "Pie",
-      price: "55.4",
-      tags: "hoodie solid plain purple long baggy hood",
-    },
-    {
-      id: 10,
-      title: "Brownie box (set of 10)",
-      category: "Brownies",
-      price: "55.4",
-      tags: "hoodie solid plain black long baggy hood",
-    },
-    {
-      id: 11,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      image: "./cakeImage.jpeg",
-    },
-    {
-      id: 12,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-    },
-    {
-      id: 13,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-    },
-    {
-      id: 14,
-      title: "Blueberry Pie",
-      category: "Pie",
-      price: "55.4",
-      tags: "hoodie solid plain purple long baggy hood",
-    },
-    {
-      id: 15,
-      title: "Brownie box (set of 10)",
-      category: "Brownies",
-      price: "55.4",
-      tags: "hoodie solid plain black long baggy hood",
-    },
-    {
-      id: 16,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      image: "./cakeImage.jpeg",
-    },
-    {
-      id: 17,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-    },
-    {
-      id: 18,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-    },
-    {
-      id: 19,
-      title: "Blueberry Pie",
-      category: "Pie",
-      price: "55.4",
-      tags: "hoodie solid plain purple long baggy hood",
-    },
-    {
-      id: 20,
-      title: "Brownie box (set of 10)",
-      category: "Brownies",
-      price: "55.4",
-      tags: "hoodie solid plain black long baggy hood",
-    },
-  ]);
 
-  const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      title: "Loved the brownies",
-      reviewText: "Super yummy, not too sweet, perfect with tea" ,
-      date:"01-07-2022" ,
-      rating:5,
-    },
-    {
-      id: 2,
-      title: "Loved the cake",
-      reviewText: "For a party, kids loved it, tasty cream. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-      date: "23-03-2023",
-      rating:5,
-    },
-    {
-      id: 3,
-      title: "Will buy again!",
-      reviewText: "Custom ordered a jelly cake with specific instructions, cake was well done to my request.Excepteur sint occaecat cupidatat non proident.",
-      date: "13-05-2023" ,
-      rating:5,
-    },
-    {
-      id: 4,
-      title: "Average strawberry pie",
-      reviewText: "Not a bad item but costs so much and doesn't taste better than commercial pies. Excepteur sint occaecat cupidatat non proident.",
-      date: "08-09-2023",
-      rating:3,
-    },
-    {
-      id: 5,
-      title: "Rude seller",
-      reviewText: "Took really long to reply to my requests and was rude on text. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      date: "18-02-2023" ,
-      rating:1,
-    },
-  ]);
 
-  const filteredProducts = products.filter((product) => {
-    if (
-      product.tags.toLowerCase().includes(search) ||
-      product.title.toLowerCase().includes(search) ||
-      product.category.toLowerCase().includes(search)
-    ) {
-      return product;
+    const [listings, setListings] = useState([]);
+
+    const id = 1; //dummy id
+    const [reviews, setReviews] = useState([]);
+
+    useEffect(() => {
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${id}/reviews`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+        "Content-Type": "application/json",
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => setReviews(data));
+    }, []);
+
+    useEffect(() => {
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${id}/listings`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+        "Content-Type": "application/json",
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => setListings(data));
+    }, []);
+
+const [seller, setSeller] = useState(null);
+  const [buyer, setBuyer] = useState(null);
+  const [buyerName, setBuyerName] = useState("Log In");
+  const [buyerId, setBuyerId] = useState(null);
+
+  const navigate = useNavigate();
+
+
+   useEffect(() => {
+    async function fetchData() {
+      const fetchedBuyer = localStorage.getItem("buyer");
+      /*if (!fetchedBuyer) {
+        console.log("navbar", "no buyer");
+        navigate("/login");
+      } else {*/
+        console.log("navbar", "has buyer");
+        try {
+          const parsedUser = JSON.parse(fetchedBuyer);
+          setBuyer(parsedUser);
+          console.log("parsedUser: ", parsedUser);
+          console.log("parsedUser.name: ", parsedUser.name);
+          setBuyerName(parsedUser.name);
+          console.log("parsedUser.id: ", parsedUser.buyerId);
+          setBuyerId(parsedUser.buyerId);
+        } catch (error) {
+          console.log(error);
+        }
+      //}
     }
-    return null;
+    fetchData();
+  }, []);
+
+
+
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      if (parsedUser.type === "seller") {
+        setSeller(parsedUser);
+      } else {
+        setBuyer(parsedUser);
+      }
+    } /*else {
+      navigate("/login");
+    }*/
+  }, []);
+
+
+
+  const filteredListings = listings.filter((listing) => {
+    if (
+      (listing.name.toLowerCase().includes(search) ||
+      listing.description.toLowerCase().includes(search) ||
+      listing.category.toLowerCase().includes(search))
+    ) {
+      return listing;
+    }
   });
 
-{/* FIX THIS IT'S JANKY. ROUTE NOT ADDED TO APP.JS*/}
-  let navigate = useNavigate();
   const routeChangeToListing = (id) => {
     let path = "/sellerListing/";
     navigate(path + id);
@@ -286,10 +185,10 @@ function SellerProfile() {
         <div className="flexBox">
             <div className="display">
 
-                {filteredProducts.map((product) => (
+                {filteredListings.map((listing) => (
                 <div
                     className="product"
-                    onClick={() => routeChangeToListing(product.id)}>
+                    onClick={() => routeChangeToListing(listing.listingId)}>
                     <div class="productSeller">
                         <img
                             width="30px"
@@ -297,7 +196,7 @@ function SellerProfile() {
                             src={require("../assets/dummyuser.png")}
                             alt="listing product"
                         />
-                        <h6>seller name</h6>
+                        <h6>{listing.seller}</h6>
                     </div>
 
                     <div className="productImg">
@@ -309,13 +208,13 @@ function SellerProfile() {
                     </div>
 
                     <div className="titleDetails">
-                        <h3>{product.title}</h3>
+                        <h3>{listing.name}</h3>
                         <h5>product details</h5>
                     </div>
 
                     <div class="productBottomRow">
                         <FiHeart size="1.2rem" />
-                        <h3>${product.price}</h3>
+                        <h3>${listing.price} </h3>
                     </div>
 
                 </div>
@@ -363,3 +262,40 @@ function SellerProfile() {
 
 
 export default SellerProfile;
+
+/*
+    {
+      id: 1,
+      title: "Loved the brownies",
+      reviewText: "Super yummy, not too sweet, perfect with tea" ,
+      date:"01-07-2022" ,
+      rating:5,
+    },
+    {
+      id: 2,
+      title: "Loved the cake",
+      reviewText: "For a party, kids loved it, tasty cream. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+      date: "23-03-2023",
+      rating:5,
+    },
+    {
+      id: 3,
+      title: "Will buy again!",
+      reviewText: "Custom ordered a jelly cake with specific instructions, cake was well done to my request.Excepteur sint occaecat cupidatat non proident.",
+      date: "13-05-2023" ,
+      rating:5,
+    },
+    {
+      id: 4,
+      title: "Average strawberry pie",
+      reviewText: "Not a bad item but costs so much and doesn't taste better than commercial pies. Excepteur sint occaecat cupidatat non proident.",
+      date: "08-09-2023",
+      rating:3,
+    },
+    {
+      id: 5,
+      title: "Rude seller",
+      reviewText: "Took really long to reply to my requests and was rude on text. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      date: "18-02-2023" ,
+      rating:1,
+    }, */

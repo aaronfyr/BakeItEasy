@@ -1,101 +1,87 @@
 import { color } from "framer-motion";
-import React, {useState, useEffect } from "react";
-import "./resources/searchBarSection.css";
+import React, {useState, useEffect} from "react";
+import "./resources/sellerVOBL.css";
 import SellerOrderCard from "./sellerOrderCard.js";
-import CategoryDropdown from "../components/categoryDropdown";
 import { NavigationBar } from "../components/buyerNavigationBar";
-import {FaListUl} from "react-icons/fa";
+import { FaCheck } from "react-icons/fa"
 import {
   BrowserRouter as Router,
   useNavigate,
   useParams,
+  Link
 } from "react-router-dom";
 
+const SellerViewOrderByListing = () => {
 
-/*const orderResponse = await fetch(``)*/
+  const [orders, setOrders] = useState([]);
 
-const SearchBarSection = () => {
   const [search, setSearch] = useState("");
-  const [listings, setListings] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [filteredListings, setFilteredListings] = useState([]);
 
-  //get listings of seller
-async function fetchListings() {
-  try {
-    const response = await fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/1/listings`, {
-      //get seller id from storage !!!!!!!!!!!!!!
+  const [listing, setListing] = useState([]);
+
+  const {id} = useParams();
+
+  const filteredOrders = orders.filter((order) => {
+    if (
+      /*(product.tags.toLowerCase().includes(search) ||
+      product.title.toLowerCase().includes(search) ||
+      product.category.toLowerCase().includes(search) ||
+      product.buyerName.toLowerCase().includes(search) ||
+      product.notes.toLowerCase().includes(search))*/true
+        // cant get the frickin filter to work
+    ) {
+      return order;
+    }
+  });
+
+    //get orders of seller
+     useEffect(() => {
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/1/orders`, {
+        //get seller id from storage
+        method: "GET",
+        mode: "cors",
+        headers: {
+        "Content-Type": "application/json",
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => setOrders(data));
+    }, []);
+
+    //get listing
+    useEffect(() => {
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
       method: "GET",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },
-    });
-    const data = await response.json();
-    setListings(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-function filterListings(listings, search, selectedCategory) {
-  return listings.filter((listing) => {
-    if (selectedCategory === "") {
-      return (
-        listing.name.toLowerCase().includes(search) ||
-        listing.description.toLowerCase().includes(search) ||
-        listing.listingCategory.toLowerCase().includes(search)
-      );
-    } else {
-      return (
-        listing.name.toLowerCase().includes(search) &&
-        listing.listingCategory.toLowerCase().includes(selectedCategory)
-      );
-    }
-  });
-}
-
-useEffect(() => {
-  fetchListings();
-}, []);
-
-useEffect(() => {
-  fetchListings();
-}, []);
-
-useEffect(() => {
-  fetchListings();
-  if (listings.length > 0) {
-    const filteredData = filterListings(listings, search, "");
-    setFilteredListings(filteredData);
-  }
-}, [listings, search]);
-
-
-const handleCategoryChange = (category) => {
-  const newSelectedCategory = category.toLowerCase();
-  setSelectedCategory(newSelectedCategory);
-  const filteredData = filterListings(listings, "", newSelectedCategory);
-  setFilteredListings(filteredData);
-};
-
+    })
+      .then((response) => response.json())
+      .then((data) => setListing(data));
+  }, []);
 
 
    let navigate = useNavigate();
   const routeChangeToOrder = (id) => {
-    let path = "listing/";
+    let path = "/sellerOrder/";
+    /*<Link to={{
+    pathname: "path",
+    state: products.filter((product) => {if (product.id === id) {return product}}) // your data array of objects
+    }}>
+    </Link> */
     navigate(path + id);
   };
+
+
 
   return (
     <div>
         <NavigationBar/>
         <div className="dropdownRow">
             <div className="heading">
-                <h1>My listings with orders</h1>
+                <h1 style={{fontWeight: "bolder", fontSize: 20}}>My Orders</h1>
             </div>
-        <CategoryDropdown onCategoryChange={handleCategoryChange}/>
-        <body style={{fontFamily: 'Montserrat'}}>Selected category: {selectedCategory}</body>
     </div>
     <div className="searchBarSection">
       <div class="searchBar">
@@ -123,25 +109,52 @@ const handleCategoryChange = (category) => {
         </button>
       </div>
       <div className="orderDisplay">
-        {filteredListings.map((listing) => (
-          <div className="listingComponent" onClick={() => routeChangeToOrder(listing.listingId)}>
-            <SellerOrderCard>
-            <div className="sellerOrderCardHeader">
+          <SellerOrderCard>
+            <div className="cardTextBlock" style={{width: 1000}}>
+                <h2>{listing.name}</h2>
             </div>
             <div className="sellerOrderCardBodyFlex">
                 <div className="sellerOrderCardBodyFlex">
-                    <img alt="cake" style={imgStyle} src={""}/>
+                    <img alt="cake" style={imgStyle} src={""}/*listing.imagePaths[0]*//>
                 </div>
 
-                <div style={{width: 400}} className="cardTextBlock">
-                    <h2>{listing.name} [${listing.price}]</h2>
-                    <h4>{listing.listingCategory}</h4>
-                    <div className="flexBox">
-                        <div className="searchBarButton1">
-                            <FaListUl style={{alignSelf: "center"}}/>
-                            <h3>view orders</h3>
-                        </div>
-                    </div>
+                <div style={{width: 500, marginLeft:20}} className="cardTextBlock">
+                    <h1>CATEGORY:  {listing.listingCategory}</h1>
+                    <br></br>
+                    <h1>DESCRIPTION:</h1>
+                    <body>{listing.description}</body>
+                    <h1>PRICE:</h1>
+                    <body>${listing.price}</body>
+                </div>
+            </div>
+        </SellerOrderCard>
+      </div>
+
+      <div className="orderDisplay">
+        {filteredOrders.map((order) => (
+          <div className="orderComponent" onClick={() => routeChangeToOrder(order.orderId)}>
+            <SellerOrderCard>
+            <div className="sellerOrderCardHeader">
+                <img style={pfpStyle} alt="profile pic" width="50" src="https://st.depositphotos.com/1597387/1984/i/950/depositphotos_19841901-stock-photo-asian-young-business-man-close.jpg"></img>
+                <h3>{order.id}</h3>
+            </div>
+            <div className="sellerOrderCardBodyFlex">
+                <div className="sellerOrderCardBodyFlex">
+                </div>
+
+                <div style={{width: 350, margin: 5}} className="cardTextBlock">
+                    <h4>note: {order.description}</h4>
+                    <h4>amount due: {order.price}</h4>
+                    <h4>date due: {order.dateOfCollection}</h4>
+                </div>
+
+                <div className="orderStatus">
+                    <h2>{order.orderStatus}</h2>
+                </div>
+            </div>
+            <div className="sellerOrderCardBodyFlex">
+                <div className="searchBarButton1">
+                    <h5>click to view order</h5>
                 </div>
             </div>
         </SellerOrderCard>
@@ -223,8 +236,8 @@ const data = [{
 const pfpStyle = {padding: 0.5, borderRadius: "50%", width: 30, height: 30,
                     objectFit: "cover", background: "grey", display:"block" }
 
-const imgStyle = {height: 150, width: 150, objectFit:"cover", borderRadius: 10}
+const imgStyle = {height: 250, width: 350, objectFit:"cover", borderRadius: 10}
 
 
 
-export default SearchBarSection;
+export default SellerViewOrderByListing;
