@@ -5,6 +5,9 @@
         <group>
             <file>file:/Users/micaella/BakeItEasy/NetBeansProjects/BakeItEasy/BakeItEasy-ejb/src/java/entity/Order.java</file>
             <file>file:/Users/micaella/BakeItEasy/NetBeansProjects/BakeItEasy/BakeItEasy-ejb/setup/glassfish-resources.xml</file>
+            <file>file:/Users/weining/Desktop/BakeItEasy/NetBeansProjects/BakeItEasy/BakeItEasy-ejb/build/generated-sources/ap-source-output/entity/Review_.java</file>
+            <file>file:/Users/weining/Desktop/BakeItEasy/NetBeansProjects/BakeItEasy/BakeItEasy-ejb/src/java/entity/Admin.java</file>
+            <file>file:/Users/weining/Desktop/BakeItEasy/NetBeansProjects/BakeItEasy/BakeItEasy-ejb/src/java/entity/Review.java</file>
         </group>
     </open-files>
 </project-private>

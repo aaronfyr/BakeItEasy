@@ -32,6 +32,8 @@ import ViewAllReports from "./pages/viewAllReports";
 import SellerOrderMgmt from "./pages/sellerOrderMgmt";
 import SellerProfile from "./pages/sellerProfile";
 import SellerViewOrder from "./pages/sellerViewOrder";
+import SellerViewOrderByListing from "./pages/sellerViewOrderByListing";
+import SellerListingPage from "./pages/sellerListing";
 
 function App() {
   return (
@@ -64,9 +66,11 @@ function App() {
                 <Route path="/makeReview" element={<MakeReview />} />
 
                 <Route path="/sellerHomepage" element={<SellerHomepage />} />
-                <Route path="/sellerProfile" element={<SellerProfile />} />
-                <Route path="/sellerViewOrder" element={<SellerViewOrder />} />
-                <Route path="/sellerOrderMgmt" element={<SellerOrderMgmt />} />
+                <Route path="/sellerProfile" element={<SellerProfile/>}/>
+                <Route path="sellerOrder/:id" element={<SellerViewOrder/>}/>
+                <Route path="/sellerOrderMgmt" element={<SellerOrderMgmt/>}/>
+                <Route path="/sellerOrderMgmt/listing/:id" element={<SellerViewOrderByListing/>}/>
+                <Route path="/sellerListing/:id" element={<SellerListingPage/>}/>
               </Routes>
             </Router>
           </AdminProvider>
