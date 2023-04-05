@@ -9,6 +9,7 @@ import entity.Review;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingNotFoundException;
+import error.exception.OrderIsNotCompletedException;
 import error.exception.OrderNotFoundException;
 import error.exception.ReviewNotFoundException;
 import error.exception.SellerNotFoundException;
@@ -32,7 +33,7 @@ public interface ReviewSessionBeanLocal {
 
     public void updateReview(Review r) throws NoResultException, ReviewNotFoundException;
 
-    public Long createNewReview(Review review, Long orderId) throws OrderNotFoundException, UnknownPersistenceException, InputDataValidationException;
+    public Long createNewReview(Review review, Long orderId) throws OrderNotFoundException, UnknownPersistenceException, InputDataValidationException, OrderIsNotCompletedException;
 
     public List<Review> retrieveSellerReviews(Long sellerId) throws SellerNotFoundException;
 }
