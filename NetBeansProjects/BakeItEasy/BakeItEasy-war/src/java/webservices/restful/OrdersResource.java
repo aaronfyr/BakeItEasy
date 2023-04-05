@@ -10,6 +10,7 @@ import ejb.session.stateless.ReviewSessionBeanLocal;
 import entity.Order;
 import entity.Review;
 import error.exception.InputDataValidationException;
+import error.exception.OrderIsNotCompletedException;
 import error.exception.OrderNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.logging.Level;
@@ -59,7 +60,7 @@ public class OrdersResource {
             reviewSessionBeanLocal.createNewReview(r, orderId);
         } catch (UnknownPersistenceException | InputDataValidationException ex) {
             Logger.getLogger(AdminsResource.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (OrderNotFoundException ex) {
+        } catch (OrderNotFoundException | OrderIsNotCompletedException ex) {
             Logger.getLogger(OrdersResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         return r;

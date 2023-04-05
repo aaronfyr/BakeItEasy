@@ -8,6 +8,7 @@ package webservices.restful;
 import ejb.session.stateless.ListingSessionBeanLocal;
 import entity.Listing;
 import enumeration.ListingCategory;
+import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingHasOngoingOrdersException;
 import error.exception.ListingNotFoundException;
@@ -16,8 +17,6 @@ import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
@@ -193,5 +192,52 @@ public class ListingsResource {
         }
     } //end edit listing
     
+    // CHECKED: AARON
+    @PUT
+    @Path("/{listing_id}/{buyer_id}/like")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response likeListing(@PathParam("listing_id") Long listingId, @PathParam("buyer_id") Long buyerId) {
+        try {
+            listingSessionBeanLocal.likeListing(buyerId, listingId);
+            return Response.status(204).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (ListingNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Listing not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end like listing
+    
+    // CHECKED: AARON
+    @PUT
+    @Path("/{listing_id}/{buyer_id}/unlike")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unlikeListing(@PathParam("listing_id") Long listingId, @PathParam("buyer_id") Long buyerId) {
+        try {
+            listingSessionBeanLocal.unlikeListing(buyerId, listingId);
+            return Response.status(204).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (ListingNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Listing not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end like listing
     
 }

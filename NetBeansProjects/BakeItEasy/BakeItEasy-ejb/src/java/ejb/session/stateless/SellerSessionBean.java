@@ -17,6 +17,7 @@ import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerEmailExistException;
 import error.exception.SellerHasOutstandingOrdersException;
+import error.exception.SellerIsBannedException;
 import error.exception.SellerNotFoundException;
 import error.exception.SellerPhoneNumberExistException;
 import error.exception.SellerUsernameExistException;
@@ -103,6 +104,58 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
         }
     }
 
+    
+    @Override
+    public void updateSeller(Seller updatedSeller) throws SellerNotFoundException, SellerPhoneNumberExistException, SellerUsernameExistException, InputDataValidationException {
+        Set<ConstraintViolation<Seller>> constraintViolations = validator.validate(updatedSeller);
+
+        if (constraintViolations.isEmpty()) {
+            Seller sellerToUpdate = retrieveSellerBySellerId(updatedSeller.getSellerId());
+
+            // phone, username no change
+            if (sellerToUpdate.getPhoneNo().equals(updatedSeller.getPhoneNo())
+                    && sellerToUpdate.getUsername().equals(updatedSeller.getUsername())) {
+                sellerToUpdate.setName(updatedSeller.getName());
+                sellerToUpdate.setPassword(updatedSeller.getPassword());
+            } else if (!sellerToUpdate.getPhoneNo().equals(updatedSeller.getPhoneNo())
+                    && sellerToUpdate.getUsername().equals(updatedSeller.getUsername())) { // phone change, username same
+                if (isPhoneNumberAvailable(updatedSeller.getPhoneNo())) {
+                    sellerToUpdate.setName(updatedSeller.getName());
+                    sellerToUpdate.setPassword(updatedSeller.getPassword());
+                    sellerToUpdate.setPhoneNo(updatedSeller.getPhoneNo());
+                } else {
+                    throw new SellerPhoneNumberExistException("New phone number provided exist!");
+                }
+            } else if (sellerToUpdate.getPhoneNo().equals(updatedSeller.getPhoneNo())
+                    && !sellerToUpdate.getUsername().equals(updatedSeller.getUsername())) { // phone same, username change
+                if (isUsernameAvailable(updatedSeller.getUsername())) {
+                    sellerToUpdate.setName(updatedSeller.getName());
+                    sellerToUpdate.setPassword(updatedSeller.getPassword());
+                    sellerToUpdate.setUsername(updatedSeller.getUsername());
+                } else {
+                    throw new SellerUsernameExistException("New username provided exist!");
+                }
+            } else if (!sellerToUpdate.getPhoneNo().equals(updatedSeller.getPhoneNo())
+                    && !sellerToUpdate.getUsername().equals(updatedSeller.getUsername())) { // phone change, username change
+                if (isPhoneNumberAvailable(updatedSeller.getPhoneNo())) {
+                    if (isUsernameAvailable(updatedSeller.getUsername())) {
+                        sellerToUpdate.setName(updatedSeller.getName());
+                        sellerToUpdate.setPassword(updatedSeller.getPassword());
+                        sellerToUpdate.setPhoneNo(updatedSeller.getPhoneNo());
+                        sellerToUpdate.setUsername(updatedSeller.getUsername());
+                    } else {
+                        throw new SellerUsernameExistException("New username provided exist!");
+                    }
+                } else {
+                    throw new SellerPhoneNumberExistException("New phone number provided exist!");
+                }
+            }
+
+        } else {
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+        }
+    }
+
     // seller must not have outstanding orders
     @Override
     public void deleteSeller(Long sellerId) throws SellerNotFoundException, SellerHasOutstandingOrdersException {
@@ -114,16 +167,16 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
                     throw new SellerHasOutstandingOrdersException("Seller has outstanding orders (Pending/Accepted), please handle before deletion!");
                 }
             }
-            
+
             List<Listing> sellerListings = seller.getListings();
             List<Report> sellerReports = seller.getReports();
-            
+
             for (Listing individualListing : sellerListings) {
                 em.remove(individualListing);
             }
-            
+
             for (Report reportAgainst : sellerReports) {
-               em.remove(reportAgainst);
+                em.remove(reportAgainst);
             }
 
             em.remove(seller);
@@ -135,7 +188,7 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
     }
 
     @Override
-    public Seller sellerLogin(String email, String password) throws InvalidLoginCredentialException, SellerNotFoundException {
+    public Seller sellerLogin(String email, String password) throws SellerIsBannedException, InvalidLoginCredentialException, SellerNotFoundException {
         try {
             Query query = em.createQuery("SELECT s FROM Seller s WHERE s.email = :inEmail");
             query.setParameter("inEmail", email);
@@ -144,7 +197,11 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
             if (seller != null) {
 
                 if (seller.getPassword().equals(password)) {
-                    return seller;
+                    if (!seller.getIsBanned()) {
+                        return seller;
+                    } else {
+                        throw new SellerIsBannedException("Seller with email " + email + " is banned!");
+                    }
                 } else {
                     throw new InvalidLoginCredentialException("Invalid login credentials for: " + email);
                 }
@@ -209,20 +266,6 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
         return query.getResultList();
     }
 
-    // UPDATE TO SEE WHICH FIELDS CAN BE UPDATED
-    @Override
-    public void updateSeller(Seller updatedSeller) throws InputDataValidationException, SellerNotFoundException {
-        Set<ConstraintViolation<Seller>> constraintViolations = validator.validate(updatedSeller);
-
-        if (constraintViolations.isEmpty()) {
-            Seller sellerToUpdate = retrieveSellerBySellerId(updatedSeller.getSellerId());
-            sellerToUpdate.setName(updatedSeller.getName());
-            sellerToUpdate.setPassword(updatedSeller.getPassword());
-            sellerToUpdate.setPhoneNo(updatedSeller.getPhoneNo());
-        } else {
-            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
-        }
-    }
     // DELETE TO SEE WHAT ORDER IMPLEMENTED (I.E. ORDER STATUS)
 
     // TO DO: CHANGE ORDER STATUS (WHEN SELLER ACCEPTS ORDER)

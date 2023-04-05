@@ -5,11 +5,13 @@
  */
 package ejb.session.stateless;
 
+import entity.Buyer;
 import entity.Listing;
 import entity.Order;
 import entity.Seller;
 import enumeration.ListingCategory;
 import enumeration.OrderStatus;
+import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingHasOngoingOrdersException;
 import error.exception.ListingNotFoundException;
@@ -36,6 +38,9 @@ import javax.validation.ValidatorFactory;
  */
 @Stateless
 public class ListingSessionBean implements ListingSessionBeanLocal {
+
+    @EJB(name = "BuyerSessionBeanLocal")
+    private BuyerSessionBeanLocal buyerSessionBeanLocal;
 
     @EJB(name = "OrderSessionBeanLocal")
     private OrderSessionBeanLocal orderSessionBeanLocal;
@@ -98,6 +103,27 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
+    
+    @Override
+    public void likeListing(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException {
+        Listing listingToLike = retrieveListingByListingId(listingId);
+        Buyer buyerLiker = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+        
+        buyerLiker.getLikedListings().add(listingToLike);
+        listingToLike.getLikers().add(buyerLiker);
+    }
+    
+    
+    @Override
+    public void unlikeListing(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException {
+        Listing listingToLike = retrieveListingByListingId(listingId);
+        Buyer buyerLiker = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+        
+        buyerLiker.getLikedListings().remove(listingToLike);
+        listingToLike.getLikers().remove(buyerLiker);
+    }
+    
+    // method to check whether listing is liked by the buyer
 
     @Override
     public void deleteListing(Long listingId) throws ListingNotFoundException, ListingHasOngoingOrdersException, OrderNotFoundException {
