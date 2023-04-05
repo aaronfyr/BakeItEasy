@@ -49,13 +49,14 @@ function Login() {
         setSeller(user);
         localStorage.setItem("seller", JSON.stringify(user));
         console.log("seller set: ", user);
+        navigate(`/sellerHomepage`);
       } else {
         setBuyer(user);
         localStorage.setItem("buyer", JSON.stringify(user));
         console.log("buyer set: ", user);
+        navigate(`/`);
       }
       // redirect to homepage
-      navigate(`/`);
     } else {
       // show error message
       setError("Invalid login credentials. Please try again.");
