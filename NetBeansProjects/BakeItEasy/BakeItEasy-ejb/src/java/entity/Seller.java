@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -32,13 +33,16 @@ public class Seller implements Serializable {
 
     @Column
     private String name;
-    @Column
+    @Column(nullable = false, unique = true)
+    @NotNull
     private String email;
-    @Column
+    @Column(nullable = false, unique = true)
+    @NotNull
     private String username;
     @Column
     private String password;
-    @Column
+    @Column(nullable = false, unique = true)
+    @NotNull
     private String phoneNo;
     @Column
     private boolean isBanned;

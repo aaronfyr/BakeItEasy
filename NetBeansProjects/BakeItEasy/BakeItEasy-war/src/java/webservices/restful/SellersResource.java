@@ -24,6 +24,7 @@ import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerEmailExistException;
 import error.exception.SellerHasOutstandingOrdersException;
+import error.exception.SellerIsBannedException;
 import error.exception.SellerNotFoundException;
 import error.exception.SellerPhoneNumberExistException;
 import error.exception.SellerUsernameExistException;
@@ -100,6 +101,43 @@ public class SellersResource {
         sellerSessionBeanLocal.createNewSeller(seller);
         return seller;
     } // end create seller
+    
+    // CHECKED: AARON
+    @PUT
+    @Path("/{seller_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editSeller(@PathParam("seller_id") Long sellerId, Seller seller) {
+        seller.setSellerId(sellerId);
+        try {
+            sellerSessionBeanLocal.updateSeller(seller);
+            return Response.status(204).build();
+        } catch (InputDataValidationException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Input data validation exception")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (SellerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Seller not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (SellerPhoneNumberExistException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Seller new phone number exist!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (SellerUsernameExistException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Seller new username exist!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end edit seller
 
     // CHECKED: AARON
     @DELETE
@@ -132,8 +170,14 @@ public class SellersResource {
         try {
             Seller seller = sellerSessionBeanLocal.sellerLogin(email, password);
             return Response.status(200).entity(seller).type(MediaType.APPLICATION_JSON).build();
-        } catch (InvalidLoginCredentialException | SellerNotFoundException e) {
+        } catch (InvalidLoginCredentialException e) {
             JsonObject exception = Json.createObjectBuilder().add("error", "Login invalid").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch(SellerNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Seller not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (SellerIsBannedException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Seller is banned").build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end loginSeller

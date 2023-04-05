@@ -30,6 +30,8 @@ public interface SellerSessionBeanLocal {
 
     public Long createNewSeller(Seller newSeller) throws UnknownPersistenceException, InputDataValidationException, SellerUsernameExistException, SellerEmailExistException, SellerPhoneNumberExistException;
 
+    public void updateSeller(Seller updatedSeller) throws SellerNotFoundException, SellerPhoneNumberExistException, SellerUsernameExistException, InputDataValidationException;
+    
     public void deleteSeller(Long sellerId) throws SellerNotFoundException, SellerHasOutstandingOrdersException;
     
     public Seller sellerLogin(String email, String password) throws SellerIsBannedException, InvalidLoginCredentialException, SellerNotFoundException;
@@ -43,8 +45,6 @@ public interface SellerSessionBeanLocal {
     public Seller retrieveSellerByPhoneNumber(String phoneNo) throws SellerNotFoundException;
 
     public List<Seller> retrieveAllSellers();
-
-    public void updateSeller(Seller updatedSeller) throws InputDataValidationException, SellerNotFoundException;
 
     public void acceptOrder(Long orderId) throws OrderNotFoundException, OrderIsNotPendingException;
 
