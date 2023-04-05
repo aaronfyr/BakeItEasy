@@ -13,6 +13,7 @@ import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerEmailExistException;
 import error.exception.SellerHasOutstandingOrdersException;
+import error.exception.SellerIsBannedException;
 import error.exception.SellerNotFoundException;
 import error.exception.SellerPhoneNumberExistException;
 import error.exception.SellerUsernameExistException;
@@ -29,9 +30,11 @@ public interface SellerSessionBeanLocal {
 
     public Long createNewSeller(Seller newSeller) throws UnknownPersistenceException, InputDataValidationException, SellerUsernameExistException, SellerEmailExistException, SellerPhoneNumberExistException;
 
+    public void updateSeller(Seller updatedSeller) throws SellerNotFoundException, SellerPhoneNumberExistException, SellerUsernameExistException, InputDataValidationException;
+    
     public void deleteSeller(Long sellerId) throws SellerNotFoundException, SellerHasOutstandingOrdersException;
     
-    public Seller sellerLogin(String email, String password) throws InvalidLoginCredentialException, SellerNotFoundException;
+    public Seller sellerLogin(String email, String password) throws SellerIsBannedException, InvalidLoginCredentialException, SellerNotFoundException;
 
     public Seller retrieveSellerBySellerId(Long sellerId) throws SellerNotFoundException;
 
@@ -42,8 +45,6 @@ public interface SellerSessionBeanLocal {
     public Seller retrieveSellerByPhoneNumber(String phoneNo) throws SellerNotFoundException;
 
     public List<Seller> retrieveAllSellers();
-
-    public void updateSeller(Seller updatedSeller) throws InputDataValidationException, SellerNotFoundException;
 
     public void acceptOrder(Long orderId) throws OrderNotFoundException, OrderIsNotPendingException;
 

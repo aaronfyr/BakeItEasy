@@ -10,15 +10,19 @@ import entity.Listing;
 import entity.Order;
 import entity.Review;
 import entity.Seller;
+import enumeration.OrderStatus;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingNotFoundException;
+import error.exception.OrderIsNotCompletedException;
 import error.exception.OrderNotFoundException;
 import error.exception.ReviewNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -76,17 +80,21 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
     }
 
     @Override
-    public Long createNewReview(Review review, Long orderId) throws OrderNotFoundException, UnknownPersistenceException, InputDataValidationException {
+    public Long createNewReview(Review review, Long orderId) throws OrderNotFoundException, UnknownPersistenceException, InputDataValidationException, OrderIsNotCompletedException {
         Set<ConstraintViolation<Review>> constraintViolations = validator.validate(review);
 
         if (constraintViolations.isEmpty()) {
             try {
-                em.persist(review);
                 Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
-                review.setOrder(order);
-                order.setReview(review);
-                em.flush();
-                return review.getReviewId();
+                if (order.getOrderStatus().equals(OrderStatus.COMPLETED)) {
+                    em.persist(review);
+                    review.setOrder(order);
+                    order.setReview(review);
+                    em.flush();
+                    return review.getReviewId();
+                } else {
+                    throw new OrderIsNotCompletedException();
+                }
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
@@ -97,6 +105,8 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
+            } catch (OrderIsNotCompletedException ex) {
+                throw new OrderIsNotCompletedException("Order is not completed -- unable to create a review.");
             }
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));

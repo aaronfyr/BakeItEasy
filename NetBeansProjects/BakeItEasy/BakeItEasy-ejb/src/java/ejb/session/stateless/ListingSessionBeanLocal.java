@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.Listing;
 import entity.Order;
 import enumeration.ListingCategory;
+import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingHasOngoingOrdersException;
 import error.exception.ListingNotFoundException;
@@ -56,5 +57,9 @@ public interface ListingSessionBeanLocal {
     public Boolean doesListingHaveOutstandingOrders(Listing listing);
 
     public List<Order> getListingOrders(Long listingId) throws ListingNotFoundException;
+
+    public void likeListing(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException;
+
+    public void unlikeListing(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException;
     
 }
