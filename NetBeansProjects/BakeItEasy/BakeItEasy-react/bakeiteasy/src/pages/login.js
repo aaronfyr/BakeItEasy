@@ -47,16 +47,18 @@ function Login() {
       const user = await response.json();
       if (type === "seller") {
         setSeller(user);
+        console.log("response okay for seller", "");
         localStorage.setItem("seller", JSON.stringify(user));
         console.log("seller set: ", user);
-        navigate(`/sellerHomepage`);
+        const sellerId = user.sellerId;
+        navigate(`/sellerProfile`);
       } else {
         setBuyer(user);
         localStorage.setItem("buyer", JSON.stringify(user));
         console.log("buyer set: ", user);
+        // redirect to homepage
         navigate(`/`);
-      }
-      // redirect to homepage
+
     } else {
       // show error message
       setError("Invalid login credentials. Please try again.");

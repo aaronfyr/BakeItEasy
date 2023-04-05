@@ -38,11 +38,12 @@ import { IoLogOut } from "react-icons/io5";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export const SellerNavigationBar = () => {
-  const [seller, setSeller] = useState(null);
+  const navigate = useNavigate();
 
+  // Fetch this seller details
+  const [seller, setSeller] = useState(null);
   const [sellerName, setSellerName] = useState("Log In");
   const [sellerId, setSellerId] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -70,7 +71,7 @@ export const SellerNavigationBar = () => {
 
   // Routing to Buyer Profile
   const routeToProfile = () => {
-    let path = "/sellerrofile/" + sellerId;
+    let path = "/sellerProfile";
     console.log("Navigate to profile of: ", seller.id);
     navigate(path);
   };
@@ -78,7 +79,13 @@ export const SellerNavigationBar = () => {
   // Routing to Buyer Home Page
   const routeToHomePage = () => {
     console.log("Navigate to: ", "homepage");
-    navigate("seller/");
+    navigate("/sellerProfile");
+  };
+
+  // Routing to Appointments
+  const routeToAppointments = () => {
+    console.log("Navigate to: ", "appointments");
+    navigate("/sellerAppointments");
   };
 
   // Handle log out
@@ -118,10 +125,17 @@ export const SellerNavigationBar = () => {
         <div className="logo" onClick={() => routeToHomePage()}>
           BakeItEasy
         </div>
+        <div className="logoSubscript" onClick={() => routeToHomePage()}>
+          for B A K E R S
+        </div>
       </Flex>
 
       <Flex align="center">
-        <div id="navChoices">My Listings</div>
+        <div id="navChoices">Shop Profile</div>
+        <div id="navChoices">My Orders</div>
+        <div id="navChoices" onClick={() => routeToAppointments()}>
+          Appointments
+        </div>
       </Flex>
 
       <HStack spacing="15px">
@@ -161,7 +175,7 @@ export const SellerNavigationBar = () => {
                 }}
               >
                 <FaUserCircle />
-                Your shop
+                Edit Account
               </MenuItem>
               <MenuItem
                 gap="0.7rem"

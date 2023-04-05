@@ -1,4 +1,4 @@
-import {React,  useEffect, useState} from "react";
+import { React, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Avatar,
@@ -28,96 +28,96 @@ import "./resources/listing.css";
 import { NavigationBar } from "../components/buyerNavigationBar";
 
 function SellerListing() {
-    console.log("test");
+  console.log("test");
   const { id } = useParams();
 
-const [loading, setLoading] = useState(true);
-const [listing, setListing] = useState([]);
-const [isEditable, setIsEditable] = useState(false);
-const [preDelete, setPreDelete] = useState(false);
-const [deleted, setDeleted] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [listing, setListing] = useState([]);
+  const [isEditable, setIsEditable] = useState(false);
+  const [preDelete, setPreDelete] = useState(false);
+  const [deleted, setDeleted] = useState(false);
 
-
-   let navigate = useNavigate();
+  let navigate = useNavigate();
   const routeChangeToSellerProfile = () => {
     let path = "/sellerProfile";
     navigate(path);
   };
 
-useEffect(() => {
-  fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
-    method: "GET",
-    mode: "cors",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      setListing(data);
-      setLoading(false);
+  useEffect(() => {
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
-    .catch((error) => console.log(error));
-}, []);
+      .then((response) => response.json())
+      .then((data) => {
+        setListing(data);
+        setLoading(false);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
-if (loading) {
-  return <div>Loading...</div>;
-}
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   const stopEditable = () => {
     setIsEditable(false);
-  }
+  };
 
-const handleUpdate = () => {
+  const handleUpdate = () => {
     stopEditable();
-  fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(listing),
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to update listing');
-      }
-      return response.json();
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(listing),
     })
-    .then(data => {
-      // handle successful update
-      window.location.reload();
-    })
-    .catch(error => { /*handle error */ });
-}
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to update listing");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // handle successful update
+        window.location.reload();
+      })
+      .catch((error) => {
+        /*handle error */
+      });
+  };
 
-const handleDelete = () => {
+  const handleDelete = () => {
     setPreDelete(false);
     stopEditable();
-  fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
-    method: 'DELETE', mode: "cors",
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to update listing');
-      } else {
-        console.log("response ok")
-        setDeleted(true);
-        setTimeout(() => {
-        routeChangeToSellerProfile();
-    }, 3000); // 1000 milliseconds = 1 second
-      }
-      return response.json();
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
+      method: "DELETE",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
-    .then(data => {
-      // handle successful update
-    })
-    .catch(error => { });
-
-}
-
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to update listing");
+        } else {
+          console.log("response ok");
+          setDeleted(true);
+          setTimeout(() => {
+            routeChangeToSellerProfile();
+          }, 3000); // 1000 milliseconds = 1 second
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // handle successful update
+      })
+      .catch((error) => {});
+  };
 
   /*
   // for the image slideshow
@@ -155,10 +155,8 @@ const handleDelete = () => {
   }
   */
 
-
-  return ( <div>
-      <NavigationBar />
-
+  return (
+    <div>
       <br />
       <h1>Listing ID </h1>
       <div id="listingContainer">
@@ -172,37 +170,80 @@ const handleDelete = () => {
           <br />
         </div>
         <div id="rightListingContainer">
-
-            <h3>Price:</h3>
-                {isEditable ? (
-                <input type="text" className="inputStyle" value={listing.price} onChange={(e) => setListing({...listing, price: e.target.value})} /> ) : (
-                <h2>{listing.price}</h2>
-                    )}
-            <h3>Name:</h3>
-                {isEditable ? (
-                <input type="text" className="inputStyle" value={listing.name} onChange={(e) => setListing({...listing, name: e.target.value})} /> ) : (
-                <h2>{listing.name}</h2>
-                    )}
-            <h3>Description:</h3>
-                {isEditable ? (
-                <input type="text" className="inputStyle" value={listing.description} onChange={(e) => setListing({...listing, description: e.target.value})} /> ) : (
-                <h2>{listing.description}</h2>
-                )}
-            <div style={{height: 10}}></div>
-                <Flex>
-                    {!isEditable && <button className="button1" onClick={() => setIsEditable(true)}>Edit</button>}
-                    {isEditable && <button className="button1" onClick={handleUpdate}>Done</button>}
-                </Flex>
-                <div style={{height: 10}}></div>
-                <Flex>
-                    {isEditable && !preDelete && <button className="button1" onClick={() => setPreDelete(true)}>Delete Listing</button>}
-                    {isEditable && preDelete && <button className="button1" onClick={handleDelete}>Confirm Delete</button>}
-                    {isEditable && preDelete && <button className="button1" onClick={() => setPreDelete(false)}>Cancel Delete</button>}
-                    {deleted && <h1>DELETED SUCCESSFULLY! redirecting, please wait...</h1>}
-                </Flex>
-                <div style={{height: 10}}></div>
-            <h3>Category:</h3>
-                <h2>{listing.listingCategory.toLowerCase()}</h2>
+          <h3>Price:</h3>
+          {isEditable ? (
+            <input
+              type="text"
+              className="inputStyle"
+              value={listing.price}
+              onChange={(e) =>
+                setListing({ ...listing, price: e.target.value })
+              }
+            />
+          ) : (
+            <h2>{listing.price}</h2>
+          )}
+          <h3>Name:</h3>
+          {isEditable ? (
+            <input
+              type="text"
+              className="inputStyle"
+              value={listing.name}
+              onChange={(e) => setListing({ ...listing, name: e.target.value })}
+            />
+          ) : (
+            <h2>{listing.name}</h2>
+          )}
+          <h3>Description:</h3>
+          {isEditable ? (
+            <input
+              type="text"
+              className="inputStyle"
+              value={listing.description}
+              onChange={(e) =>
+                setListing({ ...listing, description: e.target.value })
+              }
+            />
+          ) : (
+            <h2>{listing.description}</h2>
+          )}
+          <div style={{ height: 10 }}></div>
+          <Flex>
+            {!isEditable && (
+              <button className="button1" onClick={() => setIsEditable(true)}>
+                Edit
+              </button>
+            )}
+            {isEditable && (
+              <button className="button1" onClick={handleUpdate}>
+                Done
+              </button>
+            )}
+          </Flex>
+          <div style={{ height: 10 }}></div>
+          <Flex>
+            {isEditable && !preDelete && (
+              <button className="button1" onClick={() => setPreDelete(true)}>
+                Delete Listing
+              </button>
+            )}
+            {isEditable && preDelete && (
+              <button className="button1" onClick={handleDelete}>
+                Confirm Delete
+              </button>
+            )}
+            {isEditable && preDelete && (
+              <button className="button1" onClick={() => setPreDelete(false)}>
+                Cancel Delete
+              </button>
+            )}
+            {deleted && (
+              <h1>DELETED SUCCESSFULLY! redirecting, please wait...</h1>
+            )}
+          </Flex>
+          <div style={{ height: 10 }}></div>
+          <h3>Category:</h3>
+          <h2>{listing.listingCategory.toLowerCase()}</h2>
           <br></br>
         </div>
       </div>
@@ -211,8 +252,6 @@ const handleDelete = () => {
 }
 
 export default SellerListing;
-
-
 
 /*
 <div class="slideshow-container">

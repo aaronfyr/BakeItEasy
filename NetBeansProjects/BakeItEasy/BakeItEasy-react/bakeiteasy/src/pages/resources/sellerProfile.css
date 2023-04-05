@@ -227,10 +227,10 @@ img.productImg {
     height: 60px;
 }
 
-.display {
+.profileListingsDisplay {
     display: flex;
-    width: 800px;
-    height: 70vh;
+
+    height: 100vh;
     overflow-y: scroll;
     justify-content: center;
     /*delete this if not necessary*/
@@ -325,14 +325,13 @@ h4 {
 }
 
 .flexBox {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 320px;
 }
 
 .reviewDisplay {
     width: 350px;
-    height: 65vh;
     overflow-y: scroll;
-    overflow-x: hidden;
     justify-content: center;
     /*delete this if not necessary*/
 }
@@ -340,7 +339,7 @@ h4 {
 .review {
     margin: 20px;
     width: 300px;
-    height: 250px;
+    height: 150px;
     padding: 10px;
     padding-left: 20px;
     border-radius: 10px;
