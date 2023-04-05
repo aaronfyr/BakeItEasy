@@ -19,6 +19,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlTransient;
@@ -57,6 +58,9 @@ public class Listing implements Serializable {
     @OneToMany(mappedBy = "listing", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JsonbTransient
     private List<Order> orders;
+    @ManyToMany
+    @JsonbTransient
+    private List<Buyer> likers;
     
     public Listing() {
         this.orders = new ArrayList<>();
@@ -169,6 +173,14 @@ public class Listing implements Serializable {
     @Override
     public String toString() {
         return "entity.Listing[ id=" + listingId + " ]";
+    }
+
+    public List<Buyer> getLikers() {
+        return likers;
+    }
+
+    public void setLikers(List<Buyer> likers) {
+        this.likers = likers;
     }
 
 }

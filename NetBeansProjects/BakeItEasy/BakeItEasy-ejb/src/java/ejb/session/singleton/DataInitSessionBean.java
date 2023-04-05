@@ -30,6 +30,9 @@ import error.exception.AdminUsernameExistsException;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingNotFoundException;
+import error.exception.OrderIsNotAcceptedException;
+import error.exception.OrderIsNotCompletedException;
+import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.PostNotFoundException;
 import error.exception.SellerEmailExistException;
@@ -95,20 +98,20 @@ public class DataInitSessionBean {
     @PostConstruct
     public void postConstruct() {
         if (em.find(Buyer.class, 1l) == null) {
-            //initialiseData();
+            initialiseData();
         }
     }
 
     private void initialiseData() {
         try {
-            Buyer buyer1 = new Buyer("test", "test", "test", "test", "test", "test");
+            Buyer buyer1 = new Buyer("test", "test@gmail.com", "test", "test", "test", "test");
             buyerSessionBeanLocal.createNewBuyer(buyer1);
 
             
-            Seller seller1 = new Seller("test", "test", "test", "test", "test");
-            Seller seller2 = new Seller("test2", "test2", "test2", "test2", "test2");
-            Seller seller3 = new Seller("test3", "test3", "test3", "test3", "test3");
-            Seller seller4 = new Seller("test4", "test4", "test4", "test4", "test4");
+            Seller seller1 = new Seller("test", "test@gmail.com", "test", "test", "test");
+            Seller seller2 = new Seller("test2", "test2@gmail.com", "test2", "test2", "test2");
+            Seller seller3 = new Seller("test3", "test3@gmail.com", "test3", "test3", "test3");
+            Seller seller4 = new Seller("test4", "test4@gmail.com", "test4", "test4", "test4");
             sellerSessionBeanLocal.createNewSeller(seller1);
             sellerSessionBeanLocal.createNewSeller(seller2);
             sellerSessionBeanLocal.createNewSeller(seller3);
@@ -213,12 +216,17 @@ public class DataInitSessionBean {
             Order order1 = new Order(BigDecimal.TEN, 2, "birthday cake", "123 house", new Date(), new Date());
             orderSessionBeanLocal.createNewOrder(order1, buyer1.getBuyerId(), listing1.getListingId());
             
+            Order order2 = new Order(BigDecimal.TEN, 2, "birthday cake", "123 house", new Date(), new Date());
+            orderSessionBeanLocal.createNewOrder(order2, buyer1.getBuyerId(), listing1.getListingId());
+            sellerSessionBeanLocal.acceptOrder(order2.getOrderId());
+            sellerSessionBeanLocal.completeOrder(order2.getOrderId());
+            
             Admin admin1 = new Admin("admin1", "admin", "admin@mail.com", "password");
             adminSessionBeanLocal.createNewAdmin(admin1);
 
             Review review = new Review("Good taste", "Wonderful taste from the cake. Soft and delicious.", 5,
-                    new ArrayList<String>(), new Date());
-            reviewSessionBeanLocal.createNewReview(review, order1.getOrderId());
+                    new ArrayList<>(), new Date());
+            reviewSessionBeanLocal.createNewReview(review, order2.getOrderId());
 
             Post buyerPost = new Post("Looking for cake recommendations", new Date(), PostCategory.LOOKINGFOR);
             postSessionBeanLocal.createNewBuyerPost(buyerPost, buyer1.getBuyerId());
@@ -236,10 +244,8 @@ public class DataInitSessionBean {
             reportSessionBeanLocal.createNewReport(report, buyer1.getBuyerId(), seller1.getSellerId());
 
         } catch (UnknownPersistenceException | InputDataValidationException | SellerUsernameExistException
-                | SellerEmailExistException | SellerPhoneNumberExistException | PostNotFoundException | OrderNotFoundException | AdminUsernameExistsException | SellerNotFoundException ex) {
+                | SellerEmailExistException | SellerPhoneNumberExistException | PostNotFoundException | OrderNotFoundException | AdminUsernameExistsException | SellerNotFoundException | BuyerNotFoundException | ListingNotFoundException | OrderIsNotPendingException | OrderIsNotAcceptedException | OrderIsNotCompletedException ex) {
             System.out.println("Error initialising data: " + ex.getMessage());
-        } catch (BuyerNotFoundException | ListingNotFoundException ex) {
-            Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
