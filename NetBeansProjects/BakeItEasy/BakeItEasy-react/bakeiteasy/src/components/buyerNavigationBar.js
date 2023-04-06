@@ -81,6 +81,12 @@ export const NavigationBar = () => {
     navigate("/");
   };
 
+  // Routing to Buyer LikedListings
+  const routeToLikedListings = () => {
+    console.log("Navigate to: ", "likedlistings");
+    navigate("/buyerLikedListings");
+  };
+
   // Handle log out
   const handleLogOut = () => {
     console.log("Navigate to: ", "login");
@@ -141,7 +147,7 @@ export const NavigationBar = () => {
             </PopoverContent>
           </Popover>
           <FiMessageSquare />
-          <FiHeart />
+          <FiHeart onClick={() => routeToLikedListings()} />
 
           <Menu>
             <MenuButton

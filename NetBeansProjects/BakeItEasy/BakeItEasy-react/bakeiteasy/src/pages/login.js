@@ -49,13 +49,13 @@ function Login() {
         setSeller(user);
         localStorage.setItem("seller", JSON.stringify(user));
         console.log("seller set: ", user);
-        navigate(`/sellerHomepage`);
+        navigate(`/sellerProfile`);
       } else {
         setBuyer(user);
         localStorage.setItem("buyer", JSON.stringify(user));
         console.log("buyer set: ", user);
         navigate(`/`);
-        }
+      }
       // redirect to homepage
     } else {
       // show error message
