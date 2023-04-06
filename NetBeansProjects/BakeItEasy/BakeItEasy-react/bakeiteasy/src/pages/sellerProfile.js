@@ -170,6 +170,7 @@ function SellerProfile() {
       {/*NAVBAR HERE BUT IT DOESNT WORK IDK WHY */}
       <div className="sellerProducts">
         <h1>Seller Products</h1>
+        <h2>create new listing</h2>
       </div>
       <div className="flexBox">
         <div className="profileListingsDisplay">

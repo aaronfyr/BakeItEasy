@@ -36,6 +36,7 @@ import SellerViewOrderByListing from "./pages/sellerViewOrderByListing";
 import SellerListingPage from "./pages/sellerListing";
 import SellerAppointments from "./pages/sellerAppointments";
 import EditSellerProfile from "./pages/sellerEditProfile"
+import SellerCreateListing from "./pages/sellerCreateListing";
 
 function App() {
   return (
@@ -84,6 +85,7 @@ function App() {
                   path="/sellerAppointments"
                   element={<SellerAppointments />}
                 />
+                <Route path="/sellerCreateListing" element={<SellerCreateListing/>}/>
               </Routes>
             </Router>
           </AdminProvider>

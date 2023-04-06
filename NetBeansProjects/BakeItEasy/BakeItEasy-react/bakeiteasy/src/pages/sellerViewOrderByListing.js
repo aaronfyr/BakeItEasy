@@ -14,12 +14,39 @@ import Seller from "../components/seller";
 
 const SellerViewOrderByListing = () => {
   const [orders, setOrders] = useState([]);
-
   const [search, setSearch] = useState("");
-
   const [listing, setListing] = useState([]);
-
+    const [seller, setSeller] = useState([]);
+      const [sellerId, setSellerId] = useState(null);
   const { id } = useParams();
+
+
+useEffect(() => {
+    async function fetchData() {
+      const fetchedSeller = localStorage.getItem("seller");
+      /*if (!fetchedBuyer) {
+        console.log("navbar", "no buyer");
+        navigate("/login");
+      } else {*/
+      if (!fetchedSeller) {
+        console.log("sellerProfile", "no seller");
+        navigate("/sellerlogin");
+      } else {
+        console.log("sellerProfile", "has seller");
+        try {
+          const parsedUser = JSON.parse(fetchedSeller);
+          setSeller(parsedUser);
+          console.log("parsedUser: ", parsedUser);
+          console.log("parsedUser.id: ", parsedUser.sellerId);
+          setSellerId(parsedUser.sellerId);
+
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+    fetchData();
+  }, []);
 
   const filteredOrders = orders.filter((order) => {
     if (
@@ -34,10 +61,11 @@ const SellerViewOrderByListing = () => {
     }
   });
 
-  //get orders of seller
+  //SUPPOSED TO BE get orders by listing, but now it's get orders by seller
   useEffect(() => {
+  if (sellerId) {
     fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/sellers/1/orders`,
+      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/orders`,
       {
         //get seller id from storage
         method: "GET",
@@ -49,7 +77,9 @@ const SellerViewOrderByListing = () => {
     )
       .then((response) => response.json())
       .then((data) => setOrders(data));
-  }, []);
+  }
+}, [sellerId]);
+
 
   //get listing
   useEffect(() => {
