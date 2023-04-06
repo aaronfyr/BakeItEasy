@@ -7,6 +7,7 @@ package webservices.restful;
 
 import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
+import entity.Buyer;
 import entity.Order;
 import entity.Review;
 import error.exception.InputDataValidationException;
@@ -86,6 +87,25 @@ public class OrdersResource {
             Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
             return Response.status(200).entity(
                     order
+            ).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: report id " + orderId)
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getReport
+    
+    @GET
+    @Path("/{id}/buyer")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOrderBuyer(@PathParam("id") Long orderId) {
+        try {
+            Buyer buyer = orderSessionBeanLocal.getOrderBuyer(orderId);
+            return Response.status(200).entity(
+                    buyer
             ).type(MediaType.APPLICATION_JSON).build();
         } catch (OrderNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()

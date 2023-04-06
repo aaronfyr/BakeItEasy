@@ -154,6 +154,17 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         }
     }
     
+    @Override
+    public Buyer getOrderBuyer(Long orderId) throws OrderNotFoundException {
+        try {
+            Order order = retrieveOrderById(orderId);
+            
+            return order.getBuyer();
+        } catch (OrderNotFoundException ex) {
+            throw new OrderNotFoundException(ex.getMessage());
+        }
+    }
+    
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Order>> constraintViolations) {
         String msg = "Input data validation error!:";
 
