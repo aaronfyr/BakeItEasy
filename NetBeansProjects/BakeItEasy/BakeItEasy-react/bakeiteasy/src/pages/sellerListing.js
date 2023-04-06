@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { SellerNavigationBar } from "../components/sellerNavigationBar";
 import {
   Avatar,
   Button,
@@ -157,8 +158,9 @@ function SellerListing() {
 
   return (
     <div>
+        <SellerNavigationBar/>
       <br />
-      <h1>Listing ID </h1>
+      <h1>Listing ID {listing.listingId} </h1>
       <div id="listingContainer">
         <div id="leftListingContainer">
           <div class="slideshow-container"></div>

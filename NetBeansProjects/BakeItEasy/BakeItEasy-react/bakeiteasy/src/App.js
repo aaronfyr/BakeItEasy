@@ -35,6 +35,7 @@ import SellerViewOrder from "./pages/sellerViewOrder";
 import SellerViewOrderByListing from "./pages/sellerViewOrderByListing";
 import SellerListingPage from "./pages/sellerListing";
 import SellerAppointments from "./pages/sellerAppointments";
+import EditSellerProfile from "./pages/sellerEditProfile"
 
 function App() {
   return (
@@ -68,6 +69,7 @@ function App() {
 
                 <Route path="/sellerHomepage" element={<SellerHomepage />} />
                 <Route path="/sellerProfile" element={<SellerProfile />} />
+                <Route path="/editSellerProfile" element={<EditSellerProfile />} />
                 <Route path="sellerOrder/:id" element={<SellerViewOrder />} />
                 <Route path="/sellerOrderMgmt" element={<SellerOrderMgmt />} />
                 <Route

@@ -88,6 +88,18 @@ export const SellerNavigationBar = () => {
     navigate("/sellerAppointments");
   };
 
+  // Routing to Order Mgmt
+  const routeToOrderMgmt = () => {
+    console.log("Navigate to: ", "orderManagement");
+    navigate("/sellerOrderMgmt");
+  };
+
+   // Routing to Order Mgmt
+  const routeToSellerProfile = () => {
+    console.log("Navigate to: ", "sellerProfile");
+    navigate("/sellerProfile");
+  };
+
   // Handle log out
   const handleLogOut = () => {
     console.log("Navigate to: ", "login");
@@ -131,8 +143,8 @@ export const SellerNavigationBar = () => {
       </Flex>
 
       <Flex align="center">
-        <div id="navChoices">Shop Profile</div>
-        <div id="navChoices">My Orders</div>
+        <div id="navChoices" onClick={() => routeToSellerProfile()}>Shop Profile </div>
+        <div id="navChoices" onClick={() => routeToOrderMgmt()}>My Orders</div>
         <div id="navChoices" onClick={() => routeToAppointments()}>
           Appointments
         </div>

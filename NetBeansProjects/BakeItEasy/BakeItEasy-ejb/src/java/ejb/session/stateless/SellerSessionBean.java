@@ -74,13 +74,13 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
                             em.flush();
                             return newSeller.getSellerId();
                         } else {
-                            throw new SellerUsernameExistException();
+                            throw new SellerPhoneNumberExistException();
                         }
                     } else {
                         throw new SellerEmailExistException();
                     }
                 } else {
-                    throw new SellerPhoneNumberExistException();
+                    throw new SellerUsernameExistException();
                 }
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
