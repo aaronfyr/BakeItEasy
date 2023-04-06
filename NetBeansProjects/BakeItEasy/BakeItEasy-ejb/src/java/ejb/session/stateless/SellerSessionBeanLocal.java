@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.Buyer;
 import entity.Seller;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
@@ -51,5 +52,7 @@ public interface SellerSessionBeanLocal {
     public void rejectOrder(Long orderId) throws OrderNotFoundException, OrderIsNotPendingException;
 
     public void completeOrder(Long orderId) throws OrderNotFoundException, OrderIsNotAcceptedException;
+
+    public List<Buyer> retrieveListOfFollowers(Long sellerId) throws SellerNotFoundException;
     
 }

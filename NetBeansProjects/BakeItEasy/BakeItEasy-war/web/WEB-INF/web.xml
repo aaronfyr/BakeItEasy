@@ -77,4 +77,10 @@
         <local>ejb.session.stateless.PostSessionBeanLocal</local>
         <ejb-link>BakeItEasy-ejb.jar#PostSessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>BuyerSessionBeanLocal</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.BuyerSessionBeanLocal</local>
+        <ejb-link>BakeItEasy-ejb.jar#BuyerSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>
