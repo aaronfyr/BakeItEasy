@@ -108,15 +108,14 @@ function SellerProfile() {
   };
 
 
-  const filteredListings = listings.filter((listing) => {
-    if (
-      listing.name.toLowerCase().includes(search) ||
-      listing.description.toLowerCase().includes(search) ||
-      listing.category.toLowerCase().includes(search)
-    ) {
-      return listing;
-    }
-  });
+  const filteredListings = listings.filter((listing) =>
+  (
+    (listing.name && listing.name.toLowerCase().includes(search)) ||
+    (listing.description && listing.description.toLowerCase().includes(search)) ||
+    (listing.category && listing.category.toLowerCase().includes(search))
+  )
+);
+
 
   const routeChangeToListing = (id) => {
     let path = "/sellerListing/";
@@ -125,6 +124,11 @@ function SellerProfile() {
 
   const routeChangeToSellerEditProfile = () => {
     let path = "/editSellerProfile";
+    navigate(path);
+  }
+
+  const routeChangeToCreateListing = () => {
+    let path = "/sellerCreateListing";
     navigate(path);
   }
 
@@ -169,8 +173,11 @@ function SellerProfile() {
 
       {/*NAVBAR HERE BUT IT DOESNT WORK IDK WHY */}
       <div className="sellerProducts">
-        <h1>Seller Products</h1>
-        <h2>create new listing</h2>
+        <Flex>
+          <h1>Seller Products</h1>
+          <div className="newListBtn" onClick={() => routeChangeToCreateListing()}>create listing</div>
+        </Flex>
+
       </div>
       <div className="flexBox">
         <div className="profileListingsDisplay">
@@ -180,26 +187,19 @@ function SellerProfile() {
               onClick={() => routeChangeToListing(listing.listingId)}
             >
               <div class="productSeller">
-                <img
-                  width="30px"
-                  height="30px"
-                  src={require("../assets/dummyuser.png")}
-                  alt="listing product"
-                />
-                <h6>{listing.seller}</h6>
               </div>
-
+            <h3>{listing.name}</h3>
               <div className="productImg">
                 <img
                   className="productImg"
-                  src={require("../assets/scones.jpg")}
+                  src="https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
                   alt="listing product"
                 />
               </div>
 
               <div className="titleDetails">
-                <h3>{listing.name}</h3>
-                <h5>product details</h5>
+
+                <h5>{listing.description}</h5>
               </div>
 
               <div class="productBottomRow">

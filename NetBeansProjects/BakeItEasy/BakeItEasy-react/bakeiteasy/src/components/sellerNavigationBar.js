@@ -104,7 +104,7 @@ export const SellerNavigationBar = () => {
   const handleLogOut = () => {
     console.log("Navigate to: ", "login");
     localStorage.clear();
-    navigate("/sellerlogin");
+    navigate("/login?type=seller");
     //return <Navigate to="/" />;
   };
 
