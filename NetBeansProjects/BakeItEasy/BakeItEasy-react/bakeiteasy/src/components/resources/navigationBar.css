@@ -16,6 +16,8 @@
   --mid-orange: #E2725B;
   --light-orange: #E9AEA2;
   --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+  --mediterranean-blue: #54b3d6;
 }
 
 a {
@@ -35,6 +37,14 @@ h4 {
   color: --var(--dark-text);
   background-color: var(--beige-bg);
   cursor: pointer;
+  /*effects*/
+  box-shadow: inset 0 0 0 0 var(--mediterranean-blue);
+  transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
+}
+
+#navChoices:hover {
+  box-shadow: inset 100px 0 0 0 var(--mediterranean-blue);
+  color: var(--beige-bg);
 }
 
 .navbar{

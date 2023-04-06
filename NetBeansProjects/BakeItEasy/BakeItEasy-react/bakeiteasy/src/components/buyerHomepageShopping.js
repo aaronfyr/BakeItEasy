@@ -11,8 +11,10 @@ import "./resources/homepageShopping.css";
 import { FiHeart } from "react-icons/fi";
 
 export const BuyerShopping = () => {
-  const [buyer, setBuyer] = useState(null);
+  let navigate = useNavigate();
 
+  // fetch buyer
+  const [buyer, setBuyer] = useState(null);
   useEffect(() => {
     async function fetchData() {
       const buyer = localStorage.getItem("buyer");
@@ -28,21 +30,7 @@ export const BuyerShopping = () => {
     fetchData();
   }, []);
 
-  const [categories, setCategories] = useState([
-    { name: "Savory" },
-    { name: "Breads" },
-    { name: "Cakes" },
-    { name: "Cupcakes" },
-    { name: "Tarts" },
-    { name: "Pies" },
-    { name: "Wedding" },
-    { name: "Graduation" },
-    { name: "Cookies" },
-    { name: "Halal" },
-    { name: "Fried" },
-    { name: "Fruits" },
-  ]);
-
+  // fetch listings
   const [listings, setListings] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -70,55 +58,37 @@ export const BuyerShopping = () => {
     fetchData();
   }, []);
 
-  let navigate = useNavigate();
+  // handle filter by category
+  const [categoryFilter, setCategoryFilter] = useState(null);
+  const [categories, setCategories] = useState([
+    { name: "Savory" },
+    { name: "Bread" },
+    { name: "Cake" },
+    { name: "Cupcake" },
+    { name: "Tart" },
+    { name: "Pie" },
+  ]);
+
+  const handleFilterByCateory = (categoryName) => {
+    console.log("filter category: ", categoryName);
+    setCategoryFilter(categoryName.toLowerCase());
+  };
+
+  // handleSearch
+  const [search, setSearch] = useState("");
+  const handleSearch = (event) => {
+    console.log("search: ", search);
+    event.preventDefault();
+    const searchLowerCase = event.target.value.toLowerCase();
+    setSearch(searchLowerCase);
+  };
+
+  // routeChangeToListing
   const routeChangeToListing = (listingId) => {
     console.log("routechangetolisting: ", listingId);
     let path = "listing/";
     navigate(path + listingId);
   };
-
-  const [search, setSearch] = useState("");
-
-  /*
-  const filteredListings = listings.filter((product) => {
-    console.log("changing filteredListings");
-    if (
-      product.name.toLowerCase().includes(search) ||
-      product.description.toLowerCase().includes(search)
-    ) {
-      return product;
-    }
-    return null;
-  });
-*/
-
-  // handle search
-  const handleSearch = (event) => {
-    console.log("search: ", search);
-    event.preventDefault();
-    setSearch(event.target.value);
-  };
-
-  /*
-  if (search.length > 0) {
-    console.log("search by " + search);
-    console.log("listings: ", listings.length);
-    let counter = 0;
-    listings.filter((product) => {
-      if (
-        product.name.toLowerCase().includes(search) ||
-        product.description.toLowerCase().includes(search)
-      ) {
-        counter++;
-        return product;
-      }
-      return null;
-    });
-    setListings(filteredListings);
-    console.log("listings passed count: ", counter);
-    console.log("filtered listings: ", listings.length);
-  }
-*/
 
   // handleListingsToLikes
   const [likeListingError, setLikeListingError] = useState(null);
@@ -135,6 +105,9 @@ export const BuyerShopping = () => {
     if (response.ok) {
       // redirect to homepage
       console.log("likedListing# ", lId);
+
+      //recolor liked button
+      document.getElementById("btn").style.backgroundColor = "black";
     } else {
       // show error message
       setLikeListingError("Invalid details. Please try again.");
@@ -176,7 +149,12 @@ export const BuyerShopping = () => {
       <div class="categoriesContainer">
         <div className="categoriesDisplay">
           {categories.map((category) => (
-            <div className="category">{category.name}</div>
+            <div
+              className="category"
+              onClick={() => handleFilterByCateory(category.name)}
+            >
+              {category.name}
+            </div>
           ))}
         </div>
       </div>
@@ -190,27 +168,38 @@ export const BuyerShopping = () => {
               product.name.toLowerCase().includes(search) ||
               product.description.toLowerCase().includes(search)
             ) {
-              console.log(product);
-              filteredListingsCounterFollowed++;
+              console.log("map: categoryFilter:", categoryFilter);
               console.log(
-                "filteredListings count: ",
-                filteredListingsCounterFollowed
+                "map: product.listingCategory:",
+                product.listingCategory
               );
-              return product;
+              if (
+                (categoryFilter &&
+                  product.listingCategory
+                    .toLowerCase()
+                    .includes(categoryFilter)) ||
+                !categoryFilter
+              ) {
+                //console.log(product);
+                filteredListingsCounterFollowed++;
+                console.log(
+                  "filteredListings count: ",
+                  filteredListingsCounterFollowed
+                );
+                return product;
+              }
             }
             return null;
           })
           .map((product) => (
-            <div
-              className="product"
-              onClick={() => routeChangeToListing(product.listingId)}
-            >
+            <div className="product">
               <div class="productSeller">
                 <img
                   width="30px"
                   height="30px"
                   src={require("../assets/dummyuser.png")}
                   alt="listing product"
+                  onClick={() => routeChangeToListing(product.listingId)}
                 />
                 <h6>seller name</h6>
               </div>
@@ -224,10 +213,12 @@ export const BuyerShopping = () => {
               <h3>{product.name}</h3>
               <h5>{product.description}</h5>
               <div class="productBottomRow">
-                <FiHeart
-                  size="1.2rem"
-                  onClick={() => handleListingToLikes(product.listingId)}
-                />
+                <div class="btn">
+                  <FiHeart
+                    size="1.2rem"
+                    onClick={() => handleListingToLikes(product.listingId)}
+                  />
+                </div>
                 <h3>${product.price}</h3>
               </div>
             </div>
@@ -248,12 +239,12 @@ export const BuyerShopping = () => {
               product.name.toLowerCase().includes(search) ||
               product.description.toLowerCase().includes(search)
             ) {
-              console.log(product);
+              //console.log(product);
               filteredListingsCounterExplore++;
-              console.log(
-                "filteredListings count: ",
-                filteredListingsCounterExplore
-              );
+              //console.log(
+              //"filteredListings count: ",
+              //filteredListingsCounterExplore
+              //);
               return product;
             }
             return null;
