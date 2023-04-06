@@ -169,11 +169,69 @@ function BuyerProfile() {
   }, []);
   */
 
-  // handleSubmitUpdateUsername
+  // handleSubmitUpdateUsername [discard]
   const [username, setUsername] = useState("");
 
   const handleSubmitUpdateUsername = async (event) => {
     event.preventDefault();
+  };
+
+  // handleCancelOrder
+  const [cancelOrderError, setCancelOrderError] = useState(null);
+  const [cancelOrderSuccess, setCancelOrderSuccess] = useState(null);
+  const handleCancelOrder = async (oId) => {
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/buyers/${oId}/cancelorder`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          // redirect to homepage
+          console.log("cancelled order: ", oId);
+          setCancelOrderSuccess("Successfully Cancelled Order");
+        } else {
+          // show error message
+
+          console.log("cannot cancel order: ", oId);
+          setCancelOrderError("Invalid order details. Please try again.");
+          throw new Error(response.statusText);
+        }
+      })
+      .catch((error) => {
+        console.log("HTTP Error: ", error);
+      });
+  };
+
+  // handleReportSeller
+  const [reportSellerError, setReportSellerError] = useState(null);
+  const [title, setTitle] = useState("");
+  const [reason, setReason] = useState("");
+  const handleReportSeller = async (oId) => {
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/sellers/2/reports`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          reason,
+        }),
+      }
+    );
+    if (response.ok) {
+      // redirect to homepage
+      navigate(`/`);
+    } else {
+      // show error message
+      setReportSellerError("Invalid details. Please try again.");
+    }
   };
 
   const routeChangeToEditAccountDetails = (buyerId) => {
@@ -265,8 +323,8 @@ function BuyerProfile() {
       </div>
       <div class="ordersDisplay">
         {orders.map((order) => (
-          <div id="orderCard" onClick={() => routeChangeToOrder(order.id)}>
-            <div className="productImg">
+          <div id="buyerOrderCard" onClick={() => routeChangeToOrder(order.id)}>
+            <div className="buyerProductImg">
               <img
                 className="productImg"
                 src={require("../assets/scones.jpg")}
@@ -275,12 +333,85 @@ function BuyerProfile() {
             </div>
             <div id="orderDetailsGrid">
               <div className="orderDetails_top">
-                <h2>{order.orderId}</h2>
+                <h2>Order No. {order.orderId}</h2>
 
                 <h4 className="italic">
                   Customisation Notes: {order.description}
                 </h4>
                 <h4 className="details">{order.dateOfCreation}</h4>
+                <Flex>
+                  {order.orderStatus === "PENDING" && (
+                    <div
+                      className="button1_cancel"
+                      onClick={() => handleCancelOrder(order.orderId)}
+                    >
+                      Cancel Order
+                      <FaEdit />
+                    </div>
+                  )}
+                </Flex>
+                <Popup
+                  trigger={
+                    <Flex>
+                      {order.orderStatus !== "CANCELLED" && (
+                        <div
+                          className="button1_cancel"
+                          onClick={() => handleReportSeller(order.orderId)}
+                        >
+                          Report Seller
+                          <FaEdit />
+                        </div>
+                      )}
+                    </Flex>
+                  }
+                  modal
+                  nested
+                >
+                  {(close) => (
+                    <div className="modal">
+                      <button className="close" onClick={close}>
+                        &times;
+                      </button>
+                      <div className="header"> Report Seller </div>
+                      <div className="content">
+                        <form onSubmit={handleReportSeller}>
+                          <FormControl mt={4}>
+                            <FormLabel>Title of Report: </FormLabel>
+                            <Input
+                              type="text"
+                              placeholder=" "
+                              value={title}
+                              onChange={(event) => setTitle(event.target.value)}
+                              required
+                            />
+                          </FormControl>
+                          <FormControl mt={4}>
+                            <FormLabel>Reason: </FormLabel>
+                            <Input
+                              type="text"
+                              placeholder=" "
+                              value={reason}
+                              onChange={(event) =>
+                                setReason(event.target.value)
+                              }
+                              required
+                            />
+                          </FormControl>
+                          <Box mt={4} display="flex" alignItems="center">
+                            <Button
+                              bg="#E2725B"
+                              colorScheme="white"
+                              type="submit"
+                              w="100%"
+                            >
+                              Submit Report
+                            </Button>
+                          </Box>
+                        </form>
+                      </div>
+                    </div>
+                  )}
+                </Popup>
               </div>
               <div className="orderDetails_bottom">
                 <h2>{order.orderStatus}</h2>

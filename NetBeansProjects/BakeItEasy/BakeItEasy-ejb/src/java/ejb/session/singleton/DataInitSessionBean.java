@@ -270,7 +270,7 @@ public class DataInitSessionBean {
                                 | SellerEmailExistException | SellerPhoneNumberExistException | PostNotFoundException
                                 | OrderNotFoundException | AdminUsernameExistsException | SellerNotFoundException
                                 | BuyerNotFoundException | ListingNotFoundException | OrderIsNotPendingException
-                                | OrderIsNotAcceptedException | OrderIsNotCompletedException ex) {
+                                | OrderIsNotAcceptedException | BuyerPhoneNumberExistException | BuyerEmailExistException | BuyerUsernameExistException | OrderIsNotCompletedException ex ) {
                         System.out.println("Error initialising data: " + ex.getMessage());
                 }
         }

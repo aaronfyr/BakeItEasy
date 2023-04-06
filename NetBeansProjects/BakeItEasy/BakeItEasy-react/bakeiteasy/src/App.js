@@ -20,6 +20,7 @@ import BuyerHomepage from "./pages/buyerHomepage";
 import AdminProfilePage from "./pages/adminProfilePage";
 
 import BuyerListingPage from "./pages/buyerListingPage";
+import BuyerLikedListings from "./pages/buyerLikedListings";
 import BuyerProfile from "./pages/buyerProfile";
 import BuyerEditAccount from "./pages/buyerEditAccount";
 import BuyerViewOrder from "./pages/buyerViewOrder";
@@ -35,7 +36,7 @@ import SellerViewOrder from "./pages/sellerViewOrder";
 import SellerViewOrderByListing from "./pages/sellerViewOrderByListing";
 import SellerListingPage from "./pages/sellerListing";
 import SellerAppointments from "./pages/sellerAppointments";
-import EditSellerProfile from "./pages/sellerEditProfile"
+import EditSellerProfile from "./pages/sellerEditProfile";
 
 function App() {
   return (
@@ -53,6 +54,10 @@ function App() {
                   element={<BuyerEditAccount />}
                 />
                 <Route path="buyerOrder/:id" element={<BuyerViewOrder />} />
+                <Route
+                  path="/buyerLikedListings"
+                  element={<BuyerLikedListings />}
+                />
                 <Route path="/login" element={<Login />} />
                 <Route path="/adminLogin" element={<AdminLogin />} />
                 <Route path="/signup" element={<Signup />} />
@@ -69,7 +74,10 @@ function App() {
 
                 <Route path="/sellerHomepage" element={<SellerHomepage />} />
                 <Route path="/sellerProfile" element={<SellerProfile />} />
-                <Route path="/editSellerProfile" element={<EditSellerProfile />} />
+                <Route
+                  path="/editSellerProfile"
+                  element={<EditSellerProfile />}
+                />
                 <Route path="sellerOrder/:id" element={<SellerViewOrder />} />
                 <Route path="/sellerOrderMgmt" element={<SellerOrderMgmt />} />
                 <Route
