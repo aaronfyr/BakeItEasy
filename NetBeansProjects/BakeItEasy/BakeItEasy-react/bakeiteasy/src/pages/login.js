@@ -56,6 +56,7 @@ function Login() {
         console.log("buyer set: ", user);
         navigate(`/`);
       }
+      // redirect to homepage
     } else {
       // show error message
       setError("Invalid login credentials. Please try again.");

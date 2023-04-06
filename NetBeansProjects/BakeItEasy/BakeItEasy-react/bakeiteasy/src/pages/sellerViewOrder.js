@@ -34,22 +34,45 @@ import "./resources/default.css";
 import "./resources/sellerEditProfile.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
+import useOrderBuyer from "../components/getOrderBuyer";
 
 function SellerViewOrder() {
   const { id } = useParams();
   const [order, setOrder] = useState([]);
+  const [orderId, setOrderId] = useState("");
+  const [buyer, setBuyer] = useState([]);
 
-  useEffect(() => {
-    fetch(`http://localhost:8080/BakeItEasy-war/webresources/orders/${id}`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
+ useEffect(() => {
+  fetch(`http://localhost:8080/BakeItEasy-war/webresources/orders/${id}`, {
+    method: "GET",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      setOrder(data);
+      setOrderId(data.orderId);
+      // Chain the second fetch call here
+      return fetch(`http://localhost:8080/BakeItEasy-war/webresources/orders/${data.orderId}/buyer`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     })
-      .then((response) => response.json())
-      .then((data) => setOrder(data));
-  }, []);
+    .then((response) => response.json())
+    .then((data) => {
+      setBuyer(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}, []);
+
+
 
   const [isPending, setPending] = useState(true);
   const [isAccepted, setAccepted] = useState(false);
@@ -162,6 +185,9 @@ function SellerViewOrder() {
           <br />
         </div>
         <div id="rightListingContainer">
+            <h3>Buyer</h3>
+          <h2>id #{buyer.buyerId}</h2>
+          <h2>@{buyer.username}</h2>
           <h3>Price:</h3>
           <h2>{order.price}</h2>
           <h3>Quantity:</h3>
