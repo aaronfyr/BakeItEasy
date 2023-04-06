@@ -7,6 +7,26 @@ import {
   useNavigate,
 } from "react-router-dom";
 import "./resources/homepageShopping.css";
+import {
+  Avatar,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  Tooltip,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
+} from "@chakra-ui/react";
 
 import { FiHeart } from "react-icons/fi";
 
@@ -70,8 +90,17 @@ export const BuyerShopping = () => {
   ]);
 
   const handleFilterByCateory = (categoryName) => {
-    console.log("filter category: ", categoryName);
-    setCategoryFilter(categoryName.toLowerCase());
+    const categoryNameLowerCase = categoryName.toLowerCase();
+    if (categoryFilter === categoryNameLowerCase) {
+      // set category status to not selected
+
+      setCategoryFilter(null);
+    } else {
+      // set category status to selected
+
+      console.log("filter category: ", categoryName);
+      setCategoryFilter(categoryName.toLowerCase());
+    }
   };
 
   // handleSearch
@@ -149,12 +178,14 @@ export const BuyerShopping = () => {
       <div class="categoriesContainer">
         <div className="categoriesDisplay">
           {categories.map((category) => (
-            <div
-              className="category"
-              onClick={() => handleFilterByCateory(category.name)}
-            >
-              {category.name}
-            </div>
+            <Flex>
+              <div
+                className="category"
+                onClick={() => handleFilterByCateory(category.name)}
+              >
+                {category.name}
+              </div>
+            </Flex>
           ))}
         </div>
       </div>
@@ -168,11 +199,11 @@ export const BuyerShopping = () => {
               product.name.toLowerCase().includes(search) ||
               product.description.toLowerCase().includes(search)
             ) {
-              console.log("map: categoryFilter:", categoryFilter);
-              console.log(
-                "map: product.listingCategory:",
-                product.listingCategory
-              );
+              //console.log("map: categoryFilter:", categoryFilter);
+              //console.log(
+              //"map: product.listingCategory:",
+              //product.listingCategory
+              //);
               if (
                 (categoryFilter &&
                   product.listingCategory
@@ -182,10 +213,10 @@ export const BuyerShopping = () => {
               ) {
                 //console.log(product);
                 filteredListingsCounterFollowed++;
-                console.log(
-                  "filteredListings count: ",
-                  filteredListingsCounterFollowed
-                );
+                //console.log(
+                //"filteredListings count: ",
+                //filteredListingsCounterFollowed
+                //);
                 return product;
               }
             }

@@ -166,6 +166,21 @@ h5 {
   margin: 0px 20px 0px 0px;
 }
 
+.category_selected {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  background: var(--dark-text);
+  color: white;
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 0px 20px 0px 0px;
+}
+
 .category:hover {
   background: var(--dark-text);
   color: white;

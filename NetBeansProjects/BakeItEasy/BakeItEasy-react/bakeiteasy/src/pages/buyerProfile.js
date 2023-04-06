@@ -331,14 +331,20 @@ function BuyerProfile() {
                 alt="listing product"
               />
             </div>
-            <div id="orderDetailsGrid">
-              <div className="orderDetails_top">
+            <div id="buyerOrderDetailsGrid">
+              <div className="orderDetails_left">
                 <h2>Order No. {order.orderId}</h2>
 
                 <h4 className="italic">
                   Customisation Notes: {order.description}
                 </h4>
                 <h4 className="details">{order.dateOfCreation}</h4>
+                <h2>{order.orderStatus}</h2>
+                <h2>
+                  {order.quantity} x ${order.price}
+                </h2>
+              </div>
+              <div className="orderDetails_right">
                 <Flex>
                   {order.orderStatus === "PENDING" && (
                     <div
@@ -350,6 +356,7 @@ function BuyerProfile() {
                     </div>
                   )}
                 </Flex>
+                <br />
                 <Popup
                   trigger={
                     <Flex>
@@ -412,12 +419,6 @@ function BuyerProfile() {
                     </div>
                   )}
                 </Popup>
-              </div>
-              <div className="orderDetails_bottom">
-                <h2>{order.orderStatus}</h2>
-                <h2>
-                  {order.quantity} x ${order.price}
-                </h2>
               </div>
             </div>
           </div>

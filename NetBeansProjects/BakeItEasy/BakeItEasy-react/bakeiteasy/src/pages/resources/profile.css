@@ -278,8 +278,9 @@ h4 {
 }
 
 #buyerOrderCard {
+  display:flex;
   background-color: white;
-  width:90vh;
+  width:900px;
   height: 150px;
   border-radius: 10px;
   margin-top: 5px;
@@ -289,23 +290,22 @@ h4 {
   justify-content: center;
 }
 
-#orderDetailsGrid {
+#buyerOrderDetailsGrid {
   display: grid;
-  grid-template-rows: 70% 30%;
+  grid-template-columns: 70% 30%;
+  width: 710px;
+  height: 150px;
   float: left;
-  height: 100%;
-  width: 50%;
   margin-left: 10px;
   margin-top:10px;
 }
 
-.orderDetails_top {
+.orderDetails_left {
 
 }
 
-.orderDetails_bottom {
-  display: flex;
-  justify-content: space-between;
+.orderDetails_right {
+  
 }
 
 /*modal*/

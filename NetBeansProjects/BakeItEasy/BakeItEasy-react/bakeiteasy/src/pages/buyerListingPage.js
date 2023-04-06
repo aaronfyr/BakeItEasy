@@ -118,7 +118,7 @@ function BuyerListingPage() {
   const dateOfCreation = new Date();
   const [quantity, setQuantity] = useState(0);
   const [dateOfCollection, setDateOfCollection] = useState(new Date());
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState("-");
   const [orderFieldValues, addOrderFieldValue] = useState([]);
   const [error, setError] = useState(null);
 
