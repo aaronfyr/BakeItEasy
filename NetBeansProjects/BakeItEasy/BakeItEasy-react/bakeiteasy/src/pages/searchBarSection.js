@@ -3,7 +3,7 @@ import React, {useState, useEffect } from "react";
 import "./resources/searchBarSection.css";
 import SellerOrderCard from "./sellerOrderCard.js";
 import CategoryDropdown from "../components/categoryDropdown";
-import { NavigationBar } from "../components/buyerNavigationBar";
+import { SellerNavigationBar } from "../components/sellerNavigationBar";
 import {FaListUl} from "react-icons/fa";
 import {
   BrowserRouter as Router,
@@ -89,13 +89,14 @@ const handleCategoryChange = (category) => {
 
   return (
     <div>
-        <NavigationBar/>
+        <SellerNavigationBar/>
         <div className="dropdownRow">
             <div className="heading">
                 <h1>My listings with orders</h1>
             </div>
-        <CategoryDropdown onCategoryChange={handleCategoryChange}/>
-        <body style={{fontFamily: 'Montserrat'}}>Selected category: {selectedCategory}</body>
+        {/*<CategoryDropdown onCategoryChange={handleCategoryChange}/>
+        <body style={{fontFamily: 'Montserrat'}}>Selected category: {selectedCategory}</body>*/}
+
     </div>
     <div className="searchBarSection">
       <div class="searchBar">

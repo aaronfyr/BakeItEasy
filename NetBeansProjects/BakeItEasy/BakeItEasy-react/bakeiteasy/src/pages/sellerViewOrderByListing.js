@@ -2,7 +2,7 @@ import { color } from "framer-motion";
 import React, { useState, useEffect } from "react";
 import "./resources/sellerVOBL.css";
 import SellerOrderCard from "./sellerOrderCard.js";
-import { NavigationBar } from "../components/buyerNavigationBar";
+import { SellerNavigationBar as SellerNav } from "../components/sellerNavigationBar";
 import { FaCheck } from "react-icons/fa";
 import {
   BrowserRouter as Router,
@@ -10,6 +10,7 @@ import {
   useParams,
   Link,
 } from "react-router-dom";
+import Seller from "../components/seller";
 
 const SellerViewOrderByListing = () => {
   const [orders, setOrders] = useState([]);
@@ -76,6 +77,7 @@ const SellerViewOrderByListing = () => {
 
   return (
     <div>
+        <SellerNav/>
       <div className="dropdownRow">
         <div className="heading">
           <h1 style={{ fontWeight: "bolder", fontSize: 20 }}>My Orders</h1>
@@ -116,7 +118,7 @@ const SellerViewOrderByListing = () => {
                 <img
                   alt="cake"
                   style={imgStyle}
-                  src={""} /*listing.imagePaths[0]*/
+                  src={"https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80"} /*listing.imagePaths[0]*/
                 />
               </div>
 
@@ -138,7 +140,7 @@ const SellerViewOrderByListing = () => {
         <div className="orderDisplay">
           {filteredOrders.map((order) => (
             <div
-              className="orderComponent"
+              className="orderComp"
               onClick={() => routeChangeToOrder(order.orderId)}
             >
               <SellerOrderCard>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { SellerNavigationBar } from "../components/sellerNavigationBar";
 import {
   Avatar,
   Button,
@@ -26,10 +27,11 @@ import {
   FaCheck,
   FaTimes,
   FaRegStar,
+  FaArrowLeft
 } from "react-icons/fa";
 
 import "./resources/default.css";
-import "./resources/sellerViewOrder.css";
+import "./resources/sellerEditProfile.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
 
@@ -136,10 +138,19 @@ function SellerViewOrder() {
     }
   };
 
+  const handleGoBack = () => {
+    window.history.back()
+  };
+
   return (
     <div>
-      <br />
-      <h1>Order ID {order.orderId}</h1>
+        <SellerNavigationBar/>
+        <br/>
+        <div style={{width: 220}}>
+            <div className="button1" onClick={handleGoBack} ><FaArrowLeft/>Back to orders</div>
+        </div>
+        <br/>
+      <h1 style={{marginLeft: 80}}>Order ID {order.orderId}</h1>
       <div id="listingContainer">
         <div id="leftListingContainer">
           <div class="slideshow-container"></div>
@@ -157,8 +168,6 @@ function SellerViewOrder() {
           <h2>{order.quantity}</h2>
           <h3>Description:</h3>
           <h2>{order.description}</h2>
-          <h3>Order status:</h3>
-          <h2>{order.status}</h2>
           <h3>Address:</h3>
           <h2>{order.address}</h2>
           <h3>Collection Date:</h3>

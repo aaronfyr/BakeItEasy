@@ -20,7 +20,9 @@ function SellerProfile() {
 
   const [seller, setSeller] = useState(null);
   const [sellerName, setSellerName] = useState("Log In");
+  const [sellerUsername, setSellerUsername] = useState("");
   const [sellerId, setSellerId] = useState(null);
+  const [sellerObj, setSellerObj] = useState([]);
 
   const navigate = useNavigate();
 
@@ -40,8 +42,6 @@ function SellerProfile() {
           const parsedUser = JSON.parse(fetchedSeller);
           setSeller(parsedUser);
           console.log("parsedUser: ", parsedUser);
-          console.log("parsedUser.name: ", parsedUser.name);
-          setSellerName(parsedUser.name);
           console.log("parsedUser.id: ", parsedUser.sellerId);
           setSellerId(parsedUser.sellerId);
         } catch (error) {
@@ -86,6 +86,28 @@ function SellerProfile() {
       .then((data) => setReviews(data));
   }, []);
 
+  //fetch seller
+  console.log("sellerID is", sellerId);
+  useEffect(() => {
+    if (sellerId){
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setSellerObj(data));
+    }
+  }, [sellerId]);
+
+
+  const handleGoBack = () => {
+    window.history.back()
+  };
+
+
   const filteredListings = listings.filter((listing) => {
     if (
       listing.name.toLowerCase().includes(search) ||
@@ -101,16 +123,24 @@ function SellerProfile() {
     navigate(path + id);
   };
 
+  const routeChangeToSellerEditProfile = () => {
+    let path = "/editSellerProfile";
+    navigate(path);
+  }
+
   return (
     <div className="background">
       <SellerNavigationBar />
       <div id="coverPhoto">
         <div id="profilePhoto"></div>
       </div>
-      <div id="userDetails">
-        <h1>{sellerName}</h1>
-        <h4>description</h4>
-      </div>
+      <Flex>
+        <div id="userDetails">
+            <h1>{sellerObj.name}</h1>
+            <h5>@{sellerObj.username}</h5>
+        </div>
+        <div className="editProfileBtn" onClick={() => routeChangeToSellerEditProfile()}>edit profile</div>
+      </Flex>
       <h2>Search for my listing:</h2>
       <div class="searchBar">
         <input
