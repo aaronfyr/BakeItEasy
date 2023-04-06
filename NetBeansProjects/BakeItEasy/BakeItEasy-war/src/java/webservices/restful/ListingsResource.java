@@ -7,6 +7,7 @@ package webservices.restful;
 
 import ejb.session.stateless.ListingSessionBeanLocal;
 import entity.Listing;
+import entity.Seller;
 import enumeration.ListingCategory;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
@@ -239,5 +240,22 @@ public class ListingsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end like listing
+    
+    @GET
+    @Path("/{listing_id}/seller")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getListingsSeller(@PathParam("listing_id") Long listingId) {
+        try {
+            Seller seller = listingSessionBeanLocal.getListingsSeller(listingId);
+            return Response.status(200).entity(seller).type(MediaType.APPLICATION_JSON).build();
+        } catch (ListingNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } // end get specific listing's seller
     
 }
