@@ -92,46 +92,69 @@ export const BuyerShopping = () => {
   });
 */
 
-  const handleSearch = async () => {
-    const results = listings.filter((product) => {
-      if (
-        product.name.toLowerCase().includes(search) ||
-        product.description.toLowerCase().includes(search)
-      ) {
-        return product;
-      }
-      return null;
-    });
-    console.log("search by " + search);
-    console.log("filtered listings: ", listings);
-    setListings(results);
+  // handle search
+  const handleSearch = (event) => {
+    console.log("search: ", search);
+    event.preventDefault();
+    setSearch(event.target.value);
   };
 
-  const handleAddListingToLikes = async () => {
-    const results = listings.filter((product) => {
+  /*
+  if (search.length > 0) {
+    console.log("search by " + search);
+    console.log("listings: ", listings.length);
+    let counter = 0;
+    listings.filter((product) => {
       if (
         product.name.toLowerCase().includes(search) ||
         product.description.toLowerCase().includes(search)
       ) {
+        counter++;
         return product;
       }
       return null;
     });
-    console.log("search by " + search);
-    console.log("filtered listings: ", listings);
-    setListings(results);
+    setListings(filteredListings);
+    console.log("listings passed count: ", counter);
+    console.log("filtered listings: ", listings.length);
+  }
+*/
+
+  // handleListingsToLikes
+  const [likeListingError, setLikeListingError] = useState(null);
+  const handleListingToLikes = async (lId) => {
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/${buyer.buyerId}/like`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.ok) {
+      // redirect to homepage
+      console.log("likedListing# ", lId);
+    } else {
+      // show error message
+      setLikeListingError("Invalid details. Please try again.");
+    }
   };
+
+  let filteredListingsCounterExplore = 0;
+  let filteredListingsCounterFollowed = 0;
 
   return (
     <div>
-      <div className="searchBar">
+      <div className="homepageSearchBar">
         <input
-          className="input"
-          onChange={(e) => {
-            setSearch(e.target.value.toLowerCase());
-          }}
+          className="homepageInput"
+          name="search"
+          placeholder="Search for Bake Listing here"
+          onChange={handleSearch}
+          value={search}
         />
-        <button className="button" onClick={handleSearch}>
+        <button className="button">
           <svg
             className="w-6 h-6"
             fill="none"
@@ -161,68 +184,114 @@ export const BuyerShopping = () => {
       <div class="shoppingHeader">Followed Bakers</div>
 
       <div className="listingsDisplay">
-        {listings.map((product) => (
-          <div
-            className="product"
-            onClick={() => routeChangeToListing(product.listingId)}
-          >
-            <div class="productSeller">
-              <img
-                width="30px"
-                height="30px"
-                src={require("../assets/dummyuser.png")}
-                alt="listing product"
-              />
-              <h6>seller name</h6>
+        {listings
+          .filter((product) => {
+            if (
+              product.name.toLowerCase().includes(search) ||
+              product.description.toLowerCase().includes(search)
+            ) {
+              console.log(product);
+              filteredListingsCounterFollowed++;
+              console.log(
+                "filteredListings count: ",
+                filteredListingsCounterFollowed
+              );
+              return product;
+            }
+            return null;
+          })
+          .map((product) => (
+            <div
+              className="product"
+              onClick={() => routeChangeToListing(product.listingId)}
+            >
+              <div class="productSeller">
+                <img
+                  width="30px"
+                  height="30px"
+                  src={require("../assets/dummyuser.png")}
+                  alt="listing product"
+                />
+                <h6>seller name</h6>
+              </div>
+              <div className="productImg">
+                <img
+                  className="productImg"
+                  src={require("../assets/scones.jpg")}
+                  alt="listing product"
+                />
+              </div>
+              <h3>{product.name}</h3>
+              <h5>{product.description}</h5>
+              <div class="productBottomRow">
+                <FiHeart
+                  size="1.2rem"
+                  onClick={() => handleListingToLikes(product.listingId)}
+                />
+                <h3>${product.price}</h3>
+              </div>
             </div>
-            <div className="productImg">
-              <img
-                className="productImg"
-                src={require("../assets/scones.jpg")}
-                alt="listing product"
-              />
-            </div>
-            <h3>{product.name}</h3>
-            <h5>{product.description}</h5>
-            <div class="productBottomRow">
-              <FiHeart size="1.2rem" />
-              <h3>${product.price}</h3>
-            </div>
-          </div>
-        ))}
+          ))}
+
+        {filteredListingsCounterFollowed === 0 && (
+          <h4 className="search">
+            Unfortunately, no such Baked Listing. Try another search?
+          </h4>
+        )}
       </div>
 
       <div class="shoppingHeader">Explore More Bakers</div>
       <div className="listingsDisplay">
-        {listings.map((product) => (
-          <div
-            className="product"
-            onClick={() => routeChangeToListing(product.listingId)}
-          >
-            <div class="productSeller">
-              <img
-                width="30px"
-                height="30px"
-                src={require("../assets/dummyuser.png")}
-                alt="listing product"
-              />
-              <h6>seller name</h6>
+        {listings
+          .filter((product) => {
+            if (
+              product.name.toLowerCase().includes(search) ||
+              product.description.toLowerCase().includes(search)
+            ) {
+              console.log(product);
+              filteredListingsCounterExplore++;
+              console.log(
+                "filteredListings count: ",
+                filteredListingsCounterExplore
+              );
+              return product;
+            }
+            return null;
+          })
+          .map((product) => (
+            <div
+              className="product"
+              onClick={() => routeChangeToListing(product.listingId)}
+            >
+              <div class="productSeller">
+                <img
+                  width="30px"
+                  height="30px"
+                  src={require("../assets/dummyuser.png")}
+                  alt="listing product"
+                />
+                <h6>seller name</h6>
+              </div>
+              <div className="productImg">
+                <img
+                  className="productImg"
+                  src={require("../assets/scones.jpg")}
+                  alt="listing product"
+                />
+              </div>
+              <h3>{product.name}</h3>
+              <h5>{product.description}</h5>
+              <div class="productBottomRow">
+                <FiHeart size="1.2rem" />
+                <h3>${product.price}</h3>
+              </div>
             </div>
-            <div className="productImg">
-              <img
-                className="productImg"
-                src={require("../assets/scones.jpg")}
-                alt="listing product"
-              />
-            </div>
-            <h3>{product.name}</h3>
-            <h5>{product.description}</h5>
-            <div class="productBottomRow">
-              <FiHeart size="1.2rem" />
-              <h3>${product.price}</h3>
-            </div>
-          </div>
-        ))}
+          ))}
+        {filteredListingsCounterExplore === 0 && (
+          <h4 className="search">
+            Unfortunately, no such Baked Listing. Try another search?
+          </h4>
+        )}
       </div>
     </div>
   );
