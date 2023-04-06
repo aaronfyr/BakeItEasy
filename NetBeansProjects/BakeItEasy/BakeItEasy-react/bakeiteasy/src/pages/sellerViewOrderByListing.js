@@ -2,7 +2,7 @@ import { color } from "framer-motion";
 import React, { useState, useEffect } from "react";
 import "./resources/sellerVOBL.css";
 import SellerOrderCard from "./sellerOrderCard.js";
-import { NavigationBar } from "../components/buyerNavigationBar";
+import { SellerNavigationBar as SellerNav } from "../components/sellerNavigationBar";
 import { FaCheck } from "react-icons/fa";
 import {
   BrowserRouter as Router,
@@ -10,15 +10,43 @@ import {
   useParams,
   Link,
 } from "react-router-dom";
+import Seller from "../components/seller";
 
 const SellerViewOrderByListing = () => {
   const [orders, setOrders] = useState([]);
-
   const [search, setSearch] = useState("");
-
   const [listing, setListing] = useState([]);
-
+    const [seller, setSeller] = useState([]);
+      const [sellerId, setSellerId] = useState(null);
   const { id } = useParams();
+
+
+useEffect(() => {
+    async function fetchData() {
+      const fetchedSeller = localStorage.getItem("seller");
+      /*if (!fetchedBuyer) {
+        console.log("navbar", "no buyer");
+        navigate("/login");
+      } else {*/
+      if (!fetchedSeller) {
+        console.log("sellerProfile", "no seller");
+        navigate("/sellerlogin");
+      } else {
+        console.log("sellerProfile", "has seller");
+        try {
+          const parsedUser = JSON.parse(fetchedSeller);
+          setSeller(parsedUser);
+          console.log("parsedUser: ", parsedUser);
+          console.log("parsedUser.id: ", parsedUser.sellerId);
+          setSellerId(parsedUser.sellerId);
+
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+    fetchData();
+  }, []);
 
   const filteredOrders = orders.filter((order) => {
     if (
@@ -33,10 +61,11 @@ const SellerViewOrderByListing = () => {
     }
   });
 
-  //get orders of seller
+  //SUPPOSED TO BE get orders by listing, but now it's get orders by seller
   useEffect(() => {
+  if (sellerId) {
     fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/sellers/1/orders`,
+      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/orders`,
       {
         //get seller id from storage
         method: "GET",
@@ -48,7 +77,9 @@ const SellerViewOrderByListing = () => {
     )
       .then((response) => response.json())
       .then((data) => setOrders(data));
-  }, []);
+  }
+}, [sellerId]);
+
 
   //get listing
   useEffect(() => {
@@ -76,6 +107,7 @@ const SellerViewOrderByListing = () => {
 
   return (
     <div>
+        <SellerNav/>
       <div className="dropdownRow">
         <div className="heading">
           <h1 style={{ fontWeight: "bolder", fontSize: 20 }}>My Orders</h1>
@@ -116,7 +148,7 @@ const SellerViewOrderByListing = () => {
                 <img
                   alt="cake"
                   style={imgStyle}
-                  src={""} /*listing.imagePaths[0]*/
+                  src={"https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80"} /*listing.imagePaths[0]*/
                 />
               </div>
 
@@ -138,7 +170,7 @@ const SellerViewOrderByListing = () => {
         <div className="orderDisplay">
           {filteredOrders.map((order) => (
             <div
-              className="orderComponent"
+              className="orderComp"
               onClick={() => routeChangeToOrder(order.orderId)}
             >
               <SellerOrderCard>

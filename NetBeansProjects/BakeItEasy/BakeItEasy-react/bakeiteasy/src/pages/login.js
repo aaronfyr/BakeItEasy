@@ -55,7 +55,7 @@ function Login() {
         localStorage.setItem("buyer", JSON.stringify(user));
         console.log("buyer set: ", user);
         navigate(`/`);
-      }
+        }
       // redirect to homepage
     } else {
       // show error message

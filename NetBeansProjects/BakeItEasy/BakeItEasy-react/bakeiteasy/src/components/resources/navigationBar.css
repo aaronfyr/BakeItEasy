@@ -18,7 +18,7 @@
   --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-a { 
+a {
   text-decoration: none;
 }
 
@@ -33,7 +33,7 @@ h4 {
   font-size: 16px;
   width: 150px;
   color: --var(--dark-text);
-  background-color: var(--mid-orange);
+  background-color: var(--beige-bg);
   cursor: pointer;
 }
 
@@ -42,6 +42,7 @@ h4 {
   justify-content: space-between;
   width: 100%;
   font-size: 20px;
+
 }
 
 .logo{
