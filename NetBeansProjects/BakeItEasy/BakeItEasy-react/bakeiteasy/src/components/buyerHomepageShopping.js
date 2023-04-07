@@ -50,6 +50,87 @@ export const BuyerShopping = () => {
     fetchData();
   }, []);
 
+  // fecth listing sellers
+  const getSeller = async (obj) => {
+    const lId = obj.listingId;
+    obj.sellerFetchAttempt = true;
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/seller`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      //console.log(`HTTP Response Code: ${response?.status}`);
+      //console.log("sellerId: ", data.sellerId);
+      console.log("sellerUsername: ", data.username);
+      //console.log("sellerName: ", data.name);
+      //obj.sellerId = data.sellerId;
+      //obj.sellerUsername = data.username;
+      //obj.sellerName = data.name;
+      return data.username;
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        // Unexpected token < in JSON
+        console.log("There was a SyntaxError", error);
+      }
+      //obj.sellerId = "User not found";
+      //obj.sellerUsername = "User not found";
+      //obj.sellerName = "User not found";
+    }
+  };
+
+  const [listingSellers, setListingSellers] = useState({});
+
+  const getSellerByLId = async (lId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/seller`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      //console.log(`HTTP Response Code: ${response?.status}`);
+      //console.log("sellerId: ", data.sellerId);
+      console.log("sellerUsername: ", data.username);
+      //console.log("sellerName: ", data.name);
+      //obj.sellerId = data.sellerId;
+      //obj.sellerUsername = data.username;
+      //obj.sellerName = data.name;
+      setListingSellers({ ...listingSellers, [lId]: data.username });
+      return data.username;
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        // Unexpected token < in JSON
+        console.log("There was a SyntaxError", error);
+      }
+      //obj.sellerId = "User not found";
+      //obj.sellerUsername = "User not found";
+      //obj.sellerName = "User not found";
+    }
+  };
+
+  const renderSellerListingHeader = (lId) => {
+    //const detailsText = await getSellerByLId(lId);
+    //return <p>{detailsText}</p>;
+
+    if (listingSellers[lId]) {
+      return <p>{listingSellers[lId]}</p>;
+    } else {
+      getSellerByLId(lId);
+      return <p>Loading...</p>;
+    }
+  };
+
   // fetch listings
   const [listings, setListings] = useState([]);
   useEffect(() => {
@@ -78,32 +159,75 @@ export const BuyerShopping = () => {
     fetchData();
   }, []);
 
-  // fecth listing sellers
-  const getSeller = async (obj) => {
-    const lId = obj.listingId;
-    try {
-      const response = await fetch(
-        `http://localhost:8080/BakeItEasy-war/webresources/orders/${lId}/seller`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+  // fetch listings with sellers
+  /*
+  const [listings, setListings] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/listings/`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        data.forEach(async (obj) => {
+          const lId = obj.listingId;
+          obj.sellerFetchAttempt = true;
+
+          try {
+            const response = await fetch(
+              `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/seller`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const data = await response.json();
+            //console.log(`HTTP Response Code: ${response?.status}`);
+            //console.log("sellerId: ", data.sellerId);
+            //console.log("sellerUsername: ", data.username);
+            //console.log("sellerName: ", data.name);
+            obj.seller = data;
+            obj.sellerId = data.sellerId;
+            obj.sellerUsername = data.username;
+            obj.sellerName = data.name;
+          } catch (error) {
+            if (error instanceof SyntaxError) {
+              // Unexpected token < in JSON
+              console.log("There was a SyntaxError", error);
+            }
+            obj.sellerId = "User not found";
+            obj.sellerUsername = "User not found";
+            obj.sellerName = "User not found";
+          }
+        }); // wasn't here before
+        setListings(data);
+        console.log("listings during useffect: ", listings);
+        console.log(
+          "listings[0].sellerName during useffect: ",
+          listings[0].sellerName
+        );
+        console.log(`HTTP Response Code: ${response?.status}`);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
         }
-      );
-      const data = await response.json();
-      console.log(`HTTP Response Code: ${response?.status}`);
-      return { ...obj, seller: data };
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        // Unexpected token < in JSON
-        console.log("There was a SyntaxError", error);
       }
-    }
-  };
-  const listingsWithSellers = listings.map(getSeller);
-  console.log("listings: ", listings);
-  console.log("listingswithsellers: ", listingsWithSellers);
+    };
+    fetchData();
+  }, []);
+  */
+
+  //listings.forEach((obj) => getSeller(obj));
 
   // handle filter by category
   const [categoryFilter, setCategoryFilter] = useState(null);
@@ -261,7 +385,7 @@ export const BuyerShopping = () => {
                   src={require("../assets/dummyuser.png")}
                   alt="listing product"
                 />
-                <h6>seller name</h6>
+                {renderSellerListingHeader(product.listingId)}
               </div>
               <div className="productImg">
                 <img
@@ -309,19 +433,24 @@ export const BuyerShopping = () => {
             }
             return null;
           })
+          .map((obj) => {
+            console.log("listing", obj);
+            return obj;
+          })
           .map((product) => (
             <div
               className="product"
               onClick={() => routeChangeToListing(product.listingId)}
             >
-              <div class="productSeller">
+              <div class="productSeller" key={product.listingId}>
                 <img
                   width="30px"
                   height="30px"
                   src={require("../assets/dummyuser.png")}
                   alt="listing product"
                 />
-                <h6>seller name</h6>
+                <h6>{product.sellerName}</h6>
+                <h6>seller</h6>
               </div>
               <div className="productImg">
                 <img
