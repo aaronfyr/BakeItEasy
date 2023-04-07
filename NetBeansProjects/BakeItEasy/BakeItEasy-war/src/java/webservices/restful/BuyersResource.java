@@ -262,4 +262,14 @@ public class BuyersResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end getLikedListings
+
+    // CHECKED: ELYSIA
+    // get all reports for buyer with id = {id}
+    @GET
+    @Path("/{buyer_id}/reports")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Report> getAllBuyerReports(@PathParam("buyer_id") Long buyerId) throws BuyerNotFoundException {
+        Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+        return buyer.getReports();
+    } //end getAllBuyerReports
 }
