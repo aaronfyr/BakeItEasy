@@ -10,6 +10,7 @@ import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.PostSessionBeanLocal;
 import ejb.session.stateless.ReportSessionBeanLocal;
 import entity.Buyer;
+import entity.Listing;
 import entity.Order;
 import entity.Post;
 import entity.Report;
@@ -245,4 +246,30 @@ public class BuyersResource {
         }
     } //end getFollowings
     
+    @GET
+    @Path("/{buyer_id}/likedlistings")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLikedListings(@PathParam("buyer_id") Long buyerId) {
+        try {
+            List<Listing> likedListings = buyerSessionBeanLocal.getLikedListings(buyerId);
+            return Response.status(200).entity(likedListings).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: buyer id " + buyerId)
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getLikedListings
+
+    // CHECKED: ELYSIA
+    // get all reports for buyer with id = {id}
+    @GET
+    @Path("/{buyer_id}/reports")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Report> getAllBuyerReports(@PathParam("buyer_id") Long buyerId) throws BuyerNotFoundException {
+        Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+        return buyer.getReports();
+    } //end getAllBuyerReports
 }

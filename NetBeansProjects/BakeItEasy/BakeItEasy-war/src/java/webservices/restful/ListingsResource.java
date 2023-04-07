@@ -8,6 +8,7 @@ package webservices.restful;
 import ejb.session.stateless.BuyerSessionBeanLocal;
 import ejb.session.stateless.ListingSessionBeanLocal;
 import entity.Listing;
+import entity.Order;
 import entity.Seller;
 import enumeration.ListingCategory;
 import error.exception.BuyerIsFollowingSellerAlreadyException;
@@ -343,6 +344,21 @@ public class ListingsResource {
         }
     } //end unfollow seller
     
+    // CHECKED: ELYSIA
+    @GET
+    @Path("/{listing_id}/orders")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Order> getAllListingOrders(@PathParam("listing_id") Long listingId) throws ListingNotFoundException {
+        Listing listing = listingSessionBeanLocal.retrieveListingByListingId(listingId);
+        return listing.getOrders();
+    } //end getAllListingOrders
     
-    
+    // CHECKED: ELYSIA
+    @GET
+    @Path("/{listing_id}/likes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Integer getNumberOfListingLikes(@PathParam("listing_id") Long listingId) throws ListingNotFoundException {
+        Listing listing = listingSessionBeanLocal.retrieveListingByListingId(listingId);
+        return listing.getLikers().size();
+    } //end getNumberOfListingLikes
 }
