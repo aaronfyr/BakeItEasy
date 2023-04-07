@@ -22,9 +22,14 @@ import "reactjs-popup/dist/index.css";
 import { FaEdit, FaArrowRight } from "react-icons/fa";
 
 function BuyerEditAccount() {
+  const navigate = useNavigate();
   const [buyer, setBuyer] = useState(null);
   const [buyerName, setBuyerName] = useState("Log In");
   const [buyerId, setBuyerId] = useState(null);
+  const [buyerEmail, setBuyerEmail] = useState("");
+  const [buyerUsername, setBuyerUsername] = useState("");
+  const [buyerAddress, setBuyerAddress] = useState("");
+  const [buyerPhoneNo, setBuyerPhoneNo] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -41,6 +46,10 @@ function BuyerEditAccount() {
           console.log("parsedUser.name: ", parsedUser.name);
           setBuyerName(parsedUser.name);
           setBuyerId(parsedUser.buyerId);
+          setBuyerEmail(parsedUser.email);
+          setBuyerUsername(parsedUser.username);
+          setBuyerAddress(parsedUser.address);
+          setBuyerPhoneNo(parsedUser.phoneNo);
         } catch (error) {
           console.log(error);
         }
@@ -49,86 +58,64 @@ function BuyerEditAccount() {
     fetchData();
   }, []);
 
-  const [orders, setOrders] = useState([]);
+  // fetch buyer
+  console.log("buyerID is", buyerId);
+  useEffect(() => {
+    if (buyerId) {
+      fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}`,
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => setBuyerObj(data));
+    }
+  }, [buyerId]);
+
   console.log("buyerId:", buyerId);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let buyerId = null;
-        const fetchedBuyer = localStorage.getItem("buyer");
-        if (!fetchedBuyer) {
-          console.log("profile", "no buyer");
-          navigate("/login");
-        } else {
-          const parsedUser = JSON.parse(fetchedBuyer);
-          buyerId = parsedUser.buyerId;
-          console.log("buyerId to get orders", buyerId);
-        }
+  //edit buyer
+  const [isEditable, setIsEditable] = useState(false);
+  const [buyerObj, setBuyerObj] = useState([]);
+  const handleUpdate = () => {
+    setIsEditable(false);
 
-        const response = await fetch(
-          `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/orders/`,
-          {
-            method: "GET",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await response.json();
-        setOrders(data);
-        console.log(`HTTP Response Code: ${response?.status}`);
-      } catch (error) {
-        if (error instanceof SyntaxError) {
-          // Unexpected token < in JSON
-          console.log("There was a SyntaxError", error);
-        }
+    console.log("handleUpdate: ", "in");
+    fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(buyerObj),
       }
-    };
-    fetchData();
-  }, []);
-
-  const { id } = useParams();
-
-  const [search, setSearch] = useState("");
-
-  let navigate = useNavigate();
-  const routeChangeToOrder = (id) => {
-    let path = "/buyerOrder/";
-    navigate(path + id);
+    )
+      .then((response) => {
+        console.log(`HTTP Response Code: `, JSON.stringify(response));
+        if (!response.ok) {
+          throw new Error("Failed to update buyer");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // handle successful update
+        window.location.reload();
+      })
+      .catch((error) => {
+        /*handle error */
+      });
   };
 
-  // if user is not logged in, redirects to homepage
-  /*
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      const parsedUser = JSON.parse(user);
-      if (parsedUser.type === "seller") {
-        setSeller(parsedUser);
-      } else {
-        setBuyer(parsedUser);
-      }
-    } else {
-      navigate("/login");
-    }
-  }, []);
-  */
-
-  // handleSubmitUpdateUsername
-  const [username, setUsername] = useState("");
-
-  const handleSubmitUpdateUsername = async (event) => {
-    event.preventDefault();
+  // routing
+  const routeChangeToProfile = () => {
+    navigate(`/buyerProfile/${buyerId}`);
   };
-
-  const routeChangeToProfile = (buyerId) => {
-    console.log("routeChangeToProfile: ", buyerId);
-    let path = "/buyerProfile/";
-    navigate(path + buyerId);
-  };
-
   return (
     <div className="background">
       <NavigationBar />
@@ -139,40 +126,6 @@ function BuyerEditAccount() {
         <div id="userDetails">
           <h1>{buyerName}</h1>
 
-          <Popup trigger={<FaEdit />} modal nested>
-            {(close) => (
-              <div className="modal">
-                <button className="close" onClick={close}>
-                  &times;
-                </button>
-                <div className="header"> Update Username </div>
-                <div className="content">
-                  <form onSubmit={handleSubmitUpdateUsername}>
-                    <FormControl mt={4}>
-                      <FormLabel>New username: </FormLabel>
-                      <Input
-                        type="text"
-                        placeholder=" "
-                        value={username}
-                        onChange={(event) => setUsername(event.target.value)}
-                        required
-                      />
-                    </FormControl>
-                    <Box mt={4} display="flex" alignItems="center">
-                      <Button
-                        bg="#E2725B"
-                        colorScheme="white"
-                        type="submit"
-                        w="100%"
-                      >
-                        Confirm New Username
-                      </Button>
-                    </Box>
-                  </form>
-                </div>
-              </div>
-            )}
-          </Popup>
           <h4>details</h4>
         </div>
         <Flex>
@@ -182,6 +135,82 @@ function BuyerEditAccount() {
           </div>
         </Flex>
       </Flex>
+      <div className="parent">
+        <div id="rightListingContainer">
+          <h1 style={{ marginLeft: 80 }}>
+            Edit My Profile: Buyer ID #{buyerId}
+          </h1>
+          <h3>Name:</h3>
+          {isEditable ? (
+            <input
+              type="text"
+              className="inputStyle"
+              value={buyerObj.name}
+              onChange={(e) =>
+                setBuyerObj({ ...buyerObj, name: e.target.value })
+              }
+            />
+          ) : (
+            <h2>{buyerObj.name}</h2>
+          )}
+          <h3>Username:</h3>
+          {isEditable ? (
+            <input
+              type="text"
+              className="inputStyle"
+              value={buyerObj.username}
+              onChange={(e) =>
+                setBuyerObj({ ...buyerObj, username: e.target.value })
+              }
+            />
+          ) : (
+            <h2>{buyerObj.username}</h2>
+          )}
+          <h3>Phone:</h3>
+          {isEditable ? (
+            <input
+              type="text"
+              className="inputStyle"
+              value={buyerObj.phoneNo}
+              onChange={(e) =>
+                setBuyerObj({ ...buyerObj, phoneNo: e.target.value })
+              }
+            />
+          ) : (
+            <h2>{buyerObj.phoneNo}</h2>
+          )}
+          <h3>Address:</h3>
+          {isEditable ? (
+            <input
+              type="text"
+              className="inputStyle"
+              value={buyerObj.address}
+              onChange={(e) =>
+                setBuyerObj({ ...buyerObj, address: e.target.value })
+              }
+            />
+          ) : (
+            <h2>{buyerObj.phoneNo}</h2>
+          )}
+          <div style={{ height: 10 }}></div>
+          <Flex>
+            {!isEditable && (
+              <button className="button1" onClick={() => setIsEditable(true)}>
+                Edit
+              </button>
+            )}
+            {isEditable && (
+              <button className="button1" onClick={handleUpdate}>
+                Done
+              </button>
+            )}
+          </Flex>
+          <div style={{ height: 10 }}></div>
+          <h3>Email:</h3>
+          <h2>{buyerEmail}</h2>
+          <br></br>
+        </div>
+      </div>
     </div>
   );
 }

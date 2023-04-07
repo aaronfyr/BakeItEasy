@@ -182,11 +182,11 @@ img.productImg {
   height:100%;
 }
 
-.productImg {
+.buyerProductImg {
   margin-left: auto;
   margin-right: auto;
   width: 180px;
-  height: 100px;
+  height: 130px;
   border-radius: 10px;
   object-fit: fill;
   float: left;
@@ -277,10 +277,10 @@ h4 {
   font-style: italic;
 }
 
-#orderCard {
+#buyerOrderCard {
   background-color: white;
   width:90vh;
-  height: 120px;
+  height: 150px;
   border-radius: 10px;
   margin-top: 5px;
   padding: 0px 10px 10px 10px;
@@ -342,4 +342,18 @@ h4 {
   background: #ffffff;
   border-radius: 18px;
   border: 1px solid #cfcece;
+}
+.button1_cancel {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--dark-text);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 0px 20px 0px 0px;
 }

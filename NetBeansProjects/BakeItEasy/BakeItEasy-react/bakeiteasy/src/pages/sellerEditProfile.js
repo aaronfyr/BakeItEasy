@@ -71,7 +71,9 @@ useEffect(() => {
     fetchData();
   }, []);
 
-    //fetch seller
+
+
+//fetch seller
   console.log("sellerID is", sellerId);
   useEffect(() => {
     if (sellerId){

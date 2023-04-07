@@ -10,6 +10,7 @@ import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.PostSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.SellerSessionBeanLocal;
+import entity.Buyer;
 import entity.Listing;
 import entity.Order;
 import entity.Post;
@@ -450,6 +451,24 @@ public class SellersResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end getOrders
+    
+    // CHECKED: AARON
+    @GET
+    @Path("/{seller_id}/followers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFollowers(@PathParam("seller_id") Long sellerId) {
+        try {
+            List<Buyer> buyersFollowing = sellerSessionBeanLocal.retrieveListOfFollowers(sellerId);
+            return Response.status(200).entity(buyersFollowing).type(MediaType.APPLICATION_JSON).build();
+        } catch (SellerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: seller id " + sellerId)
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getFollowers
 }
 
 /*

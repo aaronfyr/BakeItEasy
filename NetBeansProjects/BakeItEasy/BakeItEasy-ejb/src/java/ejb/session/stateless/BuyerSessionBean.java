@@ -7,14 +7,18 @@ package ejb.session.stateless;
 
 import entity.Buyer;
 import entity.Order;
+import entity.Seller;
 import enumeration.OrderStatus;
 import error.exception.BuyerEmailExistException;
 import error.exception.BuyerIsBannedException;
+import error.exception.BuyerIsFollowingSellerAlreadyException;
+import error.exception.BuyerIsNotFollowingSellerException;
 import error.exception.BuyerNotFoundException;
 import error.exception.BuyerPhoneNumberExistException;
 import error.exception.BuyerUsernameExistException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
+import error.exception.ListingNotFoundException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.UnknownPersistenceException;
@@ -38,6 +42,9 @@ import javax.validation.ValidatorFactory;
  */
 @Stateless
 public class BuyerSessionBean implements BuyerSessionBeanLocal {
+
+    @EJB(name = "ListingSessionBeanLocal")
+    private ListingSessionBeanLocal listingSessionBeanLocal;
 
     @EJB
     private OrderSessionBeanLocal orderSessionBeanLocal;
@@ -172,7 +179,7 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
             throw new BuyerNotFoundException("Buyer with email " + email + " not found!");
         }
     }
-    
+
     @Override
     public void cancelOrder(Long orderId) throws OrderNotFoundException, OrderIsNotPendingException {
         Order orderToCancel = orderSessionBeanLocal.retrieveOrderById(orderId);
@@ -183,7 +190,7 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
             throw new OrderIsNotPendingException("Order unable to be cancelled as it is not in pending state!");
         }
     }
-    
+
     @Override
     public void updateBuyer(Buyer updatedBuyer) throws BuyerNotFoundException, BuyerPhoneNumberExistException, BuyerUsernameExistException, InputDataValidationException {
         Set<ConstraintViolation<Buyer>> constraintViolations = validator.validate(updatedBuyer);
@@ -232,6 +239,48 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
 
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+        }
+    }
+
+    @Override
+    public List<Seller> retrieveListOfFollowing(Long buyerId) throws BuyerNotFoundException {
+        Buyer buyerFollower = retrieveBuyerById(buyerId);
+        return buyerFollower.getFollowings();
+    }
+
+    @Override
+    public void followSeller(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException, BuyerIsFollowingSellerAlreadyException {
+        if (!isFollowingSellerAlready(buyerId, listingId)) { // if seller does not have this buyer as follower
+            Seller sellerToFollow = listingSessionBeanLocal.retrieveSellerByListingId(listingId);
+            Buyer buyerFollower = retrieveBuyerById(buyerId);
+
+            buyerFollower.getFollowings().add(sellerToFollow);
+            sellerToFollow.getFollowers().add(buyerFollower);
+        } else {
+            throw new BuyerIsFollowingSellerAlreadyException("Buyer is already following seller!");
+        }
+    }
+
+    @Override
+    public void unfollowSeller(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException, BuyerIsNotFollowingSellerException {
+        if (isFollowingSellerAlready(buyerId, listingId)) { // if seller has this buyer as follower
+            Seller sellerToUnfollow = listingSessionBeanLocal.retrieveSellerByListingId(listingId);
+            Buyer buyerFollower = retrieveBuyerById(buyerId);
+
+            buyerFollower.getFollowings().remove(sellerToUnfollow);
+            sellerToUnfollow.getFollowers().remove(buyerFollower);
+        } else {
+            throw new BuyerIsNotFollowingSellerException("Buyer was not following seller! Unable to unfollow!");
+        }
+    }
+
+    private boolean isFollowingSellerAlready(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException {
+        Seller sellerToFollow = listingSessionBeanLocal.retrieveSellerByListingId(listingId);
+        Buyer buyerFollower = retrieveBuyerById(buyerId);
+        if (sellerToFollow.getFollowers().contains(buyerFollower)) {
+            return true;
+        } else {
+            return false;
         }
     }
 

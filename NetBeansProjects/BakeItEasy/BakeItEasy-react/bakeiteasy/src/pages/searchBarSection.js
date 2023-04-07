@@ -92,7 +92,7 @@ const handleCategoryChange = (category) => {
         <SellerNavigationBar/>
         <div className="dropdownRow">
             <div className="heading">
-                <h1>My listings with orders</h1>
+                <h1>My Orders</h1>
             </div>
         {/*<CategoryDropdown onCategoryChange={handleCategoryChange}/>
         <body style={{fontFamily: 'Montserrat'}}>Selected category: {selectedCategory}</body>*/}
@@ -131,7 +131,7 @@ const handleCategoryChange = (category) => {
             </div>
             <div className="sellerOrderCardBodyFlex">
                 <div className="sellerOrderCardBodyFlex">
-                    <img alt="cake" style={imgStyle} src={""}/>
+                    <img alt="cake" style={imgStyle} src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80"/>
                 </div>
 
                 <div style={{width: 400}} className="cardTextBlock">

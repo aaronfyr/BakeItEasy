@@ -393,3 +393,20 @@ h4 {
 .editProfileBtn:hover {
     background-color: lightgray;
 }
+
+.newListBtn {
+    display: flex;
+    border-radius: 20px;
+    height: 30px;
+    justify-content: center;
+    border-style: solid;
+    border-color: var(--dark-text);
+    color: var(--dark-text);
+    border-width: 1px;
+    padding: 0px 20px 0px 20px;
+    margin-left: 50px;
+}
+
+.newListBtn:hover {
+    background-color: lightgray;
+}

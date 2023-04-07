@@ -25,7 +25,7 @@
 }
 
 #rightListingContainer {
-    width: 100%;
+    width: 500px;
     padding-left: 10px;
 }
 
@@ -236,4 +236,47 @@ h4 {
     background: white;
     border-color: rgba(0, 0, 0, 0);
     border-radius: 5px;
+}
+/*these are for create listing cuz im lazy*/
+form {
+    display: block;
+    width: 400px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+        font-size: 18px;
+        color: #8B3A3A;
+    width: 500px;
+}
+
+
+input {
+    display: block;
+    width: 300px;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    height: 25px;
+    font-size: 15px;
+    color: #3D3D3D;
+    font-family:var(--reg-font-family);
+}
+
+select[name="listingCategory"] {
+    height: 40px;
+}
+
+button {
+    display: block;
+    margin-top: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
 }

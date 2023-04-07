@@ -37,6 +37,7 @@ function SellerListing() {
   const [isEditable, setIsEditable] = useState(false);
   const [preDelete, setPreDelete] = useState(false);
   const [deleted, setDeleted] = useState(false);
+  const [deleteFailed, setDeleteFailed]= useState(false);
 
   let navigate = useNavigate();
   const routeChangeToSellerProfile = () => {
@@ -45,20 +46,22 @@ function SellerListing() {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
+    method: "GET",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+        return response.json();
     })
-      .then((response) => response.json())
-      .then((data) => {
-        setListing(data);
-        setLoading(false);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+    .then((data) => {
+      setListing(data);
+      setLoading(false);
+    })
+    .catch((error) => console.log("ERROR !!!!!" + error));
+}, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -79,7 +82,7 @@ function SellerListing() {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Failed to update listing");
+          setDeleteFailed(true);
         }
         return response.json();
       })
@@ -104,7 +107,10 @@ function SellerListing() {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Failed to update listing");
+            setDeleteFailed(true);
+            setTimeout(() => {
+                setDeleteFailed(false)
+          }, 3000); // 1000 milliseconds = 1 second
         } else {
           console.log("response ok");
           setDeleted(true);
@@ -246,6 +252,7 @@ function SellerListing() {
           <div style={{ height: 10 }}></div>
           <h3>Category:</h3>
           <h2>{listing.listingCategory.toLowerCase()}</h2>
+          {deleteFailed && <h3>You cannot delete this listing.</h3>}
           <br></br>
         </div>
       </div>

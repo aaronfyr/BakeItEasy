@@ -107,6 +107,21 @@ export const BuyerShopping = () => {
     setListings(results);
   };
 
+  const handleAddListingToLikes = async () => {
+    const results = listings.filter((product) => {
+      if (
+        product.name.toLowerCase().includes(search) ||
+        product.description.toLowerCase().includes(search)
+      ) {
+        return product;
+      }
+      return null;
+    });
+    console.log("search by " + search);
+    console.log("filtered listings: ", listings);
+    setListings(results);
+  };
+
   return (
     <div>
       <div className="searchBar">

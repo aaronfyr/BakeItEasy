@@ -6,15 +6,20 @@
 package ejb.session.stateless;
 
 import entity.Buyer;
+import entity.Seller;
 import error.exception.BuyerEmailExistException;
 import error.exception.BuyerIsBannedException;
+import error.exception.BuyerIsFollowingSellerAlreadyException;
+import error.exception.BuyerIsNotFollowingSellerException;
 import error.exception.BuyerNotFoundException;
 import error.exception.BuyerPhoneNumberExistException;
 import error.exception.BuyerUsernameExistException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
+import error.exception.ListingNotFoundException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
+import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.List;
 import javax.ejb.Local;
@@ -42,4 +47,10 @@ public interface BuyerSessionBeanLocal {
 
     public void updateBuyer(Buyer updatedBuyer) throws BuyerNotFoundException, BuyerPhoneNumberExistException, BuyerUsernameExistException, InputDataValidationException;
     
+    public List<Seller> retrieveListOfFollowing(Long buyerId) throws BuyerNotFoundException;
+    
+    public void followSeller(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException, BuyerIsFollowingSellerAlreadyException;
+
+    public void unfollowSeller(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException, BuyerIsNotFollowingSellerException;
+
 }

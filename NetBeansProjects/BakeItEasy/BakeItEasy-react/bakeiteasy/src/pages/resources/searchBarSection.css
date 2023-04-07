@@ -1,3 +1,7 @@
+h1 {
+    font-weight: bolder;
+}
+
 .dropdownRow {
     display: flex;
     font-family: 'Montserrat', sans-serif;

@@ -5,18 +5,26 @@
  */
 package webservices.restful;
 
+import ejb.session.stateless.BuyerSessionBeanLocal;
 import ejb.session.stateless.ListingSessionBeanLocal;
 import entity.Listing;
+import entity.Seller;
 import enumeration.ListingCategory;
+import error.exception.BuyerIsFollowingSellerAlreadyException;
+import error.exception.BuyerIsNotFollowingSellerException;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingHasOngoingOrdersException;
+import error.exception.ListingIsNotLikedException;
+import error.exception.ListingLikedAlreadyException;
 import error.exception.ListingNotFoundException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
@@ -24,6 +32,9 @@ import javax.ws.rs.Path;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
@@ -45,6 +56,9 @@ public class ListingsResource {
 
     @EJB
     private ListingSessionBeanLocal listingSessionBeanLocal;
+    
+    @EJB
+    private BuyerSessionBeanLocal buyerSessionBeanLocal;
     
     // CHECKED: AARON
     @GET
@@ -213,6 +227,12 @@ public class ListingsResource {
                     .build();
 
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (ListingLikedAlreadyException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Listing is already liked by buyer! Unable to like listing!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end like listing
     
@@ -237,7 +257,92 @@ public class ListingsResource {
                     .build();
 
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (ListingIsNotLikedException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Listing is not liked by buyer! Unable to unlike listing!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end like listing
+    
+    @GET
+    @Path("/{listing_id}/seller")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getListingsSeller(@PathParam("listing_id") Long listingId) {
+        try {
+            Seller seller = listingSessionBeanLocal.getListingsSeller(listingId);
+            return Response.status(200).entity(seller).type(MediaType.APPLICATION_JSON).build();
+        } catch (ListingNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found")
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } // end get specific listing's seller
+    
+    // CHECKED: AARON
+    @PUT
+    @Path("/{listing_id}/{buyer_id}/follow")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response followSeller(@PathParam("listing_id") Long listingId, @PathParam("buyer_id") Long buyerId) {
+        try {
+            buyerSessionBeanLocal.followSeller(buyerId, listingId);
+            return Response.status(204).build();
+        } catch (ListingNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Listing not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerIsFollowingSellerAlreadyException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer is already following this seller! Unable to follow!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end follow seller
+    
+    // CHECKED: AARON
+    @PUT
+    @Path("/{listing_id}/{buyer_id}/unfollow")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unfollowSeller(@PathParam("listing_id") Long listingId, @PathParam("buyer_id") Long buyerId) {
+        try {
+            buyerSessionBeanLocal.unfollowSeller(buyerId, listingId);
+            return Response.status(204).build();
+        } catch (ListingNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Listing not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerIsNotFollowingSellerException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer is not following this seller! Unable to unfollow!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end unfollow seller
+    
+    
     
 }
