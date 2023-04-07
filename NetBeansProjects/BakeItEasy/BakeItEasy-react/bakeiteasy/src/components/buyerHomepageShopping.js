@@ -78,6 +78,33 @@ export const BuyerShopping = () => {
     fetchData();
   }, []);
 
+  // fecth listing sellers
+  const getSeller = async (obj) => {
+    const lId = obj.listingId;
+    try {
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/orders/${lId}/seller`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(`HTTP Response Code: ${response?.status}`);
+      return { ...obj, seller: data };
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        // Unexpected token < in JSON
+        console.log("There was a SyntaxError", error);
+      }
+    }
+  };
+  const listingsWithSellers = listings.map(getSeller);
+  console.log("listings: ", listings);
+  console.log("listingswithsellers: ", listingsWithSellers);
+
   // handle filter by category
   const [categoryFilter, setCategoryFilter] = useState(null);
   const [categories, setCategories] = useState([

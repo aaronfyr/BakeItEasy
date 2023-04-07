@@ -193,6 +193,16 @@ img {
 img.productImg {
   width:100%;
   height:100%;
+  
+}
+
+img.heartBreakIcon {
+  width:60%;
+  height:60%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .productImg {
@@ -202,6 +212,11 @@ img.productImg {
   height: 120px;
   border-radius: 10px;
   object-fit: fill;
+}
+
+.heartBreakIcon {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .btn {

@@ -16,14 +16,20 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Spacer,
 } from "@chakra-ui/react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { FaEdit } from "react-icons/fa";
+import { MdOutlineReport, MdOutlineCancel } from "react-icons/md";
 
 function BuyerProfile() {
+  const { id } = useParams();
+
+  //fetch buyer
   const [buyer, setBuyer] = useState(null);
   const [buyerName, setBuyerName] = useState("Log In");
+  const [buyerUsername, setBuyerUsername] = useState("Log In");
   const [buyerId, setBuyerId] = useState(null);
 
   useEffect(() => {
@@ -41,6 +47,7 @@ function BuyerProfile() {
           console.log("parsedUser.name: ", parsedUser.name);
           setBuyerName(parsedUser.name);
           setBuyerId(parsedUser.buyerId);
+          setBuyerUsername(parsedUser.username);
         } catch (error) {
           console.log(error);
         }
@@ -49,6 +56,7 @@ function BuyerProfile() {
     fetchData();
   }, []);
 
+  // fetch orders
   const [orders, setOrders] = useState([]);
   console.log("buyerId:", buyerId);
 
@@ -142,38 +150,10 @@ function BuyerProfile() {
   ]);
   */
 
-  const { id } = useParams();
-
-  const [search, setSearch] = useState("");
-
   let navigate = useNavigate();
   const routeChangeToOrder = (id) => {
     let path = "/buyerOrder/";
     navigate(path + id);
-  };
-
-  // if user is not logged in, redirects to homepage
-  /*
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      const parsedUser = JSON.parse(user);
-      if (parsedUser.type === "seller") {
-        setSeller(parsedUser);
-      } else {
-        setBuyer(parsedUser);
-      }
-    } else {
-      navigate("/login");
-    }
-  }, []);
-  */
-
-  // handleSubmitUpdateUsername [discard]
-  const [username, setUsername] = useState("");
-
-  const handleSubmitUpdateUsername = async (event) => {
-    event.preventDefault();
   };
 
   // handleCancelOrder
@@ -250,45 +230,11 @@ function BuyerProfile() {
         <div id="userDetails">
           <h1>{buyerName}</h1>
 
-          <Popup trigger={<FaEdit />} modal nested>
-            {(close) => (
-              <div className="modal">
-                <button className="close" onClick={close}>
-                  &times;
-                </button>
-                <div className="header"> Update Username </div>
-                <div className="content">
-                  <form onSubmit={handleSubmitUpdateUsername}>
-                    <FormControl mt={4}>
-                      <FormLabel>New username: </FormLabel>
-                      <Input
-                        type="text"
-                        placeholder=" "
-                        value={username}
-                        onChange={(event) => setUsername(event.target.value)}
-                        required
-                      />
-                    </FormControl>
-                    <Box mt={4} display="flex" alignItems="center">
-                      <Button
-                        bg="#E2725B"
-                        colorScheme="white"
-                        type="submit"
-                        w="100%"
-                      >
-                        Confirm New Username
-                      </Button>
-                    </Box>
-                  </form>
-                </div>
-              </div>
-            )}
-          </Popup>
-          <h4>details</h4>
+          <h4>@{buyerUsername}</h4>
         </div>
         <Flex>
           <div
-            className="button1"
+            className="button1_editAccount"
             onClick={() => routeChangeToEditAccountDetails()}
           >
             Edit Account Details
@@ -296,31 +242,9 @@ function BuyerProfile() {
           </div>
         </Flex>
       </Flex>
-      <h2>Search for order:</h2>
-      <div class="searchBar">
-        <input
-          className="input"
-          onChange={(e) => {
-            setSearch(e.target.value.toLowerCase());
-          }}
-        />
-        <button className="button">
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            ></path>
-          </svg>
-        </button>
-      </div>
+      <br />
+      <div class="shoppingHeader">My Orders</div>
+      <br />
       <div class="ordersDisplay">
         {orders.map((order) => (
           <div id="buyerOrderCard" onClick={() => routeChangeToOrder(order.id)}>
@@ -352,11 +276,11 @@ function BuyerProfile() {
                       onClick={() => handleCancelOrder(order.orderId)}
                     >
                       Cancel Order
-                      <FaEdit />
+                      <MdOutlineCancel />
                     </div>
                   )}
                 </Flex>
-                <br />
+
                 <Popup
                   trigger={
                     <Flex>
@@ -366,7 +290,7 @@ function BuyerProfile() {
                           onClick={() => handleReportSeller(order.orderId)}
                         >
                           Report Seller
-                          <FaEdit />
+                          <MdOutlineReport size="1.2rem" />
                         </div>
                       )}
                     </Flex>
