@@ -29,6 +29,7 @@ import {
 } from "@chakra-ui/react";
 
 import { FiHeart } from "react-icons/fi";
+import ReactLoading from "react-loading";
 
 export const BuyerShopping = () => {
   let navigate = useNavigate();
@@ -119,15 +120,20 @@ export const BuyerShopping = () => {
     }
   };
 
+  const [isLoading, setIsLoading] = useState(true);
   const renderSellerListingHeader = (lId) => {
     //const detailsText = await getSellerByLId(lId);
     //return <p>{detailsText}</p>;
 
+    if (listingSellers.length === listings.length) {
+      setIsLoading(false);
+    }
     if (listingSellers[lId]) {
       return <p>{listingSellers[lId]}</p>;
     } else {
       getSellerByLId(lId);
-      return <p>Loading...</p>;
+      return <ReactLoading color={"#000000"} height={"15%"} width={"15%"} />;
+      //return <p>Loading...</p>;
     }
   };
 
@@ -385,6 +391,7 @@ export const BuyerShopping = () => {
                   src={require("../assets/dummyuser.png")}
                   alt="listing product"
                 />
+
                 {renderSellerListingHeader(product.listingId)}
               </div>
               <div className="productImg">
@@ -450,7 +457,6 @@ export const BuyerShopping = () => {
                   alt="listing product"
                 />
                 <h6>{product.sellerName}</h6>
-                <h6>seller</h6>
               </div>
               <div className="productImg">
                 <img
