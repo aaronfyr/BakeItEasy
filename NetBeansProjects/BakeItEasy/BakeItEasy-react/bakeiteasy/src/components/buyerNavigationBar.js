@@ -152,6 +152,7 @@ export const NavigationBar = () => {
           <Menu>
             <MenuButton
               variant="ghost"
+              colorScheme="orange"
               as={Button}
               rightIcon={<ChevronDownIcon />}
             >

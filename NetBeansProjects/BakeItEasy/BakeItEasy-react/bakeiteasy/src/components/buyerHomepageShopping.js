@@ -223,14 +223,16 @@ export const BuyerShopping = () => {
             return null;
           })
           .map((product) => (
-            <div className="product">
+            <div
+              className="product"
+              onClick={() => routeChangeToListing(product.listingId)}
+            >
               <div class="productSeller">
                 <img
                   width="30px"
                   height="30px"
                   src={require("../assets/dummyuser.png")}
                   alt="listing product"
-                  onClick={() => routeChangeToListing(product.listingId)}
                 />
                 <h6>seller name</h6>
               </div>

@@ -32,6 +32,15 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   useNumberInput,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Spacer,
 } from "@chakra-ui/react";
 import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
 import DatePicker from "react-datepicker";
@@ -113,45 +122,6 @@ function BuyerListingPage() {
 
   console.log(listing);
 
-  // FUNCTIONS
-  // handle submit order
-  const dateOfCreation = new Date();
-  const [quantity, setQuantity] = useState(0);
-  const [dateOfCollection, setDateOfCollection] = useState(new Date());
-  const [description, setDescription] = useState("-");
-  const [orderFieldValues, addOrderFieldValue] = useState([]);
-  const [error, setError] = useState(null);
-
-  const handleSubmitOrder = async (event) => {
-    event.preventDefault();
-
-    const response = await fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/orders/${buyerId}/${id}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          price,
-          quantity,
-          description,
-          address,
-          dateOfCreation,
-          dateOfCollection,
-        }),
-      }
-    );
-
-    if (response.ok) {
-      // redirect to homepage
-      navigate(`/`);
-    } else {
-      // show error message
-      setError("Invalid details. Please try again.");
-    }
-  };
-
   /*
   // for the image slideshow
   let slideIndex = 1;
@@ -203,6 +173,63 @@ function BuyerListingPage() {
 
   const datePickerMinDate = new Date();
 
+  // successful create order
+  const OverlayOne = () => (
+    <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(5px) hue-rotate(-10deg)"
+    />
+  );
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [overlay, setOverlay] = useState(<OverlayOne />);
+
+  // FUNCTIONS
+  // handle submit order
+  const dateOfCreation = new Date();
+  const [quantity, setQuantity] = useState(0);
+  const [dateOfCollection, setDateOfCollection] = useState(new Date());
+  const [description, setDescription] = useState("-");
+  const [orderFieldValues, addOrderFieldValue] = useState([]);
+  const [error, setError] = useState(null);
+
+  const handleSubmitOrder = async (event) => {
+    event.preventDefault();
+
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/orders/${buyerId}/${id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          price,
+          quantity,
+          description,
+          address,
+          dateOfCreation,
+          dateOfCollection,
+        }),
+      }
+    );
+
+    if (response.ok) {
+      // redirect to homepage
+      setOverlay(<OverlayOne />);
+      onOpen();
+    } else {
+      // show error message
+      setError("Invalid details. Please try again.");
+    }
+  };
+
+  // routeChangeToHomepage
+  const routeChangeToHomepage = () => {
+    console.log("routechangetohomepage: ");
+
+    navigate("/");
+  };
+
   return (
     <div>
       <NavigationBar />
@@ -224,21 +251,16 @@ function BuyerListingPage() {
           </Flex>
           <br />
           <h1>{listingName}</h1>
-          <h4>Listing id: {id}</h4>
+          <h3 className="italic">Listing id: {id}</h3>
+
           <br />
-          <div id="listingDetailsGrid">
-            <h4>Posted on:</h4>
-            <h4 className="details">date</h4>
-
-            <h4>Quantity Available:</h4>
-            <h4 className="details">{listingMaxQty}</h4>
-
-            <h4>Minimum Preparation Time:</h4>
-            <h4 className="details">time</h4>
+          <div id="buyerListingDetailsGrid">
+            <h3>Maximum Quantity Per Order:</h3>
+            <h4>{listingMaxQty}</h4>
+            <h3>Description:</h3>
+            <h4> {listingDescription}</h4>
           </div>
           <br />
-          <h3 className="italic">Description:</h3>
-          <h4 className="details">{listingDescription}</h4>
         </div>
         <div id="rightListingContainer">
           <form onSubmit={handleSubmitOrder}>
@@ -305,6 +327,39 @@ function BuyerListingPage() {
           </form>
         </div>
       </div>
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+        {overlay}
+        <ModalContent>
+          <ModalHeader>
+            Successfully created order for {listingName}!
+          </ModalHeader>
+          <Flex>
+            <Spacer />
+            <ModalBody>
+              <img
+                width="200px"
+                height="200px"
+                src={require("../assets/celebration.png")}
+                alt="listing product"
+              />
+            </ModalBody>
+            <Spacer />
+          </Flex>
+          <Flex>
+            <Spacer />
+            <ModalFooter>
+              <Button
+                onClick={routeChangeToHomepage}
+                colorScheme="orange"
+                variant="ghost"
+              >
+                Return to Shop
+              </Button>
+            </ModalFooter>
+            <Spacer />
+          </Flex>
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

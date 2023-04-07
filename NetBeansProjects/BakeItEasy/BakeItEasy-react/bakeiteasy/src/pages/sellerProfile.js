@@ -56,7 +56,7 @@ function SellerProfile() {
   const [listings, setListings] = useState([]);
   useEffect(() => {
     fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/sellers/1/listings`,
+      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/listings`,
       {
         method: "GET",
         mode: "cors",
@@ -73,7 +73,7 @@ function SellerProfile() {
   const [reviews, setReviews] = useState([]);
   useEffect(() => {
     fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/sellers/1/reviews`,
+      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/reviews`,
       {
         method: "GET",
         mode: "cors",
@@ -89,33 +89,33 @@ function SellerProfile() {
   //fetch seller
   console.log("sellerID is", sellerId);
   useEffect(() => {
-    if (sellerId){
-    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setSellerObj(data));
+    if (sellerId) {
+      fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`,
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => setSellerObj(data));
     }
   }, [sellerId]);
 
-
   const handleGoBack = () => {
-    window.history.back()
+    window.history.back();
   };
 
-
-  const filteredListings = listings.filter((listing) =>
-  (
-    (listing.name && listing.name.toLowerCase().includes(search)) ||
-    (listing.description && listing.description.toLowerCase().includes(search)) ||
-    (listing.category && listing.category.toLowerCase().includes(search))
-  )
-);
-
+  const filteredListings = listings.filter(
+    (listing) =>
+      (listing.name && listing.name.toLowerCase().includes(search)) ||
+      (listing.description &&
+        listing.description.toLowerCase().includes(search)) ||
+      (listing.category && listing.category.toLowerCase().includes(search))
+  );
 
   const routeChangeToListing = (id) => {
     let path = "/sellerListing/";
@@ -125,12 +125,12 @@ function SellerProfile() {
   const routeChangeToSellerEditProfile = () => {
     let path = "/editSellerProfile";
     navigate(path);
-  }
+  };
 
   const routeChangeToCreateListing = () => {
     let path = "/sellerCreateListing";
     navigate(path);
-  }
+  };
 
   return (
     <div className="background">
@@ -140,10 +140,15 @@ function SellerProfile() {
       </div>
       <Flex>
         <div id="userDetails">
-            <h1>{sellerObj.name}</h1>
-            <h5>@{sellerObj.username}</h5>
+          <h1>{sellerObj.name}</h1>
+          <h5>@{sellerObj.username}</h5>
         </div>
-        <div className="editProfileBtn" onClick={() => routeChangeToSellerEditProfile()}>edit profile</div>
+        <div
+          className="editProfileBtn"
+          onClick={() => routeChangeToSellerEditProfile()}
+        >
+          edit profile
+        </div>
       </Flex>
       <h2>Search for my listing:</h2>
       <div class="searchBar">
@@ -175,9 +180,13 @@ function SellerProfile() {
       <div className="sellerProducts">
         <Flex>
           <h1>Seller Products</h1>
-          <div className="newListBtn" onClick={() => routeChangeToCreateListing()}>create listing</div>
+          <div
+            className="newListBtn"
+            onClick={() => routeChangeToCreateListing()}
+          >
+            create listing
+          </div>
         </Flex>
-
       </div>
       <div className="flexBox">
         <div className="profileListingsDisplay">
@@ -186,9 +195,8 @@ function SellerProfile() {
               className="product"
               onClick={() => routeChangeToListing(listing.listingId)}
             >
-              <div class="productSeller">
-              </div>
-            <h3>{listing.name}</h3>
+              <div class="productSeller"></div>
+              <h3>{listing.name}</h3>
               <div className="productImg">
                 <img
                   className="productImg"
@@ -198,7 +206,6 @@ function SellerProfile() {
               </div>
 
               <div className="titleDetails">
-
                 <h5>{listing.description}</h5>
               </div>
 
