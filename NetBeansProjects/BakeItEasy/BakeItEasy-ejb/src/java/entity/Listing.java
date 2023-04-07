@@ -149,6 +149,15 @@ public class Listing implements Serializable {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
+    
+    @XmlTransient
+    public List<Buyer> getLikers() {
+        return likers;
+    }
+
+    public void setLikers(List<Buyer> likers) {
+        this.likers = likers;
+    }
 
     @Override
     public int hashCode() {
@@ -173,14 +182,6 @@ public class Listing implements Serializable {
     @Override
     public String toString() {
         return "entity.Listing[ id=" + listingId + " ]";
-    }
-
-    public List<Buyer> getLikers() {
-        return likers;
-    }
-
-    public void setLikers(List<Buyer> likers) {
-        this.likers = likers;
     }
 
 }

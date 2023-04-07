@@ -13,11 +13,11 @@ import entity.Buyer;
 import entity.Order;
 import entity.Post;
 import entity.Report;
+import entity.Seller;
 import error.exception.BuyerNotFoundException;
 import error.exception.BuyerPhoneNumberExistException;
 import error.exception.BuyerUsernameExistException;
 import error.exception.InputDataValidationException;
-import error.exception.InvalidLoginCredentialException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
@@ -226,4 +226,23 @@ public class BuyersResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end edit seller
+    
+    // CHECKED: AARON
+    @GET
+    @Path("/{buyer_id}/followings")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFollowings(@PathParam("buyer_id") Long buyerId) {
+        try {
+            List<Seller> sellersFollowing = buyerSessionBeanLocal.retrieveListOfFollowing(buyerId);
+            return Response.status(200).entity(sellersFollowing).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: buyer id " + buyerId)
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getFollowings
+    
 }

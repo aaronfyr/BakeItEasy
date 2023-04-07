@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.Buyer;
 import entity.Listing;
 import entity.Order;
 import entity.Report;
@@ -300,6 +301,12 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
         } else {
             throw new OrderIsNotAcceptedException("Order unable to be accepted as it is not in pending state!");
         }
+    }
+    
+    @Override
+    public List<Buyer> retrieveListOfFollowers(Long sellerId) throws SellerNotFoundException {
+        Seller seller = retrieveSellerBySellerId(sellerId);
+        return seller.getFollowers();
     }
 
     private boolean isUsernameAvailable(String username) {

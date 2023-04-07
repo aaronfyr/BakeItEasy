@@ -62,6 +62,9 @@ public class Buyer implements Serializable {
     @ManyToMany(mappedBy = "likers", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Listing> likedListings;
+    @ManyToMany(mappedBy = "followers", fetch = FetchType.EAGER)
+    @JsonbTransient
+    private List<Seller> followings;
 
     public Buyer() {
         this.isBanned = false;
@@ -80,39 +83,12 @@ public class Buyer implements Serializable {
         this.address = address;
     }
     
-    @XmlTransient
-    public List<Post> getPosts() {
-        return posts;
+    public Long getBuyerId() {
+        return buyerId;
     }
 
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    @XmlTransient
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    @XmlTransient
-    public List<Report> getReports() {
-        return reports;
-    }
-
-    public void setReports(List<Report> reports) {
-        this.reports = reports;
+    public void setBuyerId(Long buyerId) {
+        this.buyerId = buyerId;
     }
 
     public String getName() {
@@ -123,20 +99,20 @@ public class Buyer implements Serializable {
         this.name = name;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -163,13 +139,59 @@ public class Buyer implements Serializable {
         this.isBanned = isBanned;
     }
 
-    public Long getBuyerId() {
-        return buyerId;
+    public String getAddress() {
+        return address;
     }
 
-    public void setBuyerId(Long buyerId) {
-        this.buyerId = buyerId;
+    public void setAddress(String address) {
+        this.address = address;
     }
+    
+    @XmlTransient
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+    
+    @XmlTransient
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
+    }
+    
+    @XmlTransient
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+    
+    @XmlTransient
+    public List<Listing> getLikedListings() {
+        return likedListings;
+    }
+
+    public void setLikedListings(List<Listing> likedListings) {
+        this.likedListings = likedListings;
+    }
+    
+    @XmlTransient
+    public List<Seller> getFollowings() {
+        return followings;
+    }
+
+    public void setFollowings(List<Seller> followings) {
+        this.followings = followings;
+    }
+    
 
     @Override
     public int hashCode() {
@@ -194,14 +216,6 @@ public class Buyer implements Serializable {
     @Override
     public String toString() {
         return "entity.Placeholder[ id=" + buyerId + " ]";
-    }
-
-    public List<Listing> getLikedListings() {
-        return likedListings;
-    }
-
-    public void setLikedListings(List<Listing> likedListings) {
-        this.likedListings = likedListings;
     }
 
 }

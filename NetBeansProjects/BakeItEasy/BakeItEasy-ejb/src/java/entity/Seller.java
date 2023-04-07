@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
@@ -56,6 +57,9 @@ public class Seller implements Serializable {
     @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Post> posts;
+    @ManyToMany
+    @JsonbTransient
+    private List<Buyer> followers;
     
     public Seller() {
         this.isBanned = false;
@@ -158,6 +162,15 @@ public class Seller implements Serializable {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
+    
+    @XmlTransient
+    public List<Buyer> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Buyer> followers) {
+        this.followers = followers;
     }
 
     @Override

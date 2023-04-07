@@ -14,6 +14,8 @@ import enumeration.OrderStatus;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingHasOngoingOrdersException;
+import error.exception.ListingIsNotLikedException;
+import error.exception.ListingLikedAlreadyException;
 import error.exception.ListingNotFoundException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
@@ -103,28 +105,46 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
-    @Override
-    public void likeListing(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException {
-        Listing listingToLike = retrieveListingByListingId(listingId);
-        Buyer buyerLiker = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
-        
-        buyerLiker.getLikedListings().add(listingToLike);
-        listingToLike.getLikers().add(buyerLiker);
-    }
-    
-    
-    @Override
-    public void unlikeListing(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException {
-        Listing listingToLike = retrieveListingByListingId(listingId);
-        Buyer buyerLiker = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
-        
-        buyerLiker.getLikedListings().remove(listingToLike);
-        listingToLike.getLikers().remove(buyerLiker);
-    }
-    
-    // method to check whether listing is liked by the buyer
 
+    @Override
+    public void likeListing(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException, ListingLikedAlreadyException {
+        if (!isListingLikedAlready(buyerId, listingId)) {
+            Listing listingToLike = retrieveListingByListingId(listingId);
+            Buyer buyerLiker = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+
+            buyerLiker.getLikedListings().add(listingToLike);
+            listingToLike.getLikers().add(buyerLiker);
+        } else {
+            throw new ListingLikedAlreadyException("Listing has been liked by buyer already! Unable to like listing!");
+        }
+
+    }
+
+    @Override
+    public void unlikeListing(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException, ListingIsNotLikedException {
+        if (isListingLikedAlready(buyerId, listingId)) {
+            Listing listingToUnlike = retrieveListingByListingId(listingId);
+            Buyer buyerLiker = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+
+            buyerLiker.getLikedListings().remove(listingToUnlike);
+            listingToUnlike.getLikers().remove(buyerLiker);
+        } else {
+            throw new ListingIsNotLikedException("Listing is not liked by buyer! Unable to unlike listing!");
+        }
+    }
+
+    private boolean isListingLikedAlready(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException {
+        Listing listingToLike = retrieveListingByListingId(listingId);
+        Buyer buyerLiker = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+
+        if (listingToLike.getLikers().contains(buyerLiker)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // method to check whether listing is liked by the buyer
     @Override
     public void deleteListing(Long listingId) throws ListingNotFoundException, ListingHasOngoingOrdersException, OrderNotFoundException {
         try {
@@ -135,20 +155,19 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
             }
 
             listingToRemove.getSeller().getListings().remove(listingToRemove); // disassociate from seller's listing
-            
+
             List<Order> ordersTaggedToListing = retrieveOrdersByListingId(listingId);
             for (Order order : ordersTaggedToListing) { // orders have cascade to remove other children
                 listingToRemove.getOrders().remove(order);
                 em.remove(order);
             }
-            
 
             em.remove(listingToRemove);
         } catch (ListingHasOngoingOrdersException ex) {
             throw new ListingHasOngoingOrdersException(ex.getMessage());
         }
     }
-    
+
     @Override
     public List<Order> retrieveOrdersByListingId(Long listingId) {
         Query query = em.createQuery("SELECT o FROM Order o WHERE o.listing.listingId = :inListingId");
@@ -237,6 +256,12 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
     }
 
     @Override
+    public Seller retrieveSellerByListingId(Long listingId) throws ListingNotFoundException {
+        Listing currentListing = retrieveListingByListingId(listingId);
+        return currentListing.getSeller();
+    }
+
+    @Override
     public Boolean doesListingHaveOutstandingOrders(Listing listing) {
         for (Order order : listing.getOrders()) {
             if (order.getOrderStatus() == OrderStatus.PENDING || order.getOrderStatus() == OrderStatus.ACCEPTED) {
@@ -245,23 +270,23 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         }
         return false;
     }
-    
+
     @Override
     public List<Order> getListingOrders(Long listingId) throws ListingNotFoundException {
         try {
             Listing listing = retrieveListingByListingId(listingId);
-            
+
             return listing.getOrders();
         } catch (ListingNotFoundException ex) {
             throw new ListingNotFoundException(ex.getMessage());
         }
     }
-    
+
     @Override
     public Seller getListingsSeller(Long listingId) throws ListingNotFoundException {
         try {
             Listing listing = retrieveListingByListingId(listingId);
-            
+
             return listing.getSeller();
         } catch (ListingNotFoundException ex) {
             throw new ListingNotFoundException(ex.getMessage());

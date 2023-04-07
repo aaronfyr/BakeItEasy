@@ -100,7 +100,7 @@ public class DataInitSessionBean {
         // "Insert Code > Add Business Method")
         @PostConstruct
         public void postConstruct() {
-                if (em.find(Buyer.class, 1l) == null) {
+                if (em.find(Buyer.class, 1l) == null && em.find(Order.class, 1l) == null && em.find(Admin.class, 1l) == null && em.find(Comment.class, 1l) == null && em.find(Listing.class, 1l) == null && em.find(Post.class, 1l) == null && em.find(Report.class, 1l) == null && em.find(Review.class, 1l) == null && em.find(Seller.class, 1l) == null) {
                         initialiseData();
                 }
         }
