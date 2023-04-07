@@ -8,8 +8,10 @@ package webservices.restful;
 import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import entity.Buyer;
+import entity.Listing;
 import entity.Order;
 import entity.Review;
+import entity.Seller;
 import error.exception.InputDataValidationException;
 import error.exception.OrderIsNotCompletedException;
 import error.exception.OrderNotFoundException;
@@ -77,7 +79,7 @@ public class OrdersResource {
         } catch (Exception e) {
         }
         return o;
-    } //end createCustomer
+    } //end createOrder
     
     @GET
     @Path("/{id}")
@@ -90,13 +92,13 @@ public class OrdersResource {
             ).type(MediaType.APPLICATION_JSON).build();
         } catch (OrderNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "Not found: report id " + orderId)
+                    .add("error", "Not found: order id " + orderId)
                     .build();
 
             return Response.status(404).entity(exception)
                     .type(MediaType.APPLICATION_JSON).build();
         }
-    } //end getReport
+    } //end getOrder
     
     @GET
     @Path("/{id}/buyer")
@@ -109,11 +111,49 @@ public class OrdersResource {
             ).type(MediaType.APPLICATION_JSON).build();
         } catch (OrderNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "Not found: report id " + orderId)
+                    .add("error", "Not found: order id " + orderId)
                     .build();
 
             return Response.status(404).entity(exception)
                     .type(MediaType.APPLICATION_JSON).build();
         }
-    } //end getReport
+    } //end getOrderBuyer
+    
+    @GET
+    @Path("/{id}/listing")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getListing(@PathParam("id") Long orderId) {
+        try {
+            Listing listing = orderSessionBeanLocal.getListing(orderId);
+            return Response.status(200).entity(
+                    listing
+            ).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: order id " + orderId)
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getListing
+    
+    @GET
+    @Path("/{id}/seller")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSeller(@PathParam("id") Long orderId) {
+        try {
+            Seller seller = orderSessionBeanLocal.getSeller(orderId);
+            return Response.status(200).entity(
+                    seller
+            ).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Not found: order id " + orderId)
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getSeller
 }

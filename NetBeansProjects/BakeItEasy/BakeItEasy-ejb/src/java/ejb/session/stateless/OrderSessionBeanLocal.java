@@ -6,7 +6,9 @@
 package ejb.session.stateless;
 
 import entity.Buyer;
+import entity.Listing;
 import entity.Order;
+import entity.Seller;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingNotFoundException;
@@ -36,5 +38,9 @@ public interface OrderSessionBeanLocal {
     public List<Order> getSellerOrders(Long sellerId) throws SellerNotFoundException;
 
     public Buyer getOrderBuyer(Long orderId) throws OrderNotFoundException;
+
+    public Listing getListing(Long orderId) throws OrderNotFoundException;
+
+    public Seller getSeller(Long orderId) throws OrderNotFoundException;
     
 }

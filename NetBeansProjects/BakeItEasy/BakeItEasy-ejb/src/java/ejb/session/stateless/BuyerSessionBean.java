@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.Buyer;
+import entity.Listing;
 import entity.Order;
 import entity.Seller;
 import enumeration.OrderStatus;
@@ -271,6 +272,17 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
             sellerToUnfollow.getFollowers().remove(buyerFollower);
         } else {
             throw new BuyerIsNotFollowingSellerException("Buyer was not following seller! Unable to unfollow!");
+        }
+    }
+    
+    @Override
+    public List<Listing> getLikedListings(Long buyerId) throws BuyerNotFoundException {
+        try {
+            Buyer buyer = retrieveBuyerById(buyerId);
+            
+            return buyer.getLikedListings();
+        } catch (BuyerNotFoundException ex) {
+            throw new BuyerNotFoundException(ex.getMessage());
         }
     }
 

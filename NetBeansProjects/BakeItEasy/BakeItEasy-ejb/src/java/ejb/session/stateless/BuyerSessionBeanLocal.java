@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.Buyer;
+import entity.Listing;
 import entity.Seller;
 import error.exception.BuyerEmailExistException;
 import error.exception.BuyerIsBannedException;
@@ -52,5 +53,7 @@ public interface BuyerSessionBeanLocal {
     public void followSeller(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException, BuyerIsFollowingSellerAlreadyException;
 
     public void unfollowSeller(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException, BuyerIsNotFollowingSellerException;
+
+    public List<Listing> getLikedListings(Long buyerId) throws BuyerNotFoundException;
 
 }
