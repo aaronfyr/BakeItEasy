@@ -62,10 +62,11 @@ useEffect(() => {
   });
 
   //SUPPOSED TO BE get orders by listing, but now it's get orders by seller
+  //yay fixed
   useEffect(() => {
   if (sellerId) {
     fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/orders`,
+      `http://localhost:8080/BakeItEasy-war/webresources/listings/${id}/orders`,
       {
         //get seller id from storage
         method: "GET",

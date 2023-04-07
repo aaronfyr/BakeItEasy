@@ -1,9 +1,7 @@
 import { React, useEffect, useState } from "react";
 import "./resources/sellerProfile.css";
-
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
-
-import { FiHeart } from "react-icons/fi";
+import { FaRegEdit, FaRegUser } from "react-icons/fa";
 import { Flex, flexbox } from "@chakra-ui/react";
 import {
   BrowserRouter as Router,
@@ -23,6 +21,7 @@ function SellerProfile() {
   const [sellerUsername, setSellerUsername] = useState("");
   const [sellerId, setSellerId] = useState(null);
   const [sellerObj, setSellerObj] = useState([]);
+  const [followerCount, setFollowerCount] = useState(404);
 
   const navigate = useNavigate();
 
@@ -102,10 +101,21 @@ function SellerProfile() {
     }
   }, [sellerId]);
 
-
-  const handleGoBack = () => {
-    window.history.back()
-  };
+   //fetch seller follower count
+  console.log("sellerID is", sellerId);
+  useEffect(() => {
+    if (sellerId){
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/followers`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setFollowerCount(data.length));
+    }
+  }, [sellerId]);
 
 
   const filteredListings = listings.filter((listing) =>
@@ -132,6 +142,11 @@ function SellerProfile() {
     navigate(path);
   }
 
+  const routeChangeToViewFollowers = () => {
+    let path = "/sellerViewFollowers";
+    navigate(path);
+  }
+
   return (
     <div className="background">
       <SellerNavigationBar />
@@ -143,7 +158,12 @@ function SellerProfile() {
             <h1>{sellerObj.name}</h1>
             <h5>@{sellerObj.username}</h5>
         </div>
-        <div className="editProfileBtn" onClick={() => routeChangeToSellerEditProfile()}>edit profile</div>
+        <div className="editProfileBtn" onClick={() => routeChangeToSellerEditProfile()}>
+            <FaRegEdit style={{marginRight: 5}}/>
+            edit profile</div>
+        <div className="followersBtn" onClick={() => routeChangeToViewFollowers()}>
+            <FaRegUser style={{marginRight: 5}}/>
+            {followerCount} follower(s)</div>
       </Flex>
       <h2>Search for my listing:</h2>
       <div class="searchBar">
@@ -203,7 +223,6 @@ function SellerProfile() {
               </div>
 
               <div class="productBottomRow">
-                <FiHeart size="1.2rem" />
                 <h3>${listing.price} </h3>
               </div>
             </div>

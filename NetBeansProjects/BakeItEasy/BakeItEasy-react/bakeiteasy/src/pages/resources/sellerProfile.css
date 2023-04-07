@@ -386,11 +386,30 @@ h4 {
     color: var(--dark-text);
     border-width: 1px;
     padding: 0px 20px 0px 20px;
-    margin-left: 200px;
+    margin-left: 300px;
     margin-top: 20px;
 }
 
 .editProfileBtn:hover {
+    background-color: lightgray;
+}
+
+.followersBtn {
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    height: 30px;
+    justify-content: center;
+    border-style: solid;
+    border-color: var(--dark-text);
+    color: var(--dark-text);
+    border-width: 1px;
+    padding: 0px 20px 0px 20px;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.followersBtn:hover {
     background-color: lightgray;
 }
 

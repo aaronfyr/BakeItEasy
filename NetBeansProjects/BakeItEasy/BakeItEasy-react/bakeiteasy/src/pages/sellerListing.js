@@ -27,6 +27,7 @@ import "./resources/default.css";
 import "./resources/listing.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
+import { FiHeart } from "react-icons/fi";
 
 function SellerListing() {
   console.log("test");
@@ -38,6 +39,7 @@ function SellerListing() {
   const [preDelete, setPreDelete] = useState(false);
   const [deleted, setDeleted] = useState(false);
   const [deleteFailed, setDeleteFailed]= useState(false);
+  const [likeNum, setLikeNum] = useState(404);
 
   let navigate = useNavigate();
   const routeChangeToSellerProfile = () => {
@@ -45,6 +47,7 @@ function SellerListing() {
     navigate(path);
   };
 
+  //fetch listing deets
   useEffect(() => {
   fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
     method: "GET",
@@ -62,6 +65,26 @@ function SellerListing() {
     })
     .catch((error) => console.log("ERROR !!!!!" + error));
 }, []);
+
+    //fetch listing likes
+  useEffect(() => {
+  fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}/likes`, {
+    method: "GET",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+        return response.json();
+    })
+    .then((data) => {
+      setLikeNum(data);
+      setLoading(false);
+    })
+    .catch((error) => console.log("ERROR !!!!!" + error));
+}, []);
+
 
   if (loading) {
     return <div>Loading...</div>;
@@ -215,6 +238,7 @@ function SellerListing() {
           ) : (
             <h2>{listing.description}</h2>
           )}
+
           <div style={{ height: 10 }}></div>
           <Flex>
             {!isEditable && (
@@ -229,6 +253,9 @@ function SellerListing() {
             )}
           </Flex>
           <div style={{ height: 10 }}></div>
+          <Flex>
+            <FiHeart style={{alignSelf: "center", marginTop: 5, marginRight: 10, fontSize: 20}}> </FiHeart> <h3 style={{fontSize: 20}}>{likeNum}</h3>
+          </Flex>
           <Flex>
             {isEditable && !preDelete && (
               <button className="button1" onClick={() => setPreDelete(true)}>
@@ -251,7 +278,7 @@ function SellerListing() {
           </Flex>
           <div style={{ height: 10 }}></div>
           <h3>Category:</h3>
-          <h2>{listing.listingCategory.toLowerCase()}</h2>
+          <h2>{(listing.listingCategory).toLowerCase()}</h2>
           {deleteFailed && <h3>You cannot delete this listing.</h3>}
           <br></br>
         </div>

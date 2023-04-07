@@ -14,7 +14,7 @@ import {
 
 /*const orderResponse = await fetch(``)*/
 
-const SearchBarSection = () => {
+const SellerViewListingList = () => {
   const [search, setSearch] = useState("");
   const [listings, setListings] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -123,9 +123,9 @@ const handleCategoryChange = (category) => {
           </svg>
         </button>
       </div>
-      <div className="orderDisplay">
+      <div className="listingDisplay">
         {filteredListings.map((listing) => (
-          <div className="listingComponent" onClick={() => routeChangeToOrder(listing.listingId)}>
+          <div className="listingComp" onClick={() => routeChangeToOrder(listing.listingId)}>
             <SellerOrderCard>
             <div className="sellerOrderCardHeader">
             </div>
@@ -154,72 +154,6 @@ const handleCategoryChange = (category) => {
   );
 };
 
-const data = [{
-      id: 1,
-      buyerName:"chocLover123",
-      title: "Chocolate cake",
-      category: "Cake",
-      price: "175.4",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      url: "https://www.recipetineats.com/wp-content/uploads/2018/03/Chocolate-Cake_9-SQ.jpg?w=500&h=500&crop=1",
-      notes: "no eggs",
-      status: "accepted",
-    },
-    {
-      id: 2,
-      buyerName:"janeTan",
-      title: "Strawberry Pie",
-      category: "Pastry",
-      price: "155.4",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-      url: "https://therecipecritic.com/wp-content/uploads/2019/06/freshstrawberrypie_hero.jpg",
-      notes: "deliver to my address",
-      status: "accepted",
-    },
-    {
-      id: 3,
-      buyerName:"johnDoe",
-      title: "Lasagna",
-      category: "Savoury",
-      price: "125.4",
-      tags: "coat camel white short sleeves double-breasted button",
-      url: "https://www.thewholesomedish.com/wp-content/uploads/2018/07/Best-Lasagna-550-500x375.jpg",
-      notes: "use chicken instead of beef",
-      status: "accepted",
-    },
-    {
-      id: 4,
-      buyerName:"BakerBoy567",
-      title: "Cupcakes",
-      category: "Cake",
-      price: "55.4",
-      tags: "hoodie solid plain purple long baggy hood",
-      url: "https://www.bhg.com/thmb/iL-5Q6gGjmXkxCKqEovughTLQAo=/3000x0/filters:no_upscale():strip_icc()/how-to-bake-how-to-make-cupcakes-hero-01-12c03f3eff374d569b0565bff7d9e597.jpg",
-      notes: "separate into boxes of 5",
-      status: "accepted",
-    },
-    {
-      id: 5,
-      buyerName:"breadBro",
-      title: "Sourdough Loaf",
-      category: "Bread",
-      price: "55.4",
-      tags: "hoodie solid plain black long baggy hood",
-      url: "https://www.kingarthurbaking.com/sites/default/files/2021-07/Rustic-Sourdough-Loaf_0049__0.jpg",
-      notes: "nil",
-      status: "accepted",
-    },
-    {
-      id: 6,
-      buyerName:"jellycat987",
-      title: "Jelly Cake",
-      category: "Desserts",
-      price: "55.4",
-      tags: "hoodie solid plain gray grey short hood",
-      url: "https://img.taste.com.au/gym_Wtb0/taste/2022/10/singapore-sling-jelly-cake-181810-1.png",
-      notes: "use red jelly",
-      status: "accepted",
-    }];
 
 const pfpStyle = {padding: 0.5, borderRadius: "50%", width: 30, height: 30,
                     objectFit: "cover", background: "grey", display:"block" }
@@ -228,4 +162,4 @@ const imgStyle = {height: 150, width: 150, objectFit:"cover", borderRadius: 10}
 
 
 
-export default SearchBarSection;
+export default SellerViewListingList;
