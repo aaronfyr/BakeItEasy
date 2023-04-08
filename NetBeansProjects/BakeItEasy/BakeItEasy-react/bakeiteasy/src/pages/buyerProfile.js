@@ -2,6 +2,7 @@ import { React, useEffect, useState } from "react";
 import "./resources/profile.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
+import { OrderListingHeader } from "../components/orderListingHeader";
 
 import {
   BrowserRouter as Router,
@@ -191,23 +192,42 @@ function BuyerProfile() {
   const [reportSellerError, setReportSellerError] = useState(null);
   const [title, setTitle] = useState("");
   const [reason, setReason] = useState("");
-  const handleReportSeller = async (oId) => {
-    const response = await fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/sellers/2/reports`,
+
+  const handleReportSeller = async (event, oId) => {
+    event.preventDefault();
+    const sellerResponse = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/listings/${oId}/seller`,
       {
-        method: "PUT",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          title,
-          reason,
-        }),
       }
     );
-    if (response.ok) {
-      // redirect to homepage
-      navigate(`/`);
+    const sellerData = await sellerResponse.json();
+    const sellerId = sellerData.sellerId;
+
+    if (sellerResponse.ok) {
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/sellers/${sellerId}/reports`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title,
+            reason,
+          }),
+        }
+      );
+      if (response.ok) {
+        // redirect to homepage
+        navigate(`/`);
+      } else {
+        // show error message
+        setReportSellerError("Invalid details. Please try again.");
+      }
     } else {
       // show error message
       setReportSellerError("Invalid details. Please try again.");
@@ -257,6 +277,7 @@ function BuyerProfile() {
             </div>
             <div id="buyerOrderDetailsGrid">
               <div className="orderDetails_left">
+                <OrderListingHeader oId={order.orderId} />
                 <h2>Order No. {order.orderId}</h2>
 
                 <h4 className="italic">
@@ -285,10 +306,7 @@ function BuyerProfile() {
                   trigger={
                     <Flex>
                       {order.orderStatus !== "CANCELLED" && (
-                        <div
-                          className="button1_cancel"
-                          onClick={() => handleReportSeller(order.orderId)}
-                        >
+                        <div className="button1_cancel">
                           Report Seller
                           <MdOutlineReport size="1.2rem" />
                         </div>
@@ -305,7 +323,11 @@ function BuyerProfile() {
                       </button>
                       <div className="header"> Report Seller </div>
                       <div className="content">
-                        <form onSubmit={handleReportSeller}>
+                        <form
+                          onSubmit={(event) =>
+                            handleReportSeller(event, order.orderId)
+                          }
+                        >
                           <FormControl mt={4}>
                             <FormLabel>Title of Report: </FormLabel>
                             <Input

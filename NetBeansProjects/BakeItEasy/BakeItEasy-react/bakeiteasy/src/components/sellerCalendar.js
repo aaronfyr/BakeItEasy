@@ -2,11 +2,25 @@ import { React, useEffect, useState, useMemo } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
+import { EventListingDetails } from "./eventListingDetails";
+
 import {
   BrowserRouter as Router,
   useNavigate,
   useParams,
 } from "react-router-dom";
+
+import {
+  Button,
+  Modal,
+  ModalContent,
+  ModalOverlay,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 //import timeGridPlugin from "@fullcalendar/timegrid";
 
@@ -154,14 +168,18 @@ export const SellerCalendar = () => {
           }
         );
         const data = await response.json();
+
+        // set list of orders
         setOrders(data);
+        console.log("orders: ", orders);
         console.log(`HTTP Response Code: ${response?.status}`);
 
         // process array of orders as objects
         const processedData = data.map((obj) => {
           return {
-            title: obj.orderId.toString(),
+            title: "Order #" + obj.orderId.toString(),
             start: obj.dateOfCollection.substring(0, 10),
+            orderId: obj.orderId,
           };
         });
         setOrders(processedData);
@@ -177,6 +195,25 @@ export const SellerCalendar = () => {
     fetchData();
   }, []);
 
+  const [state, setState] = useState({
+    event: {
+      title: "",
+      start: new Date(),
+      orderId: "",
+    },
+  });
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const handleEventClick = ({ event, el }) => {
+    setState({ event });
+    onOpen();
+  };
+
+  const titleToId = (title) => {
+    console.log("converted titleToId: ", title.substring(7));
+    return title.substring(7);
+  };
+
   console.log("orders: ", orders);
   return (
     <div>
@@ -190,8 +227,31 @@ export const SellerCalendar = () => {
         themeSystem="Simplex"
         plugins={[dayGridPlugin]}
         events={orders}
+        selectable={true}
+        eventClick={handleEventClick}
       />
-      <FullCalendar
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{state.event.title}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <div>
+              <p>{state.event.start.toDateString()}</p>
+              <EventListingDetails oId={titleToId(state.event.title)} />
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </div>
+  );
+};
+
+/*
+<FullCalendar
         defaultView="dayGridMonth"
         // themeSystem="Simplex"
         // header={{
@@ -204,9 +264,8 @@ export const SellerCalendar = () => {
         displayEventEnd="true"
         eventColor={"#" + Math.floor(Math.random() * 16777215).toString(16)}
       />
-    </div>
-  );
-};
+*/
+
 /*
 import { Eventcalendar, getJson } from "@mobiscroll/react-lite";
 

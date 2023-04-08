@@ -30,6 +30,7 @@ import {
 
 import { FiHeart } from "react-icons/fi";
 import ReactLoading from "react-loading";
+import { ListingSellerHeader } from "./listingSellerHeader";
 
 export const BuyerShopping = () => {
   let navigate = useNavigate();
@@ -125,9 +126,6 @@ export const BuyerShopping = () => {
     //const detailsText = await getSellerByLId(lId);
     //return <p>{detailsText}</p>;
 
-    if (listingSellers.length === listings.length) {
-      setIsLoading(false);
-    }
     if (listingSellers[lId]) {
       return <p>{listingSellers[lId]}</p>;
     } else {
@@ -392,7 +390,7 @@ export const BuyerShopping = () => {
                   alt="listing product"
                 />
 
-                {renderSellerListingHeader(product.listingId)}
+                <ListingSellerHeader lId={product.listingId} />
               </div>
               <div className="productImg">
                 <img
@@ -456,7 +454,7 @@ export const BuyerShopping = () => {
                   src={require("../assets/dummyuser.png")}
                   alt="listing product"
                 />
-                <h6>{product.sellerName}</h6>
+                <ListingSellerHeader lId={product.listingId} />
               </div>
               <div className="productImg">
                 <img

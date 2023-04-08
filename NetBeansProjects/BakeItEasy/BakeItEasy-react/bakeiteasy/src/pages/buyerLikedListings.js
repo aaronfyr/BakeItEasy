@@ -3,6 +3,7 @@ import "./resources/default.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
 import { BuyerShopping } from "../components/buyerHomepageShopping";
+import { ListingSellerHeader } from "../components/listingSellerHeader";
 
 import {
   Avatar,
@@ -254,7 +255,7 @@ function BuyerLikedListings() {
                     src={require("../assets/dummyuser.png")}
                     alt="listing product"
                   />
-                  <h6>seller name</h6>
+                  <ListingSellerHeader lId={product.listingId} />
                 </div>
                 <div className="productImg">
                   <img
