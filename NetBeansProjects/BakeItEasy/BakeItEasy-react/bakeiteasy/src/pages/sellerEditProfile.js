@@ -29,7 +29,8 @@ import {
   FaRegStar,
   FaArrowLeft
 } from "react-icons/fa";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./resources/default.css";
 import "./resources/sellerViewOrder.css";
 
@@ -106,23 +107,32 @@ useEffect(() => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Failed to update listing");
+            toast.error("Failed to update profile.");
+          throw new Error("Failed to update seller");
+        } else {
+            console.log("ok response");
+            toast.success("Profile updated successfully.");
         }
         return response.json();
       })
-      .then((data) => {
+      .then(() => {
         // handle successful update
+        console.log("pretoast");
         window.location.reload();
+
       })
       .catch((error) => {
         /*handle error */
+
       });
   }
 
   return (
     <div>
+
         <SellerNavigationBar/>
         <br/>
+        <ToastContainer/>
         <div style={{width: 220}}>
             <div className="button1" onClick={handleGoBack} ><FaArrowLeft/>Back to profile</div>
         </div>
@@ -156,16 +166,17 @@ useEffect(() => {
             )}
             <h3>Phone:</h3>
             {isEditable ? (
-                <input
-                type="text"
-                className="inputStyle"
-                value={sellerObj.phoneNo}
-                onChange={(e) =>
-                    setSellerObj({ ...sellerObj, phoneNo: e.target.value })
-                }
-                />
+            <input
+            type="text"
+            className="inputStyle"
+            value={sellerObj.phoneNo}
+            onInput={(e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                setSellerObj({ ...sellerObj, phoneNo: e.target.value })
+            }}
+            />
             ) : (
-                <h2>{sellerObj.phoneNo}</h2>
+            <h2>{sellerObj.phoneNo}</h2>
             )}
             <div style={{ height: 10 }}></div>
             <Flex>

@@ -5,6 +5,7 @@ import SellerOrderCard from "./sellerOrderCard.js";
 import CategoryDropdown from "../components/categoryDropdown";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
 import {FaListUl} from "react-icons/fa";
+import {formatPrice} from "../components/formatter"
 import {
   BrowserRouter as Router,
   useNavigate,
@@ -135,7 +136,7 @@ const handleCategoryChange = (category) => {
                 </div>
 
                 <div style={{width: 400}} className="cardTextBlock">
-                    <h2>{listing.name} [${listing.price}]</h2>
+                    <h2>{listing.name} [${formatPrice(listing.price)}]</h2>
                     <h4>{listing.listingCategory}</h4>
                     <div className="flexBox">
                         <div className="searchBarButton1">

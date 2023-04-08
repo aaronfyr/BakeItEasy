@@ -1,8 +1,11 @@
 import { React, useEffect, useState } from "react";
 import "./resources/sellerProfile.css";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
-import { FaRegEdit, FaRegUser } from "react-icons/fa";
+import { FaRegEdit, FaRegUser, FaPlus } from "react-icons/fa";
 import { Flex, flexbox } from "@chakra-ui/react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { formatPrice } from "../components/formatter";
 import {
   BrowserRouter as Router,
   Route,
@@ -22,6 +25,7 @@ function SellerProfile() {
   const [sellerId, setSellerId] = useState(null);
   const [sellerObj, setSellerObj] = useState([]);
   const [followerCount, setFollowerCount] = useState(404);
+  const [hasToasted, setToasted] = useState(false);
 
   const navigate = useNavigate();
 
@@ -43,6 +47,7 @@ function SellerProfile() {
           console.log("parsedUser: ", parsedUser);
           console.log("parsedUser.id: ", parsedUser.sellerId);
           setSellerId(parsedUser.sellerId);
+          setSellerName(parsedUser.name);
         } catch (error) {
           console.log(error);
         }
@@ -149,6 +154,7 @@ function SellerProfile() {
 
   return (
     <div className="background">
+        <ToastContainer/>
       <SellerNavigationBar />
       <div id="coverPhoto">
         <div id="profilePhoto"></div>
@@ -195,7 +201,9 @@ function SellerProfile() {
       <div className="sellerProducts">
         <Flex>
           <h1>Seller Products</h1>
-          <div className="newListBtn" onClick={() => routeChangeToCreateListing()}>create listing</div>
+          <div className="newListBtn" onClick={() => routeChangeToCreateListing()}>
+            <FaPlus style={{alignSelf: "center", paddingRight:5}}/>
+            create listing</div>
         </Flex>
 
       </div>
@@ -223,7 +231,7 @@ function SellerProfile() {
               </div>
 
               <div class="productBottomRow">
-                <h3>${listing.price} </h3>
+                <h3>${formatPrice(listing.price)} </h3>
               </div>
             </div>
           ))}

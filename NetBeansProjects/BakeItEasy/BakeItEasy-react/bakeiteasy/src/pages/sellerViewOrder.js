@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
+import {toast, ToastContainer} from "react-toastify";
 import {
   Avatar,
   Button,
@@ -32,7 +33,7 @@ import {
 
 import "./resources/default.css";
 import "./resources/sellerEditProfile.css";
-
+import { formatPrice, formatDate } from '../components/formatter';
 import { NavigationBar } from "../components/buyerNavigationBar";
 import useOrderBuyer from "../components/getOrderBuyer";
 
@@ -41,6 +42,9 @@ function SellerViewOrder() {
   const [order, setOrder] = useState([]);
   const [orderId, setOrderId] = useState("");
   const [buyer, setBuyer] = useState([]);
+
+
+
 
  useEffect(() => {
   fetch(`http://localhost:8080/BakeItEasy-war/webresources/orders/${id}`, {
@@ -91,7 +95,7 @@ function SellerViewOrder() {
       setAccepted(true);
       setRejected(false);
       setCompleted(false);
-    } else if (order.orderStatus === "REJECTED") {
+    } else if (order.orderStatus === "CANCELLED") {
       setPending(false);
       setAccepted(false);
       setRejected(true);
@@ -116,7 +120,10 @@ function SellerViewOrder() {
         }
       );
       if (response.ok) {
+        toast.success("Order accepted successfully! Reloading...");
+        setTimeout(() => {
         window.location.reload();
+        }, 5000);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -135,7 +142,10 @@ function SellerViewOrder() {
         }
       );
       if (response.ok) {
+        toast.success("Order rejected successfully! Reloading...");
+        setTimeout(() => {
         window.location.reload();
+        }, 5000);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -154,7 +164,10 @@ function SellerViewOrder() {
         }
       );
       if (response.ok) {
+        toast.success("Order completed successfully! Reloading...");
+        setTimeout(() => {
         window.location.reload();
+        }, 5000);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -165,9 +178,13 @@ function SellerViewOrder() {
     window.history.back()
   };
 
+
+
+
   return (
     <div>
         <SellerNavigationBar/>
+        <ToastContainer/>
         <br/>
         <div style={{width: 220}}>
             <div className="button1" onClick={handleGoBack} ><FaArrowLeft/>Back to orders</div>
@@ -189,7 +206,7 @@ function SellerViewOrder() {
           <h2>id #{buyer.buyerId}</h2>
           <h2>@{buyer.username}</h2>
           <h3>Price:</h3>
-          <h2>{order.price}</h2>
+          <h2>${formatPrice(order.price)}</h2>
           <h3>Quantity:</h3>
           <h2>{order.quantity}</h2>
           <h3>Description:</h3>
@@ -197,25 +214,25 @@ function SellerViewOrder() {
           <h3>Address:</h3>
           <h2>{order.address}</h2>
           <h3>Collection Date:</h3>
-          <h2>{order.dateOfCollection}</h2>
+          <h2>{formatDate(order.dateOfCollection)}</h2>
           <h3>Buyer:</h3>
           <h3>Order Status:</h3>
           <h2>{order.orderStatus}</h2>
           <br></br>
           <Flex>
-            {isPending && (
+            {isPending && !isRejected && (
               <div className="button1" onClick={clickA}>
                 <FaCheck />
                 Accept
               </div>
             )}
-            {isPending && (
+            {isPending && !isRejected &&  (
               <div className="button1" onClick={clickR}>
                 <FaTimes />
                 Reject
               </div>
             )}
-            {isAccepted && (
+            {isAccepted && !isRejected && (
               <div className="button1" onClick={clickC}>
                 <FaRegStar />
                 Complete

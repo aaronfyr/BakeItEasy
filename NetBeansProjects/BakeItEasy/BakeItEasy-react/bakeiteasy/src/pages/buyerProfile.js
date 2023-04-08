@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import "./resources/profile.css";
-
+import {toast, ToastContainer} from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
 
 import {
@@ -211,28 +211,35 @@ function BuyerProfile() {
   const [reportSellerError, setReportSellerError] = useState(null);
   const [title, setTitle] = useState("");
   const [reason, setReason] = useState("");
-  const handleReportSeller = async (oId) => {
-    const response = await fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/sellers/2/reports`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          reason,
-        }),
+ const handleReportSeller = (oId) => {
+  fetch(`http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/sellers/2/reports`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      title,
+      reason,
+    }),
+  })
+    .then(response => {
+      if (response.ok) {
+        // redirect to homepage
+        toast.success("Report submitted successfully!");
+        setTimeout(() => {
+          navigate(`/`);
+        }, 3000);
+      } else {
+        // show error message
+        toast.error("There was an error!");
+        throw new Error('Network response was not ok');
       }
-    );
-    if (response.ok) {
-      // redirect to homepage
-      navigate(`/`);
-    } else {
-      // show error message
+    })
+    .catch(error => {
       setReportSellerError("Invalid details. Please try again.");
-    }
-  };
+    });
+};
+
 
   const routeChangeToEditAccountDetails = (buyerId) => {
     console.log("routeChangeToEditAccountDetails: ", buyerId);
@@ -241,7 +248,9 @@ function BuyerProfile() {
   };
 
   return (
+
     <div className="background">
+        <ToastContainer/>
       <NavigationBar />
       <div id="coverPhoto">
         <div id="profilePhoto"></div>
