@@ -70,6 +70,10 @@
     margin-bottom: 5px;
 }
 
+.productContent {
+  height:168px;
+}
+
 .productBottomRow {
   display: flex;
   align-items: center;

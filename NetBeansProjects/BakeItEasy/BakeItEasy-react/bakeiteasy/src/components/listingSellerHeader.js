@@ -1,8 +1,40 @@
 import React, { useState, memo } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  useNavigate,
+  Navigate,
+  useParams,
+} from "react-router-dom";
+import {
+  Avatar,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  Tooltip,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
+  Spacer,
+} from "@chakra-ui/react";
 import ReactLoading from "react-loading";
 
 export function ListingSellerHeaderNonMemo({ lId }) {
+  const navigate = useNavigate();
   const [listingSellers, setListingSellers] = useState({});
+  const [listingSellerIds, setListingSellerIds] = useState({});
 
   const getSellerByLId = async (lId) => {
     try {
@@ -16,32 +48,39 @@ export function ListingSellerHeaderNonMemo({ lId }) {
         }
       );
       const data = await response.json();
-      //console.log(`HTTP Response Code: ${response?.status}`);
-      //console.log("sellerId: ", data.sellerId);
       console.log("sellerUsername: ", data.username);
-      //console.log("sellerName: ", data.name);
-      //obj.sellerId = data.sellerId;
-      //obj.sellerUsername = data.username;
-      //obj.sellerName = data.name;
       setListingSellers({ ...listingSellers, [lId]: data.username });
+      setListingSellerIds({ ...listingSellerIds, [lId]: data.sellerId });
       return data.username;
     } catch (error) {
       if (error instanceof SyntaxError) {
         // Unexpected token < in JSON
         console.log("There was a SyntaxError", error);
       }
-      //obj.sellerId = "User not found";
-      //obj.sellerUsername = "User not found";
-      //obj.sellerName = "User not found";
     }
   };
 
+  // routeChangeToSellerProfile
+  const routeChangeToSellerProfile = (sId) => {
+    if (sId) {
+      let path = "/buyerViewSellerProfile/" + sId;
+      navigate(path);
+    }
+  };
+
+  // return render statements
   if (listingSellers[lId]) {
-    return <p>{listingSellers[lId]}</p>;
+    return (
+      <div
+        className="listingSellerHeader"
+        onClick={() => routeChangeToSellerProfile(listingSellerIds[lId])}
+      >
+        {listingSellers[lId]}
+      </div>
+    );
   } else {
     getSellerByLId(lId);
     return <ReactLoading color={"#D3D3D3"} height={"15%"} width={"15%"} />;
-    //return <p>Loading...</p>;
   }
 }
 

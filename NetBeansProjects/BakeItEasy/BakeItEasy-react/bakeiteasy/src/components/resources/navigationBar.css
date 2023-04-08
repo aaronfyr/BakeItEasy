@@ -99,3 +99,12 @@ h4 {
 .main_nav li a{
   color: #ffffff;
 }
+
+.listingSellerHeader {
+  cursor: pointer;
+}
+
+.listingSellerHeader:hover {
+  cursor: pointer;
+  color:#E2725B;
+}

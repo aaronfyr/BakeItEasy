@@ -410,3 +410,34 @@ h4 {
 .newListBtn:hover {
     background-color: lightgray;
 }
+
+.button1_follow {
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-style: solid;
+    border-color: var(--dark-text);
+    color: var(--dark-text);
+    border-width: 1px;
+    padding: 0px 20px 0px 20px;
+    margin: 10px 20px 0px 0px;
+  }
+  
+  .button1_follow:hover {
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-style: solid;
+    border-color: var(--dark-text);
+    color: var(--beige-bg);
+    border-width: 1px;
+    padding: 0px 20px 0px 20px;
+    margin: 10px 20px 0px 0px;
+    background-color: var(--mid-orange);
+  }

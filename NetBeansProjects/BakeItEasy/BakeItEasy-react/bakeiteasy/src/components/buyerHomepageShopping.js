@@ -378,10 +378,7 @@ export const BuyerShopping = () => {
             return null;
           })
           .map((product) => (
-            <div
-              className="product"
-              onClick={() => routeChangeToListing(product.listingId)}
-            >
+            <div className="product">
               <div class="productSeller">
                 <img
                   width="30px"
@@ -392,15 +389,20 @@ export const BuyerShopping = () => {
 
                 <ListingSellerHeader lId={product.listingId} />
               </div>
-              <div className="productImg">
-                <img
-                  className="productImg"
-                  src={require("../assets/scones.jpg")}
-                  alt="listing product"
-                />
+              <div
+                class="productContent"
+                onClick={() => routeChangeToListing(product.listingId)}
+              >
+                <div className="productImg">
+                  <img
+                    className="productImg"
+                    src={require("../assets/scones.jpg")}
+                    alt="listing product"
+                  />
+                </div>
+                <h3>{product.name}</h3>
+                <h5>{product.description}</h5>
               </div>
-              <h3>{product.name}</h3>
-              <h5>{product.description}</h5>
               <div class="productBottomRow">
                 <div class="btn">
                   <FiHeart
@@ -443,10 +445,7 @@ export const BuyerShopping = () => {
             return obj;
           })
           .map((product) => (
-            <div
-              className="product"
-              onClick={() => routeChangeToListing(product.listingId)}
-            >
+            <div className="product">
               <div class="productSeller" key={product.listingId}>
                 <img
                   width="30px"
@@ -456,17 +455,25 @@ export const BuyerShopping = () => {
                 />
                 <ListingSellerHeader lId={product.listingId} />
               </div>
-              <div className="productImg">
-                <img
-                  className="productImg"
-                  src={require("../assets/scones.jpg")}
-                  alt="listing product"
-                />
+              <div
+                class="productContent"
+                onClick={() => routeChangeToListing(product.listingId)}
+              >
+                <div className="productImg">
+                  <img
+                    className="productImg"
+                    src={require("../assets/scones.jpg")}
+                    alt="listing product"
+                  />
+                </div>
+                <h3>{product.name}</h3>
+                <h5>{product.description}</h5>
               </div>
-              <h3>{product.name}</h3>
-              <h5>{product.description}</h5>
               <div class="productBottomRow">
-                <FiHeart size="1.2rem" />
+                <FiHeart
+                  size="1.2rem"
+                  onClick={() => handleListingToLikes(product.listingId)}
+                />
                 <h3>${product.price}</h3>
               </div>
             </div>

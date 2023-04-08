@@ -374,7 +374,7 @@ h4 {
   background-color: var(--dark-text);
 }
 
-.button1_cancel {
+.button1_follow {
   display: flex;
   align-items: center;
   border-radius: 20px;
@@ -389,7 +389,7 @@ h4 {
   margin: 10px 20px 0px 0px;
 }
 
-.button1_cancel:hover {
+.button1_follow:hover {
   display: flex;
   align-items: center;
   border-radius: 20px;
