@@ -68,5 +68,7 @@ public interface ListingSessionBeanLocal {
     public Seller getListingsSeller(Long listingId) throws ListingNotFoundException;
 
     public Seller retrieveSellerByListingId(Long listingId) throws ListingNotFoundException;
+
+    public List<Listing> getFollowedSellerListings(Long buyerId) throws BuyerNotFoundException;
     
 }
