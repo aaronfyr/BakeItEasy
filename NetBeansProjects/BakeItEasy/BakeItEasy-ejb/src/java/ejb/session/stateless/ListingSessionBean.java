@@ -21,8 +21,11 @@ import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -291,6 +294,17 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         } catch (ListingNotFoundException ex) {
             throw new ListingNotFoundException(ex.getMessage());
         }
+    }
+
+    @Override
+    public List<Listing> getFollowedSellerListings(Long buyerId) throws BuyerNotFoundException {
+            Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+
+            List<Listing> allFollowedSellerListings = new ArrayList<>();
+            for (Seller followedSeller : buyer.getFollowings()) {
+                allFollowedSellerListings.addAll(followedSeller.getListings());
+            }
+            return allFollowedSellerListings;
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Listing>> constraintViolations) {

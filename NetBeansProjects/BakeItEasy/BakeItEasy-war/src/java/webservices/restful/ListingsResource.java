@@ -361,4 +361,12 @@ public class ListingsResource {
         Listing listing = listingSessionBeanLocal.retrieveListingByListingId(listingId);
         return listing.getLikers().size();
     } //end getNumberOfListingLikes
+    
+    // CHECKED: AARON
+    @GET
+    @Path("/{buyer_id}/followed")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Listing> getAllFollowedSellersListings(@PathParam("buyer_id") Long buyerId) throws BuyerNotFoundException {
+        return listingSessionBeanLocal.getFollowedSellerListings(buyerId);
+    } //end getAllFollowedSellersListings
 }
