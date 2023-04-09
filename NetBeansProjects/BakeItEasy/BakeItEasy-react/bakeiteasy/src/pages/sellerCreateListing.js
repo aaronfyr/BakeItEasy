@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
+import {toast, ToastContainer} from "react-toastify";
 import {
   Avatar,
   Button,
@@ -138,25 +139,38 @@ const handleChange = (event) => {
     })
       .then(response => {
         if (!response.ok) {
-          throw new Error('Failed to create listing');
+            toast.error("!response.ok");
         } else {
           console.log("listing created");
           setCreated(true);
+          toast.success("Listing successfully created! Redirecting to profile...");
           setTimeout(() => {
             routeChangeToSellerProfile();
-          }, 3000); // 1000 milliseconds = 1 second
+          }, 5000); // 1000 milliseconds = 1 second
         }
         return response.json();
       })
       .then(data => {
         // handle successful creation
       })
-      .catch(error => {});
+      .catch(error => {
+         toast.error('Failed to create listing. ' + error);
+          throw new Error('Failed to create listing');
+      });
+  };
+
+  const handlePriceChange = (e) => {
+    const { value } = e.target;
+    setListing({
+      ...listing,
+      price: value.replace(/[^0-9.]/g, ""),
+    });
   };
 
 
   return (
     <div>
+        <ToastContainer/>
         <SellerNavigationBar/>
         <br/>
         <div style={{width: 220}}>
@@ -182,14 +196,28 @@ const handleChange = (event) => {
                 <option value="PIE">Pie</option>
             </select>
         </label>
-      <label>
-        Price:
-        <input type="text" name="price" value={listing.price} onChange={handleChange} />
-      </label>
+       <label>
+      Price:
+      <input
+        type="text"
+        name="price"
+        value={listing.price}
+        onChange={handlePriceChange}
+      />
+    </label>
       <label>
         Quantity:
-        <input type="text" name="quantityLeft" value={listing.quantityLeft} onChange={handleChange} />
-      </label>
+        <select name="quantityLeft" value={listing.quantityLeft} onChange={handleChange}>
+            <option value="">-- Select quantity --</option>
+            {[...Array(100)].map((_, index) => (
+            <option key={index} value={index + 1}>
+                {index + 1}
+            </option>
+            ))}
+  </select>
+</label>
+
+
       <label>
         Description:
         <input type="text" name="description" value={listing.description} onChange={handleChange} />
@@ -201,7 +229,6 @@ const handleChange = (event) => {
       <button type="submit" className="button1">Create Listing</button>
     </form>
     <br/>
-    {created && <h1>created successfully! please wait, redirecting to profile...</h1>}
             </div>
         </div>
     </div>

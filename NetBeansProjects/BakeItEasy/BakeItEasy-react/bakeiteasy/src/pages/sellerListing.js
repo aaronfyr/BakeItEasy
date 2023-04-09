@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
+import { toast, ToastContainer } from "react-toastify";
 import {
   Avatar,
   Button,
@@ -22,11 +23,12 @@ import {
   PopoverCloseButton,
 } from "@chakra-ui/react";
 import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
-
+import {formatPrice, formatDate} from "../components/formatter";
 import "./resources/default.css";
 import "./resources/listing.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
+import { FiHeart } from "react-icons/fi";
 
 function SellerListing() {
   console.log("test");
@@ -36,8 +38,8 @@ function SellerListing() {
   const [listing, setListing] = useState([]);
   const [isEditable, setIsEditable] = useState(false);
   const [preDelete, setPreDelete] = useState(false);
-  const [deleted, setDeleted] = useState(false);
   const [deleteFailed, setDeleteFailed]= useState(false);
+  const [likeNum, setLikeNum] = useState(404);
 
   let navigate = useNavigate();
   const routeChangeToSellerProfile = () => {
@@ -45,6 +47,7 @@ function SellerListing() {
     navigate(path);
   };
 
+  //fetch listing deets
   useEffect(() => {
   fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
     method: "GET",
@@ -63,6 +66,26 @@ function SellerListing() {
     .catch((error) => console.log("ERROR !!!!!" + error));
 }, []);
 
+    //fetch listing likes
+  useEffect(() => {
+  fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}/likes`, {
+    method: "GET",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+        return response.json();
+    })
+    .then((data) => {
+      setLikeNum(data);
+      setLoading(false);
+    })
+    .catch((error) => console.log("ERROR !!!!!" + error));
+}, []);
+
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -72,28 +95,36 @@ function SellerListing() {
   };
 
   const handleUpdate = () => {
-    stopEditable();
-    fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(listing),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          setDeleteFailed(true);
-        }
+  stopEditable();
+  fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(listing),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        toast.error("Update failed");
+        //setDeleteFailed(true);
+        throw new Error("Update failed");
+      } else {
+        toast.success("Listing update success");
         return response.json();
-      })
-      .then((data) => {
-        // handle successful update
+      }
+    })
+    .then((data) => {
+      // handle successful update
+      setTimeout(() => {
         window.location.reload();
-      })
-      .catch((error) => {
-        /*handle error */
-      });
-  };
+      }, 3000);
+    })
+    .catch((error) => {
+      /* handle other errors */
+      toast.error(error);
+    });
+};
+
 
   const handleDelete = () => {
     setPreDelete(false);
@@ -110,13 +141,13 @@ function SellerListing() {
             setDeleteFailed(true);
             setTimeout(() => {
                 setDeleteFailed(false)
-          }, 3000); // 1000 milliseconds = 1 second
+          }, 5000); // 1000 milliseconds = 1 second
         } else {
           console.log("response ok");
-          setDeleted(true);
+          toast.success("Listing deleted successfully");
           setTimeout(() => {
             routeChangeToSellerProfile();
-          }, 3000); // 1000 milliseconds = 1 second
+          }, 5000); // 1000 milliseconds = 1 second
         }
         return response.json();
       })
@@ -166,6 +197,7 @@ function SellerListing() {
     <div>
         <SellerNavigationBar/>
       <br />
+      <ToastContainer/>
       <h1>Listing ID {listing.listingId} </h1>
       <div id="listingContainer">
         <div id="leftListingContainer">
@@ -183,13 +215,13 @@ function SellerListing() {
             <input
               type="text"
               className="inputStyle"
-              value={listing.price}
+              value={formatPrice(listing.price)}
               onChange={(e) =>
                 setListing({ ...listing, price: e.target.value })
               }
             />
           ) : (
-            <h2>{listing.price}</h2>
+            <h2>${formatPrice(listing.price)}</h2>
           )}
           <h3>Name:</h3>
           {isEditable ? (
@@ -215,6 +247,7 @@ function SellerListing() {
           ) : (
             <h2>{listing.description}</h2>
           )}
+
           <div style={{ height: 10 }}></div>
           <Flex>
             {!isEditable && (
@@ -229,6 +262,9 @@ function SellerListing() {
             )}
           </Flex>
           <div style={{ height: 10 }}></div>
+          <Flex>
+            <FiHeart style={{alignSelf: "center", marginTop: 5, marginRight: 10, fontSize: 20}}> </FiHeart> <h3 style={{fontSize: 20}}>{likeNum}</h3>
+          </Flex>
           <Flex>
             {isEditable && !preDelete && (
               <button className="button1" onClick={() => setPreDelete(true)}>
@@ -245,13 +281,10 @@ function SellerListing() {
                 Cancel Delete
               </button>
             )}
-            {deleted && (
-              <h1>DELETED SUCCESSFULLY! redirecting, please wait...</h1>
-            )}
           </Flex>
           <div style={{ height: 10 }}></div>
           <h3>Category:</h3>
-          <h2>{listing.listingCategory.toLowerCase()}</h2>
+          <h2>{(listing.listingCategory).toLowerCase()}</h2>
           {deleteFailed && <h3>You cannot delete this listing.</h3>}
           <br></br>
         </div>

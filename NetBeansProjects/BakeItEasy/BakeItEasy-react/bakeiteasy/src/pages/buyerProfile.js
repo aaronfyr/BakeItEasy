@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import "./resources/profile.css";
-
+import { toast, ToastContainer } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
 import { OrderListingHeader } from "../components/orderListingHeader";
 
@@ -242,6 +242,7 @@ function BuyerProfile() {
 
   return (
     <div className="background">
+      <ToastContainer />
       <NavigationBar />
       <div id="coverPhoto">
         <div id="profilePhoto"></div>

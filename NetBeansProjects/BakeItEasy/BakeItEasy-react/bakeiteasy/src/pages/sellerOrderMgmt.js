@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import "./resources/default.css";
-import OrderSearch from "./searchBarSection.js";
+import OrderSearch from "./sellerViewListingList";
 import {
   BrowserRouter as Router,
   useNavigate, // Be sure to add this import

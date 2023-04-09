@@ -37,8 +37,9 @@ import SellerViewOrder from "./pages/sellerViewOrder";
 import SellerViewOrderByListing from "./pages/sellerViewOrderByListing";
 import SellerListingPage from "./pages/sellerListing";
 import SellerAppointments from "./pages/sellerAppointments";
-import EditSellerProfile from "./pages/sellerEditProfile";
+import SellerEditProfile from "./pages/sellerEditProfile";
 import SellerCreateListing from "./pages/sellerCreateListing";
+import SellerViewFollowers from "./pages/sellerViewFollowers";
 
 function App() {
   return (
@@ -80,28 +81,14 @@ function App() {
 
                 <Route path="/sellerHomepage" element={<SellerHomepage />} />
                 <Route path="/sellerProfile" element={<SellerProfile />} />
-                <Route
-                  path="/editSellerProfile"
-                  element={<EditSellerProfile />}
-                />
+                <Route path="/editSellerProfile" element={<SellerEditProfile />} />
                 <Route path="sellerOrder/:id" element={<SellerViewOrder />} />
                 <Route path="/sellerOrderMgmt" element={<SellerOrderMgmt />} />
-                <Route
-                  path="/sellerOrderMgmt/listing/:id"
-                  element={<SellerViewOrderByListing />}
-                />
-                <Route
-                  path="/sellerListing/:id"
-                  element={<SellerListingPage />}
-                />
-                <Route
-                  path="/sellerAppointments"
-                  element={<SellerAppointments />}
-                />
-                <Route
-                  path="/sellerCreateListing"
-                  element={<SellerCreateListing />}
-                />
+                <Route path="/sellerOrderMgmt/listing/:id" element={<SellerViewOrderByListing />} />
+                <Route path="/sellerListing/:id" element={<SellerListingPage />}/>
+                <Route path="/sellerAppointments" element={<SellerAppointments />}/>
+                <Route path="/sellerCreateListing" element={<SellerCreateListing />}/>
+                <Route path="/sellerViewFollowers" element={<SellerViewFollowers />}/>
               </Routes>
             </Router>
           </AdminProvider>

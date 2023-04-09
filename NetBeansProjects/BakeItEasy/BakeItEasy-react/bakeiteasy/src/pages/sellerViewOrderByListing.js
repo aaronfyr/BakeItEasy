@@ -5,6 +5,7 @@ import SellerOrderCard from "./sellerOrderCard.js";
 import { SellerNavigationBar as SellerNav } from "../components/sellerNavigationBar";
 import { FaCheck } from "react-icons/fa";
 import getOrderBuyer from "../components/getOrderBuyer"
+import { formatPrice, formatDate } from '../components/formatter.js';
 import {
   BrowserRouter as Router,
   useNavigate,
@@ -12,6 +13,7 @@ import {
   Link,
 } from "react-router-dom";
 import Seller from "../components/seller";
+
 
 const SellerViewOrderByListing = () => {
   const [orders, setOrders] = useState([]);
@@ -62,10 +64,11 @@ useEffect(() => {
   });
 
   //SUPPOSED TO BE get orders by listing, but now it's get orders by seller
+  //yay fixed
   useEffect(() => {
   if (sellerId) {
     fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/orders`,
+      `http://localhost:8080/BakeItEasy-war/webresources/listings/${id}/orders`,
       {
         //get seller id from storage
         method: "GET",
@@ -161,7 +164,7 @@ useEffect(() => {
                 <h2>DESCRIPTION:</h2>
                 <body>{listing.description}</body>
                 <h2>PRICE:</h2>
-                <body>${listing.price}</body>
+                <body>${formatPrice(listing.price)}</body>
               </div>
             </div>
           </SellerOrderCard>
@@ -185,8 +188,8 @@ useEffect(() => {
                     className="cardTextBlock"
                   >
                     <h4>note: {order.description}</h4>
-                    <h4>amount due: {order.price}</h4>
-                    <h4>date due: {order.dateOfCollection}</h4>
+                    <h4>amount due: ${formatPrice(order.price)}</h4>
+                    <h4>date due: {formatDate(order.dateOfCollection)}</h4>
                   </div>
 
                   <div className="orderStatus">

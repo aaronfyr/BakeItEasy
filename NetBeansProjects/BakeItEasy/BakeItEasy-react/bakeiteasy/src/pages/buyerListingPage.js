@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import {
   Avatar,
   Button,
@@ -233,6 +234,7 @@ function BuyerListingPage() {
   return (
     <div>
       <NavigationBar />
+      <ToastContainer />
       <div id="listingContainer">
         <div id="leftListingContainer">
           <div class="slideshow-container"></div>

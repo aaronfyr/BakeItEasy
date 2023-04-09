@@ -1,10 +1,11 @@
 import { React, useEffect, useState } from "react";
 import "./resources/sellerProfile.css";
-
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
-
-import { FiHeart } from "react-icons/fi";
+import { FaRegEdit, FaRegUser, FaPlus } from "react-icons/fa";
 import { Flex, flexbox } from "@chakra-ui/react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { formatPrice } from "../components/formatter";
 import {
   BrowserRouter as Router,
   Route,
@@ -23,6 +24,8 @@ function SellerProfile() {
   const [sellerUsername, setSellerUsername] = useState("");
   const [sellerId, setSellerId] = useState(null);
   const [sellerObj, setSellerObj] = useState([]);
+  const [followerCount, setFollowerCount] = useState(404);
+  const [hasToasted, setToasted] = useState(false);
 
   const navigate = useNavigate();
 
@@ -44,6 +47,7 @@ function SellerProfile() {
           console.log("parsedUser: ", parsedUser);
           console.log("parsedUser.id: ", parsedUser.sellerId);
           setSellerId(parsedUser.sellerId);
+          setSellerName(parsedUser.name);
         } catch (error) {
           console.log(error);
         }
@@ -105,9 +109,24 @@ function SellerProfile() {
     }
   }, [sellerId]);
 
-  const handleGoBack = () => {
-    window.history.back();
-  };
+  //fetch seller follower count
+  console.log("sellerID is", sellerId);
+  useEffect(() => {
+    if (sellerId) {
+      fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/followers`,
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => setFollowerCount(data.length));
+    }
+  }, [sellerId]);
 
   const filteredListings = listings.filter(
     (listing) =>
@@ -132,8 +151,14 @@ function SellerProfile() {
     navigate(path);
   };
 
+  const routeChangeToViewFollowers = () => {
+    let path = "/sellerViewFollowers";
+    navigate(path);
+  };
+
   return (
     <div className="background">
+      <ToastContainer />
       <SellerNavigationBar />
       <div id="coverPhoto">
         <div id="profilePhoto"></div>
@@ -148,6 +173,20 @@ function SellerProfile() {
           onClick={() => routeChangeToSellerEditProfile()}
         >
           edit profile
+        </div>
+        <div
+          className="editProfileBtn"
+          onClick={() => routeChangeToSellerEditProfile()}
+        >
+          <FaRegEdit style={{ marginRight: 5 }} />
+          edit profile
+        </div>
+        <div
+          className="followersBtn"
+          onClick={() => routeChangeToViewFollowers()}
+        >
+          <FaRegUser style={{ marginRight: 5 }} />
+          {followerCount} follower(s)
         </div>
       </Flex>
       <h2>Search for my listing:</h2>
@@ -184,6 +223,7 @@ function SellerProfile() {
             className="newListBtn"
             onClick={() => routeChangeToCreateListing()}
           >
+            <FaPlus style={{ alignSelf: "center", paddingRight: 5 }} />
             create listing
           </div>
         </Flex>
@@ -210,8 +250,7 @@ function SellerProfile() {
               </div>
 
               <div class="productBottomRow">
-                <FiHeart size="1.2rem" />
-                <h3>${listing.price} </h3>
+                <h3>${formatPrice(listing.price)} </h3>
               </div>
             </div>
           ))}
