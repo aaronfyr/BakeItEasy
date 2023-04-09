@@ -215,7 +215,7 @@ function SellerListing() {
             <input
               type="text"
               className="inputStyle"
-              value={formatPrice(listing.price)}
+              value={listing.price}
               onChange={(e) =>
                 setListing({ ...listing, price: e.target.value })
               }
