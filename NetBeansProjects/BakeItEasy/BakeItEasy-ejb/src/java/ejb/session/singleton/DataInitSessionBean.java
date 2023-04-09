@@ -109,6 +109,8 @@ public class DataInitSessionBean {
                 try {
                         Buyer buyer1 = new Buyer("test", "test@gmail.com", "test", "test", "test", "test");
                         buyerSessionBeanLocal.createNewBuyer(buyer1);
+                        Buyer buyer2 = new Buyer("test2", "test2@gmail.com", "test2", "test2", "test2", "test2");
+                        buyerSessionBeanLocal.createNewBuyer(buyer2);
 
                         Seller seller1 = new Seller("test", "test@mail.com", "test", "test", "test");
                         Seller seller2 = new Seller("test2", "test2@mail.com", "test2", "test2", "test2");
@@ -237,7 +239,7 @@ public class DataInitSessionBean {
 
                         Order order2 = new Order(BigDecimal.TEN, 2, "birthday cake", "123 house", new Date(),
                                         new Date());
-                        orderSessionBeanLocal.createNewOrder(order2, buyer1.getBuyerId(), listing1.getListingId());
+                        orderSessionBeanLocal.createNewOrder(order2, buyer2.getBuyerId(), listing1.getListingId());
                         sellerSessionBeanLocal.acceptOrder(order2.getOrderId());
                         sellerSessionBeanLocal.completeOrder(order2.getOrderId());
 

@@ -55,5 +55,9 @@ public interface BuyerSessionBeanLocal {
     public void unfollowSeller(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException, BuyerIsNotFollowingSellerException;
 
     public List<Listing> getLikedListings(Long buyerId) throws BuyerNotFoundException;
+    
+    public void followSellerThroughProfile(Long buyerId, Long sellerId) throws SellerNotFoundException, BuyerNotFoundException, BuyerIsFollowingSellerAlreadyException;
+
+    public void unfollowSellerThroughProfile(Long buyerId, Long sellerId) throws SellerNotFoundException, BuyerNotFoundException, BuyerIsNotFollowingSellerException;
 
 }
