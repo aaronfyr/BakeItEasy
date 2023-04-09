@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import "./resources/sellerProfile.css";
-
+import { toast, ToastContainer } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
 
 import { FiHeart } from "react-icons/fi";
@@ -173,11 +173,11 @@ function BuyerViewSellerProfile() {
 
     if (response.ok) {
       setIsFollowing(true);
-      console.log("followed SellerId# ", id);
+      toast.success(`Followed Seller!`);
     } else {
       // show error message
-      const data = await response.json();
-      console.log(data);
+      const errorData = await response.json();
+      toast.error(errorData.error);
       setFollowSellerError("Invalid details. Please try again.");
     }
   };
@@ -198,10 +198,12 @@ function BuyerViewSellerProfile() {
     if (response.ok) {
       setIsFollowing(false);
       console.log("unfollowed SellerId# ", id);
+
+      toast.success(`Unfollowed Seller.`);
     } else {
       // show error message
-      const data = await response.json();
-      console.log(data);
+      const errorData = await response.json();
+      toast.error(errorData.error);
       setUnfollowSellerError("Invalid details. Please try again.");
     }
   };
@@ -213,6 +215,7 @@ function BuyerViewSellerProfile() {
 
   return (
     <div className="background">
+      <ToastContainer />
       <NavigationBar />
       <div id="coverPhoto">
         <div id="profilePhoto"></div>
@@ -333,40 +336,3 @@ function BuyerViewSellerProfile() {
 }
 
 export default BuyerViewSellerProfile;
-
-/*
-    {
-      id: 1,
-      title: "Loved the brownies",
-      reviewText: "Super yummy, not too sweet, perfect with tea" ,
-      date:"01-07-2022" ,
-      rating:5,
-    },
-    {
-      id: 2,
-      title: "Loved the cake",
-      reviewText: "For a party, kids loved it, tasty cream. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-      date: "23-03-2023",
-      rating:5,
-    },
-    {
-      id: 3,
-      title: "Will buy again!",
-      reviewText: "Custom ordered a jelly cake with specific instructions, cake was well done to my request.Excepteur sint occaecat cupidatat non proident.",
-      date: "13-05-2023" ,
-      rating:5,
-    },
-    {
-      id: 4,
-      title: "Average strawberry pie",
-      reviewText: "Not a bad item but costs so much and doesn't taste better than commercial pies. Excepteur sint occaecat cupidatat non proident.",
-      date: "08-09-2023",
-      rating:3,
-    },
-    {
-      id: 5,
-      title: "Rude seller",
-      reviewText: "Took really long to reply to my requests and was rude on text. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      date: "18-02-2023" ,
-      rating:1,
-    }, */

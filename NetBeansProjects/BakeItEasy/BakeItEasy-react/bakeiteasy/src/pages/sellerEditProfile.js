@@ -27,10 +27,10 @@ import {
   FaCheck,
   FaTimes,
   FaRegStar,
-  FaArrowLeft
+  FaArrowLeft,
 } from "react-icons/fa";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./resources/default.css";
 import "./resources/sellerViewOrder.css";
 
@@ -45,7 +45,7 @@ function SellerEditProfile() {
 
   const navigate = useNavigate();
 
-useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       const fetchedSeller = localStorage.getItem("seller");
       /*if (!fetchedBuyer) {
@@ -63,7 +63,6 @@ useEffect(() => {
           console.log("parsedUser: ", parsedUser);
           console.log("parsedUser.id: ", parsedUser.sellerId);
           setSellerId(parsedUser.sellerId);
-
         } catch (error) {
           console.log(error);
         }
@@ -72,46 +71,49 @@ useEffect(() => {
     fetchData();
   }, []);
 
-
-
-//fetch seller
+  //fetch seller
   console.log("sellerID is", sellerId);
   useEffect(() => {
-    if (sellerId){
-    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setSellerObj(data));
+    if (sellerId) {
+      fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`,
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => setSellerObj(data));
     }
   }, [sellerId]);
 
-
   const handleGoBack = () => {
-    window.history.back()
+    window.history.back();
   };
 
   //edit seller
   const handleUpdate = () => {
     setIsEditable(false);
-    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(sellerObj),
-    })
+    fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sellerObj),
+      }
+    )
       .then((response) => {
         if (!response.ok) {
-            toast.error("Failed to update profile.");
+          toast.error("Failed to update profile.");
           throw new Error("Failed to update seller");
         } else {
-            console.log("ok response");
-            toast.success("Profile updated successfully.");
+          console.log("ok response");
+          toast.success("Profile updated successfully.");
         }
         return response.json();
       })
@@ -119,84 +121,88 @@ useEffect(() => {
         // handle successful update
         console.log("pretoast");
         window.location.reload();
-
       })
       .catch((error) => {
         /*handle error */
-
       });
-  }
+  };
 
   return (
     <div>
-
-        <SellerNavigationBar/>
-        <br/>
-        <ToastContainer/>
-        <div style={{width: 220}}>
-            <div className="button1" onClick={handleGoBack} ><FaArrowLeft/>Back to profile</div>
+      <SellerNavigationBar />
+      <br />
+      <ToastContainer />
+      <div style={{ width: 220 }}>
+        <div className="button1" onClick={handleGoBack}>
+          <FaArrowLeft />
+          Back to profile
         </div>
-        <br/>
-        <div className="parent">
-            <div id="rightListingContainer">
-            <h1 style={{marginLeft: 80}}>Edit My Profile: Seller ID #{sellerObj.sellerId}</h1>
-            <h3>Name:</h3>
-            {isEditable ? (
-                <input
-                type="text"
-                className="inputStyle"
-                value={sellerObj.name}
-                onChange={(e) =>
-                    setSellerObj({ ...sellerObj, name: e.target.value })
-                }
-                />
-            ) : (
-                <h2>{sellerObj.name}</h2>
-            )}
-            <h3>Username:</h3>
-            {isEditable ? (
-                <input
-                type="text"
-                className="inputStyle"
-                value={sellerObj.username}
-                onChange={(e) => setSellerObj({ ...sellerObj, username: e.target.value })}
-                />
-            ) : (
-                <h2>{sellerObj.username}</h2>
-            )}
-            <h3>Phone:</h3>
-            {isEditable ? (
+      </div>
+      <br />
+      <div className="parent">
+        <div id="rightListingContainer">
+          <h1 style={{ marginLeft: 80 }}>
+            Edit My Profile: Seller ID #{sellerObj.sellerId}
+          </h1>
+          <h3>Name:</h3>
+          {isEditable ? (
             <input
-            type="text"
-            className="inputStyle"
-            value={sellerObj.phoneNo}
-            onInput={(e) => {
-                e.target.value = e.target.value.replace(/[^0-9]/g, "");
-                setSellerObj({ ...sellerObj, phoneNo: e.target.value })
-            }}
+              type="text"
+              className="inputStyle"
+              value={sellerObj.name}
+              onChange={(e) =>
+                setSellerObj({ ...sellerObj, name: e.target.value })
+              }
             />
-            ) : (
+          ) : (
+            <h2>{sellerObj.name}</h2>
+          )}
+          <h3>Username:</h3>
+          {isEditable ? (
+            <input
+              type="text"
+              className="inputStyle"
+              value={sellerObj.username}
+              onChange={(e) =>
+                setSellerObj({ ...sellerObj, username: e.target.value })
+              }
+            />
+          ) : (
+            <h2>{sellerObj.username}</h2>
+          )}
+          <h3>Phone:</h3>
+          {isEditable ? (
+            <input
+              type="text"
+              className="inputStyle"
+              value={sellerObj.phoneNo}
+              onInput={(e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                setSellerObj({ ...sellerObj, phoneNo: e.target.value });
+              }}
+            />
+          ) : (
             <h2>{sellerObj.phoneNo}</h2>
+          )}
+          <div style={{ height: 10 }}></div>
+          <Flex>
+            {!isEditable && (
+              <button className="button1" onClick={() => setIsEditable(true)}>
+                Edit
+              </button>
             )}
-            <div style={{ height: 10 }}></div>
-            <Flex>
-                {!isEditable && (
-                <button className="button1" onClick={() => setIsEditable(true)}>
-                    Edit
-                </button>
-                )}
-                {isEditable && (
-                <button className="button1" onClick={handleUpdate}>
-                    Done
-                </button>
-                )}
-            </Flex>
-            <div style={{ height: 10 }}></div>
-            <h3>Email:</h3>
-            <h2>{sellerObj.email}</h2>
-            <br></br>
-            </div>
+            {isEditable && (
+              <button className="button1" onClick={handleUpdate}>
+                Done
+              </button>
+            )}
+          </Flex>
+          <div style={{ height: 10 }}></div>
+          <h3>Email:</h3>
+          <h2>{sellerObj.email}</h2>
+          <br></br>
         </div>
+      </div>
     </div>
   );
 }

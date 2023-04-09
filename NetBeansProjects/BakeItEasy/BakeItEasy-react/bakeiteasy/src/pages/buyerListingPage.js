@@ -102,7 +102,7 @@ function BuyerListingPage() {
           }
         );
         const data = await response.json();
-        console.log("fetched data: ", data);
+        //console.log("fetched data: ", data);
         setListing(data);
         setListingName(data.name);
         setListingDescription(data.description);
@@ -121,7 +121,7 @@ function BuyerListingPage() {
     fetchData();
   }, []);
 
-  console.log(listing);
+  //console.log(listing);
 
   /*
   // for the image slideshow
@@ -166,6 +166,10 @@ function BuyerListingPage() {
       defaultValue: 1,
       min: 1,
       max: listingMaxQty,
+      onChange: (val) => {
+        setQuantity(val);
+        console.log("quantitychange: ", quantity);
+      },
     });
 
   const inc = getIncrementButtonProps();
@@ -187,7 +191,7 @@ function BuyerListingPage() {
   // FUNCTIONS
   // handle submit order
   const dateOfCreation = new Date();
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [dateOfCollection, setDateOfCollection] = useState(new Date());
   const [description, setDescription] = useState("-");
   const [orderFieldValues, addOrderFieldValue] = useState([]);
@@ -308,7 +312,10 @@ function BuyerListingPage() {
               <Button {...inc}>+</Button>
               <Input
                 value={quantity}
-                onChange={(event) => setQuantity(event.target.value)}
+                onChange={(event) => {
+                  setQuantity(event.target.value);
+                  console.log("quantitychange: ", quantity);
+                }}
                 {...input}
               />
               <Button {...dec}>-</Button>
@@ -339,9 +346,9 @@ function BuyerListingPage() {
             <Spacer />
             <ModalBody>
               <img
-                width="200px"
-                height="200px"
-                src={require("../assets/celebration.png")}
+                width="250px"
+                height="250px"
+                src={require("../assets/successful_order.gif")}
                 alt="listing product"
               />
             </ModalBody>

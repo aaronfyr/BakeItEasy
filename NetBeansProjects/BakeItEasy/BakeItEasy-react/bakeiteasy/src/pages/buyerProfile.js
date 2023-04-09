@@ -98,59 +98,6 @@ function BuyerProfile() {
     fetchData();
   }, []);
 
-  /*
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-      status: "Paid",
-    },
-    {
-      id: 3,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-      status: "Cancelled By Seller",
-    },
-    {
-      id: 1,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-      status: "Paid",
-    },
-    {
-      id: 3,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-      status: "Cancelled By Seller",
-    },
-  ]);
-  */
-
   let navigate = useNavigate();
   const routeChangeToOrder = (id) => {
     let path = "/buyerOrder/";
@@ -169,23 +116,19 @@ function BuyerProfile() {
           "Content-Type": "application/json",
         },
       }
-    )
-      .then((response) => {
-        if (response.ok) {
-          // redirect to homepage
-          console.log("cancelled order: ", oId);
-          setCancelOrderSuccess("Successfully Cancelled Order");
-        } else {
-          // show error message
+    );
 
-          console.log("cannot cancel order: ", oId);
-          setCancelOrderError("Invalid order details. Please try again.");
-          throw new Error(response.statusText);
-        }
-      })
-      .catch((error) => {
-        console.log("HTTP Error: ", error);
-      });
+    if (response.ok) {
+      // redirect to homepage
+      console.log("cancelled order: ", oId);
+      toast.success(`Cancelled Order #${oId}.`);
+      setCancelOrderSuccess("Successfully Cancelled Order");
+    } else {
+      // show error message
+
+      const errorData = await response.json();
+      toast.error(errorData.error);
+    }
   };
 
   // handleReportSeller
@@ -224,10 +167,11 @@ function BuyerProfile() {
       if (response.ok) {
         // redirect to homepage
         console.log("reported seller!");
-        navigate(`/`);
+        toast.success(`Reported Seller ${sellerId}.`);
       } else {
-        // show error message
-        setReportSellerError("Invalid details. Please try again.");
+        const errorData = await response.json();
+        console.log("reporting error:", errorData.error);
+        toast.error(errorData.error);
       }
     } else {
       // show error message
@@ -269,7 +213,7 @@ function BuyerProfile() {
       <br />
       <div class="ordersDisplay">
         {orders.map((order) => (
-          <div id="buyerOrderCard" onClick={() => routeChangeToOrder(order.id)}>
+          <div id="buyerOrderCard">
             <div className="buyerProductImg">
               <img
                 className="productImg"

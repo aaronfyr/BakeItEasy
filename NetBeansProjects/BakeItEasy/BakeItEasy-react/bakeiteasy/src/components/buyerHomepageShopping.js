@@ -27,7 +27,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from "@chakra-ui/react";
-
+import { toast, ToastContainer } from "react-toastify";
 import { FiHeart } from "react-icons/fi";
 import ReactLoading from "react-loading";
 import { ListingSellerHeader } from "./listingSellerHeader";
@@ -351,11 +351,14 @@ export const BuyerShopping = () => {
     if (response.ok) {
       // redirect to homepage
       console.log("likedListing# ", lId);
-
+      console.log("reported seller!");
+      toast.success(`Liked listing # ${lId}.`);
       //recolor liked button
       document.getElementById("btn").style.backgroundColor = "black";
     } else {
       // show error message
+      const errorData = await response.json();
+      toast.error(errorData.error);
       setLikeListingError("Invalid details. Please try again.");
     }
   };
@@ -365,6 +368,7 @@ export const BuyerShopping = () => {
 
   return (
     <div>
+      <ToastContainer />
       <div className="homepageSearchBar">
         <input
           className="homepageInput"
@@ -427,6 +431,10 @@ export const BuyerShopping = () => {
               }
             }
             return null;
+          })
+          .map((product) => {
+            filteredListingsCounterFollowed++;
+            return product;
           })
           .map((product) => (
             <div className="product">
@@ -494,9 +502,9 @@ export const BuyerShopping = () => {
             }
             return null;
           })
-          .map((obj) => {
-            //console.log("listing", obj);
-            return obj;
+          .map((product) => {
+            filteredListingsCounterExplore++;
+            return product;
           })
           .map((product) => (
             <div className="product">

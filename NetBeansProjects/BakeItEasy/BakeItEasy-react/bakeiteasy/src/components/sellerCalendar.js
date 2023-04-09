@@ -20,6 +20,8 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Flex,
+  Spacer,
 } from "@chakra-ui/react";
 
 //import timeGridPlugin from "@fullcalendar/timegrid";
@@ -235,15 +237,33 @@ export const SellerCalendar = () => {
         <ModalContent>
           <ModalHeader>{state.event.title}</ModalHeader>
           <ModalCloseButton />
+
           <ModalBody>
             <div>
               <p>{state.event.start.toDateString()}</p>
               <EventListingDetails oId={titleToId(state.event.title)} />
             </div>
+            <Flex>
+              <Spacer />
+              <img
+                height="200px"
+                width="200px"
+                src={require("../assets/paper-bag.gif")}
+                alt="listing product"
+              />
+              <Spacer />
+            </Flex>
           </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Cancel</Button>
-          </ModalFooter>
+
+          <Flex>
+            <Spacer />
+            <ModalFooter>
+              <Button onClick={onClose} colorScheme="orange" variant="ghost">
+                Close
+              </Button>
+            </ModalFooter>
+            <Spacer />
+          </Flex>
         </ModalContent>
       </Modal>
     </div>

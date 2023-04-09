@@ -133,11 +133,13 @@ export const NavigationBar = () => {
         <div id="navChoices">My Orders</div>
       </Flex>
 
-      <HStack spacing="15px">
-        <IconContext.Provider value={{ color: "#7D7373", size: "1.5rem" }}>
+      <HStack spacing="7px">
+        <IconContext.Provider value={{ size: "1.2rem" }}>
           <Popover>
             <PopoverTrigger>
-              <FiBell />
+              <div className="icon-circle">
+                <FiBell />
+              </div>
             </PopoverTrigger>
             <PopoverContent>
               <PopoverArrow />
@@ -146,9 +148,12 @@ export const NavigationBar = () => {
               <PopoverBody>You have no new notifications.</PopoverBody>
             </PopoverContent>
           </Popover>
-          <FiMessageSquare />
-          <FiHeart onClick={() => routeToLikedListings()} />
-
+          <div className="icon-circle">
+            <FiMessageSquare />
+          </div>
+          <div className="icon-circle">
+            <FiHeart onClick={() => routeToLikedListings()} />
+          </div>
           <Menu>
             <MenuButton
               variant="ghost"
