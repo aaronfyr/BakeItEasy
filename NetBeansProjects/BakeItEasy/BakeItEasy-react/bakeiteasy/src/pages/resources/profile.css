@@ -292,7 +292,7 @@ h4 {
 
 #buyerOrderDetailsGrid {
   display: grid;
-  grid-template-columns: 70% 30%;
+  grid-template-columns: 45% 25% 30%;
   width: 710px;
   height: 150px;
   float: left;
@@ -359,6 +359,68 @@ h4 {
   margin: 10px 20px 0px 0px;
 }
 .button1_editAccount:hover {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--beige-bg);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+  background-color: var(--dark-text);
+}
+
+.button1_report {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--dark-text);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+}
+
+.button1_report:hover {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--beige-bg);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+  background-color: var(--mid-orange);
+}
+
+.button1_cancel {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--dark-text);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+}
+
+.button1_cancel:hover {
   display: flex;
   align-items: center;
   border-radius: 20px;

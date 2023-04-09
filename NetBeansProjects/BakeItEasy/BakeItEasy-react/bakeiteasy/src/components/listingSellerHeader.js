@@ -48,7 +48,7 @@ export function ListingSellerHeaderNonMemo({ lId }) {
         }
       );
       const data = await response.json();
-      console.log("sellerUsername: ", data.username);
+      //console.log("sellerUsername: ", data.username);
       setListingSellers({ ...listingSellers, [lId]: data.username });
       setListingSellerIds({ ...listingSellerIds, [lId]: data.sellerId });
       return data.username;

@@ -223,6 +223,7 @@ function BuyerProfile() {
       );
       if (response.ok) {
         // redirect to homepage
+        console.log("reported seller!");
         navigate(`/`);
       } else {
         // show error message
@@ -279,13 +280,19 @@ function BuyerProfile() {
             <div id="buyerOrderDetailsGrid">
               <div className="orderDetails_left">
                 <OrderListingHeader oId={order.orderId} />
-                <h2>Order No. {order.orderId}</h2>
+                <h4 className="italic">Order No. {order.orderId}</h4>
 
-                <h4 className="italic">
+                <h4 className="details">
                   Customisation Notes: {order.description}
                 </h4>
-                <h4 className="details">{order.dateOfCreation}</h4>
+                <h4 className="details">
+                  Collection Date: {order.dateOfCollection}
+                </h4>
+              </div>
+              <div>
+                <h4 className="italic">Status:</h4>
                 <h2>{order.orderStatus}</h2>
+                <h4 className="italic">Price:</h4>
                 <h2>
                   {order.quantity} x ${order.price}
                 </h2>
@@ -307,7 +314,7 @@ function BuyerProfile() {
                   trigger={
                     <Flex>
                       {order.orderStatus !== "CANCELLED" && (
-                        <div className="button1_cancel">
+                        <div className="button1_report">
                           Report Seller
                           <MdOutlineReport size="1.2rem" />
                         </div>

@@ -52,13 +52,49 @@ export const BuyerShopping = () => {
     fetchData();
   }, []);
 
-  // fecth listing sellers
-  const getSeller = async (obj) => {
-    const lId = obj.listingId;
-    obj.sellerFetchAttempt = true;
+  // fetch current buyer followings
+  const [followings, setFollowings] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let buyerId = null;
+        const fetchedBuyer = localStorage.getItem("buyer");
+        if (!fetchedBuyer) {
+          navigate("/login");
+        } else {
+          const parsedUser = JSON.parse(fetchedBuyer);
+          buyerId = parsedUser.buyerId;
+          console.log("buyerId to get followings", buyerId);
+        }
 
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/followings/`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        setFollowings(data.map((fol) => fol.sellerId));
+
+        console.log(`HTTP Response Code: ${response?.status}`);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
+  // fecth listing sellerId
+  const getSellerId = async (lId) => {
     try {
-      const response = await fetch(
+      fetch(
         `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/seller`,
         {
           method: "GET",
@@ -66,24 +102,17 @@ export const BuyerShopping = () => {
             "Content-Type": "application/json",
           },
         }
-      );
-      const data = await response.json();
-      //console.log(`HTTP Response Code: ${response?.status}`);
-      //console.log("sellerId: ", data.sellerId);
-      console.log("sellerUsername: ", data.username);
-      //console.log("sellerName: ", data.name);
-      //obj.sellerId = data.sellerId;
-      //obj.sellerUsername = data.username;
-      //obj.sellerName = data.name;
-      return data.username;
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          //console.log("sellerId: ", data.sellerId);
+          return data.sellerId;
+        });
     } catch (error) {
       if (error instanceof SyntaxError) {
         // Unexpected token < in JSON
         console.log("There was a SyntaxError", error);
       }
-      //obj.sellerId = "User not found";
-      //obj.sellerUsername = "User not found";
-      //obj.sellerName = "User not found";
     }
   };
 
@@ -101,13 +130,9 @@ export const BuyerShopping = () => {
         }
       );
       const data = await response.json();
-      //console.log(`HTTP Response Code: ${response?.status}`);
-      //console.log("sellerId: ", data.sellerId);
+
       console.log("sellerUsername: ", data.username);
-      //console.log("sellerName: ", data.name);
-      //obj.sellerId = data.sellerId;
-      //obj.sellerUsername = data.username;
-      //obj.sellerName = data.name;
+
       setListingSellers({ ...listingSellers, [lId]: data.username });
       return data.username;
     } catch (error) {
@@ -115,9 +140,6 @@ export const BuyerShopping = () => {
         // Unexpected token < in JSON
         console.log("There was a SyntaxError", error);
       }
-      //obj.sellerId = "User not found";
-      //obj.sellerUsername = "User not found";
-      //obj.sellerName = "User not found";
     }
   };
 
@@ -163,8 +185,48 @@ export const BuyerShopping = () => {
     fetchData();
   }, []);
 
-  // fetch listings with sellers
+  // fetch current buyer followings listings
   /*
+  const [followedListings, setFollowedListings] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/listings/`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        console.log(
+          "data: ",
+          data.filter((product) => {
+            console.log("followings: ", followings);
+            console.log(
+              "comparing followings: ",
+              getSellerId(product.listingId),
+              followings.includes(getSellerId(product.listingId))
+            );
+            return followings.includes(getSellerId(product.listingId));
+          })
+        );
+        console.log(`HTTP Response Code: ${response?.status}`);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
+  // fetch listings with sellers
+  
   const [listings, setListings] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -354,11 +416,6 @@ export const BuyerShopping = () => {
               product.name.toLowerCase().includes(search) ||
               product.description.toLowerCase().includes(search)
             ) {
-              //console.log("map: categoryFilter:", categoryFilter);
-              //console.log(
-              //"map: product.listingCategory:",
-              //product.listingCategory
-              //);
               if (
                 (categoryFilter &&
                   product.listingCategory
@@ -366,12 +423,6 @@ export const BuyerShopping = () => {
                     .includes(categoryFilter)) ||
                 !categoryFilter
               ) {
-                //console.log(product);
-                filteredListingsCounterFollowed++;
-                //console.log(
-                //"filteredListings count: ",
-                //filteredListingsCounterFollowed
-                //);
                 return product;
               }
             }
@@ -430,18 +481,21 @@ export const BuyerShopping = () => {
               product.name.toLowerCase().includes(search) ||
               product.description.toLowerCase().includes(search)
             ) {
-              //console.log(product);
-              filteredListingsCounterExplore++;
-              //console.log(
-              //"filteredListings count: ",
-              //filteredListingsCounterExplore
-              //);
-              return product;
+              if (
+                (categoryFilter &&
+                  product.listingCategory
+                    .toLowerCase()
+                    .includes(categoryFilter)) ||
+                !categoryFilter
+              ) {
+                filteredListingsCounterExplore++;
+                return product;
+              }
             }
             return null;
           })
           .map((obj) => {
-            console.log("listing", obj);
+            //console.log("listing", obj);
             return obj;
           })
           .map((product) => (

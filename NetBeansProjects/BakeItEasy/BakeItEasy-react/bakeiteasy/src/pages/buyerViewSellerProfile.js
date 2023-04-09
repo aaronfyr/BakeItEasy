@@ -49,6 +49,52 @@ function BuyerViewSellerProfile() {
 
   const navigate = useNavigate();
 
+  // fetch current buyer followings
+  const [followings, setFollowings] = useState();
+  const [isFollowing, setIsFollowing] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let buyerId = null;
+        const fetchedBuyer = localStorage.getItem("buyer");
+        if (!fetchedBuyer) {
+          navigate("/login");
+        } else {
+          const parsedUser = JSON.parse(fetchedBuyer);
+          buyerId = parsedUser.buyerId;
+          console.log("buyerId to get followings", buyerId);
+        }
+
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/followings/`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        setFollowings(data);
+        console.log("sellerProfile, followings: ", followings);
+        const checkIsFollowing = data.some(
+          (val) => val.sellerId.toString() === id
+        );
+
+        setIsFollowing(checkIsFollowing);
+        console.log("sellerProfile, isFollowing: ", isFollowing);
+        console.log(`HTTP Response Code: ${response?.status}`);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
   // fetch seller
   useEffect(() => {
     fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${id}/`, {
@@ -116,7 +162,7 @@ function BuyerViewSellerProfile() {
   const [followSellerError, setFollowSellerError] = useState(null);
   const handleFollowSeller = async () => {
     const response = await fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/listings/2/${buyerId}/follow`,
+      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${id}/${buyerId}/follow`,
       {
         method: "PUT",
         headers: {
@@ -124,15 +170,39 @@ function BuyerViewSellerProfile() {
         },
       }
     );
-    if (response.ok) {
-      // redirect to homepage
-      console.log("likedSellerId# ", id);
 
-      //recolor liked button
-      document.getElementById("btn").style.backgroundColor = "black";
+    if (response.ok) {
+      setIsFollowing(true);
+      console.log("followed SellerId# ", id);
     } else {
       // show error message
+      const data = await response.json();
+      console.log(data);
       setFollowSellerError("Invalid details. Please try again.");
+    }
+  };
+
+  // handleUnfollowSeller
+  const [unfollowSellerError, setUnfollowSellerError] = useState(null);
+  const handleUnfollowSeller = async () => {
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${id}/${buyerId}/unfollow`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.ok) {
+      setIsFollowing(false);
+      console.log("unfollowed SellerId# ", id);
+    } else {
+      // show error message
+      const data = await response.json();
+      console.log(data);
+      setUnfollowSellerError("Invalid details. Please try again.");
     }
   };
 
@@ -140,7 +210,6 @@ function BuyerViewSellerProfile() {
     let path = "/listing/" + lId;
     navigate(path);
   };
-  console.log(listings);
 
   return (
     <div className="background">
@@ -153,9 +222,19 @@ function BuyerViewSellerProfile() {
           <h1>{sellerName}</h1>
           <h5>@{sellerUsername}</h5>
         </div>
-        <div className="editProfileBtn" onClick={() => handleFollowSeller()}>
-          Follow
-        </div>
+        {!isFollowing && (
+          <div className="editProfileBtn" onClick={() => handleFollowSeller()}>
+            Follow
+          </div>
+        )}
+        {isFollowing && (
+          <div
+            className="editProfileBtn"
+            onClick={() => handleUnfollowSeller()}
+          >
+            Unfollow
+          </div>
+        )}
       </Flex>
       <h2>Search for Listing:</h2>
       <div class="searchBar">
