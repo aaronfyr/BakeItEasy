@@ -24,6 +24,7 @@ import BuyerLikedListings from "./pages/buyerLikedListings";
 import BuyerProfile from "./pages/buyerProfile";
 import BuyerEditAccount from "./pages/buyerEditAccount";
 import BuyerViewOrder from "./pages/buyerViewOrder";
+import BuyerViewSellerProfile from "./pages/buyerViewSellerProfile";
 import MakeReview from "./pages/makeReview";
 
 import ViewAllBuyers from "./pages/viewAllBuyers";
@@ -56,6 +57,10 @@ function App() {
                   element={<BuyerEditAccount />}
                 />
                 <Route path="buyerOrder/:id" element={<BuyerViewOrder />} />
+                <Route
+                  path="/buyerViewSellerProfile/:id"
+                  element={<BuyerViewSellerProfile />}
+                />
                 <Route
                   path="/buyerLikedListings"
                   element={<BuyerLikedListings />}

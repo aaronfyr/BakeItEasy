@@ -13,17 +13,17 @@
   --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.searchBar {
+.homepageSearchBar {
   display: flex;
   align-items: center;
-  background-color: black;
-  border-radius: 20px;
-  height: 20px;
-  padding: 0px 30px 0px 30px;
+  border-radius: 40px;
+  height: 30px;
   margin-top: 5px;
+  padding-right: 10px;
+  background-color: white;
 }
 
-.input {
+.homepageInput {
     width: 100%;
     border: none;
     border-radius: 20px;
@@ -33,7 +33,7 @@
     color: var(--dark-text);
     font-family: var(--reg-font-family);
     font-size: 18px;
-    background-color: black;
+
 }
 
 .button {
@@ -68,6 +68,10 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 5px;
+}
+
+.productContent {
+  height:168px;
 }
 
 .productBottomRow {
@@ -166,6 +170,21 @@ h5 {
   margin: 0px 20px 0px 0px;
 }
 
+.category_selected {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  background: var(--dark-text);
+  color: white;
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 0px 20px 0px 0px;
+}
+
 .category:hover {
   background: var(--dark-text);
   color: white;
@@ -178,6 +197,16 @@ img {
 img.productImg {
   width:100%;
   height:100%;
+  
+}
+
+img.heartBreakIcon {
+  width:60%;
+  height:60%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .productImg {
@@ -189,3 +218,113 @@ img.productImg {
   object-fit: fill;
 }
 
+.heartBreakIcon {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn {
+  height: 2rem;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* button like effects*/
+.btn:link {
+    text-transform: uppercase;
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    text-decoration: none;
+    padding: 15px 40px;
+    display: flex;
+    border-radius: 100px;
+    transition: all .2s;
+    position: absolute;
+    
+}
+
+.btn:hover {
+  background-color: rgba(239, 114, 97, 0.575);
+  height: 2rem;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+  background-color: #E9AEA2;
+  height: 2rem;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn:visited {
+  background-color: #E9AEA2;
+  height: 2rem;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+}
+
+.btn-white {
+    background-color: #fff;
+    color: #777;
+}
+
+.btn::after {
+    content: "";
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    transition: all .4s;
+}
+
+.btn-white::after {
+    background-color: #fff;
+}
+
+.btn:hover::after {
+    transform: scaleX(1.4) scaleY(1.6);
+    opacity: 0;
+}
+
+.btn-animated {
+    animation: moveInBottom 5s ease-out;
+    animation-fill-mode: backwards;
+}
+
+@keyframes moveInBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}

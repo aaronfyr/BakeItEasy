@@ -20,6 +20,8 @@ import {
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { FaEdit, FaArrowRight } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function BuyerEditAccount() {
   const navigate = useNavigate();
@@ -82,11 +84,12 @@ function BuyerEditAccount() {
   //edit buyer
   const [isEditable, setIsEditable] = useState(false);
   const [buyerObj, setBuyerObj] = useState([]);
-  const handleUpdate = () => {
+  const [errorMessage, setErrorMessage] = useState("");
+  const handleUpdate = async () => {
     setIsEditable(false);
 
     console.log("handleUpdate: ", "in");
-    fetch(
+    const response = await fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}`,
       {
         method: "PUT",
@@ -95,21 +98,13 @@ function BuyerEditAccount() {
         },
         body: JSON.stringify(buyerObj),
       }
-    )
-      .then((response) => {
-        console.log(`HTTP Response Code: `, JSON.stringify(response));
-        if (!response.ok) {
-          throw new Error("Failed to update buyer");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        // handle successful update
-        window.location.reload();
-      })
-      .catch((error) => {
-        /*handle error */
-      });
+    );
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.error);
+    } else {
+      toast.success("Profile updated successfully.");
+    }
   };
 
   // routing
@@ -119,6 +114,7 @@ function BuyerEditAccount() {
   return (
     <div className="background">
       <NavigationBar />
+      <ToastContainer />
       <div id="coverPhoto">
         <div id="profilePhoto"></div>
       </div>
@@ -205,6 +201,7 @@ function BuyerEditAccount() {
               </button>
             )}
           </Flex>
+
           <div style={{ height: 10 }}></div>
           <h3>Email:</h3>
           <h2>{buyerEmail}</h2>

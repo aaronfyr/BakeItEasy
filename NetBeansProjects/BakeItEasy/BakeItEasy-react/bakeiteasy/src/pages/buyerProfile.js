@@ -1,7 +1,8 @@
 import { React, useEffect, useState } from "react";
 import "./resources/profile.css";
-import {toast, ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
+import { OrderListingHeader } from "../components/orderListingHeader";
 
 import {
   BrowserRouter as Router,
@@ -16,14 +17,20 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Spacer,
 } from "@chakra-ui/react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { FaEdit } from "react-icons/fa";
+import { MdOutlineReport, MdOutlineCancel } from "react-icons/md";
 
 function BuyerProfile() {
+  const { id } = useParams();
+
+  //fetch buyer
   const [buyer, setBuyer] = useState(null);
   const [buyerName, setBuyerName] = useState("Log In");
+  const [buyerUsername, setBuyerUsername] = useState("Log In");
   const [buyerId, setBuyerId] = useState(null);
 
   useEffect(() => {
@@ -41,6 +48,7 @@ function BuyerProfile() {
           console.log("parsedUser.name: ", parsedUser.name);
           setBuyerName(parsedUser.name);
           setBuyerId(parsedUser.buyerId);
+          setBuyerUsername(parsedUser.username);
         } catch (error) {
           console.log(error);
         }
@@ -49,6 +57,7 @@ function BuyerProfile() {
     fetchData();
   }, []);
 
+  // fetch orders
   const [orders, setOrders] = useState([]);
   console.log("buyerId:", buyerId);
 
@@ -89,91 +98,10 @@ function BuyerProfile() {
     fetchData();
   }, []);
 
-  /*
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-      status: "Paid",
-    },
-    {
-      id: 3,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-      status: "Cancelled By Seller",
-    },
-    {
-      id: 1,
-      title: "Strawberry Shortcake",
-      category: "Cake",
-      price: "60",
-      tags: "coat check textured camel brown long sleeves buttoned cuffs",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      title: "Chicken Puff (set of 20)",
-      category: "Pastry",
-      price: "85",
-      tags: "coat camel black grey marl lapel collar hip flap pockets",
-      status: "Paid",
-    },
-    {
-      id: 3,
-      title: "Beef Casserole",
-      category: "Savoury",
-      price: "70",
-      tags: "coat camel white short sleeves double-breasted button",
-      status: "Cancelled By Seller",
-    },
-  ]);
-  */
-
-  const { id } = useParams();
-
-  const [search, setSearch] = useState("");
-
   let navigate = useNavigate();
   const routeChangeToOrder = (id) => {
     let path = "/buyerOrder/";
     navigate(path + id);
-  };
-
-  // if user is not logged in, redirects to homepage
-  /*
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      const parsedUser = JSON.parse(user);
-      if (parsedUser.type === "seller") {
-        setSeller(parsedUser);
-      } else {
-        setBuyer(parsedUser);
-      }
-    } else {
-      navigate("/login");
-    }
-  }, []);
-  */
-
-  // handleSubmitUpdateUsername [discard]
-  const [username, setUsername] = useState("");
-
-  const handleSubmitUpdateUsername = async (event) => {
-    event.preventDefault();
   };
 
   // handleCancelOrder
@@ -188,58 +116,68 @@ function BuyerProfile() {
           "Content-Type": "application/json",
         },
       }
-    )
-      .then((response) => {
-        if (response.ok) {
-          // redirect to homepage
-          console.log("cancelled order: ", oId);
-          setCancelOrderSuccess("Successfully Cancelled Order");
-        } else {
-          // show error message
+    );
 
-          console.log("cannot cancel order: ", oId);
-          setCancelOrderError("Invalid order details. Please try again.");
-          throw new Error(response.statusText);
-        }
-      })
-      .catch((error) => {
-        console.log("HTTP Error: ", error);
-      });
+    if (response.ok) {
+      // redirect to homepage
+      console.log("cancelled order: ", oId);
+      toast.success(`Cancelled Order #${oId}.`);
+      setCancelOrderSuccess("Successfully Cancelled Order");
+    } else {
+      // show error message
+
+      const errorData = await response.json();
+      toast.error(errorData.error);
+    }
   };
 
   // handleReportSeller
   const [reportSellerError, setReportSellerError] = useState(null);
   const [title, setTitle] = useState("");
   const [reason, setReason] = useState("");
- const handleReportSeller = (oId) => {
-  fetch(`http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/sellers/2/reports`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      title,
-      reason,
-    }),
-  })
-    .then(response => {
+
+  const handleReportSeller = async (event, oId) => {
+    event.preventDefault();
+    const sellerResponse = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/listings/${oId}/seller`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const sellerData = await sellerResponse.json();
+    const sellerId = sellerData.sellerId;
+
+    if (sellerResponse.ok) {
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/sellers/${sellerId}/reports`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title,
+            reason,
+          }),
+        }
+      );
       if (response.ok) {
         // redirect to homepage
-        toast.success("Report submitted successfully!");
-        setTimeout(() => {
-          navigate(`/`);
-        }, 3000);
+        console.log("reported seller!");
+        toast.success(`Reported Seller ${sellerId}.`);
       } else {
-        // show error message
-        toast.error("There was an error!");
-        throw new Error('Network response was not ok');
+        const errorData = await response.json();
+        console.log("reporting error:", errorData.error);
+        toast.error(errorData.error);
       }
-    })
-    .catch(error => {
+    } else {
+      // show error message
       setReportSellerError("Invalid details. Please try again.");
-    });
-};
-
+    }
+  };
 
   const routeChangeToEditAccountDetails = (buyerId) => {
     console.log("routeChangeToEditAccountDetails: ", buyerId);
@@ -248,9 +186,8 @@ function BuyerProfile() {
   };
 
   return (
-
     <div className="background">
-        <ToastContainer/>
+      <ToastContainer />
       <NavigationBar />
       <div id="coverPhoto">
         <div id="profilePhoto"></div>
@@ -259,45 +196,11 @@ function BuyerProfile() {
         <div id="userDetails">
           <h1>{buyerName}</h1>
 
-          <Popup trigger={<FaEdit />} modal nested>
-            {(close) => (
-              <div className="modal">
-                <button className="close" onClick={close}>
-                  &times;
-                </button>
-                <div className="header"> Update Username </div>
-                <div className="content">
-                  <form onSubmit={handleSubmitUpdateUsername}>
-                    <FormControl mt={4}>
-                      <FormLabel>New username: </FormLabel>
-                      <Input
-                        type="text"
-                        placeholder=" "
-                        value={username}
-                        onChange={(event) => setUsername(event.target.value)}
-                        required
-                      />
-                    </FormControl>
-                    <Box mt={4} display="flex" alignItems="center">
-                      <Button
-                        bg="#E2725B"
-                        colorScheme="white"
-                        type="submit"
-                        w="100%"
-                      >
-                        Confirm New Username
-                      </Button>
-                    </Box>
-                  </form>
-                </div>
-              </div>
-            )}
-          </Popup>
-          <h4>details</h4>
+          <h4>@{buyerUsername}</h4>
         </div>
         <Flex>
           <div
-            className="button1"
+            className="button1_editAccount"
             onClick={() => routeChangeToEditAccountDetails()}
           >
             Edit Account Details
@@ -305,34 +208,12 @@ function BuyerProfile() {
           </div>
         </Flex>
       </Flex>
-      <h2>Search for order:</h2>
-      <div class="searchBar">
-        <input
-          className="input"
-          onChange={(e) => {
-            setSearch(e.target.value.toLowerCase());
-          }}
-        />
-        <button className="button">
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            ></path>
-          </svg>
-        </button>
-      </div>
+      <br />
+      <div class="shoppingHeader">My Orders</div>
+      <br />
       <div class="ordersDisplay">
         {orders.map((order) => (
-          <div id="buyerOrderCard" onClick={() => routeChangeToOrder(order.id)}>
+          <div id="buyerOrderCard">
             <div className="buyerProductImg">
               <img
                 className="productImg"
@@ -340,14 +221,27 @@ function BuyerProfile() {
                 alt="listing product"
               />
             </div>
-            <div id="orderDetailsGrid">
-              <div className="orderDetails_top">
-                <h2>Order No. {order.orderId}</h2>
+            <div id="buyerOrderDetailsGrid">
+              <div className="orderDetails_left">
+                <OrderListingHeader oId={order.orderId} />
+                <h4 className="italic">Order No. {order.orderId}</h4>
 
-                <h4 className="italic">
+                <h4 className="details">
                   Customisation Notes: {order.description}
                 </h4>
-                <h4 className="details">{order.dateOfCreation}</h4>
+                <h4 className="details">
+                  Collection Date: {order.dateOfCollection}
+                </h4>
+              </div>
+              <div>
+                <h4 className="italic">Status:</h4>
+                <h2>{order.orderStatus}</h2>
+                <h4 className="italic">Price:</h4>
+                <h2>
+                  {order.quantity} x ${order.price}
+                </h2>
+              </div>
+              <div className="orderDetails_right">
                 <Flex>
                   {order.orderStatus === "PENDING" && (
                     <div
@@ -355,20 +249,18 @@ function BuyerProfile() {
                       onClick={() => handleCancelOrder(order.orderId)}
                     >
                       Cancel Order
-                      <FaEdit />
+                      <MdOutlineCancel />
                     </div>
                   )}
                 </Flex>
+
                 <Popup
                   trigger={
                     <Flex>
                       {order.orderStatus !== "CANCELLED" && (
-                        <div
-                          className="button1_cancel"
-                          onClick={() => handleReportSeller(order.orderId)}
-                        >
+                        <div className="button1_report">
                           Report Seller
-                          <FaEdit />
+                          <MdOutlineReport size="1.2rem" />
                         </div>
                       )}
                     </Flex>
@@ -383,7 +275,11 @@ function BuyerProfile() {
                       </button>
                       <div className="header"> Report Seller </div>
                       <div className="content">
-                        <form onSubmit={handleReportSeller}>
+                        <form
+                          onSubmit={(event) =>
+                            handleReportSeller(event, order.orderId)
+                          }
+                        >
                           <FormControl mt={4}>
                             <FormLabel>Title of Report: </FormLabel>
                             <Input
@@ -421,12 +317,6 @@ function BuyerProfile() {
                     </div>
                   )}
                 </Popup>
-              </div>
-              <div className="orderDetails_bottom">
-                <h2>{order.orderStatus}</h2>
-                <h2>
-                  {order.quantity} x ${order.price}
-                </h2>
               </div>
             </div>
           </div>

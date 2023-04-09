@@ -58,6 +58,8 @@ function Login() {
       }
       // redirect to homepage
     } else {
+      const errorMessage = await response.json();
+      console.log("response not okay: ", errorMessage);
       // show error message
       setError("Invalid login credentials. Please try again.");
     }

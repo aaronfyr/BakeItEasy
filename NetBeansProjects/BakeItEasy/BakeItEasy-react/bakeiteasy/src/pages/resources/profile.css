@@ -48,7 +48,6 @@
 
 .ordersDisplay {
     display: flex;
-    flex-wrap: wrap;
     overflow-y: scroll;
     height: 50vh;
     justify-content: center; /*delete this if not necessary*/
@@ -278,34 +277,35 @@ h4 {
 }
 
 #buyerOrderCard {
+  display:flex;
   background-color: white;
-  width:90vh;
+  width:900px;
   height: 150px;
   border-radius: 10px;
-  margin-top: 5px;
+  margin-top: 10px;
+  margin-left: 10px;
   padding: 0px 10px 10px 10px;
   overflow: hidden;
   /* for horizontal aligning of child divs */
   justify-content: center;
 }
 
-#orderDetailsGrid {
+#buyerOrderDetailsGrid {
   display: grid;
-  grid-template-rows: 70% 30%;
+  grid-template-columns: 45% 25% 30%;
+  width: 710px;
+  height: 150px;
   float: left;
-  height: 100%;
-  width: 50%;
   margin-left: 10px;
   margin-top:10px;
 }
 
-.orderDetails_top {
+.orderDetails_left {
 
 }
 
-.orderDetails_bottom {
-  display: flex;
-  justify-content: space-between;
+.orderDetails_right {
+  
 }
 
 /*modal*/
@@ -343,6 +343,68 @@ h4 {
   border-radius: 18px;
   border: 1px solid #cfcece;
 }
+
+.button1_editAccount {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--dark-text);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+}
+.button1_editAccount:hover {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--beige-bg);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+  background-color: var(--dark-text);
+}
+
+.button1_report {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--dark-text);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+}
+
+.button1_report:hover {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--beige-bg);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+  background-color: var(--mid-orange);
+}
+
 .button1_cancel {
   display: flex;
   align-items: center;
@@ -355,5 +417,52 @@ h4 {
   color: var(--dark-text);
   border-width: 1px;
   padding: 0px 20px 0px 20px;
-  margin: 0px 20px 0px 0px;
+  margin: 10px 20px 0px 0px;
+}
+
+.button1_cancel:hover {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--beige-bg);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+  background-color: var(--dark-text);
+}
+
+.button1_follow {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--dark-text);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+}
+
+.button1_follow:hover {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--beige-bg);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+  background-color: var(--mid-orange);
 }

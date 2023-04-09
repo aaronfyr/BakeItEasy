@@ -7,12 +7,36 @@ import {
   useNavigate,
 } from "react-router-dom";
 import "./resources/homepageShopping.css";
-
+import {
+  Avatar,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  Tooltip,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
+} from "@chakra-ui/react";
+import { toast, ToastContainer } from "react-toastify";
 import { FiHeart } from "react-icons/fi";
+import ReactLoading from "react-loading";
+import { ListingSellerHeader } from "./listingSellerHeader";
 
 export const BuyerShopping = () => {
-  const [buyer, setBuyer] = useState(null);
+  let navigate = useNavigate();
 
+  // fetch buyer
+  const [buyer, setBuyer] = useState(null);
   useEffect(() => {
     async function fetchData() {
       const buyer = localStorage.getItem("buyer");
@@ -28,21 +52,112 @@ export const BuyerShopping = () => {
     fetchData();
   }, []);
 
-  const [categories, setCategories] = useState([
-    { name: "Savory" },
-    { name: "Breads" },
-    { name: "Cakes" },
-    { name: "Cupcakes" },
-    { name: "Tarts" },
-    { name: "Pies" },
-    { name: "Wedding" },
-    { name: "Graduation" },
-    { name: "Cookies" },
-    { name: "Halal" },
-    { name: "Fried" },
-    { name: "Fruits" },
-  ]);
+  // fetch current buyer followings
+  const [followings, setFollowings] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let buyerId = null;
+        const fetchedBuyer = localStorage.getItem("buyer");
+        if (!fetchedBuyer) {
+          navigate("/login");
+        } else {
+          const parsedUser = JSON.parse(fetchedBuyer);
+          buyerId = parsedUser.buyerId;
+          console.log("buyerId to get followings", buyerId);
+        }
 
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/followings/`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        setFollowings(data.map((fol) => fol.sellerId));
+
+        console.log(`HTTP Response Code: ${response?.status}`);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
+  // fecth listing sellerId
+  const getSellerId = async (lId) => {
+    try {
+      fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/seller`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          //console.log("sellerId: ", data.sellerId);
+          return data.sellerId;
+        });
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        // Unexpected token < in JSON
+        console.log("There was a SyntaxError", error);
+      }
+    }
+  };
+
+  const [listingSellers, setListingSellers] = useState({});
+
+  const getSellerByLId = async (lId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/seller`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+
+      console.log("sellerUsername: ", data.username);
+
+      setListingSellers({ ...listingSellers, [lId]: data.username });
+      return data.username;
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        // Unexpected token < in JSON
+        console.log("There was a SyntaxError", error);
+      }
+    }
+  };
+
+  const [isLoading, setIsLoading] = useState(true);
+  const renderSellerListingHeader = (lId) => {
+    //const detailsText = await getSellerByLId(lId);
+    //return <p>{detailsText}</p>;
+
+    if (listingSellers[lId]) {
+      return <p>{listingSellers[lId]}</p>;
+    } else {
+      getSellerByLId(lId);
+      return <ReactLoading color={"#000000"} height={"15%"} width={"15%"} />;
+      //return <p>Loading...</p>;
+    }
+  };
+
+  // fetch listings
   const [listings, setListings] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -70,68 +185,199 @@ export const BuyerShopping = () => {
     fetchData();
   }, []);
 
-  let navigate = useNavigate();
+  // fetch current buyer followings listings
+  /*
+  const [followedListings, setFollowedListings] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/listings/`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        console.log(
+          "data: ",
+          data.filter((product) => {
+            console.log("followings: ", followings);
+            console.log(
+              "comparing followings: ",
+              getSellerId(product.listingId),
+              followings.includes(getSellerId(product.listingId))
+            );
+            return followings.includes(getSellerId(product.listingId));
+          })
+        );
+        console.log(`HTTP Response Code: ${response?.status}`);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
+  // fetch listings with sellers
+  
+  const [listings, setListings] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/listings/`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        data.forEach(async (obj) => {
+          const lId = obj.listingId;
+          obj.sellerFetchAttempt = true;
+
+          try {
+            const response = await fetch(
+              `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/seller`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const data = await response.json();
+            //console.log(`HTTP Response Code: ${response?.status}`);
+            //console.log("sellerId: ", data.sellerId);
+            //console.log("sellerUsername: ", data.username);
+            //console.log("sellerName: ", data.name);
+            obj.seller = data;
+            obj.sellerId = data.sellerId;
+            obj.sellerUsername = data.username;
+            obj.sellerName = data.name;
+          } catch (error) {
+            if (error instanceof SyntaxError) {
+              // Unexpected token < in JSON
+              console.log("There was a SyntaxError", error);
+            }
+            obj.sellerId = "User not found";
+            obj.sellerUsername = "User not found";
+            obj.sellerName = "User not found";
+          }
+        }); // wasn't here before
+        setListings(data);
+        console.log("listings during useffect: ", listings);
+        console.log(
+          "listings[0].sellerName during useffect: ",
+          listings[0].sellerName
+        );
+        console.log(`HTTP Response Code: ${response?.status}`);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+  */
+
+  //listings.forEach((obj) => getSeller(obj));
+
+  // handle filter by category
+  const [categoryFilter, setCategoryFilter] = useState(null);
+  const [categories, setCategories] = useState([
+    { name: "Savory" },
+    { name: "Bread" },
+    { name: "Cake" },
+    { name: "Cupcake" },
+    { name: "Tart" },
+    { name: "Pie" },
+  ]);
+
+  const handleFilterByCateory = (categoryName) => {
+    const categoryNameLowerCase = categoryName.toLowerCase();
+    if (categoryFilter === categoryNameLowerCase) {
+      // set category status to not selected
+
+      setCategoryFilter(null);
+    } else {
+      // set category status to selected
+
+      console.log("filter category: ", categoryName);
+      setCategoryFilter(categoryName.toLowerCase());
+    }
+  };
+
+  // handleSearch
+  const [search, setSearch] = useState("");
+  const handleSearch = (event) => {
+    console.log("search: ", search);
+    event.preventDefault();
+    const searchLowerCase = event.target.value.toLowerCase();
+    setSearch(searchLowerCase);
+  };
+
+  // routeChangeToListing
   const routeChangeToListing = (listingId) => {
     console.log("routechangetolisting: ", listingId);
     let path = "listing/";
     navigate(path + listingId);
   };
 
-  const [search, setSearch] = useState("");
-
-  /*
-  const filteredListings = listings.filter((product) => {
-    console.log("changing filteredListings");
-    if (
-      product.name.toLowerCase().includes(search) ||
-      product.description.toLowerCase().includes(search)
-    ) {
-      return product;
+  // handleListingsToLikes
+  const [likeListingError, setLikeListingError] = useState(null);
+  const handleListingToLikes = async (lId) => {
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/${buyer.buyerId}/like`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.ok) {
+      // redirect to homepage
+      console.log("likedListing# ", lId);
+      console.log("reported seller!");
+      toast.success(`Liked listing # ${lId}.`);
+      //recolor liked button
+      document.getElementById("btn").style.backgroundColor = "black";
+    } else {
+      // show error message
+      const errorData = await response.json();
+      toast.error(errorData.error);
+      setLikeListingError("Invalid details. Please try again.");
     }
-    return null;
-  });
-*/
-
-  const handleSearch = async () => {
-    const results = listings.filter((product) => {
-      if (
-        product.name.toLowerCase().includes(search) ||
-        product.description.toLowerCase().includes(search)
-      ) {
-        return product;
-      }
-      return null;
-    });
-    console.log("search by " + search);
-    console.log("filtered listings: ", listings);
-    setListings(results);
   };
 
-  const handleAddListingToLikes = async () => {
-    const results = listings.filter((product) => {
-      if (
-        product.name.toLowerCase().includes(search) ||
-        product.description.toLowerCase().includes(search)
-      ) {
-        return product;
-      }
-      return null;
-    });
-    console.log("search by " + search);
-    console.log("filtered listings: ", listings);
-    setListings(results);
-  };
+  let filteredListingsCounterExplore = 0;
+  let filteredListingsCounterFollowed = 0;
 
   return (
     <div>
-      <div className="searchBar">
+      <ToastContainer />
+      <div className="homepageSearchBar">
         <input
-          className="input"
-          onChange={(e) => {
-            setSearch(e.target.value.toLowerCase());
-          }}
+          className="homepageInput"
+          name="search"
+          placeholder="Search for Bake Listing here"
+          onChange={handleSearch}
+          value={search}
         />
-        <button className="button" onClick={handleSearch}>
+        <button className="button">
           <svg
             className="w-6 h-6"
             fill="none"
@@ -153,7 +399,14 @@ export const BuyerShopping = () => {
       <div class="categoriesContainer">
         <div className="categoriesDisplay">
           {categories.map((category) => (
-            <div className="category">{category.name}</div>
+            <Flex>
+              <div
+                className="category"
+                onClick={() => handleFilterByCateory(category.name)}
+              >
+                {category.name}
+              </div>
+            </Flex>
           ))}
         </div>
       </div>
@@ -161,68 +414,137 @@ export const BuyerShopping = () => {
       <div class="shoppingHeader">Followed Bakers</div>
 
       <div className="listingsDisplay">
-        {listings.map((product) => (
-          <div
-            className="product"
-            onClick={() => routeChangeToListing(product.listingId)}
-          >
-            <div class="productSeller">
-              <img
-                width="30px"
-                height="30px"
-                src={require("../assets/dummyuser.png")}
-                alt="listing product"
-              />
-              <h6>seller name</h6>
+        {listings
+          .filter((product) => {
+            if (
+              product.name.toLowerCase().includes(search) ||
+              product.description.toLowerCase().includes(search)
+            ) {
+              if (
+                (categoryFilter &&
+                  product.listingCategory
+                    .toLowerCase()
+                    .includes(categoryFilter)) ||
+                !categoryFilter
+              ) {
+                return product;
+              }
+            }
+            return null;
+          })
+          .map((product) => {
+            filteredListingsCounterFollowed++;
+            return product;
+          })
+          .map((product) => (
+            <div className="product">
+              <div class="productSeller">
+                <img
+                  width="30px"
+                  height="30px"
+                  src={require("../assets/dummyuser.png")}
+                  alt="listing product"
+                />
+
+                <ListingSellerHeader lId={product.listingId} />
+              </div>
+              <div
+                class="productContent"
+                onClick={() => routeChangeToListing(product.listingId)}
+              >
+                <div className="productImg">
+                  <img
+                    className="productImg"
+                    src={require("../assets/scones.jpg")}
+                    alt="listing product"
+                  />
+                </div>
+                <h3>{product.name}</h3>
+                <h5>{product.description}</h5>
+              </div>
+              <div class="productBottomRow">
+                <div class="btn">
+                  <FiHeart
+                    size="1.2rem"
+                    onClick={() => handleListingToLikes(product.listingId)}
+                  />
+                </div>
+                <h3>${product.price}</h3>
+              </div>
             </div>
-            <div className="productImg">
-              <img
-                className="productImg"
-                src={require("../assets/scones.jpg")}
-                alt="listing product"
-              />
-            </div>
-            <h3>{product.name}</h3>
-            <h5>{product.description}</h5>
-            <div class="productBottomRow">
-              <FiHeart size="1.2rem" />
-              <h3>${product.price}</h3>
-            </div>
-          </div>
-        ))}
+          ))}
+
+        {filteredListingsCounterFollowed === 0 && (
+          <h4 className="search">
+            Unfortunately, no such Baked Listing. Try another search?
+          </h4>
+        )}
       </div>
 
       <div class="shoppingHeader">Explore More Bakers</div>
       <div className="listingsDisplay">
-        {listings.map((product) => (
-          <div
-            className="product"
-            onClick={() => routeChangeToListing(product.listingId)}
-          >
-            <div class="productSeller">
-              <img
-                width="30px"
-                height="30px"
-                src={require("../assets/dummyuser.png")}
-                alt="listing product"
-              />
-              <h6>seller name</h6>
+        {listings
+          .filter((product) => {
+            if (
+              product.name.toLowerCase().includes(search) ||
+              product.description.toLowerCase().includes(search)
+            ) {
+              if (
+                (categoryFilter &&
+                  product.listingCategory
+                    .toLowerCase()
+                    .includes(categoryFilter)) ||
+                !categoryFilter
+              ) {
+                filteredListingsCounterExplore++;
+                return product;
+              }
+            }
+            return null;
+          })
+          .map((product) => {
+            filteredListingsCounterExplore++;
+            return product;
+          })
+          .map((product) => (
+            <div className="product">
+              <div class="productSeller" key={product.listingId}>
+                <img
+                  width="30px"
+                  height="30px"
+                  src={require("../assets/dummyuser.png")}
+                  alt="listing product"
+                />
+                <ListingSellerHeader lId={product.listingId} />
+              </div>
+              <div
+                class="productContent"
+                onClick={() => routeChangeToListing(product.listingId)}
+              >
+                <div className="productImg">
+                  <img
+                    className="productImg"
+                    src={require("../assets/scones.jpg")}
+                    alt="listing product"
+                  />
+                </div>
+                <h3>{product.name}</h3>
+                <h5>{product.description}</h5>
+              </div>
+              <div class="productBottomRow">
+                <FiHeart
+                  size="1.2rem"
+                  onClick={() => handleListingToLikes(product.listingId)}
+                />
+                <h3>${product.price}</h3>
+              </div>
             </div>
-            <div className="productImg">
-              <img
-                className="productImg"
-                src={require("../assets/scones.jpg")}
-                alt="listing product"
-              />
-            </div>
-            <h3>{product.name}</h3>
-            <h5>{product.description}</h5>
-            <div class="productBottomRow">
-              <FiHeart size="1.2rem" />
-              <h3>${product.price}</h3>
-            </div>
-          </div>
-        ))}
+          ))}
+        {filteredListingsCounterExplore === 0 && (
+          <h4 className="search">
+            Unfortunately, no such Baked Listing. Try another search?
+          </h4>
+        )}
       </div>
     </div>
   );

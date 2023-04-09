@@ -3,8 +3,8 @@ import "./resources/sellerProfile.css";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
 import { FaRegEdit, FaRegUser, FaPlus } from "react-icons/fa";
 import { Flex, flexbox } from "@chakra-ui/react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { formatPrice } from "../components/formatter";
 import {
   BrowserRouter as Router,
@@ -60,7 +60,7 @@ function SellerProfile() {
   const [listings, setListings] = useState([]);
   useEffect(() => {
     fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/sellers/1/listings`,
+      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/listings`,
       {
         method: "GET",
         mode: "cors",
@@ -77,7 +77,7 @@ function SellerProfile() {
   const [reviews, setReviews] = useState([]);
   useEffect(() => {
     fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/sellers/1/reviews`,
+      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/reviews`,
       {
         method: "GET",
         mode: "cors",
@@ -93,44 +93,48 @@ function SellerProfile() {
   //fetch seller
   console.log("sellerID is", sellerId);
   useEffect(() => {
-    if (sellerId){
-    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setSellerObj(data));
+    if (sellerId) {
+      fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`,
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => setSellerObj(data));
     }
   }, [sellerId]);
 
-   //fetch seller follower count
+  //fetch seller follower count
   console.log("sellerID is", sellerId);
   useEffect(() => {
-    if (sellerId){
-    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/followers`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setFollowerCount(data.length));
+    if (sellerId) {
+      fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/followers`,
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => setFollowerCount(data.length));
     }
   }, [sellerId]);
 
-
-  const filteredListings = listings.filter((listing) =>
-  (
-    (listing.name && listing.name.toLowerCase().includes(search)) ||
-    (listing.description && listing.description.toLowerCase().includes(search)) ||
-    (listing.category && listing.category.toLowerCase().includes(search))
-  )
-);
-
+  const filteredListings = listings.filter(
+    (listing) =>
+      (listing.name && listing.name.toLowerCase().includes(search)) ||
+      (listing.description &&
+        listing.description.toLowerCase().includes(search)) ||
+      (listing.category && listing.category.toLowerCase().includes(search))
+  );
 
   const routeChangeToListing = (id) => {
     let path = "/sellerListing/";
@@ -140,36 +144,50 @@ function SellerProfile() {
   const routeChangeToSellerEditProfile = () => {
     let path = "/editSellerProfile";
     navigate(path);
-  }
+  };
 
   const routeChangeToCreateListing = () => {
     let path = "/sellerCreateListing";
     navigate(path);
-  }
+  };
 
   const routeChangeToViewFollowers = () => {
     let path = "/sellerViewFollowers";
     navigate(path);
-  }
+  };
 
   return (
     <div className="background">
-        <ToastContainer/>
+      <ToastContainer />
       <SellerNavigationBar />
       <div id="coverPhoto">
         <div id="profilePhoto"></div>
       </div>
       <Flex>
         <div id="userDetails">
-            <h1>{sellerObj.name}</h1>
-            <h5>@{sellerObj.username}</h5>
+          <h1>{sellerObj.name}</h1>
+          <h5>@{sellerObj.username}</h5>
         </div>
-        <div className="editProfileBtn" onClick={() => routeChangeToSellerEditProfile()}>
-            <FaRegEdit style={{marginRight: 5}}/>
-            edit profile</div>
-        <div className="followersBtn" onClick={() => routeChangeToViewFollowers()}>
-            <FaRegUser style={{marginRight: 5}}/>
-            {followerCount} follower(s)</div>
+        <div
+          className="editProfileBtn"
+          onClick={() => routeChangeToSellerEditProfile()}
+        >
+          edit profile
+        </div>
+        <div
+          className="editProfileBtn"
+          onClick={() => routeChangeToSellerEditProfile()}
+        >
+          <FaRegEdit style={{ marginRight: 5 }} />
+          edit profile
+        </div>
+        <div
+          className="followersBtn"
+          onClick={() => routeChangeToViewFollowers()}
+        >
+          <FaRegUser style={{ marginRight: 5 }} />
+          {followerCount} follower(s)
+        </div>
       </Flex>
       <h2>Search for my listing:</h2>
       <div class="searchBar">
@@ -201,11 +219,14 @@ function SellerProfile() {
       <div className="sellerProducts">
         <Flex>
           <h1>Seller Products</h1>
-          <div className="newListBtn" onClick={() => routeChangeToCreateListing()}>
-            <FaPlus style={{alignSelf: "center", paddingRight:5}}/>
-            create listing</div>
+          <div
+            className="newListBtn"
+            onClick={() => routeChangeToCreateListing()}
+          >
+            <FaPlus style={{ alignSelf: "center", paddingRight: 5 }} />
+            create listing
+          </div>
         </Flex>
-
       </div>
       <div className="flexBox">
         <div className="profileListingsDisplay">
@@ -214,9 +235,8 @@ function SellerProfile() {
               className="product"
               onClick={() => routeChangeToListing(listing.listingId)}
             >
-              <div class="productSeller">
-              </div>
-            <h3>{listing.name}</h3>
+              <div class="productSeller"></div>
+              <h3>{listing.name}</h3>
               <div className="productImg">
                 <img
                   className="productImg"
@@ -226,7 +246,6 @@ function SellerProfile() {
               </div>
 
               <div className="titleDetails">
-
                 <h5>{listing.description}</h5>
               </div>
 

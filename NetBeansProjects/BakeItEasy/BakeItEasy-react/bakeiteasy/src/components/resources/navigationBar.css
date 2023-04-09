@@ -14,8 +14,11 @@
   --light-text: #676A6C;
 
   --mid-orange: #E2725B;
-  --light-orange: #E9AEA2;
+  --light-orange: #e0a589;
   --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+  --mediterranean-blue: #529cb7;
+  --light-mediterranean-blue: #90b8c6;
 }
 
 a {
@@ -35,6 +38,14 @@ h4 {
   color: --var(--dark-text);
   background-color: var(--beige-bg);
   cursor: pointer;
+  /*effects*/
+  box-shadow: inset 0 0 0 0 var(--light-orange);
+  transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
+}
+
+#navChoices:hover {
+  box-shadow: inset 100px 0 0 0 var(--mid-orange);
+  color: var(--beige-bg);
 }
 
 .navbar{
@@ -88,4 +99,39 @@ h4 {
 }
 .main_nav li a{
   color: #ffffff;
+}
+
+.listingSellerHeader {
+  cursor: pointer;
+}
+
+.listingSellerHeader:hover {
+  cursor: pointer;
+  color:#E2725B;
+}
+
+.icon-circle {
+  display: flex;
+  color: "#7D7373";
+ border-radius: 100%;
+ height: 2rem;
+ width: 2rem;
+ justify-content: center;
+ align-items: center;
+ /*effects*/
+ box-shadow: inset 0 0 0 0 var(--mediterranean-blue);
+ transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
+}
+.icon-circle:hover {
+  
+  display: flex;
+  color: var(--beige-bg);
+ background-color: var(--light-mediterranean-blue);
+ border-radius: 100%;
+ height: 2rem;
+ width: 2rem;
+ justify-content: center;
+ align-items: center;
+ box-shadow: inset 100px 0 0 0 var(--mediterranean-blue);
+  color: var(--beige-bg);
 }
