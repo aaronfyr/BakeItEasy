@@ -10,6 +10,7 @@ import ejb.session.stateless.PostSessionBeanLocal;
 import entity.Comment;
 import entity.Post;
 import error.exception.PostNotFoundException;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
@@ -115,4 +116,10 @@ public class PostsResource {
         }
         return c;
     } //end createComment
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Post> getAllPosts() {
+        return postSessionBeanLocal.retrieveAllPosts();
+    } // end get all listings
 }

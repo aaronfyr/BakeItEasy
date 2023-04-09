@@ -166,6 +166,13 @@ public class PostSessionBean implements PostSessionBeanLocal {
         }
     }
     
+    @Override
+    public List<Post> retrieveAllPosts() {
+        Query query = em.createQuery("SELECT p FROM Post p");
+
+        return query.getResultList();
+    }
+    
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Post>> constraintViolations) {
         String msg = "Input data validation error!:";
 

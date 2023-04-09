@@ -32,5 +32,7 @@ public interface PostSessionBeanLocal {
     public void deletePost(Long postId) throws PostNotFoundException;
 
     public Long createNewSellerPost(Post post, Long sellerId) throws UnknownPersistenceException, InputDataValidationException, SellerNotFoundException;
+
+    public List<Post> retrieveAllPosts();
     
 }
