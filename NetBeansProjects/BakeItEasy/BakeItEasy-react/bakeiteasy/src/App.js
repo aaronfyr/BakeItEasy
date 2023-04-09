@@ -41,6 +41,8 @@ import SellerEditProfile from "./pages/sellerEditProfile";
 import SellerCreateListing from "./pages/sellerCreateListing";
 import SellerViewFollowers from "./pages/sellerViewFollowers";
 
+import Forum from "./pages/forum";
+
 function App() {
   return (
     <ChakraProvider theme={theme}>
@@ -89,6 +91,8 @@ function App() {
                 <Route path="/sellerAppointments" element={<SellerAppointments />}/>
                 <Route path="/sellerCreateListing" element={<SellerCreateListing />}/>
                 <Route path="/sellerViewFollowers" element={<SellerViewFollowers />}/>
+
+                <Route path="/forum" element={<Forum/>}/>
               </Routes>
             </Router>
           </AdminProvider>

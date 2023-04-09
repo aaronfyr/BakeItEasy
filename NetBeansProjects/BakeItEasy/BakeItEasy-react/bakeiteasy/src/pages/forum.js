@@ -1,11 +1,13 @@
 import { color } from "framer-motion";
 import React, {useState, useEffect } from "react";
-import "./resources/searchBarSection.css";
+import "./resources/forum.css";
 import SellerOrderCard from "./sellerOrderCard.js";
 import CategoryDropdown from "../components/categoryDropdown";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
-import {FaListUl} from "react-icons/fa";
+import { NavigationBar } from "../components/buyerNavigationBar";
+import {FaComments} from "react-icons/fa";
 import {formatPrice} from "../components/formatter"
+import {toast, ToastContainer} from "react-toastify";
 import {
   BrowserRouter as Router,
   useNavigate,
@@ -15,34 +17,39 @@ import {
 
 /*const orderResponse = await fetch(``)*/
 
-const SellerViewListingList = () => {
-  const [search, setSearch] = useState("");
-  const [listings, setListings] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [filteredListings, setFilteredListings] = useState([]);
+const Forum = () => {
 
-  const [seller, setSeller] = useState(null);
-  const [sellerId, setSellerId] = useState(null);
+  const [search, setSearch] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState([]);
+    const [buyerId, setBuyerId] = useState(null);
+    const [sellerId, setSellerId] = useState(null);
+  const [sellerObj, setSellerObj] = useState([]);
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       const fetchedSeller = localStorage.getItem("seller");
-      /*if (!fetchedBuyer) {
-        console.log("navbar", "no buyer");
+      const fetchedBuyer = localStorage.getItem("buyer");
+
+      if (!fetchedBuyer && !fetchedSeller) {
+        console.log("navbar", "no buyer or seller");
         navigate("/login");
-      } else {*/
+      }
       if (!fetchedSeller) {
-        console.log("sellerProfile", "no seller");
-        navigate("/sellerlogin");
+        console.log("forum", "is buyer");
+        try {
+          const parsedUser = JSON.parse(fetchedBuyer);
+          console.log("parsedUser.id: ", parsedUser.buyerId);
+          setBuyerId(parsedUser.buyerId);
+        } catch (error) {
+          console.log(error);
+        }
       } else {
-        console.log("sellerProfile", "has seller");
+        console.log("forum", "is seller");
         try {
           const parsedUser = JSON.parse(fetchedSeller);
-          setSeller(parsedUser);
-          console.log("parsedUser: ", parsedUser);
           console.log("parsedUser.id: ", parsedUser.sellerId);
           setSellerId(parsedUser.sellerId);
-
         } catch (error) {
           console.log(error);
         }
@@ -51,11 +58,29 @@ const SellerViewListingList = () => {
     fetchData();
   }, []);
 
-  //get listings of seller
-async function fetchListings() {
+function getCategoryUrl(category) {
+  switch (category) {
+    case "DISCUSSION":
+      return "https://cdn-icons-png.flaticon.com/512/8286/8286038.png";
+    case "QUESTION":
+      return "https://cdn-icons-png.flaticon.com/512/4595/4595213.png";
+    case "LOOKINGFOR":
+      return "https://cdn-icons-png.flaticon.com/512/3101/3101467.png";
+    case "SHARINGINGREDIENTS":
+      return "https://cdn-icons-png.flaticon.com/512/3038/3038135.png";
+    case "RECIPES":
+      return "https://cdn-icons-png.flaticon.com/512/2253/2253457.png";
+    default:
+      return "";
+  }
+}
+
+
+  //get posts
+async function fetchPosts() {
   try {
-    const response = await fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/listings`, {
-      //get seller id from storage !!!!!!!!!!!!!!
+    const response = await fetch(`http://localhost:8080/BakeItEasy-war/webresources/posts`, {
+      //get all posts endpoint not ready yet
       method: "GET",
       mode: "cors",
       headers: {
@@ -63,63 +88,56 @@ async function fetchListings() {
       },
     });
     const data = await response.json();
-    setListings(data);
+    if (data.ok) {
+    }
+    setPosts(data);
+
+    //delete later
+    console.log("post ID is" + data.postId);
   } catch (error) {
     console.error(error);
   }
+
 }
 
-function filterListings(listings, search, selectedCategory) {
-  return listings.filter((listing) => {
-    if (selectedCategory === "") {
+function filterPosts(posts, search) {
+  return posts.filter((post) => {
       return (
-        listing.name.toLowerCase().includes(search) ||
-        listing.description.toLowerCase().includes(search) ||
-        listing.listingCategory.toLowerCase().includes(search)
+        post.title.toLowerCase().includes(search) ||
+        post.postCategory.toLowerCase().includes(search)
       );
-    } else {
-      return (
-        listing.name.toLowerCase().includes(search) &&
-        listing.listingCategory.toLowerCase().includes(selectedCategory)
-      );
-    }
+
   });
 }
 
 useEffect(() => {
-  fetchListings();
-}, [sellerId]);
+  fetchPosts();
+}, [posts]);
+
 
 useEffect(() => {
-  fetchListings();
-  if (listings.length > 0) {
-    const filteredData = filterListings(listings, search, "");
-    setFilteredListings(filteredData);
+  fetchPosts();
+  if (posts.length > 0) {
+    const filteredData = filterPosts(posts, search, "");
+    setFilteredPosts(filteredData);
   }
-}, [listings, search]);
-
-
-const handleCategoryChange = (category) => {
-  const newSelectedCategory = category.toLowerCase();
-  setSelectedCategory(newSelectedCategory);
-  const filteredData = filterListings(listings, "", newSelectedCategory);
-  setFilteredListings(filteredData);
-};
+}, [posts, search]);
 
 
 
    let navigate = useNavigate();
   const routeChangeToOrder = (id) => {
-    let path = "listing/";
+    let path = "post/";
     navigate(path + id);
   };
 
   return (
     <div>
         <SellerNavigationBar/>
+        <ToastContainer/>
         <div className="dropdownRow">
             <div className="heading">
-                <h1>My Orders</h1>
+                <h1>Forum</h1>
             </div>
         {/*<CategoryDropdown onCategoryChange={handleCategoryChange}/>
         <body style={{fontFamily: 'Montserrat'}}>Selected category: {selectedCategory}</body>*/}
@@ -151,23 +169,24 @@ const handleCategoryChange = (category) => {
         </button>
       </div>
       <div className="listingDisplay">
-        {filteredListings.map((listing) => (
-          <div className="listingComp" onClick={() => routeChangeToOrder(listing.listingId)}>
+        {/*change to filtered posts*/}
+        {filteredPosts.map((post) => (
+          <div className="postComp" onClick={() => routeChangeToOrder(post.postId)}>
             <SellerOrderCard>
             <div className="sellerOrderCardHeader">
             </div>
             <div className="sellerOrderCardBodyFlex">
                 <div className="sellerOrderCardBodyFlex">
-                    <img alt="cake" style={imgStyle} src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80"/>
+                    <img alt="cake" style={imgStyle} src={getCategoryUrl(post.postCategory)}/>
                 </div>
 
-                <div style={{width: 400}} className="cardTextBlock">
-                    <h2>{listing.name} [${formatPrice(listing.price)}]</h2>
-                    <h4>{listing.listingCategory}</h4>
+                <div style={{width: 1100}} className="ctb">
+                    <h2>#ID{post.postId}: {post.title} [by POSTER]</h2>
                     <div className="flexBox">
-                        <div className="searchBarButton1">
-                            <FaListUl style={{alignSelf: "center"}}/>
-                            <h3>view orders</h3>
+                        <h4>{post.postCategory}</h4>
+                        <div className="viewComments">
+                            <FaComments style={{alignSelf: "center"}}/>
+                            <h3>view comments</h3>
                         </div>
                     </div>
                 </div>
@@ -185,8 +204,8 @@ const handleCategoryChange = (category) => {
 const pfpStyle = {padding: 0.5, borderRadius: "50%", width: 30, height: 30,
                     objectFit: "cover", background: "grey", display:"block" }
 
-const imgStyle = {height: 150, width: 150, objectFit:"cover", borderRadius: 10}
+const imgStyle = {height: 60, width: 60, objectFit:"cover", borderRadius: 10}
 
 
 
-export default SellerViewListingList;
+export default Forum;
