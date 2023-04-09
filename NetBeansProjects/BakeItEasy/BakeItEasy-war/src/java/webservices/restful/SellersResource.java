@@ -5,6 +5,7 @@
  */
 package webservices.restful;
 
+import ejb.session.stateless.BuyerSessionBeanLocal;
 import ejb.session.stateless.ListingSessionBeanLocal;
 import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.PostSessionBeanLocal;
@@ -18,8 +19,12 @@ import entity.Report;
 import entity.Review;
 import entity.Seller;
 import enumeration.ListingCategory;
+import error.exception.BuyerIsFollowingSellerAlreadyException;
+import error.exception.BuyerIsNotFollowingSellerException;
+import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
+import error.exception.ListingNotFoundException;
 import error.exception.OrderIsNotAcceptedException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
@@ -73,6 +78,9 @@ public class SellersResource {
     
     @EJB
     private OrderSessionBeanLocal orderSessionBeanLocal;
+    
+    @EJB
+    private BuyerSessionBeanLocal buyerSessionBeanLocal;
 
     // CHECKED: ELYSIA
     // get all reviews for seller with id = {id}
@@ -207,7 +215,67 @@ public class SellersResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } // end get specific seller
+    
+    // CHECKED: AARON
+    @PUT
+    @Path("/{seller_id}/{buyer_id}/follow")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response followSellerThroughProfile(@PathParam("seller_id") Long sellerId, @PathParam("buyer_id") Long buyerId) {
+        try {
+            buyerSessionBeanLocal.followSellerThroughProfile(buyerId, sellerId);
+            return Response.status(204).build();
+        } catch (SellerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Seller not found")
+                    .build();
 
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerIsFollowingSellerAlreadyException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer is already following this seller! Unable to follow!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end follow seller through profile
+    
+    // CHECKED: AARON
+    @PUT
+    @Path("/{seller_id}/{buyer_id}/unfollow")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unfollowSellerThroughProfile(@PathParam("seller_id") Long sellerId, @PathParam("buyer_id") Long buyerId) {
+        try {
+            buyerSessionBeanLocal.unfollowSellerThroughProfile(buyerId, sellerId);
+            return Response.status(204).build();
+        } catch (SellerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Seller not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer not found")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerIsNotFollowingSellerException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer is not following this seller! Unable to unfollow!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end unfollow seller
+    
     // CHECKED: AARON
     @GET
     @Path("/query")
