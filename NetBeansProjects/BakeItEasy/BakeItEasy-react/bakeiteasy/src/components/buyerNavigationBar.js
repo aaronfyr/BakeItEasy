@@ -161,11 +161,11 @@ export const NavigationBar = () => {
               as={Button}
               rightIcon={<ChevronDownIcon />}
             >
-              <Flex align="center">
+              <HStack spacing="10px">
                 <FiUser />
 
-                <h4>{buyerName}</h4>
-              </Flex>
+                <p>{buyerName}</p>
+              </HStack>
             </MenuButton>
 
             <MenuList>

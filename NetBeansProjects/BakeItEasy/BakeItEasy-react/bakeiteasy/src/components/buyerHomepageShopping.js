@@ -28,7 +28,7 @@ import {
   PopoverCloseButton,
 } from "@chakra-ui/react";
 import { toast, ToastContainer } from "react-toastify";
-import { FiHeart } from "react-icons/fi";
+import { FiHeart, FiGlobe, FiUsers } from "react-icons/fi";
 import ReactLoading from "react-loading";
 import { ListingSellerHeader } from "./listingSellerHeader";
 
@@ -411,7 +411,12 @@ export const BuyerShopping = () => {
         </div>
       </div>
 
-      <div class="shoppingHeader">Followed Bakers</div>
+      <div class="shoppingHeader">
+        <HStack spacing="10px">
+          <FiUsers />
+          <div>Followed Bakers</div>
+        </HStack>
+      </div>
 
       <div className="listingsDisplay">
         {listings
@@ -481,7 +486,12 @@ export const BuyerShopping = () => {
         )}
       </div>
 
-      <div class="shoppingHeader">Explore More Bakers</div>
+      <div class="shoppingHeader">
+        <HStack spacing="10px">
+          <FiGlobe />
+          <div>Explore More Bakers</div>
+        </HStack>
+      </div>
       <div className="listingsDisplay">
         {listings
           .filter((product) => {
