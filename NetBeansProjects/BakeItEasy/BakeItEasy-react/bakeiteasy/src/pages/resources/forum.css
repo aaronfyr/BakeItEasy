@@ -1,7 +1,7 @@
 .listingDisplay {
     display: flex;
     flex-wrap: wrap;
-    margin: 20px;
+    margin: 0px;
     justify-content: center;
 }
 
@@ -11,7 +11,7 @@
     filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.15));
     background: white;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
-    width: 1200px;
+    width: 1000px;
     margin: 10px;
     border-radius: 10px;
     overflow: hidden;

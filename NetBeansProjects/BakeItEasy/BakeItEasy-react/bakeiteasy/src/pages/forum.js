@@ -4,10 +4,11 @@ import "./resources/forum.css";
 import SellerOrderCard from "./sellerOrderCard.js";
 import CategoryDropdown from "../components/categoryDropdown";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
-import { NavigationBar } from "../components/buyerNavigationBar";
+import {NavigationBar } from "../components/buyerNavigationBar";
 import {FaComments} from "react-icons/fa";
 import {formatPrice} from "../components/formatter"
 import {toast, ToastContainer} from "react-toastify";
+import {Flex} from "@chakra-ui/react";
 import {
   BrowserRouter as Router,
   useNavigate,
@@ -25,6 +26,7 @@ const Forum = () => {
     const [sellerId, setSellerId] = useState(null);
   const [sellerObj, setSellerObj] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [category, setCategory] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -100,7 +102,15 @@ async function fetchPosts() {
 
 }
 
-function filterPosts(posts, search) {
+function selectCat(categoryString) { // THIS CAUSES too many re-renders
+   /* if (category === categoryString) {
+        setCategory("");
+    } else {
+        setCategory(categoryString);
+    }*/
+}
+
+function filterPosts(posts, search, category) {
   return posts.filter((post) => {
       return (
         post.title.toLowerCase().includes(search) ||
@@ -121,7 +131,7 @@ useEffect(() => {
     const filteredData = filterPosts(posts, search, "");
     setFilteredPosts(filteredData);
   }
-}, [posts, search]);
+}, [posts, search, category]);
 
 
 
@@ -133,7 +143,8 @@ useEffect(() => {
 
   return (
     <div>
-        <SellerNavigationBar/>
+        {sellerId &&<SellerNavigationBar/> }
+        {buyerId &&<NavigationBar/> }
         <ToastContainer/>
         <div className="dropdownRow">
             <div className="heading">
@@ -143,7 +154,9 @@ useEffect(() => {
         <body style={{fontFamily: 'Montserrat'}}>Selected category: {selectedCategory}</body>*/}
 
     </div>
+
     <div className="searchBarSection">
+
       <div class="searchBar">
         <input
           className="input"
@@ -168,15 +181,76 @@ useEffect(() => {
           </svg>
         </button>
       </div>
+
+      <Flex>
+        <div className="viewComments" onClick={selectCat("DISCUSSION")}>
+            <FaComments style={{alignSelf: "center"}}/>
+            <div style={{width: 10}}></div>
+            <h3>Discussion</h3>
+        </div>
+        <div className="viewComments" onClick={selectCat("LOOKINGFOR")}>
+             <FaComments style={{alignSelf: "center"}}/>
+             <div style={{width: 10}}></div>
+            <h3>Looking for</h3>
+        </div>
+        <div className="viewComments" onClick={selectCat("QUESTION")}>
+             <FaComments style={{alignSelf: "center"}}/>
+             <div style={{width: 10}}></div>
+            <h3>Question</h3>
+        </div>
+        <div className="viewComments" onClick={selectCat("SHAREINGREDIENTS")}>
+             <FaComments style={{alignSelf: "center"}}/>
+             <div style={{width: 10}}></div>
+            <h3>Share Ingredients</h3>
+        </div>
+        <div className="viewComments" onClick={selectCat("RECIPES")}>
+             <FaComments style={{alignSelf: "center"}}/>
+             <div style={{width: 10}}></div>
+            <h3>Recipes</h3>
+        </div>
+      </Flex>
+      <div style={{textAlign: "start", justifyContent: "start", width:1000}}>
+          <h1>All Posts</h1>
+      </div>
       <div className="listingDisplay">
         {/*change to filtered posts*/}
+        <div style={{ overflow: 'auto', maxHeight: '250px' }}>
         {filteredPosts.map((post) => (
           <div className="postComp" onClick={() => routeChangeToOrder(post.postId)}>
             <SellerOrderCard>
             <div className="sellerOrderCardHeader">
             </div>
             <div className="sellerOrderCardBodyFlex">
-                <div className="sellerOrderCardBodyFlex">
+                <div className="sellerOrderCardBodyFlex" style={{width: 70}}>
+                    <img alt="cake" style={imgStyle} src={getCategoryUrl(post.postCategory)}/>
+                </div>
+
+                <div style={{width: 1100}} className="ctb">
+                    <h2>#ID{post.postId}: {post.title} [by POSTER]</h2>
+                    <div className="flexBox">
+                        <h4>{post.postCategory}</h4>
+                        <div className="viewComments">
+                            <FaComments style={{alignSelf: "center"}}/>
+                            <h3>view comments</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </SellerOrderCard>
+          </div>
+        ))}</div>
+        <div style={{textAlign: "start", justifyContent: "start", width:1000}}>
+            <br/>
+          <h1>My Posts</h1>
+      </div>
+      <div style={{ overflow: 'auto', maxHeight: '250px' }}>
+        {filteredPosts.map((post) => (
+          <div className="postComp" onClick={() => routeChangeToOrder(post.postId)}>
+            <SellerOrderCard>
+            <div className="sellerOrderCardHeader">
+            </div>
+            <div className="sellerOrderCardBodyFlex">
+                <div className="sellerOrderCardBodyFlex" style={{width: 70}}>
                     <img alt="cake" style={imgStyle} src={getCategoryUrl(post.postCategory)}/>
                 </div>
 
@@ -194,6 +268,7 @@ useEffect(() => {
         </SellerOrderCard>
           </div>
         ))}
+        </div>
       </div>
     </div>
     </div>

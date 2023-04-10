@@ -42,6 +42,8 @@ import SellerCreateListing from "./pages/sellerCreateListing";
 import SellerViewFollowers from "./pages/sellerViewFollowers";
 
 import Forum from "./pages/forum";
+import ForumPost from "./pages/forumPost";
+import ForumEditPost from "./pages/forumEditPost";
 
 function App() {
   return (
@@ -93,6 +95,8 @@ function App() {
                 <Route path="/sellerViewFollowers" element={<SellerViewFollowers />}/>
 
                 <Route path="/forum" element={<Forum/>}/>
+                <Route path="/forum/post/:id" element={<ForumPost/>}/>
+                <Route path="/forum/editPost/:id" element={<ForumEditPost/>}/>
               </Routes>
             </Router>
           </AdminProvider>
