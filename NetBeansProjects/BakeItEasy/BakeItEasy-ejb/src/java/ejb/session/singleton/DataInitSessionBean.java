@@ -104,7 +104,7 @@ public class DataInitSessionBean {
         @PostConstruct
         public void postConstruct() {
                 if (em.find(Buyer.class, 1l) == null && em.find(Order.class, 1l) == null && em.find(Admin.class, 1l) == null && em.find(Comment.class, 1l) == null && em.find(Listing.class, 1l) == null && em.find(Post.class, 1l) == null && em.find(Report.class, 1l) == null && em.find(Review.class, 1l) == null && em.find(Seller.class, 1l) == null) {
-                        initialiseData();
+                    initialiseData();
                 }
         }
 
@@ -249,9 +249,9 @@ public class DataInitSessionBean {
                                         new ArrayList<>(), new Date());
                         reviewSessionBeanLocal.createNewReview(review2, order3.getOrderId());
 
-                        Post buyerPost = new Post("Looking for cake recommendations", new Date(),
+                        Post buyerPost1 = new Post("Looking for cake recommendations", new Date(),
                                         PostCategory.LOOKINGFOR);
-                        postSessionBeanLocal.createNewBuyerPost(buyerPost, buyer1.getBuyerId());
+                        postSessionBeanLocal.createNewBuyerPost(buyerPost1, buyer1.getBuyerId());
 
                         Post sellerPost1 = new Post("Sharing brownies ingredients", new Date(),
                                         PostCategory.SHARINGINGREDIENTS);
@@ -261,14 +261,14 @@ public class DataInitSessionBean {
                             PostCategory.RECIPES);
                         postSessionBeanLocal.createNewSellerPost(sellerPost2, seller2.getSellerId());
 
-                        Comment buyerComment = new Comment("I think Emicakes is good!", new Date());
-                        commentSessionBeanLocal.createNewComment(buyerComment, buyerPost.getPostId());
+                        Comment buyerComment1 = new Comment("I think Emicakes is good!", new Date());
+                        commentSessionBeanLocal.createNewBuyerComment(buyerComment1, buyerPost1.getPostId(), buyer1.getBuyerId());
                         
                         Comment sellerComment1 = new Comment("Can try my cake!", new Date());
-                        commentSessionBeanLocal.createNewComment(sellerComment1, buyerPost.getPostId());
+                        commentSessionBeanLocal.createNewSellerComment(sellerComment1, buyerPost1.getPostId(), buyer1.getBuyerId());
 
                         Comment sellerComment2 = new Comment("I'm interested! Do you have flour?", new Date());
-                        commentSessionBeanLocal.createNewComment(sellerComment2, sellerPost1.getPostId());
+                        commentSessionBeanLocal.createNewSellerComment(sellerComment2, sellerPost1.getPostId(), 2L);
 
                         Report report = new Report("Unfair seller", "Did not grant my request for extra cream");
                         reportSessionBeanLocal.createNewReport(report, buyer1.getBuyerId(), seller1.getSellerId());
