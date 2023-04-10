@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Uni
  */
 @Entity
-public class Comment implements Serializable {
+public class Comment implements Serializable {   
 
     private static final long serialVersionUID = 1L;
     @Id
