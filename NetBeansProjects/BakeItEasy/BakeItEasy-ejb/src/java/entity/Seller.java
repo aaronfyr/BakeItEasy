@@ -60,16 +60,12 @@ public class Seller implements Serializable {
     @ManyToMany
     @JsonbTransient
     private List<Buyer> followers;
-    @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
-    @JsonbTransient
-    private List<Comment> comments;
     
     public Seller() {
         this.isBanned = false;
         this.listings = new ArrayList<>();
         this.reports = new ArrayList<>();
         this.posts = new ArrayList<>();
-        this.comments = new ArrayList<>();
     }
 
     public Seller(String name, String email, String username, String password, String phoneNo) {
@@ -200,20 +196,6 @@ public class Seller implements Serializable {
     @Override
     public String toString() {
         return "entity.Seller[ id=" + sellerId + " ]";
-    }
-
-    /**
-     * @return the comments
-     */
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    /**
-     * @param comments the comments to set
-     */
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
     }
 
 }

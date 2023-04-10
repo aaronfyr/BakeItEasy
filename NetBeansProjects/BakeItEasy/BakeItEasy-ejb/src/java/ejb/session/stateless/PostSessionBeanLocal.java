@@ -37,6 +37,4 @@ public interface PostSessionBeanLocal {
     public List<Post> retrieveAllPosts();
 
     public List<Comment> getCommentsByPostId(Long postId) throws PostNotFoundException;
-
- 
 }

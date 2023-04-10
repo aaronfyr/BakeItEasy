@@ -6,14 +6,12 @@
 package webservices.restful;
 
 import ejb.session.stateless.BuyerSessionBeanLocal;
-import ejb.session.stateless.CommentSessionBeanLocal;
 import ejb.session.stateless.ListingSessionBeanLocal;
 import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.PostSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import ejb.session.stateless.SellerSessionBeanLocal;
 import entity.Buyer;
-import entity.Comment;
 import entity.Listing;
 import entity.Order;
 import entity.Post;
@@ -83,9 +81,6 @@ public class SellersResource {
     
     @EJB
     private BuyerSessionBeanLocal buyerSessionBeanLocal;
-    
-    @EJB
-    private CommentSessionBeanLocal commentSessionBeanLocal;
 
     // CHECKED: ELYSIA
     // get all reviews for seller with id = {id}
@@ -542,18 +537,6 @@ public class SellersResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end getFollowers
-    
-    @POST
-    @Path("/{seller_id}/{post_id}/comments")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Comment createComment(@PathParam("seller_id") Long sellerId, @PathParam("post_id") Long pId, Comment c) {
-        try {
-            commentSessionBeanLocal.createNewSellerComment(c, pId, sellerId);
-        } catch (Exception e) {
-        }
-        return c;
-    } //end createComment
 }
 
 /*

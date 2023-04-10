@@ -65,16 +65,12 @@ public class Buyer implements Serializable {
     @ManyToMany(mappedBy = "followers", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Seller> followings;
-    @OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER)
-    @JsonbTransient
-    private List<Comment> comments;
 
     public Buyer() {
         this.isBanned = false;
         this.orders = new ArrayList<>();
         this.reports = new ArrayList<>();
         this.posts = new ArrayList<>();
-        this.comments = new ArrayList<>();
     }
 
     public Buyer(String name, String email, String username, String password, String phoneNo, String address) {
@@ -220,20 +216,6 @@ public class Buyer implements Serializable {
     @Override
     public String toString() {
         return "entity.Placeholder[ id=" + buyerId + " ]";
-    }
-
-    /**
-     * @return the comments
-     */
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    /**
-     * @param comments the comments to set
-     */
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
     }
 
 }
