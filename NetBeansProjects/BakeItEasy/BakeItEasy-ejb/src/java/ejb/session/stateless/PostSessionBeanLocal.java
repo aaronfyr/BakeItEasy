@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.Comment;
 import entity.Post;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
@@ -32,5 +33,10 @@ public interface PostSessionBeanLocal {
     public void deletePost(Long postId) throws PostNotFoundException;
 
     public Long createNewSellerPost(Post post, Long sellerId) throws UnknownPersistenceException, InputDataValidationException, SellerNotFoundException;
-    
+
+    public List<Post> retrieveAllPosts();
+
+    public List<Comment> getCommentsByPostId(Long postId) throws PostNotFoundException;
+
+ 
 }

@@ -229,7 +229,7 @@ img.productImg {
 
 .profileListingsDisplay {
     display: flex;
-
+    width: 1000px;
     height: 100vh;
     overflow-y: scroll;
     justify-content: center;
@@ -444,7 +444,7 @@ h4 {
     padding: 0px 20px 0px 20px;
     margin: 10px 20px 0px 0px;
   }
-  
+
   .button1_follow:hover {
     display: flex;
     align-items: center;

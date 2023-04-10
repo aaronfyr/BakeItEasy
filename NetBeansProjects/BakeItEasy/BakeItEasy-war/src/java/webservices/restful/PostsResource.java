@@ -5,11 +5,20 @@
  */
 package webservices.restful;
 
+import ejb.session.stateless.BuyerSessionBeanLocal;
 import ejb.session.stateless.CommentSessionBeanLocal;
 import ejb.session.stateless.PostSessionBeanLocal;
+import ejb.session.stateless.SellerSessionBeanLocal;
+import entity.Buyer;
 import entity.Comment;
 import entity.Post;
+import entity.Seller;
+import error.exception.BuyerNotFoundException;
 import error.exception.PostNotFoundException;
+import error.exception.SellerNotFoundException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
@@ -40,6 +49,12 @@ public class PostsResource {
     
     @EJB
     private CommentSessionBeanLocal commentSessionBeanLocal;
+    
+    @EJB
+    private SellerSessionBeanLocal sellerSessionBeanLocal;
+    
+    @EJB
+    private BuyerSessionBeanLocal buyerSessionBeanLocal;
 
     @GET
     @Path("/{id}")
@@ -104,15 +119,53 @@ public class PostsResource {
         }
     } //end deletePost
     
-    @POST
-    @Path("/{id}/comments")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Comment createPost(@PathParam("id") Long pId, Comment c) {
+    public List<Post> getAllPosts() {
+        return postSessionBeanLocal.retrieveAllPosts();
+    } // end get all listings
+    
+    // checked: ELY
+    @GET
+    @Path("/{id}/comments")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCommentsForPost(@PathParam("id") Long pId) {
         try {
-            commentSessionBeanLocal.createNewComment(c, pId);
-        } catch (Exception e) {
+            List<Comment> comments = postSessionBeanLocal.getCommentsByPostId(pId);
+            return Response.status(200).entity(comments).type(MediaType.APPLICATION_JSON).build();
+        } catch (PostNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
-        return c;
-    } //end createComment
+    } //end getCommentsForPost
+    
+    // checked: ELY
+    @GET
+    @Path("/seller/{seller_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPostsForSeller(@PathParam("seller_id") Long sellerId) {
+        try {
+            Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
+            List<Post> posts = seller.getPosts();
+            return Response.status(200).entity(posts).type(MediaType.APPLICATION_JSON).build();
+        } catch (SellerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Seller Not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getPostsForSeller
+    
+    // checked: ELY
+    @GET
+    @Path("/buyer/{buyer_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPostsForBuyer(@PathParam("buyer_id") Long buyerId) {
+        try {
+            Buyer seller = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+            List<Post> posts = seller.getPosts();
+            return Response.status(200).entity(posts).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Buyer Not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
 }

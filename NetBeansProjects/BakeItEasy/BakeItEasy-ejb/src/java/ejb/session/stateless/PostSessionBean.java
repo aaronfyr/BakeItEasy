@@ -166,6 +166,25 @@ public class PostSessionBean implements PostSessionBeanLocal {
         }
     }
     
+    @Override
+    public List<Post> retrieveAllPosts() {
+        Query query = em.createQuery("SELECT p FROM Post p");
+
+        return query.getResultList();
+    }
+    
+    @Override
+    public List<Comment> getCommentsByPostId(Long postId) throws PostNotFoundException {
+        try {
+            Post post = retrievePostById(postId);
+            Query query = em.createQuery("SELECT c FROM Comment c WHERE c.post.postId = :inPostId ORDER BY c.dateCreated ASC");
+            query.setParameter("inPostId", postId);
+            return query.getResultList();
+        } catch (PostNotFoundException ex) {
+            throw new PostNotFoundException(ex.getMessage());
+        }
+    }
+    
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Post>> constraintViolations) {
         String msg = "Input data validation error!:";
 

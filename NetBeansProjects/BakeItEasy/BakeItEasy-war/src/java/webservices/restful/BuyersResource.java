@@ -6,10 +6,12 @@
 package webservices.restful;
 
 import ejb.session.stateless.BuyerSessionBeanLocal;
+import ejb.session.stateless.CommentSessionBeanLocal;
 import ejb.session.stateless.OrderSessionBeanLocal;
 import ejb.session.stateless.PostSessionBeanLocal;
 import ejb.session.stateless.ReportSessionBeanLocal;
 import entity.Buyer;
+import entity.Comment;
 import entity.Listing;
 import entity.Order;
 import entity.Post;
@@ -59,6 +61,9 @@ public class BuyersResource {
     @EJB
     private OrderSessionBeanLocal orderSessionBeanLocal;
 
+    @EJB
+    private CommentSessionBeanLocal commentSessionBeanLocal;
+    
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -112,7 +117,7 @@ public class BuyersResource {
             return Response.status(204).build();
         } catch (BuyerNotFoundException e) {
             JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "Customer not found")
+                    .add("error", "Buyer not found")
                     .build();
             
             return Response.status(404).entity(exception).build();
@@ -148,7 +153,7 @@ public class BuyersResource {
         } catch (Exception e) {
         }
         return p;
-    } //end createCustomer
+    } //end createPost
     
     @GET
     @Path("/{buyer_id}/orders")
@@ -272,4 +277,16 @@ public class BuyersResource {
         Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
         return buyer.getReports();
     } //end getAllBuyerReports
+    
+    @POST
+    @Path("/{buyer_id}/{post_id}/comments")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Comment createComment(@PathParam("buyer_id") Long buyerId, @PathParam("post_id") Long pId, Comment c) {
+        try {
+            commentSessionBeanLocal.createNewBuyerComment(c, pId, buyerId);
+        } catch (Exception e) {
+        }
+        return c;
+    } //end createComment
 }
