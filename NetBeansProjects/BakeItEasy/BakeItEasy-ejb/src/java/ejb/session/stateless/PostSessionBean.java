@@ -177,8 +177,9 @@ public class PostSessionBean implements PostSessionBeanLocal {
     public List<Comment> getCommentsByPostId(Long postId) throws PostNotFoundException {
         try {
             Post post = retrievePostById(postId);
-            
-            return post.getComments();
+            Query query = em.createQuery("SELECT c FROM Comment c WHERE c.post.postId = :inPostId ORDER BY c.dateCreated ASC");
+            query.setParameter("inPostId", postId);
+            return query.getResultList();
         } catch (PostNotFoundException ex) {
             throw new PostNotFoundException(ex.getMessage());
         }
