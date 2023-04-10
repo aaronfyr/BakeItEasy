@@ -25,7 +25,6 @@ function SellerProfile() {
   const [sellerId, setSellerId] = useState(null);
   const [sellerObj, setSellerObj] = useState([]);
   const [followerCount, setFollowerCount] = useState(404);
-  const [hasToasted, setToasted] = useState(false);
 
   const navigate = useNavigate();
 
@@ -59,7 +58,9 @@ function SellerProfile() {
   // fetch listings
   const [listings, setListings] = useState([]);
   useEffect(() => {
+    console.log("fetching listings for " + sellerId);
     fetch(
+
       `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/listings`,
       {
         method: "GET",
@@ -71,7 +72,7 @@ function SellerProfile() {
     )
       .then((response) => response.json())
       .then((data) => setListings(data));
-  }, []);
+  }, [sellerId]);
 
   // fetch reviews
   const [reviews, setReviews] = useState([]);
@@ -88,7 +89,7 @@ function SellerProfile() {
     )
       .then((response) => response.json())
       .then((data) => setReviews(data));
-  }, []);
+  }, [sellerId]);
 
   //fetch seller
   console.log("sellerID is", sellerId);

@@ -43,6 +43,14 @@ public class Comment implements Serializable {
     @JoinColumn(nullable = false)
     @JsonbTransient
     private Post post;
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = true)
+    @JsonbTransient
+    private Buyer buyer;
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = true)
+    @JsonbTransient
+    private Seller seller;
 
     public Comment() {
     }
@@ -108,6 +116,34 @@ public class Comment implements Serializable {
     @Override
     public String toString() {
         return "entity.Comment[ id=" + commentId + " ]";
+    }
+
+    /**
+     * @return the buyer
+     */
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    /**
+     * @param buyer the buyer to set
+     */
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
+    }
+
+    /**
+     * @return the seller
+     */
+    public Seller getSeller() {
+        return seller;
+    }
+
+    /**
+     * @param seller the seller to set
+     */
+    public void setSeller(Seller seller) {
+        this.seller = seller;
     }
 
 }

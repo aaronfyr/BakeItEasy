@@ -87,6 +87,12 @@ export const NavigationBar = () => {
     navigate("/buyerLikedListings");
   };
 
+  // Routing to forum
+  const routeToForum = () => {
+    console.log("Navigate to: ", "forum");
+    navigate("/forum");
+  };
+
   // Handle log out
   const handleLogOut = () => {
     console.log("Navigate to: ", "login");
@@ -131,6 +137,9 @@ export const NavigationBar = () => {
           Shop
         </div>
         <div id="navChoices">My Orders</div>
+        <div id="navChoices" onClick={() => routeToForum()}>
+          Forum
+        </div>
       </Flex>
 
       <HStack spacing="7px">

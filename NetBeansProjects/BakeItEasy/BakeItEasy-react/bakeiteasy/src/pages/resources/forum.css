@@ -1,0 +1,99 @@
+.listingDisplay {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0px;
+    justify-content: center;
+}
+
+.postComp {
+    padding: 20px;
+    border-radius: 20px;
+    filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.15));
+    background: white;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+    width: 1000px;
+    margin: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 120px;
+
+}
+
+.image {
+    height: 150;
+    width: 150;
+    object-fit: cover;
+}
+
+h2 {
+    color: black;
+    font-size: 20px;
+    padding-left: 10px;
+}
+
+h3 {
+    color: #8B3A3A;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+h4 {
+    width: 200px;
+}
+
+body {
+    padding: 10px;
+    background-color: white;
+}
+
+.ctb h2 {
+    color: #8B3A3A;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    padding-left: 10px;
+}
+
+.ctb h3 {
+    color: black;
+    margin: 10px;
+}
+
+.ctb h4 {
+    color: black;
+    font-weight: bolder;
+    font-family: 'Montserrat', sans-serif;
+    margin: 10px;
+}
+
+.sellerOrderCardHeader h3 {
+    color: #8B3A3A;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+.viewComments {
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-style: solid;
+    border-color: var(--dark-text);
+    color: var(--dark-text);
+    border-width: 1px;
+    padding: 0px 20px 0px 20px;
+    margin: 10px;
+    background-color: #ebeced;
+    width: 200px;
+}
+
+.viewComments:hover {
+    background-color:  lightgray;
+}
+
+.flexBox {
+    width: 600px;
+}

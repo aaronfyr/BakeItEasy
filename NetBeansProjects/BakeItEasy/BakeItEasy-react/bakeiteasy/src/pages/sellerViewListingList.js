@@ -21,10 +21,40 @@ const SellerViewListingList = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredListings, setFilteredListings] = useState([]);
 
+  const [seller, setSeller] = useState(null);
+  const [sellerId, setSellerId] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const fetchedSeller = localStorage.getItem("seller");
+      /*if (!fetchedBuyer) {
+        console.log("navbar", "no buyer");
+        navigate("/login");
+      } else {*/
+      if (!fetchedSeller) {
+        console.log("sellerProfile", "no seller");
+        navigate("/sellerlogin");
+      } else {
+        console.log("sellerProfile", "has seller");
+        try {
+          const parsedUser = JSON.parse(fetchedSeller);
+          setSeller(parsedUser);
+          console.log("parsedUser: ", parsedUser);
+          console.log("parsedUser.id: ", parsedUser.sellerId);
+          setSellerId(parsedUser.sellerId);
+
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+    fetchData();
+  }, []);
+
   //get listings of seller
 async function fetchListings() {
   try {
-    const response = await fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/1/listings`, {
+    const response = await fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/listings`, {
       //get seller id from storage !!!!!!!!!!!!!!
       method: "GET",
       mode: "cors",
@@ -58,11 +88,7 @@ function filterListings(listings, search, selectedCategory) {
 
 useEffect(() => {
   fetchListings();
-}, []);
-
-useEffect(() => {
-  fetchListings();
-}, []);
+}, [sellerId]);
 
 useEffect(() => {
   fetchListings();

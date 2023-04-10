@@ -94,10 +94,16 @@ export const SellerNavigationBar = () => {
     navigate("/sellerOrderMgmt");
   };
 
-  // Routing to Order Mgmt
+  // Routing to seller profile
   const routeToSellerProfile = () => {
     console.log("Navigate to: ", "sellerProfile");
     navigate("/sellerProfile");
+  };
+
+  // Routing to forum
+  const routeToForum = () => {
+    console.log("Navigate to: ", "forum");
+    navigate("/forum");
   };
 
   // Handle log out
@@ -151,6 +157,9 @@ export const SellerNavigationBar = () => {
         </div>
         <div id="navChoices" onClick={() => routeToAppointments()}>
           Appointments
+        </div>
+        <div id="navChoices" onClick={() => routeToForum()}>
+          Forum
         </div>
       </Flex>
 
