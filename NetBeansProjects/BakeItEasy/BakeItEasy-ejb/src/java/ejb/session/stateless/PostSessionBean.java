@@ -173,6 +173,17 @@ public class PostSessionBean implements PostSessionBeanLocal {
         return query.getResultList();
     }
     
+    @Override
+    public List<Comment> getCommentsByPostId(Long postId) throws PostNotFoundException {
+        try {
+            Post post = retrievePostById(postId);
+            
+            return post.getComments();
+        } catch (PostNotFoundException ex) {
+            throw new PostNotFoundException(ex.getMessage());
+        }
+    }
+    
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Post>> constraintViolations) {
         String msg = "Input data validation error!:";
 

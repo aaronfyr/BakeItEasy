@@ -109,7 +109,7 @@ public class PostsResource {
     @Path("/{id}/comments")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Comment createPost(@PathParam("id") Long pId, Comment c) {
+    public Comment createComment(@PathParam("id") Long pId, Comment c) {
         try {
             commentSessionBeanLocal.createNewComment(c, pId);
         } catch (Exception e) {
@@ -122,4 +122,17 @@ public class PostsResource {
     public List<Post> getAllPosts() {
         return postSessionBeanLocal.retrieveAllPosts();
     } // end get all listings
+    
+    @GET
+    @Path("/{id}/comments")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getComments(@PathParam("id") Long pId) {
+        try {
+            List<Comment> comments = postSessionBeanLocal.getCommentsByPostId(pId);
+            return Response.status(200).entity(comments).type(MediaType.APPLICATION_JSON).build();
+        } catch (PostNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end getComments
 }
