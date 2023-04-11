@@ -110,28 +110,33 @@ public class DataInitSessionBean {
 
         private void initialiseData() {
                 try {
-                        Buyer buyer1 = new Buyer("Andy", "andy@gmail.com", "andy", "password", "99999991", "123 building");
+                        String image = "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
+                    
+                        Buyer buyer1 = new Buyer("Andy", "andy@gmail.com", "andy", "password", "99999991", "123 building", image);
                         buyerSessionBeanLocal.createNewBuyer(buyer1);
-                        Buyer buyer2 = new Buyer("Bob", "bob@gmail.com", "bob", "password", "99999992", "345 building");
+                        Buyer buyer2 = new Buyer("Bob", "bob@gmail.com", "bob", "password", "99999992", "345 building", image);
                         buyerSessionBeanLocal.createNewBuyer(buyer2);
-                        Buyer buyer3 = new Buyer("Charlie", "charlie@gmail.com", "charlie", "password", "99999993", "45 building");
+                        Buyer buyer3 = new Buyer("Charlie", "charlie@gmail.com", "charlie", "password", "99999993", "45 building", image);
                         buyerSessionBeanLocal.createNewBuyer(buyer3);
 
-                        Seller seller1 = new Seller("Sam", "sam@gmail.com", "sam", "password", "88888881");
-                        Seller seller2 = new Seller("Tom", "tom@gmail.com", "tom", "password", "88888882");
-                        Seller seller3 = new Seller("Rachel", "rachel@gmail.com", "rachel", "password", "88888883");
-                        Seller seller4 = new Seller("Oliver", "oliver@gmail.com", "oliver", "password", "88888884");
+                        Seller seller1 = new Seller("Sam", "sam@gmail.com", "sam", "password", "88888881", image);
+                        Seller seller2 = new Seller("Tom", "tom@gmail.com", "tom", "password", "88888882", image);
+                        Seller seller3 = new Seller("Rachel", "rachel@gmail.com", "rachel", "password", "88888883", image);
+                        Seller seller4 = new Seller("Oliver", "oliver@gmail.com", "oliver", "password", "88888884", image);
                         sellerSessionBeanLocal.createNewSeller(seller1);
                         sellerSessionBeanLocal.createNewSeller(seller2);
                         sellerSessionBeanLocal.createNewSeller(seller3);
                         sellerSessionBeanLocal.createNewSeller(seller4);
 
+                        // test with 3 pictures in array
                         List<String> newImagePath = new ArrayList<>();
                         newImagePath.add(
                                         "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80");
+                        newImagePath.add(image);
+                        newImagePath.add(image);
+                        
                         Listing listing1 = new Listing("Customisable Cake", ListingCategory.CAKE, new BigDecimal(25.00), 5,
                                         "A delicious cake for any occasion!", newImagePath);
-                        newImagePath.clear();
                         Listing listing2 = new Listing("Savory Tomato Tart", ListingCategory.SAVORY, new BigDecimal(2.50), 20,
                                         "Savory tarts with custard filling.", newImagePath);
                         Listing listing3 = new Listing("Wholegrain bread loaf", ListingCategory.BREAD, new BigDecimal(3.00), 15,
@@ -249,25 +254,22 @@ public class DataInitSessionBean {
                                         new ArrayList<>(), new Date());
                         reviewSessionBeanLocal.createNewReview(review2, order3.getOrderId());
 
-                        Post buyerPost1 = new Post("Looking for cake recommendations", new Date(),
-                                        PostCategory.LOOKINGFOR);
+                        Post buyerPost1 = new Post("Looking for cake recommendations", new Date(), PostCategory.LOOKINGFOR, true);
                         postSessionBeanLocal.createNewBuyerPost(buyerPost1, buyer1.getBuyerId());
 
-                        Post sellerPost1 = new Post("Sharing brownies ingredients", new Date(),
-                                        PostCategory.SHARINGINGREDIENTS);
+                        Post sellerPost1 = new Post("Sharing brownies ingredients", new Date(), PostCategory.SHARINGINGREDIENTS, false);
                         postSessionBeanLocal.createNewSellerPost(sellerPost1, seller1.getSellerId());
                         
-                        Post sellerPost2 = new Post("My grandmother's apple pie recipe", new Date(),
-                            PostCategory.RECIPES);
+                        Post sellerPost2 = new Post("My grandmother's apple pie recipe", new Date(), PostCategory.RECIPES, false);
                         postSessionBeanLocal.createNewSellerPost(sellerPost2, seller2.getSellerId());
 
-                        Comment buyerComment1 = new Comment("I think Emicakes is good!", new Date());
+                        Comment buyerComment1 = new Comment("I think Emicakes is good!", new Date(), true);
                         commentSessionBeanLocal.createNewBuyerComment(buyerComment1, buyerPost1.getPostId(), buyer1.getBuyerId());
                         
-                        Comment sellerComment1 = new Comment("Can try my cake!", new Date());
+                        Comment sellerComment1 = new Comment("Can try my cake!", new Date(), false);
                         commentSessionBeanLocal.createNewSellerComment(sellerComment1, buyerPost1.getPostId(), buyer1.getBuyerId());
 
-                        Comment sellerComment2 = new Comment("I'm interested! Do you have flour?", new Date());
+                        Comment sellerComment2 = new Comment("I'm interested! Do you have flour?", new Date(), false);
                         commentSessionBeanLocal.createNewSellerComment(sellerComment2, sellerPost1.getPostId(), 2L);
 
                         Report report = new Report("Unfair seller", "Did not grant my request for extra cream");

@@ -38,6 +38,8 @@ public class Comment implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     private Date dateCreated;
+    @Column
+    private boolean isBuyer;
     
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
@@ -55,9 +57,10 @@ public class Comment implements Serializable {
     public Comment() {
     }
     
-    public Comment(String title, Date dateCreated) {
+    public Comment(String title, Date dateCreated, boolean isBuyer) {
         this.title = title;
         this.dateCreated = dateCreated;
+        this.isBuyer = isBuyer;
     }
 
     @XmlTransient
@@ -144,6 +147,20 @@ public class Comment implements Serializable {
      */
     public void setSeller(Seller seller) {
         this.seller = seller;
+    }
+
+    /**
+     * @return the isBuyer
+     */
+    public boolean isIsBuyer() {
+        return isBuyer;
+    }
+
+    /**
+     * @param isBuyer the isBuyer to set
+     */
+    public void setIsBuyer(boolean isBuyer) {
+        this.isBuyer = isBuyer;
     }
 
 }

@@ -44,6 +44,8 @@ public class Post implements Serializable {
     private Date dateCreated;    
     @Column
     private PostCategory postCategory;
+    @Column
+    private boolean isBuyer;
     
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
     @JsonbTransient
@@ -58,14 +60,15 @@ public class Post implements Serializable {
     private Seller seller;
 
     public Post() {
-        this.comments = new ArrayList<Comment>();
+        this.comments = new ArrayList<>();
     }
     
-    public Post(String title, Date dateCreated, PostCategory postCategory) {
+    public Post(String title, Date dateCreated, PostCategory postCategory, boolean isBuyer) {
         this.title = title;
         this.dateCreated = dateCreated;
         this.postCategory = postCategory;
-        this.comments = new ArrayList<Comment>();
+        this.isBuyer = isBuyer;
+        this.comments = new ArrayList<>();
     }
     
     @XmlTransient
@@ -152,6 +155,20 @@ public class Post implements Serializable {
     @Override
     public String toString() {
         return "entity.pOST[ id=" + postId + " ]";
+    }
+
+    /**
+     * @return the isBuyer
+     */
+    public boolean isIsBuyer() {
+        return isBuyer;
+    }
+
+    /**
+     * @param isBuyer the isBuyer to set
+     */
+    public void setIsBuyer(boolean isBuyer) {
+        this.isBuyer = isBuyer;
     }
     
 }

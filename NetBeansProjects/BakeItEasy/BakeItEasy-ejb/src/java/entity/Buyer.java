@@ -49,6 +49,8 @@ public class Buyer implements Serializable {
     private boolean isBanned;
     @Column(nullable = true)
     private String address;
+    @Column
+    private String imagePath;
 
     @OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER)
     @JsonbTransient
@@ -77,7 +79,7 @@ public class Buyer implements Serializable {
         this.comments = new ArrayList<>();
     }
 
-    public Buyer(String name, String email, String username, String password, String phoneNo, String address) {
+    public Buyer(String name, String email, String username, String password, String phoneNo, String address, String imagePath) {
         this();
         this.name = name;
         this.email = email;
@@ -85,6 +87,7 @@ public class Buyer implements Serializable {
         this.password = password;
         this.phoneNo = phoneNo;
         this.address = address;
+        this.imagePath = imagePath;
     }
     
     public Long getBuyerId() {
@@ -234,6 +237,20 @@ public class Buyer implements Serializable {
      */
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    /**
+     * @return the imagePath
+     */
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    /**
+     * @param imagePath the imagePath to set
+     */
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
 }
