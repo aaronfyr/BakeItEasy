@@ -118,6 +118,7 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
                     && sellerToUpdate.getUsername().equals(updatedSeller.getUsername())) {
                 sellerToUpdate.setName(updatedSeller.getName());
                 sellerToUpdate.setPassword(updatedSeller.getPassword());
+                sellerToUpdate.setImagePath(updatedSeller.getImagePath());
             } else if (!sellerToUpdate.getPhoneNo().equals(updatedSeller.getPhoneNo())
                     && sellerToUpdate.getUsername().equals(updatedSeller.getUsername())) { // phone change, username same
                 if (isPhoneNumberAvailable(updatedSeller.getPhoneNo())) {

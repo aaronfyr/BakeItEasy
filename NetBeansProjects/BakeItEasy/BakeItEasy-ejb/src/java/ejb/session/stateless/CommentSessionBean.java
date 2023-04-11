@@ -144,8 +144,8 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
     public void editComment(Comment comment) throws CommentNotFoundException {
         try {
             Comment commentToEdit = retrieveCommentById(comment.getCommentId());
-            
             commentToEdit.setTitle(comment.getTitle());
+            commentToEdit.setIsBuyer(comment.isIsBuyer());
         } catch (CommentNotFoundException ex) {
             throw new CommentNotFoundException(ex.getMessage());
         }

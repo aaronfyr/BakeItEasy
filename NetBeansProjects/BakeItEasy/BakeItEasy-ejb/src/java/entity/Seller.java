@@ -108,16 +108,8 @@ public class Seller implements Serializable {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.setEmail(email);
-    }
-
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.setUsername(username);
     }
 
     public String getPassword() {
@@ -130,10 +122,6 @@ public class Seller implements Serializable {
 
     public String getPhoneNo() {
         return phoneNo;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.setPhoneNo(phoneNo);
     }
 
     public boolean getIsBanned() {
@@ -238,6 +226,27 @@ public class Seller implements Serializable {
      */
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * @param username the username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * @param phoneNo the phoneNo to set
+     */
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
     }
 
 }

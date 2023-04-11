@@ -143,6 +143,7 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
             buyerToUpdate.setPhoneNo(buyer.getPhoneNo());
             buyerToUpdate.setIsBanned(buyer.isIsBanned());
             buyerToUpdate.setAddress(buyer.getAddress());
+            buyerToUpdate.setImagePath(buyer.getImagePath());
         } catch (BuyerNotFoundException ex) {
             throw new BuyerNotFoundException(ex.getMessage());
         }
