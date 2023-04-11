@@ -125,6 +125,7 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
                     sellerToUpdate.setName(updatedSeller.getName());
                     sellerToUpdate.setPassword(updatedSeller.getPassword());
                     sellerToUpdate.setPhoneNo(updatedSeller.getPhoneNo());
+                    sellerToUpdate.setImagePath(updatedSeller.getImagePath());
                 } else {
                     throw new SellerPhoneNumberExistException("New phone number provided exist!");
                 }
@@ -134,6 +135,7 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
                     sellerToUpdate.setName(updatedSeller.getName());
                     sellerToUpdate.setPassword(updatedSeller.getPassword());
                     sellerToUpdate.setUsername(updatedSeller.getUsername());
+                    sellerToUpdate.setImagePath(updatedSeller.getImagePath());
                 } else {
                     throw new SellerUsernameExistException("New username provided exist!");
                 }
@@ -145,6 +147,7 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
                         sellerToUpdate.setPassword(updatedSeller.getPassword());
                         sellerToUpdate.setPhoneNo(updatedSeller.getPhoneNo());
                         sellerToUpdate.setUsername(updatedSeller.getUsername());
+                        sellerToUpdate.setImagePath(updatedSeller.getImagePath());
                     } else {
                         throw new SellerUsernameExistException("New username provided exist!");
                     }
