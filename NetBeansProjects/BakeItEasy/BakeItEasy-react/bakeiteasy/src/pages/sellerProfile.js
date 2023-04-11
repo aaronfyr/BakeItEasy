@@ -162,7 +162,9 @@ function SellerProfile() {
       <ToastContainer />
       <SellerNavigationBar />
       <div id="coverPhoto">
-        <div id="profilePhoto"></div>
+        <div id="profilePhoto">
+            <img alt="seller pfp" style={{height: 120, objectFit: "cover"}}src={sellerObj.imagePath}></img>
+        </div>
       </div>
       <Flex>
         <div id="userDetails">

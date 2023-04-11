@@ -147,6 +147,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
             
             postToUpdate.setTitle(post.getTitle());
             postToUpdate.setPostCategory(post.getPostCategory());
+            postToUpdate.setIsBuyer(post.isIsBuyer());
         } catch (PostNotFoundException ex) {
             throw new PostNotFoundException(ex.getMessage());
         }

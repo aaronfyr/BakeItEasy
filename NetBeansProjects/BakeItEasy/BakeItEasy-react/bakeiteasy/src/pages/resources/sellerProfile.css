@@ -220,6 +220,8 @@ img.productImg {
     width: 120px;
     border-radius: 60px;
     transform: translate(40px, 100px);
+    overflow: hidden;
+    object-fit: cover;
 }
 
 #userDetails {

@@ -20,6 +20,7 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
+  Center,
 } from "@chakra-ui/react";
 import {
   FaRegCommentAlt,
@@ -42,6 +43,7 @@ function SellerEditProfile() {
   const [sellerId, setSellerId] = useState(null);
   const [sellerObj, setSellerObj] = useState([]);
   const [isEditable, setIsEditable] = useState(false);
+  const [image, setImage] = useState("")
 
   const navigate = useNavigate();
 
@@ -54,7 +56,7 @@ function SellerEditProfile() {
       } else {*/
       if (!fetchedSeller) {
         console.log("sellerProfile", "no seller");
-        navigate("/sellerlogin");
+        navigate("/login?type=seller");
       } else {
         console.log("sellerProfile", "has seller");
         try {
@@ -74,7 +76,6 @@ function SellerEditProfile() {
   //fetch seller
   console.log("sellerID is", sellerId);
   useEffect(() => {
-    if (sellerId) {
       fetch(
         `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`,
         {
@@ -87,7 +88,7 @@ function SellerEditProfile() {
       )
         .then((response) => response.json())
         .then((data) => setSellerObj(data));
-    }
+
   }, [sellerId]);
 
   const handleGoBack = () => {
@@ -96,7 +97,38 @@ function SellerEditProfile() {
 
   //edit seller
   const handleUpdate = () => {
+    toast.loading("loading, please wait");
     setIsEditable(false);
+
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset","module-buddies");
+    data.append("cloud_name","nelsonchoo456");
+
+
+  fetch("https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload", {
+    method: "POST",
+    body: data,
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      toast.dismiss();
+      toast.error("rsponse for cloud upload not ok");
+    }
+  })
+  .then((data) => {
+    console.log("cloud url is", data.url);
+    //setSellerObj({ ...sellerObj, imagePath: data.url});
+    setSellerObj(prevListing => {
+      prevListing.imagePath = data.url;
+    return {
+    ...prevListing,
+    imagePath: prevListing.imagePath
+  };
+    });
+    console.log("imagePath after setting is", sellerObj.imagePath);
+
     fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`,
       {
@@ -125,6 +157,8 @@ function SellerEditProfile() {
       .catch((error) => {
         /*handle error */
       });
+  })
+
   };
 
   return (
@@ -144,6 +178,11 @@ function SellerEditProfile() {
           <h1 style={{ marginLeft: 80 }}>
             Edit My Profile: Seller ID #{sellerObj.sellerId}
           </h1>
+          <br/>
+          <div style={{width:260, display: "block", margin: "auto"}}>
+            <img style={{borderRadius: "50%"}}
+          src={sellerObj.imagePath} alt="pfp"/></div>
+            <br/>
           <h3>Name:</h3>
           {isEditable ? (
             <input
@@ -184,6 +223,10 @@ function SellerEditProfile() {
           ) : (
             <h2>{sellerObj.phoneNo}</h2>
           )}
+
+           {isEditable && <div >
+            <input style={{height: 40}} type="file" id="image" name="image" onChange={(e) => setImage(e.target.files[0])}/>
+        </div> }
           <div style={{ height: 10 }}></div>
           <Flex>
             {!isEditable && (
@@ -196,6 +239,7 @@ function SellerEditProfile() {
                 Done
               </button>
             )}
+
           </Flex>
           <div style={{ height: 10 }}></div>
           <h3>Email:</h3>
