@@ -47,6 +47,8 @@ public class Seller implements Serializable {
     private String phoneNo;
     @Column
     private boolean isBanned;
+    @Column
+    private String imagePath;
 
     @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
     @JsonbTransient
@@ -72,7 +74,7 @@ public class Seller implements Serializable {
         this.comments = new ArrayList<>();
     }
 
-    public Seller(String name, String email, String username, String password, String phoneNo) {
+    public Seller(String name, String email, String username, String password, String phoneNo, String imagePath) {
         this();
         
         this.name = name;
@@ -80,6 +82,7 @@ public class Seller implements Serializable {
         this.username = username;
         this.password = password;
         this.phoneNo = phoneNo;
+        this.imagePath = imagePath;
     }
     
     
@@ -106,7 +109,7 @@ public class Seller implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.setEmail(email);
     }
 
     public String getUsername() {
@@ -114,7 +117,7 @@ public class Seller implements Serializable {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.setUsername(username);
     }
 
     public String getPassword() {
@@ -130,11 +133,11 @@ public class Seller implements Serializable {
     }
 
     public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
+        this.setPhoneNo(phoneNo);
     }
 
     public boolean getIsBanned() {
-        return isBanned;
+        return isIsBanned();
     }
 
     public void setIsBanned(boolean isBanned) {
@@ -214,6 +217,27 @@ public class Seller implements Serializable {
      */
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    /**
+     * @return the isBanned
+     */
+    public boolean isIsBanned() {
+        return isBanned;
+    }
+
+    /**
+     * @return the imagePath
+     */
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    /**
+     * @param imagePath the imagePath to set
+     */
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
 }

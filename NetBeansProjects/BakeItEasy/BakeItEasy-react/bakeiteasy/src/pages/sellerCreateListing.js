@@ -39,13 +39,14 @@ function SellerCreateListing() {
   const [sellerId, setSellerId] = useState(null);
   const [sellerObj, setSellerObj] = useState([]);
   const [isEditable, setIsEditable] = useState(false);
+  const [image, setImage] = useState("");
   const [listing, setListing] = useState({
     name: '',
     listingCategory: '',
     price: '',
     quantityLeft: '',
     description: '',
-    imagePaths: []
+    imagePaths: ["", "test"]
   });
   const [created, setCreated] = useState(false);
 
@@ -128,36 +129,80 @@ const handleChange = (event) => {
 
   //create listing
   const handleSubmit = e => {
-    e.preventDefault();
+  e.preventDefault();
+  const data = new FormData();
+  data.append("file", image);
+  data.append("upload_preset","module-buddies");
+  data.append("cloud_name","nelsonchoo456");
 
-    fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${sellerId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(listing)
-    })
-      .then(response => {
+  fetch("https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload", {
+    method: "POST",
+    body: data,
+  })
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      toast.error("rsponse for cloud upload not ok");
+    }
+  })
+  .then((data) => {
+    console.log("CLOUD URL", data.url);
+    setListing(prevListing => {
+
+      const updatedImagePaths = [...prevListing.imagePaths]; // create a copy of imagePaths array
+      console.log(typeof prevListing.imagePaths);
+      console.log(typeof listing.imagePaths);
+
+      console.log(data.url);
+      console.log("before update",updatedImagePaths);
+      updatedImagePaths[0] = data.url; // set element 0 to a new value
+      console.log("after update",updatedImagePaths);
+      return {
+        ...prevListing,
+        imagePaths: updatedImagePaths
+      };
+    });
+    console.log("LISTING after setlisting in 1st fetch", listing)
+    console.log("image path of listings state is", listing.imagePaths[0]);
+    toast.success("image uploaded");
+
+    // check if imagePaths[0] is not empty before executing second fetch
+    if (listing.imagePaths[0] !== "") {
+      // Create the listing after image upload
+      fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${sellerId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(listing),
+      })
+      .then((response) => {
         if (!response.ok) {
-            toast.error("!response.ok");
+          toast.error("!response.ok");
         } else {
           console.log("listing created");
+          console.log(response);
           setCreated(true);
           toast.success("Listing successfully created! Redirecting to profile...");
-          setTimeout(() => {
+          setImage("");
+          /*setTimeout(() => {
             routeChangeToSellerProfile();
-          }, 5000); // 1000 milliseconds = 1 second
+          }, 5000); // 1000 milliseconds = 1 second*/
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         // handle successful creation
       })
-      .catch(error => {
-         toast.error('Failed to create listing. ' + error);
-          throw new Error('Failed to create listing');
+      .catch((error) => {
+        toast.error("Failed to create listing. " + error);
+        throw new Error("Failed to create listing");
       });
-  };
+    }
+  });
+};
+
 
   const handlePriceChange = (e) => {
     const { value } = e.target;
@@ -222,10 +267,11 @@ const handleChange = (event) => {
         Description:
         <input type="text" name="description" value={listing.description} onChange={handleChange} />
       </label>
-      <label>
-        Image Paths:
-        <input type="text" name="imagePaths" value={listing.imagePaths} onChange={handleChange} />
-      </label>
+
+        <div >
+            <input style={{height: 40}} type="file" id="image" name="image" onChange={(e) => setImage(e.target.files[0])}/>
+        </div>
+
       <button type="submit" className="button1">Create Listing</button>
     </form>
     <br/>

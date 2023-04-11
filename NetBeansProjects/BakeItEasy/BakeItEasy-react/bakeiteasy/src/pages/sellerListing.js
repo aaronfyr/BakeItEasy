@@ -62,6 +62,7 @@ function SellerListing() {
     .then((data) => {
       setListing(data);
       setLoading(false);
+      console.log("response is", data)
     })
     .catch((error) => console.log("ERROR !!!!!" + error));
 }, []);
@@ -144,6 +145,7 @@ function SellerListing() {
           }, 5000); // 1000 milliseconds = 1 second
         } else {
           console.log("response ok");
+
           toast.success("Listing deleted successfully");
           setTimeout(() => {
             routeChangeToSellerProfile();
@@ -286,6 +288,7 @@ function SellerListing() {
           <h3>Category:</h3>
           <h2>{(listing.listingCategory).toLowerCase()}</h2>
           {deleteFailed && <h3>You cannot delete this listing.</h3>}
+          <img alt="upload" src={listing.imagePaths[0]}/>
           <br></br>
         </div>
       </div>

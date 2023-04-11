@@ -241,7 +241,7 @@ function SellerProfile() {
               <div className="productImg">
                 <img
                   className="productImg"
-                  src="https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
+                  src={listing.imagePaths[0] ? listing.imagePaths[0] : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"}
                   alt="listing product"
                 />
               </div>

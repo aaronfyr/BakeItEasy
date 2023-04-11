@@ -61,6 +61,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
             try {
                 Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
                 post.setBuyer(buyer);
+                post.setIsBuyer(true);
                 buyer.getPosts().add(post);
                 em.persist(post);
                 em.flush();
@@ -91,6 +92,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
             try {
                 Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
                 post.setSeller(seller);
+                post.setIsBuyer(false);
                 seller.getPosts().add(post);
                 em.persist(post);
                 em.flush();
@@ -180,6 +182,28 @@ public class PostSessionBean implements PostSessionBeanLocal {
             Query query = em.createQuery("SELECT c FROM Comment c WHERE c.post.postId = :inPostId ORDER BY c.dateCreated ASC");
             query.setParameter("inPostId", postId);
             return query.getResultList();
+        } catch (PostNotFoundException ex) {
+            throw new PostNotFoundException(ex.getMessage());
+        }
+    }
+    
+    @Override
+    public Buyer getBuyerFromPost(Long postId) throws PostNotFoundException {
+        try {
+            Post post = retrievePostById(postId);
+            
+            return post.getBuyer();
+        } catch (PostNotFoundException ex) {
+            throw new PostNotFoundException(ex.getMessage());
+        }
+    }
+    
+    @Override
+    public Seller getSellerFromPost(Long postId) throws PostNotFoundException {
+        try {
+            Post post = retrievePostById(postId);
+            
+            return post.getSeller();
         } catch (PostNotFoundException ex) {
             throw new PostNotFoundException(ex.getMessage());
         }
