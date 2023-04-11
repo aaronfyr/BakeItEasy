@@ -46,7 +46,7 @@ function SellerCreateListing() {
     price: '',
     quantityLeft: '',
     description: '',
-    imagePaths: ["", "test"]
+    imagePaths: [],
   });
   const [created, setCreated] = useState(false);
 
@@ -129,6 +129,7 @@ const handleChange = (event) => {
 
   //create listing
   const handleSubmit = e => {
+toast.loading("loading, please wait!");
   e.preventDefault();
   const data = new FormData();
   data.append("file", image);
@@ -143,28 +144,22 @@ const handleChange = (event) => {
     if (res.ok) {
       return res.json();
     } else {
+      toast.dismiss();
       toast.error("rsponse for cloud upload not ok");
     }
   })
   .then((data) => {
     console.log("CLOUD URL", data.url);
     setListing(prevListing => {
-
-      const updatedImagePaths = [...prevListing.imagePaths]; // create a copy of imagePaths array
-      console.log(typeof prevListing.imagePaths);
-      console.log(typeof listing.imagePaths);
-
-      console.log(data.url);
-      console.log("before update",updatedImagePaths);
-      updatedImagePaths[0] = data.url; // set element 0 to a new value
-      console.log("after update",updatedImagePaths);
-      return {
-        ...prevListing,
-        imagePaths: updatedImagePaths
-      };
+      prevListing.imagePaths[0] = data.url;
+    return {
+    ...prevListing,
+    imagePaths: prevListing.imagePaths
+  };
     });
     console.log("LISTING after setlisting in 1st fetch", listing)
     console.log("image path of listings state is", listing.imagePaths[0]);
+    toast.dismiss();
     toast.success("image uploaded");
 
     // check if imagePaths[0] is not empty before executing second fetch
@@ -186,9 +181,9 @@ const handleChange = (event) => {
           setCreated(true);
           toast.success("Listing successfully created! Redirecting to profile...");
           setImage("");
-          /*setTimeout(() => {
+          setTimeout(() => {
             routeChangeToSellerProfile();
-          }, 5000); // 1000 milliseconds = 1 second*/
+          }, 5000); // 1000 milliseconds = 1 second
         }
         return response.json();
       })
