@@ -110,6 +110,34 @@ h4 {
   color:#E2725B;
 }
 
+.postSellerHeader {
+  cursor: pointer;
+}
+
+.postSellerHeader:hover {
+  cursor: pointer;
+  color:#E2725B;
+}
+
+.postBuyerHeader {
+  cursor: pointer;
+}
+
+.postBuyerHeader:hover {
+  cursor: pointer;
+  color:var(--mediterranean-blue);
+}
+
+.postFooterContent {
+  cursor: pointer;
+}
+
+.postFooterContent:hover {
+  cursor: pointer;
+  color: var(--mediterranean-blue);
+  text-decoration: underline;
+}
+
 .icon-circle {
   display: flex;
   color: "#7D7373";

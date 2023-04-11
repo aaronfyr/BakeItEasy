@@ -226,7 +226,7 @@ const Forum = () => {
             title={post.title}
             dateCreated={post.dateCreated}
             postCategory={post.postCategory}
-            isBuyer={true}
+            isBuyer={post.isBuyer}
           />
 
           /*
