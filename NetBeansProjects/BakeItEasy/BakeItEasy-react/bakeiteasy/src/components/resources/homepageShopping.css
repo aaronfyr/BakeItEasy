@@ -51,6 +51,20 @@
     justify-content: center; /*delete this if not necessary*/
 }
 
+.productsDisplay {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  height: 80vh;
+  justify-content: center; /*delete this if not necessary*/
+}
+
+.postsDisplay {
+  max-width: 50%;
+  margin: auto;
+}
+
+
 
 .product {
     margin: 20px;
@@ -327,4 +341,47 @@ img.heartBreakIcon {
         opacity: 1;
         transform: translateY(0px);
     }
+}
+
+.postCard {
+  width: 500px;
+  height: 250px;
+  margin:20px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 2px 2px 4px 1px rgba(0,0,0,0.3);
+}
+
+.postCardHeader {
+  width: 100%;
+  height: 50px;
+  padding: 10px 10px 0px 10px;
+  background-color: #dfc581;
+}
+
+.postCardContentGrid {
+  display: grid;
+  grid-template-columns: 40% 1fr;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.postCardContentGrid_left {
+  background-color: rgb(210, 210, 210);
+  border-radius: 10px 10px 10px 10px;
+}
+
+.postCardContentGrid_right {
+  padding: 10px;
+}
+
+.postCardFooter {
+  width: 280px;
+  height: 50px;
+  padding: 10px 10px 0px 10px;
+  background-color: #a7ccdd;
+  position: absolute;
+  bottom: 0;
 }

@@ -182,14 +182,14 @@ export const SellerNavigationBar = () => {
           <Menu>
             <MenuButton
               variant="ghost"
+              colorScheme="orange"
               as={Button}
               rightIcon={<ChevronDownIcon />}
             >
-              <Flex align="center">
+              <HStack spacing="10px">
                 <FiUser />
-
-                <h4>{sellerName}</h4>
-              </Flex>
+                <p>{sellerName}</p>
+              </HStack>
             </MenuButton>
 
             <MenuList>
