@@ -65,6 +65,7 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
                 comment.setPost(post);
                 post.getComments().add(comment);
                 comment.setBuyer(buyer);
+                comment.setIsBuyer(true);
                 buyer.getComments().add(comment);
                 em.persist(comment);
                 em.flush();
@@ -95,6 +96,7 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
                 Seller seller = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
                 comment.setPost(post);
                 comment.setSeller(seller);
+                comment.setIsBuyer(false);
                 post.getComments().add(comment);
                 seller.getComments().add(comment);
                 em.persist(comment);
@@ -156,6 +158,28 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
             
             comment.getPost().getComments().remove(comment);
             em.remove(comment);
+        } catch (CommentNotFoundException ex) {
+            throw new CommentNotFoundException(ex.getMessage());
+        }
+    }
+    
+    @Override
+    public Buyer getBuyerFromComment(Long commentId) throws CommentNotFoundException {
+        try {
+            Comment comment = retrieveCommentById(commentId);
+            
+            return comment.getBuyer();
+        } catch (CommentNotFoundException ex) {
+            throw new CommentNotFoundException(ex.getMessage());
+        }
+    }
+    
+    @Override
+    public Seller getSellerFromComment(Long commentId) throws CommentNotFoundException {
+        try {
+            Comment comment = retrieveCommentById(commentId);
+            
+            return comment.getSeller();
         } catch (CommentNotFoundException ex) {
             throw new CommentNotFoundException(ex.getMessage());
         }

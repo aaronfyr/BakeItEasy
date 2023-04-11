@@ -5,8 +5,10 @@
  */
 package ejb.session.stateless;
 
+import entity.Buyer;
 import entity.Comment;
 import entity.Post;
+import entity.Seller;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.PostNotFoundException;
@@ -37,6 +39,10 @@ public interface PostSessionBeanLocal {
     public List<Post> retrieveAllPosts();
 
     public List<Comment> getCommentsByPostId(Long postId) throws PostNotFoundException;
+
+    public Buyer getBuyerFromPost(Long postId) throws PostNotFoundException;
+
+    public Seller getSellerFromPost(Long postId) throws PostNotFoundException;
 
  
 }

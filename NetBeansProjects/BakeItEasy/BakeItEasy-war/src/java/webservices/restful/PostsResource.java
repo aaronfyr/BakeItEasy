@@ -39,20 +39,19 @@ import javax.ws.rs.core.Response;
  *
  * @author Nelson Choo
  */
-
 @Path("posts")
 @RequestScoped
 public class PostsResource {
-    
+
     @EJB
     private PostSessionBeanLocal postSessionBeanLocal;
-    
+
     @EJB
     private CommentSessionBeanLocal commentSessionBeanLocal;
-    
+
     @EJB
     private SellerSessionBeanLocal sellerSessionBeanLocal;
-    
+
     @EJB
     private BuyerSessionBeanLocal buyerSessionBeanLocal;
 
@@ -68,7 +67,7 @@ public class PostsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end getPost
-    
+
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -96,7 +95,7 @@ public class PostsResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end editPost
-    
+
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -118,13 +117,13 @@ public class PostsResource {
             return Response.status(404).entity(exception).build();
         }
     } //end deletePost
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Post> getAllPosts() {
         return postSessionBeanLocal.retrieveAllPosts();
     } // end get all listings
-    
+
     // checked: ELY
     @GET
     @Path("/{id}/comments")
@@ -138,7 +137,7 @@ public class PostsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end getCommentsForPost
-    
+
     // checked: ELY
     @GET
     @Path("/seller/{seller_id}")
@@ -153,7 +152,7 @@ public class PostsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end getPostsForSeller
-    
+
     // checked: ELY
     @GET
     @Path("/buyer/{buyer_id}")
@@ -165,6 +164,28 @@ public class PostsResource {
             return Response.status(200).entity(posts).type(MediaType.APPLICATION_JSON).build();
         } catch (BuyerNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder().add("error", "Buyer Not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+
+    // checked: NELSON
+    @GET
+    @Path("/{post_id}/{user}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserFromPost(@PathParam("post_id") Long postId, @PathParam("user") String user) {
+        try {
+            if (user.equals("buyer")) {
+                Buyer buyer = postSessionBeanLocal.getBuyerFromPost(postId);
+                return Response.status(200).entity(buyer).type(MediaType.APPLICATION_JSON).build();
+            } else if (user.equals("seller")) {
+                Seller seller = postSessionBeanLocal.getSellerFromPost(postId);
+                return Response.status(200).entity(seller).type(MediaType.APPLICATION_JSON).build();
+            } else {
+                JsonObject exception = Json.createObjectBuilder().add("error", "Incorrect user string").build();
+                return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+            }
+        } catch (PostNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Post Not found").build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     }

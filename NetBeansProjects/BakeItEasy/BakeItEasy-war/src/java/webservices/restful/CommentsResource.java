@@ -6,8 +6,10 @@
 package webservices.restful;
 
 import ejb.session.stateless.CommentSessionBeanLocal;
+import entity.Buyer;
 import entity.Comment;
 import entity.Post;
+import entity.Seller;
 import error.exception.CommentNotFoundException;
 import error.exception.PostNotFoundException;
 import javax.ejb.EJB;
@@ -96,4 +98,26 @@ public class CommentsResource {
             return Response.status(404).entity(exception).build();
         }
     } //end deleteComment
+    
+    // checked: NELSON
+    @GET
+    @Path("/{comment_id}/{user}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserFromComment(@PathParam("comment_id") Long commentId, @PathParam("user") String user) {
+        try {
+            if (user.equals("buyer")) {
+                Buyer buyer = commentSessionBeanLocal.getBuyerFromComment(commentId);
+                return Response.status(200).entity(buyer).type(MediaType.APPLICATION_JSON).build();
+            } else if (user.equals("seller")) {
+                Seller seller = commentSessionBeanLocal.getSellerFromComment(commentId);
+                return Response.status(200).entity(seller).type(MediaType.APPLICATION_JSON).build();
+            } else {
+                JsonObject exception = Json.createObjectBuilder().add("error", "Incorrect user string").build();
+                return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+            }
+        } catch (CommentNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Post Not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
 }

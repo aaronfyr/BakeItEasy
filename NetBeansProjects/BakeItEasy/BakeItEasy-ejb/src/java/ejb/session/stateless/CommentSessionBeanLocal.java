@@ -5,7 +5,9 @@
  */
 package ejb.session.stateless;
 
+import entity.Buyer;
 import entity.Comment;
+import entity.Seller;
 import error.exception.BuyerNotFoundException;
 import error.exception.CommentNotFoundException;
 import error.exception.InputDataValidationException;
@@ -33,5 +35,9 @@ public interface CommentSessionBeanLocal {
     public Long createNewBuyerComment(Comment comment, Long postId, Long buyerId) throws UnknownPersistenceException, InputDataValidationException, BuyerNotFoundException, PostNotFoundException;
 
     public Long createNewSellerComment(Comment comment, Long postId, Long sellerId) throws UnknownPersistenceException, InputDataValidationException, PostNotFoundException, SellerNotFoundException;
+
+    public Buyer getBuyerFromComment(Long commentId) throws CommentNotFoundException;
+
+    public Seller getSellerFromComment(Long commentId) throws CommentNotFoundException;
     
 }
