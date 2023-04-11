@@ -17,6 +17,14 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
   Spacer,
 } from "@chakra-ui/react";
 import Popup from "reactjs-popup";
@@ -122,6 +130,7 @@ function BuyerProfile() {
       // redirect to homepage
       console.log("cancelled order: ", oId);
       toast.success(`Cancelled Order #${oId}.`);
+      onOpen();
       setCancelOrderSuccess("Successfully Cancelled Order");
     } else {
       // show error message
@@ -139,7 +148,7 @@ function BuyerProfile() {
   const handleReportSeller = async (event, oId) => {
     event.preventDefault();
     const sellerResponse = await fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/listings/${oId}/seller`,
+      `http://localhost:8080/BakeItEasy-war/webresources/orders/${oId}/seller`,
       {
         method: "GET",
         headers: {
@@ -149,6 +158,7 @@ function BuyerProfile() {
     );
     const sellerData = await sellerResponse.json();
     const sellerId = sellerData.sellerId;
+    const sellerUsername = sellerData.username;
 
     if (sellerResponse.ok) {
       const response = await fetch(
@@ -167,7 +177,7 @@ function BuyerProfile() {
       if (response.ok) {
         // redirect to homepage
         console.log("reported seller!");
-        toast.success(`Reported Seller ${sellerId}.`);
+        toast.success(`Reported Seller ${sellerUsername}.`);
       } else {
         const errorData = await response.json();
         console.log("reporting error:", errorData.error);
@@ -185,10 +195,51 @@ function BuyerProfile() {
     navigate(path + buyerId);
   };
 
+  // successful cancelOrder
+  const OverlayOne = () => (
+    <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(5px) hue-rotate(-10deg)"
+    />
+  );
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [overlay, setOverlay] = useState(<OverlayOne />);
+
   return (
     <div className="background">
       <ToastContainer />
       <NavigationBar />
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+        {overlay}
+        <ModalContent>
+          <ModalHeader>Cancelled order!</ModalHeader>
+          <Flex>
+            <Spacer />
+            <ModalBody>
+              <img
+                width="250px"
+                height="250px"
+                src={require("../assets/cancel_order.gif")}
+                alt="listing product"
+              />
+            </ModalBody>
+            <Spacer />
+          </Flex>
+          <Flex>
+            <Spacer />
+            <ModalFooter>
+              <Button
+                onClick={() => window.location.reload()}
+                colorScheme="orange"
+                variant="ghost"
+              >
+                Return
+              </Button>
+            </ModalFooter>
+            <Spacer />
+          </Flex>
+        </ModalContent>
+      </Modal>
       <div id="coverPhoto">
         <div id="profilePhoto"></div>
       </div>

@@ -86,18 +86,36 @@ function App() {
 
                 <Route path="/sellerHomepage" element={<SellerHomepage />} />
                 <Route path="/sellerProfile" element={<SellerProfile />} />
-                <Route path="/editSellerProfile" element={<SellerEditProfile />} />
+                <Route
+                  path="/editSellerProfile"
+                  element={<SellerEditProfile />}
+                />
                 <Route path="sellerOrder/:id" element={<SellerViewOrder />} />
                 <Route path="/sellerOrderMgmt" element={<SellerOrderMgmt />} />
-                <Route path="/sellerOrderMgmt/listing/:id" element={<SellerViewOrderByListing />} />
-                <Route path="/sellerListing/:id" element={<SellerListingPage />}/>
-                <Route path="/sellerAppointments" element={<SellerAppointments />}/>
-                <Route path="/sellerCreateListing" element={<SellerCreateListing />}/>
-                <Route path="/sellerViewFollowers" element={<SellerViewFollowers />}/>
-
+                <Route
+                  path="/sellerOrderMgmt/listing/:id"
+                  element={<SellerViewOrderByListing />}
+                />
+                <Route
+                  path="/sellerListing/:id"
+                  element={<SellerListingPage />}
+                />
+                <Route
+                  path="/sellerAppointments"
+                  element={<SellerAppointments />}
+                />
+                <Route
+                  path="/sellerCreateListing"
+                  element={<SellerCreateListing />}
+                />
+                <Route
+                  path="/sellerViewFollowers"
+                  element={<SellerViewFollowers />}
+                />
                 <Route path="/forum" element={<Forum/>}/>
                 <Route path="/forum/post/:id" element={<ForumPost/>}/>
                 <Route path="/forum/createPost" element={<ForumCreatePost/>}/>
+                {/*<Route path="/forum/editPost/:id" element={<ForumEditPost/>}*/}
               </Routes>
             </Router>
           </AdminProvider>
