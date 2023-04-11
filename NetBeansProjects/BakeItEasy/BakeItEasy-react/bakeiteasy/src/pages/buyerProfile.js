@@ -3,6 +3,7 @@ import "./resources/profile.css";
 import { toast, ToastContainer } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
 import { OrderListingHeader } from "../components/orderListingHeader";
+import { OrderListingImage } from "../components/orderListingImage";
 
 import {
   BrowserRouter as Router,
@@ -41,6 +42,7 @@ function BuyerProfile() {
   const [buyerName, setBuyerName] = useState("Log In");
   const [buyerUsername, setBuyerUsername] = useState("Log In");
   const [buyerId, setBuyerId] = useState(null);
+  const [buyerProfilePhoto, setBuyerProfilePhoto] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -58,6 +60,7 @@ function BuyerProfile() {
           setBuyerName(parsedUser.name);
           setBuyerId(parsedUser.buyerId);
           setBuyerUsername(parsedUser.username);
+          setBuyerProfilePhoto(parsedUser.imagePath);
         } catch (error) {
           console.log(error);
         }
@@ -242,7 +245,13 @@ function BuyerProfile() {
         </ModalContent>
       </Modal>
       <div id="coverPhoto">
-        <div id="profilePhoto"></div>
+        <div id="profilePhoto">
+          <img
+            className="homepageProfilePhotoImg"
+            alt="seller pfp"
+            src={buyerProfilePhoto}
+          ></img>
+        </div>
       </div>
       <Flex justifyContent={"space-between"}>
         <div id="userDetails">
@@ -270,11 +279,7 @@ function BuyerProfile() {
         {orders.map((order) => (
           <div id="buyerOrderCard">
             <div className="buyerProductImg">
-              <img
-                className="productImg"
-                src={require("../assets/scones.jpg")}
-                alt="listing product"
-              />
+              <OrderListingImage oId={order.orderId} />
             </div>
             <div id="buyerOrderDetailsGrid">
               <div className="orderDetails_left">

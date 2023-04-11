@@ -21,6 +21,7 @@ function BuyerViewSellerProfile() {
   // fetch current buyer
   const [buyer, setBuyer] = useState();
   const [buyerId, setBuyerId] = useState();
+  const [buyerProfilePhoto, setBuyerProfilePhoto] = useState();
   useEffect(() => {
     async function fetchData() {
       const fetchedBuyer = localStorage.getItem("buyer");
@@ -32,6 +33,7 @@ function BuyerViewSellerProfile() {
           const parsedUser = JSON.parse(fetchedBuyer);
           setBuyer(parsedUser);
           setBuyerId(parsedUser.buyerId);
+          setBuyerProfilePhoto(parsedUser.imagePath);
         } catch (error) {
           console.log(error);
         }
@@ -208,6 +210,33 @@ function BuyerViewSellerProfile() {
     }
   };
 
+  // handleListingsToLikes
+  const [likeListingError, setLikeListingError] = useState(null);
+  const handleListingToLikes = async (lId) => {
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/${buyer.buyerId}/like`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.ok) {
+      // redirect to homepage
+      console.log("likedListing# ", lId);
+      console.log("reported seller!");
+      toast.success(`Liked listing # ${lId}.`);
+      //recolor liked button
+      document.getElementById("btn").style.backgroundColor = "black";
+    } else {
+      // show error message
+      const errorData = await response.json();
+      toast.error(errorData.error);
+      setLikeListingError("Invalid details. Please try again.");
+    }
+  };
+
   const routeChangeToListing = (lId) => {
     let path = "/listing/" + lId;
     navigate(path);
@@ -218,7 +247,17 @@ function BuyerViewSellerProfile() {
       <ToastContainer />
       <NavigationBar />
       <div id="coverPhoto">
-        <div id="profilePhoto"></div>
+        <div id="profilePhoto">
+          <img
+            className="homepageProfilePhotoImg"
+            src={
+              buyerProfilePhoto
+                ? buyerProfilePhoto
+                : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
+            }
+            alt="baked listing"
+          />
+        </div>
       </div>
       <Flex>
         <div id="userDetails">
@@ -273,27 +312,36 @@ function BuyerViewSellerProfile() {
       <div className="flexBox">
         <div className="profileListingsDisplay">
           {filteredListings.map((listing) => (
-            <div
-              className="product"
-              onClick={() => routeChangeToListing(listing.listingId)}
-            >
-              <div class="productSeller"></div>
-              <h3>{listing.name}</h3>
-              <div className="productImg">
-                <img
-                  className="productImg"
-                  src="https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
-                  alt="listing product"
-                />
+            <div className="product">
+              <div class="productSeller">
+                <h3>{listing.name}</h3>
               </div>
+              <div
+                className="productContent"
+                onClick={() => routeChangeToListing(listing.listingId)}
+              >
+                <div className="productImg">
+                  <img
+                    className="productImg"
+                    src={
+                      listing.imagePaths[0]
+                        ? listing.imagePaths[0]
+                        : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
+                    }
+                    alt="baked listing"
+                  />
+                </div>
 
-              <div className="titleDetails">
                 <h5>{listing.description}</h5>
               </div>
-
               <div class="productBottomRow">
-                <FiHeart size="1.2rem" />
-                <h3>${listing.price} </h3>
+                <div class="btn">
+                  <FiHeart
+                    size="1.2rem"
+                    onClick={() => handleListingToLikes(listing.listingId)}
+                  />
+                </div>
+                <h3>${listing.price}</h3>
               </div>
             </div>
           ))}

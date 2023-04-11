@@ -34,6 +34,7 @@ import ReactLoading from "react-loading";
 export function ListingSellerHeaderNonMemo({ lId }) {
   const navigate = useNavigate();
   const [listingSellers, setListingSellers] = useState({});
+  const [listingSellerImages, setListingSellerImages] = useState({});
   const [listingSellerIds, setListingSellerIds] = useState({});
 
   const getSellerByLId = async (lId) => {
@@ -50,6 +51,7 @@ export function ListingSellerHeaderNonMemo({ lId }) {
       const data = await response.json();
       //console.log("sellerUsername: ", data.username);
       setListingSellers({ ...listingSellers, [lId]: data.username });
+      setListingSellerImages({ ...listingSellerImages, [lId]: data.imagePath });
       setListingSellerIds({ ...listingSellerIds, [lId]: data.sellerId });
       return data.username;
     } catch (error) {
@@ -75,7 +77,26 @@ export function ListingSellerHeaderNonMemo({ lId }) {
         className="listingSellerHeader"
         onClick={() => routeChangeToSellerProfile(listingSellerIds[lId])}
       >
-        {listingSellers[lId]}
+        <HStack>
+          <div className="homepageProfilePhoto">
+            {listingSellerImages[lId] && (
+              <img
+                className="homepageProfilePhotoImg"
+                alt="seller pfp"
+                src={listingSellerImages[lId]}
+              ></img>
+            )}
+            {!listingSellerImages[lId] && (
+              <img
+                width="30px"
+                height="30px"
+                src={require("../assets/dummyuser.png")}
+                alt="listing product"
+              />
+            )}
+          </div>
+          <p>{listingSellers[lId]}</p>
+        </HStack>
       </div>
     );
   } else {

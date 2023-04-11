@@ -482,13 +482,6 @@ export const BuyerShopping = () => {
           .map((product) => (
             <div className="product">
               <div class="productSeller">
-                <img
-                  width="30px"
-                  height="30px"
-                  src={require("../assets/dummyuser.png")}
-                  alt="listing product"
-                />
-
                 <ListingSellerHeader lId={product.listingId} />
               </div>
               <div
@@ -498,8 +491,12 @@ export const BuyerShopping = () => {
                 <div className="productImg">
                   <img
                     className="productImg"
-                    src={require("../assets/scones.jpg")}
-                    alt="listing product"
+                    src={
+                      product.imagePaths[0]
+                        ? product.imagePaths[0]
+                        : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
+                    }
+                    alt="baked listing"
                   />
                 </div>
                 <h3>{product.name}</h3>
@@ -557,12 +554,6 @@ export const BuyerShopping = () => {
           .map((product) => (
             <div className="product">
               <div class="productSeller" key={product.listingId}>
-                <img
-                  width="30px"
-                  height="30px"
-                  src={require("../assets/dummyuser.png")}
-                  alt="listing product"
-                />
                 <ListingSellerHeader lId={product.listingId} />
               </div>
               <div
@@ -572,8 +563,12 @@ export const BuyerShopping = () => {
                 <div className="productImg">
                   <img
                     className="productImg"
-                    src={require("../assets/scones.jpg")}
-                    alt="listing product"
+                    src={
+                      product.imagePaths[0]
+                        ? product.imagePaths[0]
+                        : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
+                    }
+                    alt="baked listing"
                   />
                 </div>
                 <h3>{product.name}</h3>
