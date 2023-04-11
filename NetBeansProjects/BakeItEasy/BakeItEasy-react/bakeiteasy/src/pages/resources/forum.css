@@ -38,6 +38,12 @@ h3 {
 
 }
 
+.productName {
+    overflow: hidden;
+  white-space: nowrap; /* Don't forget this one */
+  text-overflow: ellipsis;
+}
+
 h4 {
     width: 200px;
 }
@@ -64,6 +70,12 @@ body {
     font-weight: bolder;
     font-family: 'Montserrat', sans-serif;
     margin: 10px;
+}
+
+.productName {
+    overflow: hidden;
+  white-space: nowrap; /* Don't forget this one */
+  text-overflow: ellipsis;
 }
 
 .sellerOrderCardHeader h3 {

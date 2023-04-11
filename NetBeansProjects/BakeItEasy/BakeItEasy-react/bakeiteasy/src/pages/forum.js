@@ -159,8 +159,8 @@ const Forum = () => {
     }
   };
 
-  const routeChangeToOrder = (id) => {
-    let path = "post/";
+  const routeChangeToPost = (id) => {
+    let path = "/forum/post/";
     navigate(path + id);
   };
 

@@ -32,8 +32,7 @@ export function OrderListingHeaderNonMemo({ oId }) {
   if (orderListings[oId]) {
     return (
       <>
-        <p>{orderListings[oId]}</p>
-        <p>{orderListingIds[oId]}</p>
+        <h1>{orderListings[oId]}</h1>
       </>
     );
   } else {

@@ -26,6 +26,7 @@ import {
   ModalCloseButton,
   useDisclosure,
   Spacer,
+  HStack,
 } from "@chakra-ui/react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
@@ -254,8 +255,11 @@ function BuyerProfile() {
             className="button1_editAccount"
             onClick={() => routeChangeToEditAccountDetails()}
           >
-            Edit Account Details
-            <FaEdit />
+            {" "}
+            <HStack spacing="10px">
+              <div>Edit Account Details</div>
+              <FaEdit />
+            </HStack>
           </div>
         </Flex>
       </Flex>
@@ -281,7 +285,8 @@ function BuyerProfile() {
                   Customisation Notes: {order.description}
                 </h4>
                 <h4 className="details">
-                  Collection Date: {order.dateOfCollection}
+                  Collection Date:{" "}
+                  {order.dateOfCollection.toString().substring(0, 10)}
                 </h4>
               </div>
               <div>

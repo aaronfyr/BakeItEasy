@@ -85,7 +85,8 @@
 }
 
 .productContent {
-  height:168px;
+  color: var(--dark-text);
+  height: 168px;
 }
 
 .productBottomRow {
@@ -96,11 +97,19 @@
   align-self: end;
 }
 
+
+
 h3 {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 600;
   font-size: 17px;
   margin-top: 5px;
+}
+
+.productName {
+  overflow: hidden;
+white-space: nowrap; /* Don't forget this one */
+text-overflow: ellipsis;
 }
 
 h4 {
@@ -114,6 +123,12 @@ h5 {
   font-weight: 400;
   font-size: 12px;
   color: var(--light-text);
+  display: -webkit-box;
+  /*cuts lines off after 2 lines*/
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 
 .search {
@@ -140,6 +155,25 @@ h5 {
   font-size: 16px;
   margin-top: 5px;
   font-weight: 00;
+}
+
+.forumHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 20px;
+  height: 32px;
+  padding: 0px 30px 0px 30px;
+  margin-top: 5px;
+width:100%;
+  font-family: var(--reg-font-family);
+  color: var(--beige-bg);
+  font-size: 18px;
+  margin-top: 5px;
+  font-weight: 00;
+  background-color: var(--dark-text);
 }
 
 .categoriesContainer {
@@ -226,8 +260,9 @@ img.heartBreakIcon {
 .productImg {
   margin-left: auto;
   margin-right: auto;
+  margin-bottom:5px;
   width: 180px;
-  height: 120px;
+  height: 95px;
   border-radius: 10px;
   object-fit: fill;
 }
@@ -359,6 +394,10 @@ img.heartBreakIcon {
   margin-bottom: 10px;
 }
 
+.postCardDetails {
+  cursor: pointer;
+}
+
 .postCardContentGrid {
   display: grid;
   grid-template-columns: 40% 1fr;
@@ -371,6 +410,8 @@ img.heartBreakIcon {
 .postCardContentGrid_left {
   background-color: rgb(210, 210, 210);
   border-radius: 10px 10px 10px 10px;
+  cursor: pointer;
+  box-shadow: 0px 0px 3px 2px rgba(0,0,0,0.1);
 }
 
 .postCardContentGrid_right {

@@ -185,6 +185,44 @@ export const BuyerShopping = () => {
     fetchData();
   }, []);
 
+  // fetch listings by followed sellers
+  const [fListings, setFListings] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let buyerId = null;
+        const fetchedBuyer = localStorage.getItem("buyer");
+        if (!fetchedBuyer) {
+          navigate("/login");
+        } else {
+          const parsedUser = JSON.parse(fetchedBuyer);
+          buyerId = parsedUser.buyerId;
+          console.log("buyerId to get followings", buyerId);
+        }
+
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/listings/${buyerId}/followed`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        setFListings(data);
+        console.log(`HTTP Response Code: ${response?.status}`);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
   // fetch current buyer followings listings
   /*
   const [followedListings, setFollowedListings] = useState();
@@ -413,13 +451,13 @@ export const BuyerShopping = () => {
 
       <div class="shoppingHeader">
         <HStack spacing="10px">
-          <FiUsers />
-          <div>Followed Bakers</div>
+          <FiUsers color="#c75f4a" />
+          <h1>Followed Bakers</h1>
         </HStack>
       </div>
 
       <div className="listingsDisplay">
-        {listings
+        {fListings
           .filter((product) => {
             if (
               product.name.toLowerCase().includes(search) ||
@@ -454,7 +492,7 @@ export const BuyerShopping = () => {
                 <ListingSellerHeader lId={product.listingId} />
               </div>
               <div
-                class="productContent"
+                className="productContent"
                 onClick={() => routeChangeToListing(product.listingId)}
               >
                 <div className="productImg">
@@ -481,15 +519,15 @@ export const BuyerShopping = () => {
 
         {filteredListingsCounterFollowed === 0 && (
           <h4 className="search">
-            Unfortunately, no such Baked Listing. Try another search?
+            Unfortunately, no Baked Listings here. Follow more bakers!
           </h4>
         )}
       </div>
 
       <div class="shoppingHeader">
         <HStack spacing="10px">
-          <FiGlobe />
-          <div>Explore More Bakers</div>
+          <FiGlobe color="#c75f4a" />
+          <h1>Explore More Bakers</h1>
         </HStack>
       </div>
       <div className="listingsDisplay">

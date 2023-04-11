@@ -31,21 +31,25 @@ import {
   Navigate,
   useParams,
 } from "react-router-dom";
-import { FiUserPlus, FiUserMinus, FiMessageSquare } from "react-icons/fi";
+import SellerOrderCard from "../pages/sellerFollowerCard.js";
+import {
+  FiUserPlus,
+  FiUserMinus,
+  FiMessageSquare,
+  FiEdit3,
+} from "react-icons/fi";
 
-const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
+const Comment = ({ commentId, title, dateCreated, isBuyer }) => {
   const navigate = useNavigate();
 
-  console.log("in post:", postId);
-
-  // fetch poster
-  const [user, setUser] = useState();
-  const [userId, setUserId] = useState();
-  const [userName, setUserName] = useState();
-  const [userUsername, setUserUsername] = useState();
+  // fetch commenter
+  const [commenter, setCommenter] = useState();
+  const [commenterId, setCommenterId] = useState();
+  const [commenterName, setCommenterName] = useState();
+  const [commenterUsername, setCommenterUsername] = useState();
   useEffect(() => {
     fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/posts/${postId}/${
+      `http://localhost:8080/BakeItEasy-war/webresources/comments/${commentId}/${
         isBuyer ? "buyer" : "seller"
       }`,
       {
@@ -58,19 +62,20 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
     )
       .then((response) => response.json())
       .then((data) => {
-        //console.log("post user: ", data);
-        setUser(data);
+        console.log("commenter: ", data);
+        setCommenter(data);
         if (isBuyer) {
-          setUserId(data.buyerId);
+          setCommenterId(data.buyerId);
         } else {
-          setUserId(data.sellerId);
+          setCommenterId(data.sellerId);
         }
-        setUserName(data.name);
-        setUserUsername(data.username);
+        setCommenterName(data.name);
+        setCommenterUsername(data.username);
       });
   }, []);
 
   /* FOLLOWING FUNCTIONS */
+  console.log("isCommentByABuyer:", isBuyer);
   // fetch current viewer if it's a buyer, then fetch its following
   const [buyer, setBuyer] = useState();
   const [buyerId, setBuyerId] = useState();
@@ -85,25 +90,21 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
         navigate("/login");
       }
       if (!fetchedSeller) {
+        // current viewer is a buyer
         setIsCurrentUserABuyer(true);
         try {
           const parsedUser = JSON.parse(fetchedBuyer);
           setBuyer(parsedUser);
           setBuyerId(parsedUser.buyerId);
-          /*if (parsedUser.buyerId === commenterId) {
-            setIsCurrentUserComment(true);
-          }*/
         } catch (error) {
           console.log(error);
         }
       } else {
+        // current viewer is a seller
         setIsCurrentUserABuyer(false);
         try {
           const parsedUser = JSON.parse(fetchedSeller);
           setSellerId(parsedUser.sellerId);
-          /*if (parsedUser.sellerId === commenterId) {
-            setIsCurrentUserComment(true);
-          }*/
         } catch (error) {
           console.log(error);
         }
@@ -114,7 +115,7 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
 
   // fetch current buyer followings
   const [followings, setFollowings] = useState();
-  const [isFollowing, setIsFollowing] = useState();
+  const [isFollowing, setIsFollowing] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -124,28 +125,25 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
         } else {
           const parsedUser = JSON.parse(fetchedBuyer);
           buyerId = parsedUser.buyerId;
-
-          const response = await fetch(
-            `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/followings/`,
-            {
-              method: "GET",
-              mode: "cors",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const data = await response.json();
-          setFollowings(data);
-          //console.log("sellerProfile, followings: ", followings);
-          const checkIsFollowing = data.some(
-            (val) => val.sellerId.toString() === userId
-          );
-
-          setIsFollowing(checkIsFollowing);
-          //console.log("sellerProfile, isFollowing: ", isFollowing);
-          console.log(`HTTP Response Code: ${response?.status}`);
         }
+
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/followings/`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        setFollowings(data);
+        const checkIsFollowing = data.some(
+          (val) => val.sellerId.toString() === commenterId
+        );
+
+        setIsFollowing(checkIsFollowing);
       } catch (error) {
         if (error instanceof SyntaxError) {
           // Unexpected token < in JSON
@@ -193,7 +191,6 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
     if (response.ok) {
       setIsFollowing(false);
       console.log("unfollowed SellerId# ", sId);
-
       toast.success(`Unfollowed Seller.`);
     } else {
       // show error message
@@ -202,71 +199,64 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
     }
   };
 
-  // routeChangeToPost
-  const routeChangeToPost = (postId) => {
-    console.log("routechangetopost: ", postId);
-    let path = "/forum/post/";
-    navigate(path + postId);
-  };
-
-  // routeChangeToSellerProfile
-  const routeChangeToSellerProfile = (sId) => {
-    if (!isBuyer && sId) {
-      let path = "/buyerViewSellerProfile/" + sId;
-      navigate(path);
-    }
-  };
-
-  useEffect(() => {
-    Aos.init({ duration: 2000 });
-  }, []);
-
   return (
-    <div data-aos="fade-left" className="postCard">
-      <div className="postCardContentGrid">
-        <div
-          className="postCardContentGrid_left"
-          onClick={() => routeChangeToPost(postId)}
-        >
-          {postId}
-        </div>
-
-        <div className="postCardContentGrid_right">
-          <div className="postCardHeader">
+    <div className="commentCard">
+      <SellerOrderCard>
+        <div className="sellerOrderCardHeader"></div>
+        <div className="commentBodyFlex">
+          <div style={{ width: "97%" }} className="commentTextBlock">
             {isBuyer && (
-              <HStack>
-                <img
-                  width="35px"
-                  height="35px"
-                  src={require("../assets/dummyuser.png")}
-                  alt="listing product"
-                />
-                <div className="postBuyerHeader">{userUsername}</div>
+              <HStack spacing="15px">
+                <div
+                  style={{
+                    height: "35px",
+                    width: "35px",
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      backgroundImage: `url('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png')`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  ></div>
+                </div>
+                <div className="postBuyerHeader">{commenterUsername}</div>
               </HStack>
             )}
             {!isBuyer && (
               <HStack>
-                <HStack>
-                  <img
-                    width="35px"
-                    height="35px"
-                    src={require("../assets/dummyuser.png")}
-                    alt="listing product"
-                  />
+                <HStack spacing="15px">
                   <div
-                    className="postSellerHeader"
-                    onClick={() => routeChangeToSellerProfile(userId)}
+                    style={{
+                      height: "35px",
+                      width: "35px",
+                      borderRadius: "50%",
+                      overflow: "hidden",
+                    }}
                   >
-                    {userUsername}
+                    <div
+                      style={{
+                        height: "100%",
+                        width: "100%",
+                        backgroundImage: `url('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png')`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
+                    ></div>
                   </div>
+                  <div className="postSellerHeader">{commenterUsername}</div>
                 </HStack>
                 <Spacer />
-
                 {isCurrentUserABuyer && !isFollowing && (
                   <div className="postSellerHeader">
                     <FiUserPlus
                       size="1.2rem"
-                      onClick={() => handleFollowSeller(userId)}
+                      onClick={() => handleFollowSeller(commenterId)}
                     />
                   </div>
                 )}
@@ -274,35 +264,36 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
                   <div className="postSellerHeader">
                     <FiUserMinus
                       size="1.2rem"
-                      onClick={() => handleUnfollowSeller(userId)}
+                      onClick={() => handleUnfollowSeller(commenterId)}
                     />
                   </div>
                 )}
               </HStack>
             )}
-          </div>
-          <div
-            className="postCardDetails"
-            onClick={() => routeChangeToPost(postId)}
-          >
-            <h1>{title}</h1>
-            <h4 className="details">{dateCreated}</h4>
-          </div>
-          <div
-            className="postCardFooter"
-            onClick={() => routeChangeToPost(postId)}
-          >
-            <div className="postFooterContent">
+            <h3>{title}</h3>
+            <div className="commentFooter">
               <HStack>
-                <FiMessageSquare size="1.2rem" />
-                <div>View Comments</div>
+                <div>posted on: {dateCreated}</div>
               </HStack>
+              <Spacer />
+              {isBuyer && commenterId === buyerId && (
+                <FiEdit3
+                  size="1.2rem"
+                  onClick={() => handleFollowSeller(commenterId)}
+                />
+              )}
+              {!isBuyer && commenterId === sellerId && (
+                <FiEdit3
+                  size="1.2rem"
+                  onClick={() => handleFollowSeller(commenterId)}
+                />
+              )}
             </div>
           </div>
         </div>
-      </div>
+      </SellerOrderCard>
     </div>
   );
 };
 
-export default Post;
+export default Comment;

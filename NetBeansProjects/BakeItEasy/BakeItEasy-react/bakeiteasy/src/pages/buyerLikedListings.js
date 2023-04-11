@@ -264,7 +264,9 @@ function BuyerLikedListings() {
                     alt="listing product"
                   />
                 </div>
-                <h3>{product.name}</h3>
+
+                <h3 className="productName">{product.name}</h3>
+
                 <h5>{product.description}</h5>
               </div>
               <div class="productBottomRow">
@@ -289,7 +291,7 @@ function BuyerLikedListings() {
 
         {filteredListingsCounterFollowed === 0 && (
           <h4 className="search">
-            Unfortunately, no such Baked Listing. Try another search?
+            Unfortunately, no Baked Listings here. 'Like' more Listings!
           </h4>
         )}
       </div>
