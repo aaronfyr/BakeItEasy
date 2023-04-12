@@ -3,15 +3,17 @@ import React, { useState, useEffect } from "react";
 import "./resources/sellerViewFollowers.css";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
 import { NavigationBar } from "../components/buyerNavigationBar";
-import { FaRegEdit } from "react-icons/fa";
+import { FaRegEdit, FaComment } from "react-icons/fa";
 import { formatDate } from "../components/formatter";
 import Comment from "../components/comment";
 import { toast, ToastContainer } from "react-toastify";
+import { Flex } from "@chakra-ui/react";
 import {
   BrowserRouter as Router,
   useNavigate,
   useParams,
 } from "react-router-dom";
+import Popup from "reactjs-popup";
 
 /*const orderResponse = await fetch(``)*/
 
@@ -21,8 +23,31 @@ function ForumPost() {
   const [sellerId, setSellerId] = useState(null);
   const [post, setPost] = useState(null);
   const [postId, setPostId] = useState(null);
+   const [showCommentPopup, setShowCommentPopup] = useState(false);
+
+
+
   const { id } = useParams();
   console.log("post param id ", id);
+
+
+
+     const [buyerNewComment, setBuyerNewComment] = useState({
+    buyerId: 0,
+    pId: id,
+    comment: {
+      title: "",
+      isBuyer: true,
+    },
+  });
+  const [sellerNewComment, setSellerNewComment] = useState({
+    sellerId: 0,
+    pId: id,
+    comment: {
+      title: "",
+      isBuyer: false,
+    },
+  });
 
   useEffect(() => {
     async function fetchData() {
@@ -39,6 +64,13 @@ function ForumPost() {
           const parsedUser = JSON.parse(fetchedBuyer);
           console.log("parsedUser.id: ", parsedUser.buyerId);
           setBuyerId(parsedUser.buyerId);
+          setBuyerNewComment(prevState => {
+            return {
+                ...prevState,
+                buyerId: parsedUser.buyerId,
+            }
+            });
+
         } catch (error) {
           console.log(error);
         }
@@ -48,6 +80,15 @@ function ForumPost() {
           const parsedUser = JSON.parse(fetchedSeller);
           console.log("parsedUser.id: ", parsedUser.sellerId);
           setSellerId(parsedUser.sellerId);
+         setSellerNewComment(prevState => {
+            return {
+                ...prevState,
+                sellerId: parsedUser.sellerId,
+            }
+            });
+            console.log("seller new comment sellerId set to", sellerNewComment.sellerId)
+
+            console.log("seller id set in comment state is ", sellerNewComment.sellerId);
         } catch (error) {
           console.log(error);
         }
@@ -55,6 +96,7 @@ function ForumPost() {
     }
     fetchData();
   }, []);
+
 
   // fetch post
   useEffect(() => {
@@ -106,6 +148,64 @@ function ForumPost() {
     fetchPost();
   }, []);
 
+  async function createBuyerComment() {
+     try {
+        console.log("creating buyer comment");
+
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/${id}/comments`,
+          {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(buyerNewComment),
+          }
+        ).then((response) =>{
+            if (!response.ok) {
+                toast.error("response not ok");
+            } else {
+                toast.success("buyer comment created! refreshing...");
+                /*setTimeout(() => {
+              window.location.reload();
+                }, 8000);*/
+            }
+        })
+      } catch (error) {
+        console.error(error);
+      }
+  }
+
+  async function createSellerComment() {
+     try {
+        console.log("creating seller comment");
+        console.log("PUTTING", sellerNewComment)
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/${id}/comments`,
+          {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(sellerNewComment),
+          }
+        ).then((response) =>{
+            if (!response.ok) {
+                toast.error("response not ok");
+            } else {
+                toast.success("seller comment created! refreshing...");
+                /*setTimeout(() => {
+              window.location.reload();
+                }, 8000);*/
+            }
+        })
+      } catch (error) {
+        console.error(error);
+      }
+  }
+
   /*
 RETRIEVE POST BY POST ID
 async function fetchComments(postId) {
@@ -132,6 +232,85 @@ async function fetchComments(postId) {
 useEffect(() => {
     fetchFollowers(postId);
 }, [postId]); */
+
+
+useEffect(() => {
+  console.log("changed!!!!!",sellerNewComment);
+}, [sellerNewComment]);
+
+
+function CommentPopup(props) {
+  const [newComment, setNewComment] = useState("");
+
+  const handleCommentChange = (event) => {
+    setNewComment(event.target.value);
+  };
+
+
+  const handleSubmitComment = () => {
+    // Do something with the comment, e.g. save it to a database
+    console.log("saved comment is", newComment);
+    if(buyerId) {
+         setBuyerNewComment({
+        ...buyerNewComment,
+      comment: {
+        ...buyerNewComment.comment,
+        title: newComment,
+      },
+      });
+    console.log(buyerNewComment);
+    createBuyerComment();
+
+    } else {
+  setSellerNewComment(prevState => ({
+  ...prevState,
+  comment: {
+    ...prevState.comment,
+    title: newComment
+  }
+}));
+
+    console.log("seller ID is", sellerId);
+    console.log("!!!!!!!!!!!!!comment set is", sellerNewComment);
+    createSellerComment();
+    }
+    // Close the popup
+    props.onClose();
+  };
+
+  return (
+    <div style={{marginLeft:10}}>
+      <textarea style={{minWidth:500}} value={newComment} onChange={handleCommentChange} />
+      <Flex>
+        <div
+              className="editPostBtn"
+              onClick={handleSubmitComment}
+            >
+              <FaRegEdit style={{ alignSelf: "center" }} />
+              <div style={{ width: 5 }}></div>
+              <h3>done</h3>
+            </div>
+        <div
+              className="editPostBtn"
+              onClick={handleCloseCommentPopup}
+            >
+              <FaRegEdit style={{ alignSelf: "center" }} />
+              <div style={{ width: 5 }}></div>
+              <h3>close</h3>
+            </div>
+      </Flex>
+
+    </div>
+  );
+}
+
+ const handleCommentClick = () => {
+    setShowCommentPopup(true);
+  };
+
+  const handleCloseCommentPopup = () => {
+    setShowCommentPopup(false);
+  };
 
   let navigate = useNavigate();
   if (!post || !comments) {
@@ -190,7 +369,8 @@ useEffect(() => {
                 />
               </div>
             </div>
-            <div
+            <Flex>
+             <div
               className="editPostBtn"
               onClick={() => navigate("/forum/editPost/" + id)}
             >
@@ -198,6 +378,20 @@ useEffect(() => {
               <div style={{ width: 5 }}></div>
               <h3>edit</h3>
             </div>
+            <div
+              className="editPostBtn" onClick={handleCommentClick}
+            >
+              <FaComment style={{ alignSelf: "center" }} />
+              <div style={{ width: 5 }}></div>
+              <h3>comment</h3>
+            </div>
+            </Flex>
+            <br/>
+            {showCommentPopup && <h3>new comment:</h3>}
+            {showCommentPopup && (
+        <CommentPopup style={{marginRight: 20}} onClose={handleCloseCommentPopup} />
+      )}
+
           </div>
           <div className="orderDisplay">
             <div className="forumHeader">Comments</div>
@@ -211,7 +405,9 @@ useEffect(() => {
                   isBuyer={comment.isBuyer}
                 />
               ))}
+
             </div>
+
           </div>
         </div>
       </div>

@@ -36,10 +36,26 @@ h1 {
     border-radius: 20px;
 }
 
+.searchBar2 {
+    display: flex;
+    align-items: start;
+    background-color: white;
+    border: 1px solid;
+    border-radius: 20px;
+}
+
 .input {
     width: 250px;
     border: none;
     border-radius: 20px;
+}
+
+.profileSearchInput {
+    width: 1360px;
+    border: none;
+    border-radius: 20px;
+    height: 30px;
+    margin: 2px;
 }
 
 .button {
@@ -212,6 +228,7 @@ body {
     margin: 10px;
     background-color: #ebeced;
     width: 150px;
+    min-width: 150px;
 }
 
 .editPostBtn:hover {

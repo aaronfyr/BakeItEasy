@@ -221,8 +221,8 @@ function ForumCreatePost() {
       <h1 style={{ marginLeft: 450 }}>Create Post</h1>
       <div className="parent">
         <div id="rightListingContainer">
-          <form onSubmit={handleSubmit}>
-            <label>Title:</label>
+          <form className="form2" onSubmit={handleSubmit}>
+            <label>Write your post:</label>
             <textarea
               name="title"
               value={buyerPost.title}
