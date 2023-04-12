@@ -275,12 +275,20 @@ img {
 img.productImg {
   width:100%;
   height:100%;
-  
+
 }
 
 img.homepageProfilePhotoImg {
   width:100%;
   height:100%;
+}
+
+img.homepageProfilePhotoImg2 {
+    width: 100%;
+    height: 100%;
+    align-self: center;
+    object-fit:contain;
+    background-color: #FFF;
 }
 
 img.heartBreakIcon {
@@ -329,7 +337,7 @@ img.heartBreakIcon {
     border-radius: 100px;
     transition: all .2s;
     position: absolute;
-    
+
 }
 
 .btn:hover {
@@ -462,4 +470,3 @@ img.heartBreakIcon {
   position: absolute;
   bottom: 0;
 }
-

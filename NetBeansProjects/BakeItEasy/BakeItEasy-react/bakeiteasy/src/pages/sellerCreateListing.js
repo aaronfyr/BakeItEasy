@@ -219,7 +219,7 @@ toast.loading("loading, please wait!");
         <br/>
         <div className="parent">
             <div id="rightListingContainer">
-                <form onSubmit={handleSubmit}>
+                <form className="form2" onSubmit={handleSubmit}>
       <label>
         Name:
         <input type="text" name="name" value={listing.name} onChange={handleChange} />

@@ -193,9 +193,9 @@ function SellerProfile() {
         </div>
       </Flex>
       <h2>Search for my listing:</h2>
-      <div class="searchBar">
+      <div class="searchBar2">
         <input
-          className="input"
+          className="profileSearchInput"
           onChange={(e) => {
             setSearch(e.target.value.toLowerCase());
           }}
@@ -204,7 +204,7 @@ function SellerProfile() {
           <svg
             className="w-6 h-6"
             fill="none"
-            stroke="currentColor"
+            stroke="black"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >
