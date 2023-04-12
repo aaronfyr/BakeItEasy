@@ -21,7 +21,12 @@ import {
   useDisclosure,
   Spacer,
   HStack,
+  FormControl,
+  FormLabel,
+  Input,
+  Box,
 } from "@chakra-ui/react";
+import Popup from "reactjs-popup";
 import {
   BrowserRouter as Router,
   Route,
@@ -39,14 +44,16 @@ import {
   FiEdit3,
 } from "react-icons/fi";
 
-const Comment = ({ commentId, title, dateCreated, isBuyer }) => {
+const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
   const navigate = useNavigate();
+  const dateToday = new Date();
 
   // fetch commenter
   const [commenter, setCommenter] = useState();
   const [commenterId, setCommenterId] = useState();
   const [commenterName, setCommenterName] = useState();
   const [commenterUsername, setCommenterUsername] = useState();
+  const [commenterProfilePhoto, setCommenterProfilePhoto] = useState();
   useEffect(() => {
     fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/comments/${commentId}/${
@@ -71,6 +78,7 @@ const Comment = ({ commentId, title, dateCreated, isBuyer }) => {
         }
         setCommenterName(data.name);
         setCommenterUsername(data.username);
+        setCommenterProfilePhoto(data.imagePath);
       });
   }, []);
 
@@ -199,100 +207,145 @@ const Comment = ({ commentId, title, dateCreated, isBuyer }) => {
     }
   };
 
+  //edit buyer
+  const [commentObj, setCommentObj] = useState([]);
+  const [title, setTitle] = useState([]);
+  const handleEdit = async (event) => {
+    event.preventDefault();
+    console.log("handleUpdate: ", "in");
+    console.log("newTitle: ", title);
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/comments/${commentId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, dateToday, isBuyer }),
+      }
+    );
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.error);
+    } else {
+      window.location.reload();
+      toast.success("Comment updated successfully.");
+    }
+  };
+
   return (
-    <div className="commentCard">
-      <SellerOrderCard>
-        <div className="sellerOrderCardHeader"></div>
-        <div className="commentBodyFlex">
-          <div style={{ width: "97%" }} className="commentTextBlock">
-            {isBuyer && (
-              <HStack spacing="15px">
-                <div
-                  style={{
-                    height: "35px",
-                    width: "35px",
-                    borderRadius: "50%",
-                    overflow: "hidden",
-                  }}
-                >
-                  <div
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                      backgroundImage: `url('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png')`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  ></div>
-                </div>
-                <div className="postBuyerHeader">{commenterUsername}</div>
-              </HStack>
-            )}
-            {!isBuyer && (
-              <HStack>
+    <>
+      <div className="commentCard">
+        <SellerOrderCard>
+          <div className="sellerOrderCardHeader"></div>
+          <div className="commentBodyFlex">
+            <div style={{ width: "97%" }} className="commentTextBlock">
+              {isBuyer && (
                 <HStack spacing="15px">
-                  <div
-                    style={{
-                      height: "35px",
-                      width: "35px",
-                      borderRadius: "50%",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div
-                      style={{
-                        height: "100%",
-                        width: "100%",
-                        backgroundImage: `url('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png')`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }}
-                    ></div>
+                  <div className="homepageProfilePhoto">
+                    <img
+                      className="homepageProfilePhotoImg"
+                      src={
+                        commenterProfilePhoto
+                          ? commenterProfilePhoto
+                          : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
+                      }
+                      alt="baked listing"
+                    />
                   </div>
-                  <div className="postSellerHeader">{commenterUsername}</div>
+                  <div className="postBuyerHeader">{commenterUsername}</div>
+                </HStack>
+              )}
+              {!isBuyer && (
+                <HStack>
+                  <HStack spacing="15px">
+                    <div className="homepageProfilePhoto">
+                      <img
+                        className="homepageProfilePhotoImg"
+                        src={
+                          commenterProfilePhoto
+                            ? commenterProfilePhoto
+                            : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
+                        }
+                        alt="baked listing"
+                      />
+                    </div>
+                    <div className="postSellerHeader">{commenterUsername}</div>
+                  </HStack>
+                  <Spacer />
+                  {isCurrentUserABuyer && !isFollowing && (
+                    <div className="postSellerHeader">
+                      <FiUserPlus
+                        size="1.2rem"
+                        onClick={() => handleFollowSeller(commenterId)}
+                      />
+                    </div>
+                  )}
+                  {isCurrentUserABuyer && isFollowing && (
+                    <div className="postSellerHeader">
+                      <FiUserMinus
+                        size="1.2rem"
+                        onClick={() => handleUnfollowSeller(commenterId)}
+                      />
+                    </div>
+                  )}
+                </HStack>
+              )}
+              <h3>{currentTitle}</h3>
+              <div className="commentFooter">
+                <HStack>
+                  <div>
+                    posted on: {dateCreated.toString().substring(0, 10)}
+                  </div>
                 </HStack>
                 <Spacer />
-                {isCurrentUserABuyer && !isFollowing && (
-                  <div className="postSellerHeader">
-                    <FiUserPlus
-                      size="1.2rem"
-                      onClick={() => handleFollowSeller(commenterId)}
-                    />
-                  </div>
+                {((!isBuyer && commenterId === sellerId) ||
+                  (isBuyer && commenterId === buyerId)) && (
+                  <Popup trigger={<FiEdit3 size="1.2rem" />} modal nested>
+                    {(close) => (
+                      <div className="modal">
+                        <button className="close" onClick={close}>
+                          &times;
+                        </button>
+                        <div className="header"> Edit Comment </div>
+                        <div className="content">
+                          <form onSubmit={(event) => handleEdit(event)}>
+                            <FormControl mt={4}>
+                              <FormLabel>Comment: </FormLabel>
+                              <Input
+                                type="text"
+                                placeholder=" "
+                                value={title}
+                                onChange={(event) => {
+                                  console.log("onChange: ", event.target.value);
+                                  setTitle(event.target.value);
+                                }}
+                                required
+                              />
+                            </FormControl>
+
+                            <Box mt={4} display="flex" alignItems="center">
+                              <Button
+                                bg="#E2725B"
+                                colorScheme="white"
+                                type="submit"
+                                w="100%"
+                              >
+                                Done
+                              </Button>
+                            </Box>
+                          </form>
+                        </div>
+                      </div>
+                    )}
+                  </Popup>
                 )}
-                {isCurrentUserABuyer && isFollowing && (
-                  <div className="postSellerHeader">
-                    <FiUserMinus
-                      size="1.2rem"
-                      onClick={() => handleUnfollowSeller(commenterId)}
-                    />
-                  </div>
-                )}
-              </HStack>
-            )}
-            <h3>{title}</h3>
-            <div className="commentFooter">
-              <HStack>
-                <div>posted on: {dateCreated}</div>
-              </HStack>
-              <Spacer />
-              {isBuyer && commenterId === buyerId && (
-                <FiEdit3
-                  size="1.2rem"
-                  onClick={() => handleFollowSeller(commenterId)}
-                />
-              )}
-              {!isBuyer && commenterId === sellerId && (
-                <FiEdit3
-                  size="1.2rem"
-                  onClick={() => handleFollowSeller(commenterId)}
-                />
-              )}
+              </div>
             </div>
           </div>
-        </div>
-      </SellerOrderCard>
-    </div>
+        </SellerOrderCard>
+      </div>
+    </>
   );
 };
 

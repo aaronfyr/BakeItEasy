@@ -22,7 +22,6 @@
     display: flex;
     align-items: center;
     height: 30px;
-    background-color: bisque;
     color: var(--dark-text);
     font-family: 'Montserrat',sans-serif;
     font-size: 12px;

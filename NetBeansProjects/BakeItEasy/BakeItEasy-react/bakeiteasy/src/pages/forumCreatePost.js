@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
-import {toast, ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import {
   Avatar,
   Button,
@@ -28,7 +28,7 @@ import {
   FaCheck,
   FaTimes,
   FaRegStar,
-  FaArrowLeft
+  FaArrowLeft,
 } from "react-icons/fa";
 
 import "./resources/default.css";
@@ -40,23 +40,23 @@ function ForumCreatePost() {
   const [isSeller, setIsSeller] = useState(false);
   const [buyerPost, setBuyerPost] = useState({
     post: {
-    title: "",
-    postCategory: "",
-  },
+      title: "",
+      postCategory: "",
+    },
     buyerId: 0,
   });
-   const [sellerPost, setSellerPost] = useState({
+  const [sellerPost, setSellerPost] = useState({
     post: {
-    title: "",
-    postCategory: "",
-  },
+      title: "",
+      postCategory: "",
+    },
     sellerId: 0,
   });
   const [created, setCreated] = useState(false);
 
   const navigate = useNavigate();
 
-useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       const fetchedSeller = localStorage.getItem("seller");
       const fetchedBuyer = localStorage.getItem("buyer");
@@ -75,7 +75,7 @@ useEffect(() => {
           setBuyerPost({
             ...buyerPost,
             buyerId: buyerId,
-            });
+          });
         } catch (error) {
           console.log(error);
         }
@@ -89,8 +89,7 @@ useEffect(() => {
           setSellerPost({
             ...sellerPost,
             sellerId: sellerId,
-            });
-
+          });
         } catch (error) {
           console.log(error);
         }
@@ -98,142 +97,166 @@ useEffect(() => {
     }
     fetchData();
   }, []);
-   const routeChangeToForum = () => {
+
+  const routeChangeToForum = () => {
     let path = "/forum";
     navigate(path);
   };
   const handleGoBack = () => {
-    window.history.back()
+    window.history.back();
   };
-const handleChange = (event) => {
-  const { name, value } = event.target;
-  if (isSeller) {
-    if (name === "postCategory") {
-    setSellerPost((prevPost) => ({
-      ...prevPost,
-      postCategory: value,
-    }));
-    } else {
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (isSeller) {
+      if (name === "postCategory") {
         setSellerPost((prevPost) => ({
-        ...prevPost,
-        [name]: value,
+          ...prevPost,
+          postCategory: value,
         }));
-    }
-  } else {
-    if (name === "postCategory") {
-    setBuyerPost((prevPost) => ({
-      ...prevPost,
-      postCategory: value,
-    }));
+      } else {
+        setSellerPost((prevPost) => ({
+          ...prevPost,
+          [name]: value,
+        }));
+      }
     } else {
+      if (name === "postCategory") {
         setBuyerPost((prevPost) => ({
-        ...prevPost,
-        [name]: value,
+          ...prevPost,
+          postCategory: value,
         }));
+      } else {
+        setBuyerPost((prevPost) => ({
+          ...prevPost,
+          [name]: value,
+        }));
+      }
     }
-  }
-};
-
+  };
 
   //create post
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!isSeller) {
-           //seller create post
-        fetch(`http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/posts`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(buyerPost)
-        })
-        .then(response => {
-            if (!response.ok) {
-                toast.error("!response.ok");
-            } else {
+      //seller create post
+      fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(buyerPost),
+        }
+      )
+        .then((response) => {
+          if (!response.ok) {
+            toast.error("!response.ok");
+          } else {
             console.log("listing created");
             setCreated(true);
-            toast.success("Post successfully created! Redirecting to profile...");
+            toast.success(
+              "Post successfully created! Redirecting to profile..."
+            );
             setTimeout(() => {
-                routeChangeToForum();
+              routeChangeToForum();
             }, 8000); // 1000 milliseconds = 1 second
-            }
-            return response.json();
+          }
+          return response.json();
         })
-        .then(data => {
-            // handle successful creation
+        .then((data) => {
+          // handle successful creation
         })
-        .catch(error => {
-            toast.error('Failed to create listing. ' + error);
+        .catch((error) => {
+          toast.error("Failed to create listing. " + error);
         });
-
     } else {
-        //buyer create post
-    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/posts`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(sellerPost)
-    })
-      .then(response => {
-        if (!response.ok) {
-            toast.error("!response.ok");
-        } else {
-          console.log("listing created");
-          setCreated(true);
-          toast.success("Post successfully created! Redirecting to profile...");
-          setTimeout(() => {
-            routeChangeToForum();
-          }, 8000); // 1000 milliseconds = 1 second
+      //buyer create post
+      fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(sellerPost),
         }
-        return response.json();
-      })
-      .then(data => {
-        // handle successful creation
-      })
-      .catch(error => {
-         toast.error('Failed to create listing. ' + error);
-      });
+      )
+        .then((response) => {
+          if (!response.ok) {
+            toast.error("!response.ok");
+          } else {
+            console.log("listing created");
+            setCreated(true);
+            toast.success(
+              "Post successfully created! Redirecting to profile..."
+            );
+            setTimeout(() => {
+              routeChangeToForum();
+            }, 8000); // 1000 milliseconds = 1 second
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // handle successful creation
+        })
+        .catch((error) => {
+          toast.error("Failed to create listing. " + error);
+        });
     }
   };
-
-
 
   return (
     <div>
-        <ToastContainer/>
-        <SellerNavigationBar/>
-        <br/>
-        <div style={{width: 220}}>
-            <div className="button1" onClick={handleGoBack} ><FaArrowLeft/>Back to forum</div>
+      <ToastContainer />
+      <SellerNavigationBar />
+      <br />
+      <div style={{ width: 220 }}>
+        <div className="button1" onClick={handleGoBack}>
+          <FaArrowLeft />
+          Back to forum
         </div>
-        <br/>
-        <h1 style={{marginLeft:450}}>Create Post</h1>
-        <div className="parent">
-            <div id="rightListingContainer">
-                <form onSubmit={handleSubmit}>
-      <label>
-  Title:
-  </label>
-  <textarea name="title" value={buyerPost.title} onChange={handleChange} style={{ minHeight: "10px", height: "auto", width: "280px", boxSizing: "border-box" }} />
+      </div>
+      <br />
+      <h1 style={{ marginLeft: 450 }}>Create Post</h1>
+      <div className="parent">
+        <div id="rightListingContainer">
+          <form onSubmit={handleSubmit}>
+            <label>Title:</label>
+            <textarea
+              name="title"
+              value={buyerPost.title}
+              onChange={handleChange}
+              style={{
+                minHeight: "10px",
+                height: "auto",
+                width: "280px",
+                boxSizing: "border-box",
+              }}
+            />
 
-      <label>
-        Category:
-            <select name="postCategory" value={buyerPost.postCategory} onChange={handleChange}>
+            <label>
+              Category:
+              <select
+                name="postCategory"
+                value={buyerPost.postCategory}
+                onChange={handleChange}
+              >
                 <option value="">Select a category</option>
                 <option value="DISCUSSION">Discussion</option>
                 <option value="QUESTION">Question</option>
                 <option value="LOOKINGFOR">Looking For</option>
                 <option value="SHARINGINGREDIENTS">Sharing Ingredients</option>
                 <option value="RECIPES">Recipes</option>
-            </select>
-        </label>
-      <button type="submit" className="button1">Create Post</button>
-    </form>
-    <br/>
-            </div>
+              </select>
+            </label>
+            <button type="submit" className="button1">
+              Create Post
+            </button>
+          </form>
+          <br />
         </div>
+      </div>
     </div>
   );
 }

@@ -43,6 +43,7 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
   const [userId, setUserId] = useState();
   const [userName, setUserName] = useState();
   const [userUsername, setUserUsername] = useState();
+  const [userProfilePhoto, setUserProfilePhoto] = useState();
   useEffect(() => {
     fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/posts/${postId}/${
@@ -67,6 +68,7 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
         }
         setUserName(data.name);
         setUserUsername(data.username);
+        setUserProfilePhoto(data.imagePath);
       });
   }, []);
 
@@ -228,31 +230,47 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
           className="postCardContentGrid_left"
           onClick={() => routeChangeToPost(postId)}
         >
-          {postId}
+          <img
+            className="homepageProfilePhotoImg"
+            src={
+              "https://cdn.loveandlemons.com/wp-content/uploads/2018/06/IMG_12572-yellow-cropped2-580x752.jpg"
+            }
+            alt="baked listing"
+          />
         </div>
 
         <div className="postCardContentGrid_right">
           <div className="postCardHeader">
             {isBuyer && (
               <HStack>
-                <img
-                  width="35px"
-                  height="35px"
-                  src={require("../assets/dummyuser.png")}
-                  alt="listing product"
-                />
+                <div className="homepageProfilePhoto">
+                  <img
+                    className="homepageProfilePhotoImg"
+                    src={
+                      userProfilePhoto
+                        ? userProfilePhoto
+                        : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
+                    }
+                    alt="baked listing"
+                  />
+                </div>
                 <div className="postBuyerHeader">{userUsername}</div>
               </HStack>
             )}
             {!isBuyer && (
               <HStack>
                 <HStack>
-                  <img
-                    width="35px"
-                    height="35px"
-                    src={require("../assets/dummyuser.png")}
-                    alt="listing product"
-                  />
+                  <div className="homepageProfilePhoto">
+                    <img
+                      className="homepageProfilePhotoImg"
+                      src={
+                        userProfilePhoto
+                          ? userProfilePhoto
+                          : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
+                      }
+                      alt="baked listing"
+                    />
+                  </div>
                   <div
                     className="postSellerHeader"
                     onClick={() => routeChangeToSellerProfile(userId)}

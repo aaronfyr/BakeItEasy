@@ -29,7 +29,7 @@ import {
   PopoverCloseButton,
 } from "@chakra-ui/react";
 import { toast, ToastContainer } from "react-toastify";
-import { FiHeart, FiGlobe, FiUsers } from "react-icons/fi";
+import { FiHeart, FiGlobe, FiUsers, FiPlus } from "react-icons/fi";
 import ReactLoading from "react-loading";
 import {
   BrowserRouter as Router,
@@ -146,7 +146,7 @@ const Forum = () => {
   ]);
 
   const handleFilterByCateory = (categoryName) => {
-    const categoryNameLowerCase = categoryName.toLowerCase();
+    const categoryNameLowerCase = categoryName.toLowerCase().replace(/\s/g, "");
     if (categoryFilter === categoryNameLowerCase) {
       // set category status to not selected
 
@@ -155,7 +155,7 @@ const Forum = () => {
       // set category status to selected
 
       console.log("filter category: ", categoryName);
-      setCategoryFilter(categoryName.toLowerCase());
+      setCategoryFilter(categoryName.toLowerCase().replace(/\s/g, ""));
     }
   };
 
@@ -164,12 +164,19 @@ const Forum = () => {
     navigate(path + id);
   };
 
+  const routeChangeToCreatePost = () => {
+    let path = "/forum/createPost/";
+    navigate(path);
+  };
+
   return (
     <div>
       {sellerId && <SellerNavigationBar />}
       {buyerId && <NavigationBar />}
       <ToastContainer />
-
+      <div className="float" onClick={() => routeChangeToCreatePost()}>
+        <FiPlus size="2.5rem" />
+      </div>
       <div class="shoppingHeader">
         <HStack spacing="10px">
           <FiUsers />
@@ -220,16 +227,29 @@ const Forum = () => {
       </div>
       <div className="postsDisplay">
         {/*change to filtered posts*/}
-        {posts.map((post) => (
-          <Post
-            postId={post.postId}
-            title={post.title}
-            dateCreated={post.dateCreated}
-            postCategory={post.postCategory}
-            isBuyer={post.isBuyer}
-          />
+        {posts
+          .filter((post) => {
+            if (post.title.toLowerCase().includes(search)) {
+              if (
+                (categoryFilter &&
+                  post.postCategory.toLowerCase().includes(categoryFilter)) ||
+                !categoryFilter
+              ) {
+                return post;
+              }
+            }
+            return null;
+          })
+          .map((post) => (
+            <Post
+              postId={post.postId}
+              title={post.title}
+              dateCreated={post.dateCreated}
+              postCategory={post.postCategory}
+              isBuyer={post.isBuyer}
+            />
 
-          /*
+            /*
             <div
               className="postComp"
               onClick={() => routeChangeToOrder(post.postId)}
@@ -264,7 +284,7 @@ const Forum = () => {
               </SellerOrderCard>
             </div>
             */
-        ))}
+          ))}
       </div>
     </div>
   );

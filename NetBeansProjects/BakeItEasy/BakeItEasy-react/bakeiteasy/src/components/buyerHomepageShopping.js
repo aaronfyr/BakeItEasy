@@ -460,8 +460,9 @@ export const BuyerShopping = () => {
         {fListings
           .filter((product) => {
             if (
-              product.name.toLowerCase().includes(search) ||
-              product.description.toLowerCase().includes(search)
+              (product.name && product.name.toLowerCase().includes(search)) ||
+              (product.description &&
+                product.description.toLowerCase().includes(search))
             ) {
               if (
                 (categoryFilter &&
@@ -531,8 +532,9 @@ export const BuyerShopping = () => {
         {listings
           .filter((product) => {
             if (
-              product.name.toLowerCase().includes(search) ||
-              product.description.toLowerCase().includes(search)
+              (product.name && product.name.toLowerCase().includes(search)) ||
+              (product.description &&
+                product.description.toLowerCase().includes(search))
             ) {
               if (
                 (categoryFilter &&

@@ -155,6 +155,8 @@ useEffect(() => {
     }
   }
 
+  console.log("comments", comments);
+
   return (
     <div>
       {sellerId && <SellerNavigationBar />}
@@ -204,7 +206,7 @@ useEffect(() => {
               {comments.map((comment) => (
                 <Comment
                   commentId={comment.commentId}
-                  title={comment.title}
+                  currentTitle={comment.title}
                   dateCreated={comment.dateCreated}
                   isBuyer={comment.isBuyer}
                 />
