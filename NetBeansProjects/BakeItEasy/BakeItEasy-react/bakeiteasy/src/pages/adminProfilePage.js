@@ -28,7 +28,7 @@ function AdminProfilePage() {
   }, []);
 
   return (
-    <div className="background">
+    <div>
       <AdminMenuBar />
       {admin && (
         <AdminEditDetails

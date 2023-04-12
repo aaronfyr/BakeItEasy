@@ -1,14 +1,14 @@
 import {
+  Box,
+  Button,
   FormControl,
   FormLabel,
-  Input,
-  Button,
-  Box,
-  Text,
   Image,
+  Input,
+  Text,
 } from "@chakra-ui/react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { BuyerContext } from "../context/buyerProvider";
 import { SellerContext } from "../context/sellerProvider";
@@ -27,8 +27,8 @@ function Signup() {
 
   const [profilePic, setProfilePic] = useState(null);
 
-  const { setBuyer } = useContext(BuyerContext);
-  const { setSeller } = useContext(SellerContext);
+  const { setBuyer, buyer } = useContext(BuyerContext);
+  const { setSeller, seller } = useContext(SellerContext);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -47,43 +47,71 @@ function Signup() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/${
-        type === "seller" ? "sellers" : "buyers"
-      }`,
-      {
+    if (profilePic) {
+      const data = new FormData();
+      data.append("file", profilePic);
+      data.append("upload_preset", "module-buddies");
+      data.append("cloud_name", "nelsonchoo456");
+
+      fetch("https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          username,
-          email,
-          password,
-          phoneNo,
-          address,
-        }),
-      }
-    );
+        body: data,
+      }).then((data) => {
+        console.log("CLOUD URL", data.url);
+        if (type === "seller") {
+          setSeller((seller) => {
+            seller.imagePath = data.url;
+            return {
+              ...seller,
+            };
+          });
+        } else {
+          setBuyer((buyer) => {
+            buyer.imagePath = data.url;
+            return {
+              ...buyer,
+            };
+          });
+        }
+      });
 
-    if (response.ok) {
-      const user = await response.json();
-      if (type === "seller") {
-        setSeller(user);
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/${
+          type === "seller" ? "sellers" : "buyers"
+        }`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            username,
+            email,
+            password,
+            phoneNo,
+            address,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const user = await response.json();
+        if (type === "seller") {
+          setSeller(user);
+          localStorage.setItem("seller", JSON.stringify(user));
+          console.log("seller set: ", user);
+          navigate(`/sellerProfile`);
+        } else {
+          setBuyer(user);
+          localStorage.setItem("buyer", JSON.stringify(user));
+          console.log("buyer set: ", user);
+          navigate(`/`);
+        }
       } else {
-        setBuyer(user);
+        // show error message
+        setError("Invalid details. Please try again.");
       }
-
-      if (profilePic) {
-        //saveProfilePic(type, user.id, profilePic);
-      }
-
-      // redirect to homepage
-      navigate(`/`);
-    } else {
-      // show error message
-      setError("Invalid details. Please try again.");
     }
   };
 
