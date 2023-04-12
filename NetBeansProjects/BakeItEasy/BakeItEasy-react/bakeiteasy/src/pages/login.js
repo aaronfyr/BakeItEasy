@@ -106,21 +106,6 @@ function Login() {
         {type === "seller" ? "for Buyers" : "for Bakers"}
       </Button>
 
-      <Button
-        position="absolute"
-        top="20"
-        left="20"
-        size="lg"
-        mr="4"
-        variant="outline"
-        color="#E2725B"
-        borderColor="#E2725B"
-        borderRadius="30px 30px 30px 30px"
-        onClick={handleHomepageReturn}
-      >
-        To Homepage
-      </Button>
-
       <Box
         maxW="xl"
         mx="auto"
