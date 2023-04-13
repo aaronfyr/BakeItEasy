@@ -110,6 +110,7 @@ function ViewAllBuyers() {
                 phoneNo={buyer.phoneNo}
                 address={buyer.address}
                 isBanned={buyer.isBanned}
+                imagePath={buyer.imagePath}
                 onBan={handleBan}
                 onUnban={handleUnban}
               />

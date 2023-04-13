@@ -27,6 +27,7 @@ const Report = ({ reportId, title, reason, onBan, onUnban }) => {
   const [reporter, setReporter] = useState();
   const [reporterName, setReporterName] = useState();
   const [reporterUsername, setReporterUsername] = useState();
+  const [reporterImagePath, setReporterImagePath] = useState();
   useEffect(() => {
     fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/reports/${reportId}/reporter`,
@@ -44,6 +45,7 @@ const Report = ({ reportId, title, reason, onBan, onUnban }) => {
         setReporter(data);
         setReporterName(data.name);
         setReporterUsername(data.username);
+        setReporterImagePath(data.imagePath);
       });
   }, []);
 
@@ -52,6 +54,7 @@ const Report = ({ reportId, title, reason, onBan, onUnban }) => {
   const [reporteeName, setReporteeName] = useState();
   const [reporteeUsername, setReporteeUsername] = useState();
   const [reporteeIsBanned, setReporteeIsBanned] = useState();
+  const [reporteeImagePath, setReporteeImagePath] = useState();
   useEffect(() => {
     fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/reports/${reportId}/reportee`,
@@ -69,6 +72,7 @@ const Report = ({ reportId, title, reason, onBan, onUnban }) => {
         setReporteeName(data.name);
         setReporteeUsername(data.username);
         setReporteeIsBanned(data.isBanned);
+        setReporteeImagePath(data.imagePath);
       });
   }, [reporteeIsBanned]);
 
@@ -116,15 +120,39 @@ const Report = ({ reportId, title, reason, onBan, onUnban }) => {
             <strong>Reason: </strong>
             {reason}
           </Text>
-          <Text>
-            <strong>Reporter: </strong>
-            {reporterUsername}
-          </Text>
-          <Text>
-            <strong>Reported: </strong>
-            {reporteeUsername}
-          </Text>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Text style={{ marginRight: "0.65rem" }}>
+              <strong>Reporter: </strong>
+            </Text>
+            <div
+              className="homepageProfilePhoto"
+              style={{ marginRight: "0.5rem" }}
+            >
+              <img
+                className="homepageProfilePhotoImg"
+                src={reporterImagePath}
+                alt="baked listing"
+              />
+            </div>
+            <Text>{reporterUsername}</Text>
+          </div>
 
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Text style={{ marginRight: "0.5rem" }}>
+              <strong>Reported: </strong>
+            </Text>
+            <div
+              className="homepageProfilePhoto"
+              style={{ marginRight: "0.5rem" }}
+            >
+              <img
+                className="homepageProfilePhotoImg"
+                src={reporteeImagePath}
+                alt="baked listing"
+              />
+            </div>
+            <Text>{reporteeUsername}</Text>
+          </div>
           {reporteeIsBanned ? (
             <Button bg="#E2725B" colorScheme="white" onClick={handleUnban}>
               Unban

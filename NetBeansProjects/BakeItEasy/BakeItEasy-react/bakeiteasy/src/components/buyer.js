@@ -17,6 +17,7 @@ const Buyer = ({
   phoneNo,
   address,
   isBanned,
+  imagePath,
   onBan,
   onUnban,
 }) => {
@@ -46,7 +47,14 @@ const Buyer = ({
     <Card maxW="sm">
       <CardBody>
         <Stack spacing="3">
-          <Text >
+          <div className="homepageProfilePhoto">
+            <img
+              className="homepageProfilePhotoImg"
+              src={imagePath}
+              alt="Profile Image"
+            />
+          </div>
+          <Text>
             <strong>Name: </strong>
             {name}
           </Text>

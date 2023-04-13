@@ -109,6 +109,7 @@ function ViewAllSellers() {
                 email={seller.email}
                 phoneNo={seller.phoneNo}
                 isBanned={seller.isBanned}
+                imagePath={seller.imagePath}
                 onBan={handleBan}
                 onUnban={handleUnban}
               />
