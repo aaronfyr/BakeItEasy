@@ -9,6 +9,8 @@ import {
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { BuyerContext } from "../context/buyerProvider";
 import { SellerContext } from "../context/sellerProvider";
@@ -59,6 +61,8 @@ function Signup() {
         } else {
           setError("Unable to upload image. Please try again.");
           setProfilePic(null);
+          const errorData = await response.json();
+          toast.error(errorData.error);
         }
       } else {
         setError("Invalid picture format. Please try again.");
@@ -116,7 +120,7 @@ function Signup() {
       console.log(errorData.error);
       setError("Invalid details. Please try again.");
       console.log("Invalid details. Please try again.");
-
+      toast.error(errorData.error);
     }
   };
 
@@ -129,6 +133,7 @@ function Signup() {
       h="xl"
       marginTop="10%"
     >
+      <ToastContainer />
       <Box align="center">
         <img
           width="50px"
