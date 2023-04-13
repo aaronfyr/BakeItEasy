@@ -12,7 +12,9 @@ import entity.Listing;
 import entity.Order;
 import entity.Review;
 import entity.Seller;
+import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
+import error.exception.ListingNotFoundException;
 import error.exception.OrderIsNotCompletedException;
 import error.exception.OrderNotFoundException;
 import error.exception.UnknownPersistenceException;
@@ -72,13 +74,21 @@ public class OrdersResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{seller_id}/{listing_id}")
-    public Order createOrder(@PathParam("seller_id") Long seller_id, @PathParam("listing_id") Long listing_id, Order o) {
+    @Path("/{buyer_id}/{listing_id}")
+    public Response createOrder(@PathParam("buyer_id") Long buyer_id, @PathParam("listing_id") Long listing_id, Order o) {
         try {
-            orderSessionBeanLocal.createNewOrder(o, seller_id, listing_id);
-        } catch (Exception e) {
+            orderSessionBeanLocal.createNewOrder(o, buyer_id, listing_id);
+            return Response.status(200).entity(o).type(MediaType.APPLICATION_JSON).build();
+        } catch (UnknownPersistenceException | InputDataValidationException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Unknown Persistence or Input Data Validation error").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Buyer not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (ListingNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Listing not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
-        return o;
     } //end createOrder
     
     @GET

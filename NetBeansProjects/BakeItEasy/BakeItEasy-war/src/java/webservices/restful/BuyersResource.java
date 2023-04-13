@@ -24,10 +24,13 @@ import error.exception.BuyerUsernameExistException;
 import error.exception.InputDataValidationException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
+import error.exception.PostNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -161,13 +164,18 @@ public class BuyersResource {
     @Path("/{buyer_id}/posts")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Post createPost(@PathParam("buyer_id") Long buyerId, Post p) {
+    public Response createPost(@PathParam("buyer_id") Long buyerId, Post p) {
         try {
             p.setDateCreated(new Date(System.currentTimeMillis()));
             postSessionBeanLocal.createNewBuyerPost(p, buyerId);
-        } catch (Exception e) {
-        }
-        return p;
+            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
+        } catch (UnknownPersistenceException | InputDataValidationException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Unknown Persistence or Input Data Validation error").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Buyer not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } 
     } //end createPost
 
     @GET
@@ -297,11 +305,19 @@ public class BuyersResource {
     @Path("/{buyer_id}/{post_id}/comments")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Comment createComment(@PathParam("buyer_id") Long buyerId, @PathParam("post_id") Long pId, Comment c) {
+    public Response createComment(@PathParam("buyer_id") Long buyerId, @PathParam("post_id") Long pId, Comment c) {
         try {
             commentSessionBeanLocal.createNewBuyerComment(c, pId, buyerId);
-        } catch (Exception e) {
+            return Response.status(200).entity(c).type(MediaType.APPLICATION_JSON).build();
+        } catch (UnknownPersistenceException | InputDataValidationException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Unknown Persistence or Input Data Validation error").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Buyer not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (PostNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Post not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
-        return c;
     } //end createComment
 }

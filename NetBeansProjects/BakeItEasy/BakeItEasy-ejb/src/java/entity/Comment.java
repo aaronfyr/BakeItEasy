@@ -55,11 +55,12 @@ public class Comment implements Serializable {
     private Seller seller;
 
     public Comment() {
+        this.dateCreated = new Date(System.currentTimeMillis());
     }
     
-    public Comment(String title, Date dateCreated, boolean isBuyer) {
+    public Comment(String title, boolean isBuyer) {
         this.title = title;
-        this.dateCreated = dateCreated;
+        this.dateCreated = new Date(System.currentTimeMillis());
         this.isBuyer = isBuyer;
     }
 

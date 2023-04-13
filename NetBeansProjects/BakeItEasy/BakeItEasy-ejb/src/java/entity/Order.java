@@ -68,15 +68,16 @@ public class Order implements Serializable {
     private Review review;
 
     public Order() {
+        this.dateOfCreation = new Date(System.currentTimeMillis());
     }
 
-    public Order(BigDecimal price, Integer quantity, String description, String address, Date dateOfCreation, Date dateOfCollection) {
+    public Order(BigDecimal price, Integer quantity, String description, String address, Date dateOfCollection) {
         this.price = price;
         this.quantity = quantity;
         this.description = description;
         this.orderStatus = OrderStatus.PENDING;
         this.address = address;
-        this.dateOfCreation = dateOfCreation;
+        this.dateOfCreation = new Date(System.currentTimeMillis());
         this.dateOfCollection = dateOfCollection;
     }
 

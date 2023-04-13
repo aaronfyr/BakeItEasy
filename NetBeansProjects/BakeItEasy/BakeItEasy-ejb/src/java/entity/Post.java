@@ -60,12 +60,13 @@ public class Post implements Serializable {
     private Seller seller;
 
     public Post() {
+        this.dateCreated = new Date(System.currentTimeMillis());
         this.comments = new ArrayList<>();
     }
     
-    public Post(String title, Date dateCreated, PostCategory postCategory, boolean isBuyer) {
+    public Post(String title, PostCategory postCategory, boolean isBuyer) {
         this.title = title;
-        this.dateCreated = dateCreated;
+        this.dateCreated = new Date(System.currentTimeMillis());
         this.postCategory = postCategory;
         this.isBuyer = isBuyer;
         this.comments = new ArrayList<>();

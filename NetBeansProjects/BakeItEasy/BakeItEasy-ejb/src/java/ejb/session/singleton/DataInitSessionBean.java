@@ -233,13 +233,15 @@ public class DataInitSessionBean {
                         date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date1);
                         */
                         
-                        Order order1 = new Order(new BigDecimal(25.00), 1, "Birthday cake", "123 house", new Date(), new Date());
+                        Date dateOfCollection = new Date(System.currentTimeMillis() + (7 * 24 * 60 * 60 * 1000));
+                        
+                        Order order1 = new Order(new BigDecimal(25.00), 1, "Birthday cake", "123 house", dateOfCollection);
                         orderSessionBeanLocal.createNewOrder(order1, buyer1.getBuyerId(), listing1.getListingId());
-                        Order order2 = new Order(new BigDecimal(25.00), 1, "Graduation cake", "456 house", new Date(), new Date());
+                        Order order2 = new Order(new BigDecimal(25.00), 1, "Graduation cake", "456 house", dateOfCollection);
                         orderSessionBeanLocal.createNewOrder(order2, buyer2.getBuyerId(), listing1.getListingId());
                         sellerSessionBeanLocal.acceptOrder(order2.getOrderId());
                         sellerSessionBeanLocal.completeOrder(order2.getOrderId());
-                        Order order3 = new Order(new BigDecimal(5.00), 3, "Puff pastry tart", "456 house", new Date(), new Date());
+                        Order order3 = new Order(new BigDecimal(5.00), 3, "Puff pastry tart", "456 house", dateOfCollection);
                         orderSessionBeanLocal.createNewOrder(order3, buyer1.getBuyerId(), listing5.getListingId());
                         sellerSessionBeanLocal.acceptOrder(order3.getOrderId());
                         sellerSessionBeanLocal.completeOrder(order3.getOrderId());
@@ -254,22 +256,22 @@ public class DataInitSessionBean {
                                         new ArrayList<>(), new Date());
                         reviewSessionBeanLocal.createNewReview(review2, order3.getOrderId());
 
-                        Post buyerPost1 = new Post("Looking for cake recommendations", new Date(), PostCategory.LOOKINGFOR, true);
+                        Post buyerPost1 = new Post("Looking for cake recommendations", PostCategory.LOOKINGFOR, true);
                         postSessionBeanLocal.createNewBuyerPost(buyerPost1, buyer1.getBuyerId());
 
-                        Post sellerPost1 = new Post("Sharing brownies ingredients", new Date(), PostCategory.SHARINGINGREDIENTS, false);
+                        Post sellerPost1 = new Post("Sharing brownies ingredients", PostCategory.SHARINGINGREDIENTS, false);
                         postSessionBeanLocal.createNewSellerPost(sellerPost1, seller1.getSellerId());
                         
-                        Post sellerPost2 = new Post("My grandmother's apple pie recipe", new Date(), PostCategory.RECIPES, false);
+                        Post sellerPost2 = new Post("My grandmother's apple pie recipe", PostCategory.RECIPES, false);
                         postSessionBeanLocal.createNewSellerPost(sellerPost2, seller2.getSellerId());
 
-                        Comment buyerComment1 = new Comment("I think Emicakes is good!", new Date(), true);
+                        Comment buyerComment1 = new Comment("I think Emicakes is good!", true);
                         commentSessionBeanLocal.createNewBuyerComment(buyerComment1, buyerPost1.getPostId(), buyer1.getBuyerId());
                         
-                        Comment sellerComment1 = new Comment("Can try my cake!", new Date(), false);
+                        Comment sellerComment1 = new Comment("Can try my cake!", false);
                         commentSessionBeanLocal.createNewSellerComment(sellerComment1, buyerPost1.getPostId(), buyer1.getBuyerId());
 
-                        Comment sellerComment2 = new Comment("I'm interested! Do you have flour?", new Date(), false);
+                        Comment sellerComment2 = new Comment("I'm interested! Do you have flour?", false);
                         commentSessionBeanLocal.createNewSellerComment(sellerComment2, sellerPost1.getPostId(), 2L);
 
                         Report report = new Report("Unfair seller", "Did not grant my request for extra cream");
