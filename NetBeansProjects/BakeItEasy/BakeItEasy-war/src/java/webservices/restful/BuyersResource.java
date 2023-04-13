@@ -68,9 +68,27 @@ public class BuyersResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Buyer createBuyer(Buyer b) throws UnknownPersistenceException, InputDataValidationException, BuyerPhoneNumberExistException, BuyerEmailExistException, BuyerUsernameExistException {
-        buyerSessionBeanLocal.createNewBuyer(b);
-        return b;
+    public Response createBuyer(Buyer b) {
+        try {
+            Long id = buyerSessionBeanLocal.createNewBuyer(b);
+            Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(id);
+            return Response.status(200).entity(buyer).type(MediaType.APPLICATION_JSON).build();
+        } catch (UnknownPersistenceException | InputDataValidationException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Unknown Persistence or Input Data Validation error").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerPhoneNumberExistException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Phone number already exist").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerEmailExistException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Email already exist").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerUsernameExistException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Username already exist").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Buyer not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
     } //end createCustomer
 
     @GET

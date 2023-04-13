@@ -110,10 +110,27 @@ public class SellersResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Seller createSeller(Seller seller) throws UnknownPersistenceException, InputDataValidationException, SellerUsernameExistException, SellerEmailExistException, SellerPhoneNumberExistException {
-
-        sellerSessionBeanLocal.createNewSeller(seller);
-        return seller;
+    public Response createSeller(Seller seller) {
+        try {
+            Long id = sellerSessionBeanLocal.createNewSeller(seller);
+            Seller newSeller = sellerSessionBeanLocal.retrieveSellerBySellerId(id);
+            return Response.status(200).entity(newSeller).type(MediaType.APPLICATION_JSON).build();
+        } catch (UnknownPersistenceException | InputDataValidationException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Unknown Persistence or Input Data Validation error").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (SellerUsernameExistException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Username already exist").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (SellerEmailExistException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Email already exist").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (SellerPhoneNumberExistException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Phone Number already exist").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (SellerNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Seller not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
     } // end create seller
     
     // CHECKED: AARON
