@@ -74,44 +74,44 @@ function Signup() {
           });
         }
       });
+    }
 
-      const response = await fetch(
-        `http://localhost:8080/BakeItEasy-war/webresources/${
-          type === "seller" ? "sellers" : "buyers"
-        }`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name,
-            username,
-            email,
-            password,
-            phoneNo,
-            address,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        const user = await response.json();
-        if (type === "seller") {
-          setSeller(user);
-          localStorage.setItem("seller", JSON.stringify(user));
-          console.log("seller set: ", user);
-          navigate(`/sellerProfile`);
-        } else {
-          setBuyer(user);
-          localStorage.setItem("buyer", JSON.stringify(user));
-          console.log("buyer set: ", user);
-          navigate(`/`);
-        }
-      } else {
-        // show error message
-        setError("Invalid details. Please try again.");
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/${
+        type === "seller" ? "sellers" : "buyers"
+      }`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          username,
+          email,
+          password,
+          phoneNo,
+          address,
+        }),
       }
+    );
+
+    if (response.ok) {
+      const user = await response.json();
+      if (type === "seller") {
+        setSeller(user);
+        localStorage.setItem("seller", JSON.stringify(user));
+        console.log("seller set: ", user);
+        navigate(`/sellerProfile`);
+      } else {
+        setBuyer(user);
+        localStorage.setItem("buyer", JSON.stringify(user));
+        console.log("buyer set: ", user);
+        navigate(`/`);
+      }
+    } else {
+      // show error message
+      setError("Invalid details. Please try again.");
     }
   };
 
