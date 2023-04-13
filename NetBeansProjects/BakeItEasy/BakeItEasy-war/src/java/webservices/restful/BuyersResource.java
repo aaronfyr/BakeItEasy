@@ -17,6 +17,7 @@ import entity.Order;
 import entity.Post;
 import entity.Report;
 import entity.Seller;
+import error.exception.BuyerEmailExistException;
 import error.exception.BuyerNotFoundException;
 import error.exception.BuyerPhoneNumberExistException;
 import error.exception.BuyerUsernameExistException;
@@ -51,31 +52,27 @@ public class BuyersResource {
 
     @EJB
     private BuyerSessionBeanLocal buyerSessionBeanLocal;
-    
+
     @EJB
     private ReportSessionBeanLocal reportSessionBeanLocal;
-    
+
     @EJB
     private PostSessionBeanLocal postSessionBeanLocal;
-    
+
     @EJB
     private OrderSessionBeanLocal orderSessionBeanLocal;
 
     @EJB
     private CommentSessionBeanLocal commentSessionBeanLocal;
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Buyer createBuyer(Buyer b) {
-        try {
-            b.setIsBanned(false);
-            buyerSessionBeanLocal.createNewBuyer(b);
-        } catch (Exception e) {
-        }
+    public Buyer createBuyer(Buyer b) throws UnknownPersistenceException, InputDataValidationException, BuyerPhoneNumberExistException, BuyerEmailExistException, BuyerUsernameExistException {
+        buyerSessionBeanLocal.createNewBuyer(b);
         return b;
     } //end createCustomer
-    
+
     @GET
     @Path("/{email}/{password}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -88,13 +85,13 @@ public class BuyersResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end loginCustomer
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Buyer> getAllBuyers() {
         return buyerSessionBeanLocal.searchBuyersByName(null);
     } //end getAllCustomers
-    
+
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -107,7 +104,7 @@ public class BuyersResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end getCustomer
-    
+
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -119,17 +116,17 @@ public class BuyersResource {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Buyer not found")
                     .build();
-            
+
             return Response.status(404).entity(exception).build();
         }
     } //end deleteCustomer
-    
+
     /* request body:
     {
     "title": "report title",
     "reason": "report reason"
     }
-    */
+     */
     @POST
     @Path("/{buyer_id}/sellers/{seller_id}/reports")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -141,7 +138,7 @@ public class BuyersResource {
         }
         return report;
     } //end createReport
-    
+
     @POST
     @Path("/{buyer_id}/posts")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -154,7 +151,7 @@ public class BuyersResource {
         }
         return p;
     } //end createPost
-    
+
     @GET
     @Path("/{buyer_id}/orders")
     @Produces(MediaType.APPLICATION_JSON)
@@ -173,7 +170,7 @@ public class BuyersResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end getOrders
-    
+
     @PUT
     @Path("/{order_id}/cancelorder")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -196,7 +193,7 @@ public class BuyersResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end cancel order
-    
+
     @PUT
     @Path("/{buyer_id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -232,7 +229,7 @@ public class BuyersResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end edit seller
-    
+
     // CHECKED: AARON
     @GET
     @Path("/{buyer_id}/followings")
@@ -250,7 +247,7 @@ public class BuyersResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end getFollowings
-    
+
     @GET
     @Path("/{buyer_id}/likedlistings")
     @Produces(MediaType.APPLICATION_JSON)
@@ -277,7 +274,7 @@ public class BuyersResource {
         Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
         return buyer.getReports();
     } //end getAllBuyerReports
-    
+
     @POST
     @Path("/{buyer_id}/{post_id}/comments")
     @Consumes(MediaType.APPLICATION_JSON)

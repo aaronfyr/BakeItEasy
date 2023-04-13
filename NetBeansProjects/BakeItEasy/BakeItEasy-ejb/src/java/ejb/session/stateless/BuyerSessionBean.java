@@ -78,16 +78,16 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
                         if (isPhoneNumberAvailable(buyer.getPhoneNo())) {
                             em.persist(buyer);
                             em.flush();
+                            return buyer.getBuyerId();
                         } else {
-                            throw new BuyerPhoneNumberExistException();
+                            throw new BuyerPhoneNumberExistException("Phone number already exist!");
                         }
                     } else {
-                        throw new BuyerEmailExistException();
+                        throw new BuyerEmailExistException("Email already exist!");
                     }
                 } else {
-                    throw new BuyerUsernameExistException();
+                    throw new BuyerUsernameExistException("Username already exist!");
                 }
-                return buyer.getBuyerId();
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
@@ -283,7 +283,7 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
             throw new BuyerIsNotFollowingSellerException("Buyer was not following seller! Unable to unfollow!");
         }
     }
-    
+
     @Override
     public void followSellerThroughProfile(Long buyerId, Long sellerId) throws SellerNotFoundException, BuyerNotFoundException, BuyerIsFollowingSellerAlreadyException {
         if (!isFollowingSellerAlreadySellerId(buyerId, sellerId)) { // if seller does not have this buyer as follower
@@ -296,7 +296,7 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
             throw new BuyerIsFollowingSellerAlreadyException("Buyer is already following seller!");
         }
     }
-    
+
     @Override
     public void unfollowSellerThroughProfile(Long buyerId, Long sellerId) throws SellerNotFoundException, BuyerNotFoundException, BuyerIsNotFollowingSellerException {
         if (isFollowingSellerAlreadySellerId(buyerId, sellerId)) { // if seller has this buyer as follower
@@ -309,12 +309,12 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
             throw new BuyerIsNotFollowingSellerException("Buyer was not following seller! Unable to unfollow!");
         }
     }
-    
+
     @Override
     public List<Listing> getLikedListings(Long buyerId) throws BuyerNotFoundException {
         try {
             Buyer buyer = retrieveBuyerById(buyerId);
-            
+
             return buyer.getLikedListings();
         } catch (BuyerNotFoundException ex) {
             throw new BuyerNotFoundException(ex.getMessage());
@@ -330,7 +330,7 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
             return false;
         }
     }
-    
+
     private boolean isFollowingSellerAlreadySellerId(Long buyerId, Long sellerId) throws SellerNotFoundException, BuyerNotFoundException {
         Seller sellerToFollow = sellerSessionBeanLocal.retrieveSellerBySellerId(sellerId);
         Buyer buyerFollower = retrieveBuyerById(buyerId);

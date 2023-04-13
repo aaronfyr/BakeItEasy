@@ -75,13 +75,13 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
                             em.flush();
                             return newSeller.getSellerId();
                         } else {
-                            throw new SellerPhoneNumberExistException();
+                            throw new SellerPhoneNumberExistException("Phone number already exist!");
                         }
                     } else {
-                        throw new SellerEmailExistException();
+                        throw new SellerEmailExistException("Email already exist!");
                     }
                 } else {
-                    throw new SellerUsernameExistException();
+                    throw new SellerUsernameExistException("Username already exist!");
                 }
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
@@ -93,12 +93,6 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            } catch (SellerUsernameExistException ex) {
-                throw new SellerUsernameExistException();
-            } catch (SellerEmailExistException ex) {
-                throw new SellerEmailExistException();
-            } catch (SellerPhoneNumberExistException ex) {
-                throw new SellerPhoneNumberExistException();
             }
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
