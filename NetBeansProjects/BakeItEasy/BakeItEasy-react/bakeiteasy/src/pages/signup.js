@@ -23,6 +23,7 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [address, setAddress] = useState("");
+  const [imagePath, setImagePath] = useState(null);
   const [error, setError] = useState(null);
 
   const [profilePic, setProfilePic] = useState(null);
@@ -30,14 +31,36 @@ function Signup() {
   const { setBuyer, buyer } = useContext(BuyerContext);
   const { setSeller, seller } = useContext(SellerContext);
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
 
     if (file) {
       const fileType = file.type;
       if (fileType === "image/jpeg" || fileType === "image/png") {
+        const data = new FormData();
+        data.append("file", file);
+        data.append("upload_preset", "module-buddies");
+        data.append("cloud_name", "nelsonchoo456");
+
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload",
+          {
+            method: "POST",
+            body: data,
+          }
+        );
+
+        if (response.ok) {
+          const responseData = await response.json();
+          console.log("CLOUD URL", responseData.url);
+          setProfilePic(responseData.url);
+          setImagePath(responseData.url);
+          setError(null);
+        } else {
+          setError("Unable to upload image. Please try again.");
+          setProfilePic(null);
+        }
       } else {
-        // invalid file type, show an error message to the user
         setError("Invalid picture format. Please try again.");
         setProfilePic(null);
       }
@@ -46,35 +69,6 @@ function Signup() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (profilePic) {
-      const data = new FormData();
-      data.append("file", profilePic);
-      data.append("upload_preset", "module-buddies");
-      data.append("cloud_name", "nelsonchoo456");
-
-      fetch("https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload", {
-        method: "POST",
-        body: data,
-      }).then((data) => {
-        console.log("CLOUD URL", data.url);
-        if (type === "seller") {
-          setSeller((seller) => {
-            seller.imagePath = data.url;
-            return {
-              ...seller,
-            };
-          });
-        } else {
-          setBuyer((buyer) => {
-            buyer.imagePath = data.url;
-            return {
-              ...buyer,
-            };
-          });
-        }
-      });
-    }
 
     const response = await fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/${
@@ -92,6 +86,7 @@ function Signup() {
           password,
           phoneNo,
           address,
+          imagePath,
         }),
       }
     );
