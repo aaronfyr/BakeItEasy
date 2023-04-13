@@ -26,8 +26,6 @@ function Signup() {
   const [phoneNo, setPhoneNo] = useState("");
   const [address, setAddress] = useState("");
   const [imagePath, setImagePath] = useState(null);
-  const [error, setError] = useState(null);
-
   const [profilePic, setProfilePic] = useState(null);
 
   const { setBuyer } = useContext(BuyerContext);
@@ -37,6 +35,8 @@ function Signup() {
     const file = e.target.files[0];
 
     if (file) {
+      toast.loading("loading, please wait!");
+
       const fileType = file.type;
       if (fileType === "image/jpeg" || fileType === "image/png") {
         const data = new FormData();
@@ -51,21 +51,20 @@ function Signup() {
             body: data,
           }
         );
+        toast.dismiss();
 
         if (response.ok) {
           const responseData = await response.json();
           console.log("CLOUD URL", responseData.url);
           setProfilePic(responseData.url);
           setImagePath(responseData.url);
-          setError(null);
         } else {
-          setError("Unable to upload image. Please try again.");
           setProfilePic(null);
           const errorData = await response.json();
           toast.error(errorData.error);
         }
       } else {
-        setError("Invalid picture format. Please try again.");
+        toast.error("Invalid picture format. Please try again.");
         setProfilePic(null);
       }
     }
@@ -116,10 +115,7 @@ function Signup() {
     } else {
       // show error message
       const errorData = await response.json();
-      setError(errorData.error);
       console.log(errorData.error);
-      setError("Invalid details. Please try again.");
-      console.log("Invalid details. Please try again.");
       toast.error(errorData.error);
     }
   };
@@ -216,12 +212,6 @@ function Signup() {
           accept="image/jpeg, image/png"
         />
         {profilePic && <Image src={profilePic} />}
-
-        {error && (
-          <FormControl>
-            <FormLabel color="red.500">{error}</FormLabel>
-          </FormControl>
-        )}
 
         <Box mt={4} display="flex" alignItems="center">
           <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">
