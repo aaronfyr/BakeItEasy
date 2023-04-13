@@ -28,8 +28,8 @@ function Signup() {
 
   const [profilePic, setProfilePic] = useState(null);
 
-  const { setBuyer, buyer } = useContext(BuyerContext);
-  const { setSeller, seller } = useContext(SellerContext);
+  const { setBuyer } = useContext(BuyerContext);
+  const { setSeller } = useContext(SellerContext);
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -70,6 +70,19 @@ function Signup() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const requestBody = {
+      name,
+      username,
+      email,
+      password,
+      phoneNo,
+      imagePath,
+    };
+
+    if (type === "buyer") {
+      requestBody.address = address;
+    }
+
     const response = await fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/${
         type === "seller" ? "sellers" : "buyers"
@@ -79,15 +92,7 @@ function Signup() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          name,
-          username,
-          email,
-          password,
-          phoneNo,
-          address,
-          imagePath,
-        }),
+        body: JSON.stringify(requestBody),
       }
     );
 
@@ -106,7 +111,12 @@ function Signup() {
       }
     } else {
       // show error message
+      const errorData = await response.json();
+      setError(errorData.error);
+      console.log(errorData.error);
       setError("Invalid details. Please try again.");
+      console.log("Invalid details. Please try again.");
+
     }
   };
 
