@@ -66,7 +66,6 @@ public class Comment implements Serializable {
     
     public Comment(String title, boolean isBuyer) {
         this.title = title;
-        this.dateCreated = new Date(System.currentTimeMillis());
         this.isBuyer = isBuyer;
     }
     
