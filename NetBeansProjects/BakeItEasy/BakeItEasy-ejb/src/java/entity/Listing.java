@@ -100,12 +100,12 @@ public class Listing implements Serializable {
         this.likers = new ArrayList<>();
     }
 
-    public Listing(String name, ListingCategory listingCategory, BigDecimal price, Integer quantityLeft, String description, List<String> imagePaths, Integer minPrepDays) {
+    public Listing(String name, ListingCategory listingCategory, BigDecimal price, Integer maxQuantity, String description, List<String> imagePaths, Integer minPrepDays) {
         this();
         this.name = name;
         this.listingCategory = listingCategory;
         this.price = price;
-        this.maxQuantity = quantityLeft;
+        this.maxQuantity = maxQuantity;
         this.description = description;
         this.imagePaths = imagePaths;
         this.minPrepDays = minPrepDays;
