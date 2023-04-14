@@ -16,7 +16,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -30,32 +31,48 @@ public class Admin implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adminId;
     
-    @Column
+    @Column(nullable = false, length = 128)
+    @NotNull
+    @Size(min = 1, max = 128)
     private String name;
-    @Column
+    
+    @Column(nullable = false, length = 16, unique = true)
+    @NotNull
+    @Size(min = 1, max = 16)
     private String username;
-    @Column
+    
+    @Column(nullable = false, length = 128, unique = true)
+    @NotNull
+    @Size(min = 1, max = 128)
     private String email;
-    @Column
+    
+    @Column(nullable = false, length = 64)
+    @NotNull
+    @Size(min = 1, max = 64)
     private String password;
     
     @JsonbTransient
     @OneToMany(mappedBy = "admin", fetch = FetchType.EAGER)
     private List<Report> reports;
+    
+    public Admin() {
+        this.reports = new ArrayList<>();
+    }
 
     public Admin(String name, String username, String email, String password) {
+        this();
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.reports = new ArrayList<>();
-    }
-
-    public Admin() {
     }
 
     public Long getAdminId() {
         return adminId;
+    }
+
+    public void setAdminId(Long adminId) {
+        this.adminId = adminId;
     }
 
     public String getName() {
@@ -74,6 +91,14 @@ public class Admin implements Serializable {
         this.username = username;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -82,8 +107,12 @@ public class Admin implements Serializable {
         this.password = password;
     }
 
-    public void setAdminId(Long adminId) {
-        this.adminId = adminId;
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
     }
 
     @Override
@@ -109,34 +138,6 @@ public class Admin implements Serializable {
     @Override
     public String toString() {
         return "entity.Admin[ id=" + adminId + " ]";
-    }
-
-    /**
-     * @return the reports
-     */
-    public List<Report> getReports() {
-        return reports;
-    }
-
-    /**
-     * @param reports the reports to set
-     */
-    public void setReports(List<Report> reports) {
-        this.reports = reports;
-    }
-
-    /**
-     * @return the email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * @param email the email to set
-     */
-    public void setEmail(String email) {
-        this.email = email;
     }
     
 }

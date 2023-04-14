@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -32,36 +33,53 @@ public class Seller implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sellerId;
 
-    @Column
+    @Column(nullable = false, length = 64)
+    @NotNull
+    @Size(min = 1, max = 64)
     private String name;
-    @Column(nullable = false, unique = true)
+    
+    @Column(nullable = false, length = 128, unique = true)
     @NotNull
+    @Size(min = 1, max = 128)
     private String email;
-    @Column(nullable = false, unique = true)
+    
+    @Column(nullable = false, length = 16, unique = true)
     @NotNull
+    @Size(min = 1, max = 16)
     private String username;
-    @Column
-    private String password;
-    @Column(nullable = false, unique = true)
+    
+    @Column(nullable = false, length = 64)
     @NotNull
+    @Size(min = 1, max = 64)
+    private String password;
+    
+    @Column(nullable = false, length = 128, unique = true)
+    @NotNull
+    @Size(min = 1, max = 128)
     private String phoneNo;
-    @Column
+    
+    @NotNull
     private boolean isBanned;
-    @Column
+    
+    @Column(nullable = true)
     private String imagePath;
 
     @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Listing> listings;
+    
     @OneToMany(mappedBy = "reportee", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Report> reports;
+    
     @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Post> posts;
+    
     @ManyToMany
     @JsonbTransient
     private List<Buyer> followers;
+    
     @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Comment> comments;
@@ -71,6 +89,7 @@ public class Seller implements Serializable {
         this.listings = new ArrayList<>();
         this.reports = new ArrayList<>();
         this.posts = new ArrayList<>();
+        this.followers = new ArrayList<>();
         this.comments = new ArrayList<>();
     }
 
@@ -85,9 +104,6 @@ public class Seller implements Serializable {
         this.imagePath = imagePath;
     }
     
-    
-
-
     public Long getSellerId() {
         return sellerId;
     }
@@ -108,8 +124,16 @@ public class Seller implements Serializable {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -124,15 +148,26 @@ public class Seller implements Serializable {
         return phoneNo;
     }
 
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
     public boolean getIsBanned() {
-        return isIsBanned();
+        return isBanned;
     }
 
     public void setIsBanned(boolean isBanned) {
         this.isBanned = isBanned;
     }
 
-    @XmlTransient
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     public List<Listing> getListings() {
         return listings;
     }
@@ -141,7 +176,6 @@ public class Seller implements Serializable {
         this.listings = listings;
     }
 
-    @XmlTransient
     public List<Report> getReports() {
         return reports;
     }
@@ -150,7 +184,6 @@ public class Seller implements Serializable {
         this.reports = reports;
     }
 
-    @XmlTransient
     public List<Post> getPosts() {
         return posts;
     }
@@ -158,14 +191,21 @@ public class Seller implements Serializable {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
-    
-    @XmlTransient
+
     public List<Buyer> getFollowers() {
         return followers;
     }
 
     public void setFollowers(List<Buyer> followers) {
         this.followers = followers;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override
@@ -191,62 +231,6 @@ public class Seller implements Serializable {
     @Override
     public String toString() {
         return "entity.Seller[ id=" + sellerId + " ]";
-    }
-
-    /**
-     * @return the comments
-     */
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    /**
-     * @param comments the comments to set
-     */
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    /**
-     * @return the isBanned
-     */
-    public boolean isIsBanned() {
-        return isBanned;
-    }
-
-    /**
-     * @return the imagePath
-     */
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    /**
-     * @param imagePath the imagePath to set
-     */
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    /**
-     * @param email the email to set
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * @param username the username to set
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
-     * @param phoneNo the phoneNo to set
-     */
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
     }
 
 }

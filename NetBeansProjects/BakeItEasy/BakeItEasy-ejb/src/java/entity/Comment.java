@@ -16,10 +16,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -33,43 +33,49 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
-    @Column
+    @Column(nullable = false, length = 128)
+    @NotNull
+    @Size(min = 1, max = 128)
     private String title;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     private Date dateCreated;
-    @Column
+    
+    @NotNull
     private boolean isBuyer;
     
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     @JsonbTransient
     private Post post;
+    
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(nullable = true)
     @JsonbTransient
     private Buyer buyer;
+    
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(nullable = true)
     @JsonbTransient
     private Seller seller;
 
     public Comment() {
+        this.dateCreated = new Date(System.currentTimeMillis());
     }
     
-    public Comment(String title, Date dateCreated, boolean isBuyer) {
+    public Comment(String title, boolean isBuyer) {
         this.title = title;
-        this.dateCreated = dateCreated;
+        this.dateCreated = new Date(System.currentTimeMillis());
         this.isBuyer = isBuyer;
     }
-
-    @XmlTransient
-    public Post getPost() {
-        return post;
+    
+        public Long getCommentId() {
+        return commentId;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setCommentId(Long commentId) {
+        this.commentId = commentId;
     }
 
     public String getTitle() {
@@ -88,14 +94,38 @@ public class Comment implements Serializable {
         this.dateCreated = dateCreated;
     }
 
-    public Long getCommentId() {
-        return commentId;
+    public boolean isIsBuyer() {
+        return isBuyer;
     }
 
-    public void setCommentId(Long commentId) {
-        this.commentId = commentId;
+    public void setIsBuyer(boolean isBuyer) {
+        this.isBuyer = isBuyer;
     }
 
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -119,48 +149,6 @@ public class Comment implements Serializable {
     @Override
     public String toString() {
         return "entity.Comment[ id=" + commentId + " ]";
-    }
-
-    /**
-     * @return the buyer
-     */
-    public Buyer getBuyer() {
-        return buyer;
-    }
-
-    /**
-     * @param buyer the buyer to set
-     */
-    public void setBuyer(Buyer buyer) {
-        this.buyer = buyer;
-    }
-
-    /**
-     * @return the seller
-     */
-    public Seller getSeller() {
-        return seller;
-    }
-
-    /**
-     * @param seller the seller to set
-     */
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
-
-    /**
-     * @return the isBuyer
-     */
-    public boolean isIsBuyer() {
-        return isBuyer;
-    }
-
-    /**
-     * @param isBuyer the isBuyer to set
-     */
-    public void setIsBuyer(boolean isBuyer) {
-        this.isBuyer = isBuyer;
     }
 
 }

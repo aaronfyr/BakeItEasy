@@ -13,6 +13,8 @@ import java.util.List;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +25,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -37,73 +41,55 @@ public class Post implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
     
-    @Column
+    @Column(nullable = false, length = 256)
+    @NotNull
+    @Size(min = 1, max = 256)
     private String title;
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column
-    private Date dateCreated;    
-    @Column
+    private Date dateCreated;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @NotNull
     private PostCategory postCategory;
-    @Column
+    
+    @NotNull
     private boolean isBuyer;
     
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Comment> comments;
+    
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(nullable = true)
     @JsonbTransient
     private Buyer buyer;
+    
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(nullable = true)
     @JsonbTransient
     private Seller seller;
 
     public Post() {
+        this.dateCreated = new Date(System.currentTimeMillis());
         this.comments = new ArrayList<>();
     }
     
-    public Post(String title, Date dateCreated, PostCategory postCategory, boolean isBuyer) {
+    public Post(String title, PostCategory postCategory, boolean isBuyer) {
+        this();
         this.title = title;
-        this.dateCreated = dateCreated;
         this.postCategory = postCategory;
         this.isBuyer = isBuyer;
-        this.comments = new ArrayList<>();
-    }
-    
-    @XmlTransient
-    public Buyer getBuyer() {
-        return buyer;
     }
 
-    public void setBuyer(Buyer buyer) {
-        this.buyer = buyer;
+    public Long getPostId() {
+        return postId;
     }
 
-    @XmlTransient
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
-
-    @XmlTransient
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public PostCategory getPostCategory() {
-        return postCategory;
-    }
-
-    public void setPostCategory(PostCategory postCategory) {
-        this.postCategory = postCategory;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
     public String getTitle() {
@@ -121,15 +107,45 @@ public class Post implements Serializable {
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
-    
-    
 
-    public Long getPostId() {
-        return postId;
+    public PostCategory getPostCategory() {
+        return postCategory;
     }
 
-    public void setPostId(Long postId) {
-        this.postId = postId;
+    public void setPostCategory(PostCategory postCategory) {
+        this.postCategory = postCategory;
+    }
+
+    public boolean isIsBuyer() {
+        return isBuyer;
+    }
+
+    public void setIsBuyer(boolean isBuyer) {
+        this.isBuyer = isBuyer;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
     }
 
     @Override
@@ -155,20 +171,6 @@ public class Post implements Serializable {
     @Override
     public String toString() {
         return "entity.pOST[ id=" + postId + " ]";
-    }
-
-    /**
-     * @return the isBuyer
-     */
-    public boolean isIsBuyer() {
-        return isBuyer;
-    }
-
-    /**
-     * @param isBuyer the isBuyer to set
-     */
-    public void setIsBuyer(boolean isBuyer) {
-        this.isBuyer = isBuyer;
     }
     
 }
