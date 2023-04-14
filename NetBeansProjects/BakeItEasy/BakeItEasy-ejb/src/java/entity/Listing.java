@@ -28,7 +28,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -78,15 +77,19 @@ public class Listing implements Serializable {
     @Column
     private Date dateOfCreation;
 
+    @Min(0)
+    @NotNull
+    private Integer minPrepDays;
+
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     @JsonbTransient
     private Seller seller;
-    
+
     @OneToMany(mappedBy = "listing", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonbTransient
     private List<Order> orders;
-    
+
     @ManyToMany
     @JsonbTransient
     private List<Buyer> likers;
@@ -97,7 +100,7 @@ public class Listing implements Serializable {
         this.likers = new ArrayList<>();
     }
 
-    public Listing(String name, ListingCategory listingCategory, BigDecimal price, Integer quantityLeft, String description, List<String> imagePaths) {
+    public Listing(String name, ListingCategory listingCategory, BigDecimal price, Integer quantityLeft, String description, List<String> imagePaths, Integer minPrepDays) {
         this();
         this.name = name;
         this.listingCategory = listingCategory;
@@ -105,6 +108,7 @@ public class Listing implements Serializable {
         this.maxQuantity = quantityLeft;
         this.description = description;
         this.imagePaths = imagePaths;
+        this.minPrepDays = minPrepDays;
     }
 
     public Long getListingId() {
@@ -169,6 +173,14 @@ public class Listing implements Serializable {
 
     public void setDateOfCreation(Date dateOfCreation) {
         this.dateOfCreation = dateOfCreation;
+    }
+
+    public Integer getMinPrepDays() {
+        return minPrepDays;
+    }
+
+    public void setMinPrepDays(Integer minPrepDays) {
+        this.minPrepDays = minPrepDays;
     }
 
     public Seller getSeller() {
