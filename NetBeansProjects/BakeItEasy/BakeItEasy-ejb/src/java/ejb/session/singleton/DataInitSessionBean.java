@@ -232,16 +232,14 @@ public class DataInitSessionBean {
                         Date date1 = new GregorianCalendar(2023, Calendar.APRIL, 18).getTime();
                         date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date1);
                         */
-                        
-                        Date dateOfCollection = new Date(System.currentTimeMillis() + (7 * 24 * 60 * 60 * 1000));
-                        
-                        Order order1 = new Order(new BigDecimal(25.00), 1, "Birthday cake", "123 house", dateOfCollection);
+                       
+                        Order order1 = new Order(new BigDecimal(25.00), 1, "Birthday cake", "123 house");
                         orderSessionBeanLocal.createNewOrder(order1, buyer1.getBuyerId(), listing1.getListingId());
-                        Order order2 = new Order(new BigDecimal(25.00), 1, "Graduation cake", "456 house", dateOfCollection);
+                        Order order2 = new Order(new BigDecimal(25.00), 1, "Graduation cake", "456 house");
                         orderSessionBeanLocal.createNewOrder(order2, buyer2.getBuyerId(), listing1.getListingId());
                         sellerSessionBeanLocal.acceptOrder(order2.getOrderId());
                         sellerSessionBeanLocal.completeOrder(order2.getOrderId());
-                        Order order3 = new Order(new BigDecimal(5.00), 3, "Puff pastry tart", "456 house", dateOfCollection);
+                        Order order3 = new Order(new BigDecimal(5.00), 3, "Puff pastry tart", "456 house");
                         orderSessionBeanLocal.createNewOrder(order3, buyer1.getBuyerId(), listing5.getListingId());
                         sellerSessionBeanLocal.acceptOrder(order3.getOrderId());
                         sellerSessionBeanLocal.completeOrder(order3.getOrderId());

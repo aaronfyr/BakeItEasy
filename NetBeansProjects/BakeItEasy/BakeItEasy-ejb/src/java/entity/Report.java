@@ -16,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -30,19 +32,26 @@ public class Report implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportId;
     
-    @Column
+    @Column(nullable = false, length = 128)
+    @NotNull
+    @Size(min = 1, max = 128)
     private String title;
-    @Column
+    
+    @Column(nullable = false, length = 256)
+    @NotNull
+    @Size(min = 1, max = 256)
     private String reason;
     
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     @JsonbTransient
     private Buyer reporter;
+    
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     @JsonbTransient
     private Seller reportee;
+    
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(nullable = true)
     @JsonbTransient
@@ -54,6 +63,14 @@ public class Report implements Serializable {
     public Report(String title, String reason) {
         this.title = title;
         this.reason = reason;
+    }
+
+    public Long getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(Long reportId) {
+        this.reportId = reportId;
     }
 
     public String getTitle() {
@@ -71,15 +88,29 @@ public class Report implements Serializable {
     public void setReason(String reason) {
         this.reason = reason;
     }
-    
-    
 
-    public Long getReportId() {
-        return reportId;
+    public Buyer getReporter() {
+        return reporter;
     }
 
-    public void setReportId(Long reportId) {
-        this.reportId = reportId;
+    public void setReporter(Buyer reporter) {
+        this.reporter = reporter;
+    }
+
+    public Seller getReportee() {
+        return reportee;
+    }
+
+    public void setReportee(Seller reportee) {
+        this.reportee = reportee;
+    }
+
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
     }
 
     @Override
@@ -105,51 +136,6 @@ public class Report implements Serializable {
     @Override
     public String toString() {
         return "entity.Report[ id=" + reportId + " ]";
-    }
-
-    /**
-     * @return the reporter
-     */
-    @XmlTransient
-    public Buyer getReporter() {
-        return reporter;
-    }
-
-    /**
-     * @param reporter the reporter to set
-     */
-    public void setReporter(Buyer reporter) {
-        this.reporter = reporter;
-    }
-
-    /**
-     * @return the reportee
-     */
-    @XmlTransient
-    public Seller getReportee() {
-        return reportee;
-    }
-
-    /**
-     * @param reportee the reportee to set
-     */
-    public void setReportee(Seller reportee) {
-        this.reportee = reportee;
-    }
-
-    /**
-     * @return the admin
-     */
-    @XmlTransient
-    public Admin getAdmin() {
-        return admin;
-    }
-
-    /**
-     * @param admin the admin to set
-     */
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
     }
     
 }

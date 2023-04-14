@@ -5,7 +5,6 @@
  */
 package entity;
 
-import java.awt.Image;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -17,11 +16,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -35,14 +35,23 @@ public class Review implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
     
-    @Column
+    @Column(nullable = false, length = 128)
+    @NotNull
+    @Size(min = 1, max = 128)
     private String title;
-    @Column
+    
+    @Column(nullable = false, length = 256)
+    @NotNull
+    @Size(min = 1, max = 256)
     private String reviewText;
-    @Column
+    
+    @Min(0)
+    @NotNull
     private Integer rating;
+    
     @Column
     private List<String> imagePaths; // might need to change or swap to front end?
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     private Date dateCreated; // maybe use sql.date
@@ -63,13 +72,12 @@ public class Review implements Serializable {
         this.dateCreated = dateCreated;
     }
 
-    @XmlTransient
-    public Order getOrder() {
-        return order;
+   public Long getReviewId() {
+        return reviewId;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setReviewId(Long reviewId) {
+        this.reviewId = reviewId;
     }
 
     public String getTitle() {
@@ -112,12 +120,12 @@ public class Review implements Serializable {
         this.dateCreated = dateCreated;
     }
 
-    public Long getReviewId() {
-        return reviewId;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setReviewId(Long reviewId) {
-        this.reviewId = reviewId;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     @Override

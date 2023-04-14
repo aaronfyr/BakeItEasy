@@ -18,7 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -32,41 +32,61 @@ public class Buyer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long buyerId;
 
-    @Column
+    @Column(nullable = false, length = 64)
+    @NotNull
+    @Size(min = 1, max = 64)
     private String name;
-    @Column(nullable = false, unique = true)
+    
+    @Column(nullable = false, length = 128, unique = true)
     @NotNull
+    @Size(min = 1, max = 128)
     private String email;
-    @Column(nullable = false, unique = true)
+    
+    @Column(nullable = false, length = 16, unique = true)
     @NotNull
+    @Size(min = 1, max = 16)
     private String username;
-    @Column
-    private String password;
-    @Column(nullable = false, unique = true)
+    
+    @Column(nullable = false, length = 64)
     @NotNull
+    @Size(min = 1, max = 64)
+    private String password;
+    
+    @Column(nullable = false, length = 128, unique = true)
+    @NotNull
+    @Size(min = 1, max = 128)
     private String phoneNo;
-    @Column
+    
+    @NotNull
     private boolean isBanned;
-    @Column(nullable = true)
+    
+    @Column(nullable = true, length = 256)
+    @Size(max = 256)
     private String address;
-    @Column
+    
+    @Column(nullable = true)
     private String imagePath;
 
     @OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Order> orders;
+    
     @OneToMany(mappedBy = "reporter", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Report> reports;
+    
     @OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Post> posts;
+    
     @ManyToMany(mappedBy = "likers", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Listing> likedListings;
+    
     @ManyToMany(mappedBy = "followers", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Seller> followings;
+    
     @OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER)
     @JsonbTransient
     private List<Comment> comments;
@@ -76,6 +96,8 @@ public class Buyer implements Serializable {
         this.orders = new ArrayList<>();
         this.reports = new ArrayList<>();
         this.posts = new ArrayList<>();
+        this.likedListings = new ArrayList<>();
+        this.followings = new ArrayList<>();
         this.comments = new ArrayList<>();
     }
 
@@ -153,8 +175,15 @@ public class Buyer implements Serializable {
     public void setAddress(String address) {
         this.address = address;
     }
-    
-    @XmlTransient
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     public List<Order> getOrders() {
         return orders;
     }
@@ -162,8 +191,7 @@ public class Buyer implements Serializable {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
-    
-    @XmlTransient
+
     public List<Report> getReports() {
         return reports;
     }
@@ -171,8 +199,7 @@ public class Buyer implements Serializable {
     public void setReports(List<Report> reports) {
         this.reports = reports;
     }
-    
-    @XmlTransient
+
     public List<Post> getPosts() {
         return posts;
     }
@@ -180,8 +207,7 @@ public class Buyer implements Serializable {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
-    
-    @XmlTransient
+
     public List<Listing> getLikedListings() {
         return likedListings;
     }
@@ -189,8 +215,7 @@ public class Buyer implements Serializable {
     public void setLikedListings(List<Listing> likedListings) {
         this.likedListings = likedListings;
     }
-    
-    @XmlTransient
+
     public List<Seller> getFollowings() {
         return followings;
     }
@@ -198,8 +223,15 @@ public class Buyer implements Serializable {
     public void setFollowings(List<Seller> followings) {
         this.followings = followings;
     }
-    
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -223,34 +255,6 @@ public class Buyer implements Serializable {
     @Override
     public String toString() {
         return "entity.Placeholder[ id=" + buyerId + " ]";
-    }
-
-    /**
-     * @return the comments
-     */
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    /**
-     * @param comments the comments to set
-     */
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    /**
-     * @return the imagePath
-     */
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    /**
-     * @param imagePath the imagePath to set
-     */
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
     }
 
 }

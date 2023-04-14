@@ -9,11 +9,14 @@ import enumeration.ListingCategory;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,7 +25,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -36,34 +45,56 @@ public class Listing implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long listingId;
 
-    @Column
+    @Column(nullable = false, length = 64)
+    @NotNull
+    @Size(min = 1, max = 64)
     private String name;
-    @Column
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @NotNull
     private ListingCategory listingCategory;
-    @Column
+
+    @Column(nullable = false)
+    @NotNull
+    @DecimalMin("0.00")
     private BigDecimal price;
-    @Column
+
+    @Min(0)
+    @NotNull
     private Integer maxQuantity;
-    @Column
+
+    @Column(nullable = false, length = 512)
+    @NotNull
+    @Size(min = 1, max = 512)
     private String description;
+
     @Column
     private List<String> imagePaths; // might need to change or swap to front end?
     /*@Column
     private String videoPath;    */
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column
+    private Date dateOfCreation;
+
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     @JsonbTransient
     private Seller seller;
-    @OneToMany(mappedBy = "listing", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    
+    @OneToMany(mappedBy = "listing", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonbTransient
     private List<Order> orders;
+    
     @ManyToMany
     @JsonbTransient
     private List<Buyer> likers;
-    
+
     public Listing() {
+        this.dateOfCreation = new Date(System.currentTimeMillis());
         this.orders = new ArrayList<>();
+        this.likers = new ArrayList<>();
     }
 
     public Listing(String name, ListingCategory listingCategory, BigDecimal price, Integer quantityLeft, String description, List<String> imagePaths) {
@@ -132,7 +163,14 @@ public class Listing implements Serializable {
         this.imagePaths = imagePaths;
     }
 
-    @XmlTransient
+    public Date getDateOfCreation() {
+        return dateOfCreation;
+    }
+
+    public void setDateOfCreation(Date dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
+    }
+
     public Seller getSeller() {
         return seller;
     }
@@ -141,7 +179,6 @@ public class Listing implements Serializable {
         this.seller = seller;
     }
 
-    @XmlTransient
     public List<Order> getOrders() {
         return orders;
     }
@@ -149,8 +186,7 @@ public class Listing implements Serializable {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
-    
-    @XmlTransient
+
     public List<Buyer> getLikers() {
         return likers;
     }
