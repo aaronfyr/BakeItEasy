@@ -9,6 +9,8 @@ import {
 } from "@chakra-ui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { BuyerContext } from "../context/buyerProvider";
 import { SellerContext } from "../context/sellerProvider";
 import "./resources/login.css";
@@ -23,7 +25,6 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -58,10 +59,8 @@ function Login() {
       }
       // redirect to homepage
     } else {
-      const errorMessage = await response.json();
-      console.log("response not okay: ", errorMessage);
-      // show error message
-      setError("Invalid login credentials. Please try again.");
+      const errorData = await response.json();
+      toast.error(errorData.error);
     }
   };
 
@@ -91,6 +90,7 @@ function Login() {
 
   return (
     <>
+      <ToastContainer />
       <Button
         position="absolute"
         top="20"
@@ -148,11 +148,6 @@ function Login() {
             />
             <FormLabel>Password</FormLabel>
           </FormControl>
-          {error && (
-            <FormControl>
-              <FormLabel color="red.500">{error}</FormLabel>
-            </FormControl>
-          )}
 
           <Box mt={4} display="flex" alignItems="center">
             <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">
