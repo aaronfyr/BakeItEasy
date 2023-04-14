@@ -125,7 +125,7 @@ const Report = ({ reportId, title, reason, onBan, onUnban }) => {
               <strong>Reporter: </strong>
             </Text>
             <div
-              className="homepageProfilePhoto"
+              className="adminProfilePhoto"
               style={{ marginRight: "0.5rem" }}
             >
               <img
@@ -142,7 +142,7 @@ const Report = ({ reportId, title, reason, onBan, onUnban }) => {
               <strong>Reported: </strong>
             </Text>
             <div
-              className="homepageProfilePhoto"
+              className="adminProfilePhoto"
               style={{ marginRight: "0.5rem" }}
             >
               <img

@@ -9,6 +9,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
+
 const Buyer = ({
   buyerId,
   name,
@@ -47,7 +48,7 @@ const Buyer = ({
     <Card maxW="sm">
       <CardBody>
         <Stack spacing="3">
-          <div className="homepageProfilePhoto">
+          <div className="adminProfilePhoto">
             <img
               className="homepageProfilePhotoImg"
               src={imagePath}

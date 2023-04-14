@@ -45,7 +45,7 @@ const Seller = ({
     <Card maxW="sm">
       <CardBody>
         <Stack spacing="3">
-          <div className="homepageProfilePhoto">
+          <div className="adminProfilePhoto">
             <img
               className="homepageProfilePhotoImg"
               src={imagePath}

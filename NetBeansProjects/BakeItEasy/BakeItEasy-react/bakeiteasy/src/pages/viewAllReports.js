@@ -303,14 +303,9 @@ function ViewAllReports() {
           <Text>No reports found</Text>
         </Box>
       ) : (
-        <Grid
-          templateColumns="repeat(4, 1fr)"
-          gap={1}
-          m={20}
-          mt={0}
-        >
+        <Grid templateColumns="repeat(4, 1fr)" gap={1} m={20} mt={0}>
           {reports.map((report) => (
-            <GridItem key={report.reportId} colSpan={1}>
+            <GridItem key={report.reportId} colSpan={1} mt={2}>
               <Report
                 reportId={report.reportId}
                 title={report.title}

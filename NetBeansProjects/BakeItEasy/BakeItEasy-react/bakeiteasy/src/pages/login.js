@@ -57,7 +57,6 @@ function Login() {
         console.log("buyer set: ", user);
         navigate(`/`);
       }
-      // redirect to homepage
     } else {
       const errorData = await response.json();
       toast.error(errorData.error);

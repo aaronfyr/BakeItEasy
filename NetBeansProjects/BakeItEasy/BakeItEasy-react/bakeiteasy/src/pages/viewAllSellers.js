@@ -99,14 +99,9 @@ function ViewAllSellers() {
           <Text>No sellers found</Text>
         </Box>
       ) : (
-        <Grid
-          templateColumns="repeat(4, 1fr)"
-          gap={1}
-          m={20}
-          mt={0}
-        >
+        <Grid templateColumns="repeat(4, 1fr)" gap={1} m={20} mt={0}>
           {sellers.map((seller) => (
-            <GridItem key={seller.sellerId} colSpan={1}>
+            <GridItem key={seller.sellerId} colSpan={1} mt={2}>
               <Seller
                 sellerId={seller.sellerId}
                 name={seller.name}
