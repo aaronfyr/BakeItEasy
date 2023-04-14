@@ -38,8 +38,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 /**
- *
- * @author aaronf
+ * 
+ * @author aaronf  
  */
 @Stateless
 public class ListingSessionBean implements ListingSessionBeanLocal {

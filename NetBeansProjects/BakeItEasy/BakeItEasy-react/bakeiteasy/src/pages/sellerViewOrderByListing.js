@@ -6,6 +6,7 @@ import { SellerNavigationBar as SellerNav } from "../components/sellerNavigation
 import { FaCheck } from "react-icons/fa";
 import getOrderBuyer from "../components/getOrderBuyer"
 import { formatPrice, formatDate } from '../components/formatter.js';
+import { Flex } from "@chakra-ui/react";
 import {
   BrowserRouter as Router,
   useNavigate,
@@ -119,12 +120,12 @@ useEffect(() => {
       <div className="searchBarSection">
         <div class="searchBar">
           <input
-            className="input"
+            className="inputMyOrdersSearch"
             onChange={(e) => {
               setSearch(e.target.value.toLowerCase());
             }}
           />
-          <button className="button">
+          <button className="myOrdersSearchIcon">
             <svg
               className="w-6 h-6"
               fill="none"
@@ -165,6 +166,18 @@ useEffect(() => {
                 <body>{listing.description}</body>
                 <h2>PRICE:</h2>
                 <body>${formatPrice(listing.price)}</body>
+                <Flex>
+                    <div>
+                        <h2>qty left:</h2>
+                         <body> {listing.maxQuantity}</body>
+                    </div>
+                    <div style={{width: 15}}></div>
+                    <div>
+                        <h2>prep days:</h2>
+                         <body> {listing.minPrepDays}</body>
+                    </div>
+
+                </Flex>
               </div>
             </div>
           </SellerOrderCard>

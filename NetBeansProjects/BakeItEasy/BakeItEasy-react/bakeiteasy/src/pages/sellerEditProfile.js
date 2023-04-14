@@ -180,7 +180,7 @@ function SellerEditProfile() {
           </h1>
           <br/>
           <div style={{width:260, display: "block", margin: "auto"}}>
-            <img style={{borderRadius: "50%"}}
+            <img style={{borderRadius: '50%', objectFit: 'cover', width: '200px', height: '200px'}}
           src={sellerObj.imagePath} alt="pfp"/></div>
             <br/>
           <h3>Name:</h3>

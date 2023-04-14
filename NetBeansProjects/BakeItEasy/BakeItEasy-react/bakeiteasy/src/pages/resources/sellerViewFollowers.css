@@ -50,11 +50,29 @@ h1 {
     border-radius: 20px;
 }
 
+.inputMyOrdersSearch {
+    margin-top: 10px;
+    width: 250px;
+    height: 30px;
+    border: none;
+    border-radius: 20px;
+}
+
+.myOrdersSearchIcon {
+    background-color: transparent;
+    border: none;
+    color: black;
+    height: 20px;
+    width: 20px;
+    align-self:self-start;
+    margin-left: 10px;
+}
+
 .profileSearchInput {
     width: 1360px;
     border: none;
     border-radius: 20px;
-    height: 30px;
+    height: 38px;
     margin: 2px;
 }
 
@@ -63,6 +81,13 @@ h1 {
     border: none;
     width: 25px;
     border-radius: 20px;
+}
+.searchIcon {
+    background-color: transparent;
+    border: none;
+    width: 25px;
+    border-radius: 20px;
+    margin-bottom: 8px;
 }
 
 .orderDisplay {
@@ -177,6 +202,11 @@ body {
     margin: 10px;
     background-color: #ebeced;
     width: 170px;
+}
+
+.searchBarButton1:hover {
+    background-color: lightgray;
+    cursor: pointer;
 }
 
 .flex {

@@ -43,10 +43,11 @@ function SellerCreateListing() {
   const [listing, setListing] = useState({
     name: '',
     listingCategory: '',
-    price: '',
-    quantityLeft: '',
+    price: 9.05,
+    maxQuantity: -1,
     description: '',
     imagePaths: [],
+    minPrepDays: -1
   });
   const [created, setCreated] = useState(false);
 
@@ -121,10 +122,12 @@ const handleChange = (event) => {
   } else {
     setListing((prevListing) => ({
       ...prevListing,
-      [name]: value,
+      [name]: (name === 'maxQuantity' || name === 'minPrepDays') ? parseInt(value) : (name === 'price' ? parseFloat(value) : value),
     }));
   }
 };
+
+
 
 
   //create listing
@@ -198,14 +201,20 @@ toast.loading("loading, please wait!");
   });
 };
 
-
-  const handlePriceChange = (e) => {
-    const { value } = e.target;
+const handlePriceChange = (e) => {
+  const { value } = e.target;
+  const regex = /^[0-9.]*$/;
+  if (regex.test(value) || value === '') {
     setListing({
       ...listing,
-      price: value.replace(/[^0-9.]/g, ""),
+      price: value,
     });
-  };
+  }
+};
+
+
+
+
 
 
   return (
@@ -246,8 +255,8 @@ toast.loading("loading, please wait!");
       />
     </label>
       <label>
-        Quantity:
-        <select name="quantityLeft" value={listing.quantityLeft} onChange={handleChange}>
+        Max Quantity:
+        <select name="maxQuantity" value={listing.maxQuantity} onChange={handleChange}>
             <option value="">-- Select quantity --</option>
             {[...Array(100)].map((_, index) => (
             <option key={index} value={index + 1}>
@@ -262,6 +271,18 @@ toast.loading("loading, please wait!");
         Description:
         <input type="text" name="description" value={listing.description} onChange={handleChange} />
       </label>
+
+      <label>
+        Minimum Preparation Days:
+        <select name="minPrepDays" value={listing.minPrepDays} onChange={handleChange}>
+            <option value="">-- Select minimum preparation days --</option>
+            {[...Array(11)].map((_, index) => (
+            <option key={index} value={index}>
+                {index}
+            </option>
+            ))}
+        </select>
+        </label>
 
         <div >
             <input style={{height: 40}} type="file" id="image" name="image" onChange={(e) => setImage(e.target.files[0])}/>

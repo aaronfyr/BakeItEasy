@@ -128,12 +128,12 @@ const handleCategoryChange = (category) => {
     <div className="searchBarSection">
       <div class="searchBar">
         <input
-          className="input"
+          className="inputMyOrdersSearch"
           onChange={(e) => {
             setSearch(e.target.value.toLowerCase());
           }}
         />
-        <button className="button">
+        <button className="myOrdersSearchIcon">
           <svg
             className="w-6 h-6"
             fill="none"
@@ -152,7 +152,7 @@ const handleCategoryChange = (category) => {
       </div>
       <div className="listingDisplay">
         {filteredListings.map((listing) => (
-          <div className="listingComp" onClick={() => routeChangeToOrder(listing.listingId)}>
+          <div className="listingComp" >
             <SellerOrderCard>
             <div className="sellerOrderCardHeader">
             </div>
@@ -165,7 +165,7 @@ const handleCategoryChange = (category) => {
                     <h2>{listing.name} [${formatPrice(listing.price)}]</h2>
                     <h4>{listing.listingCategory}</h4>
                     <div className="flexBox">
-                        <div className="searchBarButton1">
+                        <div className="searchBarButton1" onClick={() => (routeChangeToOrder(listing.listingId))}>
                             <FaListUl style={{alignSelf: "center"}}/>
                             <h3>view orders</h3>
                         </div>

@@ -171,12 +171,7 @@ function SellerProfile() {
           <h1>{sellerObj.name}</h1>
           <h5>@{sellerObj.username}</h5>
         </div>
-        <div
-          className="editProfileBtn"
-          onClick={() => routeChangeToSellerEditProfile()}
-        >
-          edit profile
-        </div>
+
         <div
           className="editProfileBtn"
           onClick={() => routeChangeToSellerEditProfile()}
@@ -200,7 +195,7 @@ function SellerProfile() {
             setSearch(e.target.value.toLowerCase());
           }}
         />
-        <button className="button">
+        <button className="searchIcon">
           <svg
             className="w-6 h-6"
             fill="none"
@@ -264,7 +259,7 @@ function SellerProfile() {
             {reviews.map((review) => (
               <div
                 className="review"
-                onClick={() => routeChangeToListing(review.id)}
+
               >
                 <div class="productSeller">
                   <img
