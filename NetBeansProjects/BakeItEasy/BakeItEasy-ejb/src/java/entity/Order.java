@@ -47,30 +47,30 @@ public class Order implements Serializable {
     @NotNull
     @DecimalMin("0.00")
     private BigDecimal price;
-    
+
     @Min(0)
     @NotNull
     private Integer quantity;
-    
+
     @Column(nullable = false, length = 512)
     @NotNull
     @Size(min = 1, max = 512)
     private String description;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @NotNull
     private OrderStatus orderStatus;
-    
+
     @Column(nullable = false, length = 256)
     @NotNull
     @Size(max = 256)
     private String address;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     private Date dateOfCreation;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     private Date dateOfCollection;
@@ -79,31 +79,31 @@ public class Order implements Serializable {
     @JoinColumn(nullable = false)
     @JsonbTransient
     private Listing listing;
-    
+
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     @JsonbTransient
     private Buyer buyer;
-    
-    @OneToOne(mappedBy = "order", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+
+    @OneToOne(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonbTransient
     private Review review;
 
     public Order() {
         this.orderStatus = OrderStatus.PENDING;
-        this.dateOfCreation = new Date(System.currentTimeMillis());
-        this.dateOfCollection = new Date(System.currentTimeMillis() + (7 * 24 * 60 * 60 * 1000));
     }
-
-    public Order(BigDecimal price, Integer quantity, String description, String address) {
+    
+    public Order(BigDecimal price, Integer quantity, String description, String address, Date dateOfCreation, Date dateOfCollection) {
         this();
         this.price = price;
         this.quantity = quantity;
         this.description = description;
         this.address = address;
+        this.dateOfCreation = dateOfCreation;
+        this.dateOfCollection = dateOfCollection;
     }
 
-        public Long getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
@@ -190,7 +190,7 @@ public class Order implements Serializable {
     public void setReview(Review review) {
         this.review = review;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
