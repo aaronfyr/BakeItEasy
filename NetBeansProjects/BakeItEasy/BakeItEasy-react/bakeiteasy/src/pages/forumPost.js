@@ -24,7 +24,10 @@ function ForumPost() {
   const [post, setPost] = useState(null);
   const [postId, setPostId] = useState(null);
    const [showCommentPopup, setShowCommentPopup] = useState(false);
-   const currentTime = (new Date().getTime())/1000;
+   const [currentType, setCurrentType] = useState("");
+   const [poster, setPoster] = useState(null);
+   const [isOwnPost, setIsOwnPost] = useState(false);
+   const [posterType, setPosterType] = useState("");
 
 
 
@@ -57,6 +60,7 @@ function ForumPost() {
       }
       if (!fetchedSeller) {
         console.log("forum", "is buyer");
+        setCurrentType("buyer");
         try {
           const parsedUser = JSON.parse(fetchedBuyer);
           console.log("parsedUser.id: ", parsedUser.buyerId);
@@ -73,6 +77,7 @@ function ForumPost() {
         }
       } else {
         console.log("forum", "is seller");
+        setCurrentType("seller");
         try {
           const parsedUser = JSON.parse(fetchedSeller);
           console.log("parsedUser.id: ", parsedUser.sellerId);
@@ -112,6 +117,11 @@ function ForumPost() {
         );
         const data = await response.json();
         setPost(data);
+        if (data.isBuyer) {
+            setPosterType("buyer");
+        } else {
+            setPosterType("seller");
+        }
         return data;
       } catch (error) {
         console.error(error);
@@ -122,9 +132,9 @@ function ForumPost() {
 
   // fetch comments
   useEffect(() => {
-    async function fetchPost() {
+    async function fetchComments() {
       try {
-        console.log("fetching post");
+        console.log("fetching comments");
         const response = await fetch(
           `http://localhost:8080/BakeItEasy-war/webresources/posts/${id}/comments`,
           {
@@ -142,8 +152,50 @@ function ForumPost() {
         console.error(error);
       }
     }
-    fetchPost();
+    fetchComments();
   }, []);
+
+
+  // fetch poster
+  useEffect(() => {
+    async function fetchPoster() {
+      try {
+        console.log("fetching poster");
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/posts/${id}/${posterType}`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        setPoster(data);
+        console.log(data,"poster info");
+        if (buyerId && post.isBuyer) {
+            if (buyerId === data.buyerId) {
+                setIsOwnPost(true);
+            }
+        }
+
+        if (sellerId && !post.isBuyer) {
+            console.log("seller id", sellerId);
+            console.log("postisBuyer", post.isBuyer);
+            console.log("post seller Id", data.sellerId);
+            if (sellerId === data.sellerId) {
+                setIsOwnPost(true);
+            }
+            console.log(isOwnPost);
+        }
+        return data;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchPoster();
+  }, [post]);
 
   async function createBuyerComment() {
      try {
@@ -161,7 +213,7 @@ function ForumPost() {
           }
         ).then((response) =>{
             if (!response.ok) {
-                toast.error("response not ok");
+                console.log("create buyer comment failed");
             } else {
                 toast.success("buyer comment created! refreshing...");
                 setTimeout(() => {
@@ -235,16 +287,13 @@ useEffect(() => {
 
 useEffect(() => {
   console.log("changed SNC!!!!!",sellerNewComment);
-  if (sellerNewComment.title !== "") {
-    createSellerComment();
-  }
+        createSellerComment();
+
 }, [sellerNewComment]);
 
 useEffect(() => {
   console.log("changed BNC!!!!!", buyerNewComment);
-  if (buyerNewComment.title !== "") {
     createBuyerComment();
-  }
 }, [buyerNewComment]);
 
 
@@ -266,33 +315,26 @@ function CommentPopup(props) {
     console.log("saved comment is", newComment);
     if (newComment === "") {
         toast.error("comment cannot be blank!");
+    } else if (newComment.title.length < 1 || newComment.title.length > 128 ) {
+        toast.error("Your comment must have 1 to 128 characters! Try again.")
     } else {
           if(buyerId) {
         setBuyerNewComment({...buyerNewComment, title: newComment});
-        //createBuyerComment();
-
         } else {
             setSellerNewComment({...sellerNewComment, title: newComment});
 
         console.log("seller ID is", sellerId);
         console.log("!!!!!!!!!!!!!comment set is", sellerNewComment);
-        //createSellerComment();
         }
+        props.onClose();
     }
-
-
-
     // Close the popup
-    props.onClose();
+
   };
-
-
-
-
 
   return (
     <div style={{marginLeft:10}}>
-      <textarea style={{minWidth:500}} value={newComment} onChange={handleCommentChange} />
+      <textarea style={{color: "black", minWidth:500}} value={newComment} onChange={handleCommentChange} />
       <Flex>
         <div
               className="editPostBtn"
@@ -364,8 +406,14 @@ function CommentPopup(props) {
             <div className="postDiv">
               <h1>Post #{post.postId}</h1>
               <h2>{post.title}</h2>
-              <h3>Category: #{post.postCategory}</h3>
+              <Flex>
+                <div style={{width:220}}>
+                    <h3>Category: #{post.postCategory}</h3>
+                </div>
+                <div style={{width:70}}></div>
               <h3>created: {formatDate(post.dateCreated)}</h3>
+              </Flex>
+              {poster && <h3>posted by: {poster.name} ({posterType})</h3>}
               <br />
               <div
                 style={{
@@ -382,14 +430,14 @@ function CommentPopup(props) {
               </div>
             </div>
             <Flex>
-             <div
+             {isOwnPost && <div
               className="editPostBtn"
               onClick={() => navigate("/forum/editPost/" + id)}
             >
               <FaRegEdit style={{ alignSelf: "center" }} />
               <div style={{ width: 5 }}></div>
               <h3>edit</h3>
-            </div>
+            </div>}
             <div
               className="editPostBtn" onClick={handleCommentClick}
             >

@@ -127,78 +127,116 @@ const handleChange = (event) => {
   }
 };
 
+function validateListing(listing) {
+    var validated = true;
+    if (listing.name.length < 1 || listing.name.length > 64) {
+        toast.error("Listing name must contain 1 to 64 characters!");
+        validated = false;
+    }
+    if (listing.listingCategory === "") {
+        toast.error("Select a category!");
+        validated = false;
+    }
+    if (listing.price < 0) {
+        toast.error("Listing price must not be negative!");
+        validated = false;
+    }
+    if (listing.maxQuantity < 0) {
+        toast.error("Select max quantity!");
+        validated = false;
+    }
+    if (listing.description.length < 1 || listing.description.length > 512) {
+        toast.error("Listing description must contain 1 to 512 characters!");
+        validated = false;
+    }
+    if (listing.minPrepDays < 0) {
+        toast.error("Select minimum prep days!");
+        validated = false;
+    }
+
+    if (image === "") {
+        toast.error("Upload an image!");
+        validated = false;
+    }
+    return validated;
+}
+
 
 
 
   //create listing
   const handleSubmit = e => {
-toast.loading("loading, please wait!");
+
   e.preventDefault();
-  const data = new FormData();
-  data.append("file", image);
-  data.append("upload_preset","module-buddies");
-  data.append("cloud_name","nelsonchoo456");
 
-  fetch("https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload", {
-    method: "POST",
-    body: data,
-  })
-  .then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      toast.dismiss();
-      toast.error("rsponse for cloud upload not ok");
-    }
-  })
-  .then((data) => {
-    console.log("CLOUD URL", data.url);
-    setListing(prevListing => {
-      prevListing.imagePaths[0] = data.url;
-    return {
-    ...prevListing,
-    imagePaths: prevListing.imagePaths
-  };
-    });
-    console.log("LISTING after setlisting in 1st fetch", listing)
-    console.log("image path of listings state is", listing.imagePaths[0]);
-    toast.dismiss();
-    toast.success("image uploaded");
+  if (validateListing(listing)) {
+    toast.loading("loading, please wait!");
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset","module-buddies");
+    data.append("cloud_name","nelsonchoo456");
 
-    // check if imagePaths[0] is not empty before executing second fetch
-    if (listing.imagePaths[0] !== "") {
-      // Create the listing after image upload
-      fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${sellerId}`, {
+    fetch("https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(listing),
-      })
-      .then((response) => {
-        if (!response.ok) {
-          toast.error("!response.ok");
+        body: data,
+    })
+    .then((res) => {
+        if (res.ok) {
+        return res.json();
         } else {
-          console.log("listing created");
-          console.log(response);
-          setCreated(true);
-          toast.success("Listing successfully created! Redirecting to profile...");
-          setImage("");
-          setTimeout(() => {
-            routeChangeToSellerProfile();
-          }, 5000); // 1000 milliseconds = 1 second
+        toast.dismiss();
+        toast.error("rsponse for cloud upload not ok");
         }
-        return response.json();
-      })
-      .then((data) => {
-        // handle successful creation
-      })
-      .catch((error) => {
-        toast.error("Failed to create listing. " + error);
-        throw new Error("Failed to create listing");
-      });
-    }
-  });
+    })
+    .then((data) => {
+        console.log("CLOUD URL", data.url);
+        setListing(prevListing => {
+        prevListing.imagePaths[0] = data.url;
+        return {
+        ...prevListing,
+        imagePaths: prevListing.imagePaths
+    };
+        });
+        console.log("LISTING after setlisting in 1st fetch", listing)
+        console.log("image path of listings state is", listing.imagePaths[0]);
+        toast.dismiss();
+        toast.success("image uploaded");
+
+        // check if imagePaths[0] is not empty before executing second fetch
+        if (listing.imagePaths[0] !== "") {
+        // Create the listing after image upload
+        fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${sellerId}`, {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify(listing),
+        })
+        .then((response) => {
+            if (!response.ok) {
+            toast.error("!response.ok");
+            } else {
+            console.log("listing created");
+            console.log(response);
+            setCreated(true);
+            toast.success("Listing successfully created! Redirecting to profile...");
+            setImage("");
+            setTimeout(() => {
+                routeChangeToSellerProfile();
+            }, 5000); // 1000 milliseconds = 1 second
+            }
+            return response.json();
+        })
+        .then((data) => {
+            // handle successful creation
+        })
+        .catch((error) => {
+            toast.error("Failed to create listing. " + error);
+            throw new Error("Failed to create listing");
+        });
+        }
+    });
+  }
 };
 
 const handlePriceChange = (e) => {

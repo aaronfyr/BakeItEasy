@@ -96,6 +96,8 @@ function SellerListing() {
   };
 
   const handleUpdate = () => {
+    if (validateListing(listing)) {
+
   stopEditable();
   fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
     method: "PUT",
@@ -124,6 +126,7 @@ function SellerListing() {
       /* handle other errors */
       toast.error(error);
     });
+    }
 };
 
 
@@ -158,6 +161,23 @@ function SellerListing() {
       })
       .catch((error) => {});
   };
+
+  function validateListing(listing) {
+    var validated = true;
+    if (listing.name.length < 1 || listing.name.length > 64) {
+        toast.error("Listing name must contain 1 to 64 characters!");
+        validated = false;
+    }
+    if (listing.price < 0) {
+        toast.error("Listing price must not be negative!");
+        validated = false;
+    }
+    if (listing.description.length < 1 || listing.description.length > 512) {
+        toast.error("Listing description must contain 1 to 512 characters!");
+        validated = false;
+    }
+    return validated;
+}
 
   /*
   // for the image slideshow
@@ -204,7 +224,7 @@ function SellerListing() {
       <div id="listingContainer">
         <div id="leftListingContainer">
           {/*<div class="slideshow-container"></div>*/}
-          <img alt="upload" style={{width: 700, maxHeight: 400, marginLeft:50, borderRadius:"5%", objectFit: "cover"}} src={listing.imagePaths[0]}/>
+          <img alt="upload" style={{width: 700, maxHeight: 400, borderRadius:"5%", objectFit: "cover"}} src={listing.imagePaths[0]}/>
           <Flex justifyContent={"space-between"}></Flex>
           <br />
 

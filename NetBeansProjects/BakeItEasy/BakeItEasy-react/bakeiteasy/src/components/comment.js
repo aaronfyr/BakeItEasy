@@ -43,6 +43,7 @@ import {
   FiMessageSquare,
   FiEdit3,
 } from "react-icons/fi";
+import { formatDate } from "./formatter.js";
 
 const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
   const navigate = useNavigate();
@@ -298,7 +299,7 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
               <h3>{currentTitle}</h3>
               <div className="commentFooter">
                 <HStack>
-                  <div>posted on: {dateCreated}</div>
+                  <div>posted on: {formatDate(dateCreated)}</div>
                 </HStack>
                 <Spacer />
                 {((!isBuyer && commenterId === sellerId) ||

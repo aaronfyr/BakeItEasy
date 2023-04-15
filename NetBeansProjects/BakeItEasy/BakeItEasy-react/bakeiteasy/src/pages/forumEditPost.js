@@ -74,6 +74,23 @@ function ForumEditPost() {
     setIsEditable(false);
   };
 
+   function getCategoryUrl(category) {
+    switch (category) {
+      case "DISCUSSION":
+        return "https://cdn-icons-png.flaticon.com/512/8286/8286038.png";
+      case "QUESTION":
+        return "https://cdn-icons-png.flaticon.com/512/4595/4595213.png";
+      case "LOOKINGFOR":
+        return "https://cdn-icons-png.flaticon.com/512/3101/3101467.png";
+      case "SHARINGINGREDIENTS":
+        return "https://cdn-icons-png.flaticon.com/512/3038/3038135.png";
+      case "RECIPES":
+        return "https://cdn-icons-png.flaticon.com/512/2253/2253457.png";
+      default:
+        return "";
+    }
+  }
+
   const handleUpdate = () => {
   stopEditable();
   fetch(`http://localhost:8080/BakeItEasy-war/webresources/posts/${id}`, {
@@ -218,6 +235,9 @@ function ForumEditPost() {
 ) : (
   <h2>{post.postCategory}</h2>
 )}
+
+    <img style={{height:200}} alt="categoryimg" src={post.postCategory ? getCategoryUrl(post.postCategory) :
+ "https://www.freeiconspng.com/thumbs/flat-icon-png/email-flat-icon-png-26.png"}></img>
 
 
           <div style={{ height: 10 }}></div>
