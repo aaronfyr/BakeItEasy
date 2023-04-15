@@ -90,6 +90,7 @@ function BuyerListingPage() {
   const [price, setPrice] = useState(null);
   const [listingMaxQty, setListingMaxQty] = useState(null);
   const [listingImagePaths, setListingImagePaths] = useState([""]);
+  const [listingMinPrep, setListingMinPrep] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,6 +113,7 @@ function BuyerListingPage() {
         setPrice(data.price);
         setListingMaxQty(data.maxQuantity);
         setListingImagePaths(data.imagePaths);
+        setListingMinPrep(data.minPrepDays);
         console.log(`HTTP Response Code: ${response?.status}`);
       } catch (error) {
         if (error instanceof SyntaxError) {
@@ -144,7 +146,10 @@ function BuyerListingPage() {
   const dec = getDecrementButtonProps();
   const input = getInputProps();
 
-  const datePickerMinDate = new Date();
+  var someDate = new Date();
+  const datePickerMinDate = new Date(
+    someDate.setDate(someDate.getDate() + listingMinPrep)
+  );
 
   // successful create order
   const OverlayOne = () => (
