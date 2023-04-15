@@ -249,12 +249,6 @@ function BuyerLikedListings() {
             <div className="product">
               <div onClick={() => routeChangeToListing(product.listingId)}>
                 <div class="productSeller">
-                  <img
-                    width="30px"
-                    height="30px"
-                    src={require("../assets/dummyuser.png")}
-                    alt="listing product"
-                  />
                   <ListingSellerHeader lId={product.listingId} />
                 </div>
                 <div className="productImg">
@@ -265,7 +259,7 @@ function BuyerLikedListings() {
                   />
                 </div>
 
-                <h3 className="productName">{product.name}</h3>
+                <h3>{product.name}</h3>
 
                 <h5>{product.description}</h5>
               </div>

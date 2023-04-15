@@ -331,7 +331,6 @@ function BuyerViewSellerProfile() {
                     alt="baked listing"
                   />
                 </div>
-
                 <h5>{listing.description}</h5>
               </div>
               <div class="productBottomRow">

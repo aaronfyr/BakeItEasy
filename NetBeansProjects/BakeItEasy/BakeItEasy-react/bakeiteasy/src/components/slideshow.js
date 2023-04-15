@@ -12,7 +12,7 @@ export const Slideshow = ({ imagePaths }) => {
             style={{
               background: `url('${path}') no-repeat center center`,
               height: "400px",
-              width: "650px",
+              width: "100%",
               borderRadius: "15px",
               marginTop: "0px",
               marginBotton: "auto",

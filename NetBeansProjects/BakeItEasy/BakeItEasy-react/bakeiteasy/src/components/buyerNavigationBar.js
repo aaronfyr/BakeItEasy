@@ -142,6 +142,14 @@ export const NavigationBar = () => {
         <div
           id="navChoices"
           onClick={() => {
+            routeToHomePage();
+          }}
+        >
+          Home
+        </div>
+        <div
+          id="navChoices"
+          onClick={() => {
             routeToForum();
           }}
         >

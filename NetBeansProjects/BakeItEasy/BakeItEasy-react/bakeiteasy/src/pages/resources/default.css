@@ -15,7 +15,7 @@
 
 body { /* background */
   background-color: var(--beige-bg) !important;
-  padding: 20px 120px 50px 120px;
+  padding: 15px 100px 0px 100px !important;;
 }
 
 a { 
