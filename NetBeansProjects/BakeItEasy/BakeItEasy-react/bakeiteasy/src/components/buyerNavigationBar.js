@@ -136,7 +136,9 @@ export const NavigationBar = () => {
         <div id="navChoices" onClick={() => routeToHomePage()}>
           Shop
         </div>
-        <div id="navChoices">My Orders</div>
+        <div id="navChoices" onClick={() => routeToProfile()}>
+          My Orders
+        </div>
         <div id="navChoices" onClick={() => routeToForum()}>
           Forum
         </div>
