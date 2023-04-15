@@ -152,12 +152,20 @@ public class BuyersResource {
     @Path("/{buyer_id}/sellers/{seller_id}/reports")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Report createReport(@PathParam("buyer_id") Long buyerId, @PathParam("seller_id") Long sellerId, Report report) {
+    public Response createReport(@PathParam("buyer_id") Long buyerId, @PathParam("seller_id") Long sellerId, Report report) {
         try {
             reportSessionBeanLocal.createNewReport(report, buyerId, sellerId);
-        } catch (BuyerNotFoundException | InputDataValidationException | SellerNotFoundException | UnknownPersistenceException e) {
+            return Response.status(200).entity(report).type(MediaType.APPLICATION_JSON).build();
+        } catch (UnknownPersistenceException | InputDataValidationException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Unknown Persistence or Input Data Validation error").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Buyer not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (SellerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Seller not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
-        return report;
     } //end createReport
 
     @POST
