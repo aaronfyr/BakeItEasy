@@ -125,7 +125,6 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
         Admin oldA = retrieveAdminById(a.getAdminId());
 
         oldA.setName(a.getName());
-        oldA.setUsername(a.getUsername());
         oldA.setEmail(a.getEmail());
         oldA.setPassword(a.getPassword());
         oldA.setReports(a.getReports());

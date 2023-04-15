@@ -241,7 +241,7 @@ public class DataInitSessionBean {
                         sellerSessionBeanLocal.acceptOrder(order3.getOrderId());
                         sellerSessionBeanLocal.completeOrder(order3.getOrderId());
 
-                        Admin admin1 = new Admin("Admin John", "admin", "admin@gmail.com", "password");
+                        Admin admin1 = new Admin("Admin John", "admin@gmail.com", "password");
                         adminSessionBeanLocal.createNewAdmin(admin1);
                         
                         Review review1 = new Review("Good taste", "Wonderful taste from the cake. Soft and delicious.", 5,
