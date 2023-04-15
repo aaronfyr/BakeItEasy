@@ -203,7 +203,8 @@ function SellerListing() {
       <h1>Listing ID {listing.listingId} </h1>
       <div id="listingContainer">
         <div id="leftListingContainer">
-          <div class="slideshow-container"></div>
+          {/*<div class="slideshow-container"></div>*/}
+          <img alt="upload" style={{width: 700, maxHeight: 400, marginLeft:50, borderRadius:"5%", objectFit: "cover"}} src={listing.imagePaths[0]}/>
           <Flex justifyContent={"space-between"}></Flex>
           <br />
 
@@ -250,6 +251,51 @@ function SellerListing() {
             <h2>{listing.description}</h2>
           )}
 
+          <div>
+  <h3>Minimum Preparation Days:</h3>
+  {isEditable ? (
+    <select
+      value={listing.minPrepDays}
+      onChange={(e) =>
+        setListing({ ...listing, minPrepDays: parseInt(e.target.value) })
+      }
+    >
+        <option value="0">0 days</option>
+      <option value="1">1 day</option>
+      <option value="2">2 days</option>
+      <option value="3">3 days</option>
+      <option value="4">4 days</option>
+      <option value="5">5 days</option>
+      <option value="6">6 days</option>
+      <option value="7">7 days</option>
+      <option value="8">8 days</option>
+      <option value="9">9 days</option>
+      <option value="10">10 days</option>
+    </select>
+  ) : (
+    <h2>{listing.minPrepDays} day(s)</h2>
+  )}
+</div>
+<div>
+  <h3>Maximum Quantity:</h3>
+  {isEditable ? (
+    <select
+      value={listing.maxQuantity}
+      onChange={(e) =>
+        setListing({ ...listing, maxQuantity: parseInt(e.target.value) })
+      }
+    >
+      {[...Array(200).keys()].map((num) => (
+        <option value={num + 1}>{num + 1}</option>
+      ))}
+    </select>
+  ) : (
+    <h2>{listing.maxQuantity}</h2>
+  )}
+
+</div>
+
+
           <div style={{ height: 10 }}></div>
           <Flex>
             {!isEditable && (
@@ -288,7 +334,7 @@ function SellerListing() {
           <h3>Category:</h3>
           <h2>{(listing.listingCategory).toLowerCase()}</h2>
           {deleteFailed && <h3>You cannot delete this listing.</h3>}
-          <img alt="upload" src={listing.imagePaths[0]}/>
+
           <br></br>
         </div>
       </div>

@@ -24,7 +24,6 @@ import entity.Report;
 import entity.Review;
 import entity.Seller;
 import enumeration.ListingCategory;
-import enumeration.OrderStatus;
 import enumeration.PostCategory;
 import error.exception.AdminUsernameExistsException;
 import error.exception.BuyerEmailExistException;
@@ -44,14 +43,9 @@ import error.exception.SellerPhoneNumberExistException;
 import error.exception.SellerUsernameExistException;
 import error.exception.UnknownPersistenceException;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -136,67 +130,67 @@ public class DataInitSessionBean {
                         newImagePath.add(image);
                         
                         Listing listing1 = new Listing("Customisable Cake", ListingCategory.CAKE, new BigDecimal(25.00), 5,
-                                        "A delicious cake for any occasion!", newImagePath);
+                                        "A delicious cake for any occasion!", newImagePath, 3);
                         Listing listing2 = new Listing("Savory Tomato Tart", ListingCategory.SAVORY, new BigDecimal(2.50), 20,
-                                        "Savory tarts with custard filling.", newImagePath);
+                                        "Savory tarts with custard filling.", newImagePath, 3);
                         Listing listing3 = new Listing("Wholegrain bread loaf", ListingCategory.BREAD, new BigDecimal(3.00), 15,
-                                        "Classic bread made with high quality ingredients.", newImagePath);
+                                        "Classic bread made with high quality ingredients.", newImagePath, 3);
                         Listing listing4 = new Listing("Chocolate muffin", ListingCategory.MUFFINCUPCAKE, new BigDecimal(3.00), 30,
-                                        "Yummy chocolate muffins.", newImagePath);
+                                        "Yummy chocolate muffins.", newImagePath, 3);
                         Listing listing5 = new Listing("Puff pastry tart", ListingCategory.PASTRYTART, new BigDecimal(5.00), 5,
-                                        "Delicious flaky, buttery homemade puff pastry with cream and fruits.", newImagePath);
+                                        "Delicious flaky, buttery homemade puff pastry with cream and fruits.", newImagePath, 3);
                         Listing listing6 = new Listing("Apple pie", ListingCategory.PIE, new BigDecimal(8.25), 6,
-                                        "Best apple pie in Singapore.", newImagePath);
+                                        "Best apple pie in Singapore.", newImagePath, 3);
                         Listing listing7 = new Listing("Sponge cake", ListingCategory.CAKE,
                                         new BigDecimal(5.60), 1,
-                                        "The most cottony and bouncy sponge cake.", newImagePath);
+                                        "The most cottony and bouncy sponge cake.", newImagePath, 3);
                         Listing listing8 = new Listing("Cheese & piccalilli tart", ListingCategory.SAVORY, new BigDecimal(6.45), 6,
-                                        "Crisp pastry, a delicious layer of piccalilli and a soft cheesy filling.", newImagePath);
+                                        "Crisp pastry, a delicious layer of piccalilli and a soft cheesy filling.", newImagePath, 3);
                         Listing listing9 = new Listing("Sourdough bread", ListingCategory.BREAD, new BigDecimal(5.00), 3,
-                                        "This chewy loaf has rich, deep, flavor with mild sourdough tang.", newImagePath);
+                                        "This chewy loaf has rich, deep, flavor with mild sourdough tang.", newImagePath, 3);
                         Listing listing10 = new Listing("Yoghurt muffin", ListingCategory.MUFFINCUPCAKE, new BigDecimal(2.50), 30,
-                                        "A light, moist and super fluffy Greek yogurt blueberry muffin.", newImagePath);
+                                        "A light, moist and super fluffy Greek yogurt blueberry muffin.", newImagePath, 3);
                         Listing listing11 = new Listing("Cherry puff pastry tart", ListingCategory.PASTRYTART, new BigDecimal(2.78), 50,
-                                        "Rustic yet elegant, buttery, flaky pastries, filled with a creamy center and juicy sweet cherries", newImagePath);
+                                        "Rustic yet elegant, buttery, flaky pastries, filled with a creamy center and juicy sweet cherries", newImagePath, 3);
                         Listing listing12 = new Listing("Banana pie", ListingCategory.PIE, new BigDecimal(15.60), 15,
-                                        "This yummy banana cream pie made with lots of bananas and a rich, creamy homemade pudding in a pre-baked pie crust", newImagePath);
+                                        "This yummy banana cream pie made with lots of bananas and a rich, creamy homemade pudding in a pre-baked pie crust", newImagePath, 3);
                         Listing listing13 = new Listing("Birthday cake", ListingCategory.CAKE, new BigDecimal(30.00), 10,
-                                        "Customisable to your needs.", newImagePath);
+                                        "Customisable to your needs.", newImagePath, 3);
                         Listing listing14 = new Listing("Mushroom Tart", ListingCategory.SAVORY, new BigDecimal(2.78), 50,
-                                        "An eye-catching mushroom tart for an easy but impressive vegetarian main course.", newImagePath);
+                                        "An eye-catching mushroom tart for an easy but impressive vegetarian main course.", newImagePath, 3);
                         Listing listing15 = new Listing("French baguette", ListingCategory.BREAD, new BigDecimal(5.00), 5,
-                                        "Has a crisp crust.", newImagePath);
+                                        "Has a crisp crust.", newImagePath, 3);
                         Listing listing16 = new Listing("Classic cupcakes", ListingCategory.MUFFINCUPCAKE, new BigDecimal(3.00), 50,
-                                        "Handmade with love everyday for kids and adults alike to enjoy.", newImagePath);
+                                        "Handmade with love everyday for kids and adults alike to enjoy.", newImagePath, 3);
                         Listing listing17 = new Listing("Pesto Tart", ListingCategory.PASTRYTART, new BigDecimal(13.30), 5,
-                                        "High quality pesto.", newImagePath);
+                                        "High quality pesto.", newImagePath, 3);
                         Listing listing18 = new Listing("Lemon Meringue Pie", ListingCategory.PIE, new BigDecimal(19.90), 8,
-                                        "A shortened pastry base filled with lemon curd and topped with meringue.", newImagePath);
+                                        "A shortened pastry base filled with lemon curd and topped with meringue.", newImagePath, 3);
                         Listing listing19 = new Listing("Marble Cake", ListingCategory.CAKE, new BigDecimal(7.50), 9,
-                                        "This homemade marble cake is so moist and and buttery.", newImagePath);
+                                        "This homemade marble cake is so moist and and buttery.", newImagePath, 3);
                         Listing listing20 = new Listing("Onion Tart", ListingCategory.SAVORY, new BigDecimal(9.55),
                                         10,
-                                        "This simple quiche is a classic veggie favourite.", newImagePath);
+                                        "This simple quiche is a classic veggie favourite.", newImagePath, 3);
                         Listing listing21 = new Listing("Pan loaf bread", ListingCategory.BREAD, new BigDecimal(4.50), 10,
-                                        "This delicious, fine-grained loaf is perfect for sandwiches and toast.", newImagePath);
+                                        "This delicious, fine-grained loaf is perfect for sandwiches and toast.", newImagePath, 3);
                         Listing listing22 = new Listing("Egg muffin", ListingCategory.MUFFINCUPCAKE, new BigDecimal(3.22), 30,
-                                        "It's easy, delicious, freezer friendly.", newImagePath);
+                                        "It's easy, delicious, freezer friendly.", newImagePath, 3);
                         Listing listing23 = new Listing("Shortcrust pastry tart", ListingCategory.PASTRYTART, new BigDecimal(5.00), 50,
-                                        "Versatile shortcrust makes terrific tarts, pies and party nibbles.", newImagePath);
+                                        "Versatile shortcrust makes terrific tarts, pies and party nibbles.", newImagePath, 3);
                         Listing listing24 = new Listing("Custard Pie", ListingCategory.PIE, new BigDecimal(9.99), 5,
-                                        "An absolute classic, this Custard Pie has a silky smooth egg custard filling made from eggs, milk, and cream.", newImagePath);
+                                        "An absolute classic, this Custard Pie has a silky smooth egg custard filling made from eggs, milk, and cream.", newImagePath, 3);
                         Listing listing25 = new Listing("Fruitcake", ListingCategory.CAKE, new BigDecimal(5.60), 10,
-                                        "An easy, rich and moist fruit cake that uses soaked unsweetened fruit and nut mix.", newImagePath);
+                                        "An easy, rich and moist fruit cake that uses soaked unsweetened fruit and nut mix.", newImagePath, 3);
                         Listing listing26 = new Listing("Asparagus & Chesse tart", ListingCategory.SAVORY, new BigDecimal(8.80), 10,
-                                        "Classic British flavours in this springtime quiche.", newImagePath);
+                                        "Classic British flavours in this springtime quiche.", newImagePath, 3);
                         Listing listing27 = new Listing("Coconut sweet buns", ListingCategory.BREAD, new BigDecimal(4.40), 10,
-                                        "Freshly baked sweet buns.", newImagePath);
+                                        "Freshly baked sweet buns.", newImagePath, 3);
                         Listing listing28 = new Listing("Pumpkin spice muffins", ListingCategory.MUFFINCUPCAKE, new BigDecimal(4.60), 50,
-                                        "Cinnamon spiced pumpkin muffins for a mid-morning snack.", newImagePath);
+                                        "Cinnamon spiced pumpkin muffins for a mid-morning snack.", newImagePath, 3);
                         Listing listing29 = new Listing("Sweet Shortcrust Pastry Tart", ListingCategory.PASTRYTART, new BigDecimal(5.00), 5,
-                                        "Delicious and good.", newImagePath);
+                                        "Delicious and good.", newImagePath, 3);
                         Listing listing30 = new Listing("Double-crust fruit pie", ListingCategory.PIE, new BigDecimal(15.60), 20,
-                                        "Flaky, buttery goodness, plus juicy fruit fillings you'll crave.", newImagePath);
+                                        "Flaky, buttery goodness, plus juicy fruit fillings you'll crave.", newImagePath, 3);
                         listingSessionBeanLocal.createNewListing(listing1, seller1.getSellerId());
                         listingSessionBeanLocal.createNewListing(listing2, seller2.getSellerId());
                         listingSessionBeanLocal.createNewListing(listing3, seller3.getSellerId());
@@ -233,13 +227,16 @@ public class DataInitSessionBean {
                         date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date1);
                         */
                         
-                        Order order1 = new Order(new BigDecimal(25.00), 1, "Birthday cake", "123 house", new Date(), new Date());
+                        Date dateOfCreation = new Date(System.currentTimeMillis());
+                        Date dateOfCollection = new Date(System.currentTimeMillis() + (7 * 24 * 60 * 60 * 1000));
+                        
+                        Order order1 = new Order(new BigDecimal(25.00), 1, "Birthday cake", "123 house", dateOfCreation, dateOfCollection);
                         orderSessionBeanLocal.createNewOrder(order1, buyer1.getBuyerId(), listing1.getListingId());
-                        Order order2 = new Order(new BigDecimal(25.00), 1, "Graduation cake", "456 house", new Date(), new Date());
+                        Order order2 = new Order(new BigDecimal(25.00), 1, "Graduation cake", "456 house", dateOfCreation, dateOfCollection);
                         orderSessionBeanLocal.createNewOrder(order2, buyer2.getBuyerId(), listing1.getListingId());
                         sellerSessionBeanLocal.acceptOrder(order2.getOrderId());
                         sellerSessionBeanLocal.completeOrder(order2.getOrderId());
-                        Order order3 = new Order(new BigDecimal(5.00), 3, "Puff pastry tart", "456 house", new Date(), new Date());
+                        Order order3 = new Order(new BigDecimal(5.00), 3, "Puff pastry tart", "456 house", dateOfCreation, dateOfCollection);
                         orderSessionBeanLocal.createNewOrder(order3, buyer1.getBuyerId(), listing5.getListingId());
                         sellerSessionBeanLocal.acceptOrder(order3.getOrderId());
                         sellerSessionBeanLocal.completeOrder(order3.getOrderId());
@@ -254,22 +251,22 @@ public class DataInitSessionBean {
                                         new ArrayList<>(), new Date());
                         reviewSessionBeanLocal.createNewReview(review2, order3.getOrderId());
 
-                        Post buyerPost1 = new Post("Looking for cake recommendations", new Date(), PostCategory.LOOKINGFOR, true);
+                        Post buyerPost1 = new Post("Looking for cake recommendations", PostCategory.LOOKINGFOR, true);
                         postSessionBeanLocal.createNewBuyerPost(buyerPost1, buyer1.getBuyerId());
 
-                        Post sellerPost1 = new Post("Sharing brownies ingredients", new Date(), PostCategory.SHARINGINGREDIENTS, false);
+                        Post sellerPost1 = new Post("Sharing brownies ingredients", PostCategory.SHARINGINGREDIENTS, false);
                         postSessionBeanLocal.createNewSellerPost(sellerPost1, seller1.getSellerId());
                         
-                        Post sellerPost2 = new Post("My grandmother's apple pie recipe", new Date(), PostCategory.RECIPES, false);
+                        Post sellerPost2 = new Post("My grandmother's apple pie recipe", PostCategory.RECIPES, false);
                         postSessionBeanLocal.createNewSellerPost(sellerPost2, seller2.getSellerId());
 
-                        Comment buyerComment1 = new Comment("I think Emicakes is good!", new Date(), true);
+                        Comment buyerComment1 = new Comment("I think Emicakes is good!", true);
                         commentSessionBeanLocal.createNewBuyerComment(buyerComment1, buyerPost1.getPostId(), buyer1.getBuyerId());
                         
-                        Comment sellerComment1 = new Comment("Can try my cake!", new Date(), false);
+                        Comment sellerComment1 = new Comment("Can try my cake!", false);
                         commentSessionBeanLocal.createNewSellerComment(sellerComment1, buyerPost1.getPostId(), buyer1.getBuyerId());
 
-                        Comment sellerComment2 = new Comment("I'm interested! Do you have flour?", new Date(), false);
+                        Comment sellerComment2 = new Comment("I'm interested! Do you have flour?", false);
                         commentSessionBeanLocal.createNewSellerComment(sellerComment2, sellerPost1.getPostId(), 2L);
 
                         Report report = new Report("Unfair seller", "Did not grant my request for extra cream");

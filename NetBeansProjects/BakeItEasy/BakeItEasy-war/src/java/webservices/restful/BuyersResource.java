@@ -17,16 +17,20 @@ import entity.Order;
 import entity.Post;
 import entity.Report;
 import entity.Seller;
+import error.exception.BuyerEmailExistException;
 import error.exception.BuyerNotFoundException;
 import error.exception.BuyerPhoneNumberExistException;
 import error.exception.BuyerUsernameExistException;
 import error.exception.InputDataValidationException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
+import error.exception.PostNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -51,31 +55,45 @@ public class BuyersResource {
 
     @EJB
     private BuyerSessionBeanLocal buyerSessionBeanLocal;
-    
+
     @EJB
     private ReportSessionBeanLocal reportSessionBeanLocal;
-    
+
     @EJB
     private PostSessionBeanLocal postSessionBeanLocal;
-    
+
     @EJB
     private OrderSessionBeanLocal orderSessionBeanLocal;
 
     @EJB
     private CommentSessionBeanLocal commentSessionBeanLocal;
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Buyer createBuyer(Buyer b) {
+    public Response createBuyer(Buyer b) {
         try {
-            b.setIsBanned(false);
-            buyerSessionBeanLocal.createNewBuyer(b);
-        } catch (Exception e) {
+            Long id = buyerSessionBeanLocal.createNewBuyer(b);
+            Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(id);
+            return Response.status(200).entity(buyer).type(MediaType.APPLICATION_JSON).build();
+        } catch (UnknownPersistenceException | InputDataValidationException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Unknown Persistence or Input Data Validation error").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerPhoneNumberExistException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Phone number already exist").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerEmailExistException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Email already exist").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerUsernameExistException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Username already exist").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Buyer not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
-        return b;
     } //end createCustomer
-    
+
     @GET
     @Path("/{email}/{password}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -88,13 +106,13 @@ public class BuyersResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end loginCustomer
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Buyer> getAllBuyers() {
         return buyerSessionBeanLocal.searchBuyersByName(null);
     } //end getAllCustomers
-    
+
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -107,7 +125,7 @@ public class BuyersResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end getCustomer
-    
+
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -119,17 +137,17 @@ public class BuyersResource {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Buyer not found")
                     .build();
-            
+
             return Response.status(404).entity(exception).build();
         }
     } //end deleteCustomer
-    
+
     /* request body:
     {
     "title": "report title",
     "reason": "report reason"
     }
-    */
+     */
     @POST
     @Path("/{buyer_id}/sellers/{seller_id}/reports")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -141,20 +159,25 @@ public class BuyersResource {
         }
         return report;
     } //end createReport
-    
+
     @POST
     @Path("/{buyer_id}/posts")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Post createPost(@PathParam("buyer_id") Long buyerId, Post p) {
+    public Response createPost(@PathParam("buyer_id") Long buyerId, Post p) {
         try {
             p.setDateCreated(new Date(System.currentTimeMillis()));
             postSessionBeanLocal.createNewBuyerPost(p, buyerId);
-        } catch (Exception e) {
-        }
-        return p;
+            return Response.status(200).entity(p).type(MediaType.APPLICATION_JSON).build();
+        } catch (UnknownPersistenceException | InputDataValidationException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Unknown Persistence or Input Data Validation error").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Buyer not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } 
     } //end createPost
-    
+
     @GET
     @Path("/{buyer_id}/orders")
     @Produces(MediaType.APPLICATION_JSON)
@@ -173,7 +196,7 @@ public class BuyersResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end getOrders
-    
+
     @PUT
     @Path("/{order_id}/cancelorder")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -196,7 +219,7 @@ public class BuyersResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end cancel order
-    
+
     @PUT
     @Path("/{buyer_id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -232,7 +255,7 @@ public class BuyersResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end edit seller
-    
+
     // CHECKED: AARON
     @GET
     @Path("/{buyer_id}/followings")
@@ -250,7 +273,7 @@ public class BuyersResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end getFollowings
-    
+
     @GET
     @Path("/{buyer_id}/likedlistings")
     @Produces(MediaType.APPLICATION_JSON)
@@ -277,16 +300,24 @@ public class BuyersResource {
         Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
         return buyer.getReports();
     } //end getAllBuyerReports
-    
+
     @POST
     @Path("/{buyer_id}/{post_id}/comments")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Comment createComment(@PathParam("buyer_id") Long buyerId, @PathParam("post_id") Long pId, Comment c) {
+    public Response createComment(@PathParam("buyer_id") Long buyerId, @PathParam("post_id") Long pId, Comment c) {
         try {
             commentSessionBeanLocal.createNewBuyerComment(c, pId, buyerId);
-        } catch (Exception e) {
+            return Response.status(200).entity(c).type(MediaType.APPLICATION_JSON).build();
+        } catch (UnknownPersistenceException | InputDataValidationException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Unknown Persistence or Input Data Validation error").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Buyer not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (PostNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Post not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
-        return c;
     } //end createComment
 }

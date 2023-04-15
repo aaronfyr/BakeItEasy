@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from "react";
 import Aos from "aos";
 import { toast, ToastContainer } from "react-toastify";
+import { formatDate } from "./formatter";
 import {
   Button,
   Card,
@@ -33,7 +34,7 @@ import {
 } from "react-router-dom";
 import { FiUserPlus, FiUserMinus, FiMessageSquare } from "react-icons/fi";
 
-const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
+const Post = ({ postId, title, dateCreated, postCategory, isBuyer, categoryImage }) => {
   const navigate = useNavigate();
 
   console.log("in post:", postId);
@@ -231,10 +232,10 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
           onClick={() => routeChangeToPost(postId)}
         >
           <img
-            className="homepageProfilePhotoImg"
-            src={
-              "https://cdn.loveandlemons.com/wp-content/uploads/2018/06/IMG_12572-yellow-cropped2-580x752.jpg"
-            }
+            className="homepageProfilePhotoImg2"
+            src={categoryImage ? categoryImage
+                        : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
+                    }
             alt="baked listing"
           />
         </div>
@@ -304,7 +305,8 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer }) => {
             onClick={() => routeChangeToPost(postId)}
           >
             <h1>{title}</h1>
-            <h4 className="details">{dateCreated}</h4>
+            <h4 className="details">{formatDate(dateCreated)}</h4>
+            <h4 className="details">#{postCategory}</h4>
           </div>
           <div
             className="postCardFooter"

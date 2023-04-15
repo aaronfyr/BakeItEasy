@@ -169,6 +169,23 @@ const Forum = () => {
     navigate(path);
   };
 
+    function getCategoryUrl(category) {
+    switch (category.toUpperCase()) {
+      case "DISCUSSION":
+        return "https://cdn-icons-png.flaticon.com/512/8286/8286038.png";
+      case "QUESTION":
+        return "https://cdn-icons-png.flaticon.com/512/4595/4595213.png";
+      case "LOOKINGFOR":
+        return "https://cdn-icons-png.flaticon.com/512/3101/3101467.png";
+      case "SHARINGINGREDIENTS":
+        return "https://cdn-icons-png.flaticon.com/512/3038/3038135.png";
+      case "RECIPES":
+        return "https://cdn-icons-png.flaticon.com/512/2253/2253457.png";
+      default:
+        return "";
+    }
+  }
+
   return (
     <div>
       {sellerId && <SellerNavigationBar />}
@@ -247,6 +264,7 @@ const Forum = () => {
               dateCreated={post.dateCreated}
               postCategory={post.postCategory}
               isBuyer={post.isBuyer}
+              categoryImage={getCategoryUrl(post.postCategory)}
             />
 
             /*

@@ -38,8 +38,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 /**
- *
- * @author aaronf
+ * 
+ * @author aaronf  
  */
 @Stateless
 public class ListingSessionBean implements ListingSessionBeanLocal {
@@ -104,6 +104,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
             listingToUpdate.setDescription(updatedListing.getDescription());
             listingToUpdate.setImagePaths(updatedListing.getImagePaths());
             listingToUpdate.setListingCategory(updatedListing.getListingCategory());
+            listingToUpdate.setMinPrepDays(updatedListing.getMinPrepDays());
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }

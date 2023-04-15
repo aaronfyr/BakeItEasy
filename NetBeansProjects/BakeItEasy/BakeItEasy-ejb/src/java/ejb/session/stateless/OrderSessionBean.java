@@ -68,7 +68,6 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
                 listing.getOrders().add(order);
                 order.setBuyer(buyer);
                 order.setListing(listing);
-                order.setOrderStatus(OrderStatus.PENDING);
                 em.persist(order);
                 em.flush();
                 return order.getOrderId();

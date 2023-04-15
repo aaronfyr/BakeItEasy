@@ -13,17 +13,22 @@ import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -38,19 +43,34 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    @Column
+    @Column(nullable = false)
+    @NotNull
+    @DecimalMin("0.00")
     private BigDecimal price;
-    @Column
+
+    @Min(0)
+    @NotNull
     private Integer quantity;
-    @Column
+
+    @Column(nullable = false, length = 512)
+    @NotNull
+    @Size(min = 1, max = 512)
     private String description;
-    @Column
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @NotNull
     private OrderStatus orderStatus;
-    @Column
+
+    @Column(nullable = false, length = 256)
+    @NotNull
+    @Size(max = 256)
     private String address;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     private Date dateOfCreation;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column
     private Date dateOfCollection;
@@ -59,60 +79,36 @@ public class Order implements Serializable {
     @JoinColumn(nullable = false)
     @JsonbTransient
     private Listing listing;
+
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     @JsonbTransient
     private Buyer buyer;
-    @OneToOne(mappedBy = "order", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+
+    @OneToOne(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonbTransient
     private Review review;
 
     public Order() {
+        this.orderStatus = OrderStatus.PENDING;
     }
-
+    
     public Order(BigDecimal price, Integer quantity, String description, String address, Date dateOfCreation, Date dateOfCollection) {
+        this();
         this.price = price;
         this.quantity = quantity;
         this.description = description;
-        this.orderStatus = OrderStatus.PENDING;
         this.address = address;
         this.dateOfCreation = dateOfCreation;
         this.dateOfCollection = dateOfCollection;
     }
 
-    @XmlTransient
-    public Review getReview() {
-        return review;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setReview(Review review) {
-        this.review = review;
-    }
-
-    @XmlTransient
-    public Buyer getBuyer() {
-        return buyer;
-    }
-
-    public void setBuyer(Buyer buyer) {
-        this.buyer = buyer;
-    }
-
-    @XmlTransient
-    public Listing getListing() {
-        return listing;
-    }
-
-    public void setListing(Listing listing) {
-        this.listing = listing;
-    }
-
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public BigDecimal getPrice() {
@@ -139,12 +135,60 @@ public class Order implements Serializable {
         this.description = description;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Date getDateOfCreation() {
+        return dateOfCreation;
+    }
+
+    public void setDateOfCreation(Date dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
+    }
+
+    public Date getDateOfCollection() {
+        return dateOfCollection;
+    }
+
+    public void setDateOfCollection(Date dateOfCollection) {
+        this.dateOfCollection = dateOfCollection;
+    }
+
+    public Listing getListing() {
+        return listing;
+    }
+
+    public void setListing(Listing listing) {
+        this.listing = listing;
+    }
+
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
     }
 
     @Override
@@ -170,48 +214,6 @@ public class Order implements Serializable {
     @Override
     public String toString() {
         return "entity.Order[ id=" + orderId + " ]";
-    }
-
-    /**
-     * @return the address
-     */
-    public String getAddress() {
-        return address;
-    }
-
-    /**
-     * @param address the address to set
-     */
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    /**
-     * @return the dateOfCreation
-     */
-    public Date getDateOfCreation() {
-        return dateOfCreation;
-    }
-
-    /**
-     * @param dateOfCreation the dateOfCreation to set
-     */
-    public void setDateOfCreation(Date dateOfCreation) {
-        this.dateOfCreation = dateOfCreation;
-    }
-
-    /**
-     * @return the dateOfCollection
-     */
-    public Date getDateOfCollection() {
-        return dateOfCollection;
-    }
-
-    /**
-     * @param dateOfCollection the dateOfCollection to set
-     */
-    public void setDateOfCollection(Date dateOfCollection) {
-        this.dateOfCollection = dateOfCollection;
     }
 
 }

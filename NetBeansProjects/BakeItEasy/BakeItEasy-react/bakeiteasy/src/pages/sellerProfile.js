@@ -171,12 +171,7 @@ function SellerProfile() {
           <h1>{sellerObj.name}</h1>
           <h5>@{sellerObj.username}</h5>
         </div>
-        <div
-          className="editProfileBtn"
-          onClick={() => routeChangeToSellerEditProfile()}
-        >
-          edit profile
-        </div>
+
         <div
           className="editProfileBtn"
           onClick={() => routeChangeToSellerEditProfile()}
@@ -193,18 +188,18 @@ function SellerProfile() {
         </div>
       </Flex>
       <h2>Search for my listing:</h2>
-      <div class="searchBar">
+      <div class="searchBar2">
         <input
-          className="input"
+          className="profileSearchInput"
           onChange={(e) => {
             setSearch(e.target.value.toLowerCase());
           }}
         />
-        <button className="button">
+        <button className="searchIcon">
           <svg
             className="w-6 h-6"
             fill="none"
-            stroke="currentColor"
+            stroke="black"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -264,7 +259,7 @@ function SellerProfile() {
             {reviews.map((review) => (
               <div
                 className="review"
-                onClick={() => routeChangeToListing(review.id)}
+
               >
                 <div class="productSeller">
                   <img
