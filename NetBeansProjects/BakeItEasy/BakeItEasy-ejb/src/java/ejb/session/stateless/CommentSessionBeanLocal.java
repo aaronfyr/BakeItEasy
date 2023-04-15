@@ -23,7 +23,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface CommentSessionBeanLocal {
-
+ 
     public Comment retrieveCommentById(Long commentId) throws CommentNotFoundException;
 
     public List<Comment> getCommentsFromPost(Long postId) throws PostNotFoundException;

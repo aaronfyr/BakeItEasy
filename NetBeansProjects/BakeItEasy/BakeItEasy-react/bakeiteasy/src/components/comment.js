@@ -48,6 +48,10 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
   const navigate = useNavigate();
   const dateToday = new Date();
 
+  if (!dateCreated) {
+    dateCreated = "-";
+  }
+
   // fetch commenter
   const [commenter, setCommenter] = useState();
   const [commenterId, setCommenterId] = useState();
@@ -294,9 +298,7 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
               <h3>{currentTitle}</h3>
               <div className="commentFooter">
                 <HStack>
-                  <div>
-                    posted on: {dateCreated.toString().substring(0, 10)}
-                  </div>
+                  <div>posted on: {dateCreated}</div>
                 </HStack>
                 <Spacer />
                 {((!isBuyer && commenterId === sellerId) ||

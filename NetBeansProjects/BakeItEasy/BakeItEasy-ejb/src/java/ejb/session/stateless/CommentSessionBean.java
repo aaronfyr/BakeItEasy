@@ -195,3 +195,4 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
         return msg;
     }
 }
+

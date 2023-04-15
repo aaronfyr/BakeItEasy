@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
+import { NavigationBar } from "../components/buyerNavigationBar";
 import { toast, ToastContainer } from "react-toastify";
 import {
   Avatar,
@@ -63,7 +64,7 @@ function ForumCreatePost() {
 
       if (!fetchedBuyer && !fetchedSeller) {
         console.log("navbar", "no buyer or seller");
-        navigate("/login");
+        navigate("/");
       }
       if (!fetchedSeller) {
         console.log("forum", "is buyer");
@@ -209,7 +210,8 @@ function ForumCreatePost() {
   return (
     <div>
       <ToastContainer />
-      <SellerNavigationBar />
+      {isSeller && <SellerNavigationBar />}
+      {!isSeller && <NavigationBar />}
       <br />
       <div style={{ width: 220 }}>
         <div className="button1" onClick={handleGoBack}>

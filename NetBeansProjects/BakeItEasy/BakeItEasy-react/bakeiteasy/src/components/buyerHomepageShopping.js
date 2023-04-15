@@ -498,6 +498,9 @@ export const BuyerShopping = () => {
           })
           .map((product) => {
             filteredListingsCounterFollowed++;
+            if (typeof product.price === "string") {
+              product.price = parseFloat(product.price);
+            }
             return product;
           })
           .map((product) => (

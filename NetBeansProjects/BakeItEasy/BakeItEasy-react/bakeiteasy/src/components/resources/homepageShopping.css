@@ -74,7 +74,7 @@
 	width:60px;
 	height:60px;
 	top:260px;
-	left:40px;
+	left:120px;
 	background-color: var(--mid-orange);
 	color:#FFF;
 	border-radius:50px;
@@ -103,7 +103,6 @@
   display: flex;
   flex-wrap: wrap;
   overflow-y: scroll;
-  height:80vh;
   margin: auto;
   width: 550px;
 }

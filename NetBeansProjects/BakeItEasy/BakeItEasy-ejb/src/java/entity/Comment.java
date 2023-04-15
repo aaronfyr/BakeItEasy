@@ -27,7 +27,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 public class Comment implements Serializable {   
-
+ 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
