@@ -11,12 +11,6 @@ function AdminProfilePage() {
   useEffect(() => {
     async function fetchData() {
       const admin = localStorage.getItem("admin");
-      // setAdmin({
-      //   id: "1",
-      //   name: "test",
-      //   email: "email",
-      //   password: "password",
-      // });
       if (!admin) {
         navigate("/adminLogin");
       } else {
@@ -28,7 +22,7 @@ function AdminProfilePage() {
   }, []);
 
   return (
-    <div className="background">
+    <div>
       <AdminMenuBar />
       {admin && (
         <AdminEditDetails

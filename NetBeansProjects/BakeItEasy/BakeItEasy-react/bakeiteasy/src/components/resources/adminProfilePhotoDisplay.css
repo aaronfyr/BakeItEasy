@@ -1,0 +1,8 @@
+.adminProfilePhoto {
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
+    background-color: #3D3D3D;
+    object-fit: cover;
+    overflow: hidden;
+  }

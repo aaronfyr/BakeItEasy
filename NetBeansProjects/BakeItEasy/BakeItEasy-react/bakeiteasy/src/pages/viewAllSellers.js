@@ -90,7 +90,7 @@ function ViewAllSellers() {
     <div>
       <AdminMenuBar />
       <Box textAlign="center">
-        <Text fontSize="3xl" fontWeight="bold" mb={8}>
+        <Text fontSize="3xl" fontWeight="bold" mt={2} mb={8}>
           Sellers
         </Text>
       </Box>
@@ -99,9 +99,9 @@ function ViewAllSellers() {
           <Text>No sellers found</Text>
         </Box>
       ) : (
-        <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+        <Grid templateColumns="repeat(4, 1fr)" gap={1} m={20} mt={0}>
           {sellers.map((seller) => (
-            <GridItem key={seller.sellerId} colSpan={1}>
+            <GridItem key={seller.sellerId} colSpan={1} mt={2}>
               <Seller
                 sellerId={seller.sellerId}
                 name={seller.name}
@@ -109,6 +109,7 @@ function ViewAllSellers() {
                 email={seller.email}
                 phoneNo={seller.phoneNo}
                 isBanned={seller.isBanned}
+                imagePath={seller.imagePath}
                 onBan={handleBan}
                 onUnban={handleUnban}
               />

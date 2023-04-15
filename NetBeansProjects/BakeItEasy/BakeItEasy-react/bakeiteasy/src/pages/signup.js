@@ -1,14 +1,16 @@
 import {
+  Box,
+  Button,
   FormControl,
   FormLabel,
-  Input,
-  Button,
-  Box,
-  Text,
   Image,
+  Input,
+  Text,
 } from "@chakra-ui/react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { BuyerContext } from "../context/buyerProvider";
 import { SellerContext } from "../context/sellerProvider";
@@ -23,22 +25,46 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [address, setAddress] = useState("");
-  const [error, setError] = useState(null);
-
+  const [imagePath, setImagePath] = useState(null);
   const [profilePic, setProfilePic] = useState(null);
 
   const { setBuyer } = useContext(BuyerContext);
   const { setSeller } = useContext(SellerContext);
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
 
     if (file) {
+      toast.loading("loading, please wait!");
+
       const fileType = file.type;
       if (fileType === "image/jpeg" || fileType === "image/png") {
+        const data = new FormData();
+        data.append("file", file);
+        data.append("upload_preset", "module-buddies");
+        data.append("cloud_name", "nelsonchoo456");
+
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload",
+          {
+            method: "POST",
+            body: data,
+          }
+        );
+        toast.dismiss();
+
+        if (response.ok) {
+          const responseData = await response.json();
+          console.log("CLOUD URL", responseData.url);
+          setProfilePic(responseData.url);
+          setImagePath(responseData.url);
+        } else {
+          setProfilePic(null);
+          const errorData = await response.json();
+          toast.error(errorData.error);
+        }
       } else {
-        // invalid file type, show an error message to the user
-        setError("Invalid picture format. Please try again.");
+        toast.error("Invalid picture format. Please try again.");
         setProfilePic(null);
       }
     }
@@ -46,6 +72,19 @@ function Signup() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const requestBody = {
+      name,
+      username,
+      email,
+      password,
+      phoneNo,
+      imagePath,
+    };
+
+    if (type === "buyer") {
+      requestBody.address = address;
+    }
 
     const response = await fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/${
@@ -56,14 +95,7 @@ function Signup() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          name,
-          username,
-          email,
-          password,
-          phoneNo,
-          address,
-        }),
+        body: JSON.stringify(requestBody),
       }
     );
 
@@ -71,19 +103,20 @@ function Signup() {
       const user = await response.json();
       if (type === "seller") {
         setSeller(user);
+        localStorage.setItem("seller", JSON.stringify(user));
+        console.log("seller set: ", user);
+        navigate(`/sellerProfile`);
       } else {
         setBuyer(user);
+        localStorage.setItem("buyer", JSON.stringify(user));
+        console.log("buyer set: ", user);
+        navigate(`/`);
       }
-
-      if (profilePic) {
-        //saveProfilePic(type, user.id, profilePic);
-      }
-
-      // redirect to homepage
-      navigate(`/`);
     } else {
       // show error message
-      setError("Invalid details. Please try again.");
+      const errorData = await response.json();
+      console.log(errorData.error);
+      toast.error(errorData.error);
     }
   };
 
@@ -96,6 +129,7 @@ function Signup() {
       h="xl"
       marginTop="10%"
     >
+      <ToastContainer />
       <Box align="center">
         <img
           width="50px"
@@ -178,12 +212,6 @@ function Signup() {
           accept="image/jpeg, image/png"
         />
         {profilePic && <Image src={profilePic} />}
-
-        {error && (
-          <FormControl>
-            <FormLabel color="red.500">{error}</FormLabel>
-          </FormControl>
-        )}
 
         <Box mt={4} display="flex" alignItems="center">
           <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">

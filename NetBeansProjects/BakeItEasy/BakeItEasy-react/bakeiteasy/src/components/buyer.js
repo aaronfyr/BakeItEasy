@@ -9,6 +9,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
+
 const Buyer = ({
   buyerId,
   name,
@@ -17,6 +18,7 @@ const Buyer = ({
   phoneNo,
   address,
   isBanned,
+  imagePath,
   onBan,
   onUnban,
 }) => {
@@ -46,7 +48,14 @@ const Buyer = ({
     <Card maxW="sm">
       <CardBody>
         <Stack spacing="3">
-          <Text >
+          <div className="adminProfilePhoto">
+            <img
+              className="homepageProfilePhotoImg"
+              src={imagePath}
+              alt="Profile Image"
+            />
+          </div>
+          <Text>
             <strong>Name: </strong>
             {name}
           </Text>
