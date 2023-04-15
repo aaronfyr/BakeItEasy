@@ -15,6 +15,8 @@ import { FiHeart, FiUser, FiBell, FiMessageSquare } from "react-icons/fi";
 import { IoLogOut } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import "./resources/navigationBar.css";
+import "./resources/adminProfilePhotoDisplay.css";
+
 
 function AdminMenuBar() {
   const navigate = useNavigate();
@@ -46,7 +48,7 @@ function AdminMenuBar() {
       <Flex align="center">
         <Link
           to="/adminProfilePage"
-          style={{ display: "flex", alignItems: "center" }}
+          style={{ display: "flex", alignItems: "center", marginLeft: "75px" }}
         >
           <img
             width="50px"
@@ -54,7 +56,6 @@ function AdminMenuBar() {
             hspace="30px"
             src={require("../assets/bakeiteasy-logo.png")}
             alt="BakeItEasy"
-            style={{ marginRight: "10px" }}
           ></img>
           <div className="logo">BakeItEasy</div>
         </Link>
@@ -79,7 +80,7 @@ function AdminMenuBar() {
                 rightIcon={<ChevronDownIcon />}
                 type="submit"
                 fontWeight="bold"
-                ml="225px"
+                ml="375px"
               >
                 <Flex align="center">
                   <FiUser style={{ marginRight: "10px" }} />
@@ -104,7 +105,7 @@ function AdminMenuBar() {
             </Menu>
           </>
         )}
-        <div style={{ width: "150px" }}></div>
+        <div style={{ width: "75px" }}></div>
       </Flex>
     </div>
   );

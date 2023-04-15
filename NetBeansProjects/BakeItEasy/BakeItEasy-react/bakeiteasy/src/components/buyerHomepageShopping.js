@@ -43,7 +43,7 @@ export const BuyerShopping = () => {
       const buyer = localStorage.getItem("buyer");
       if (!buyer) {
         console.log("homepage: ", "has no buyer");
-        navigate("/login");
+        navigate("/login?type=buyer");
       } else {
         console.log("homepage: ", "has buyer");
         const parsedUser = JSON.parse(buyer);
@@ -194,7 +194,7 @@ export const BuyerShopping = () => {
         let buyerId = null;
         const fetchedBuyer = localStorage.getItem("buyer");
         if (!fetchedBuyer) {
-          navigate("/login");
+          navigate("/login?type=buyer");
         } else {
           const parsedUser = JSON.parse(fetchedBuyer);
           buyerId = parsedUser.buyerId;

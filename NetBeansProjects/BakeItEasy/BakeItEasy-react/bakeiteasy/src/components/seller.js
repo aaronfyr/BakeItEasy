@@ -16,6 +16,7 @@ const Seller = ({
   email,
   phoneNo,
   isBanned,
+  imagePath,
   onBan,
   onUnban,
 }) => {
@@ -44,6 +45,13 @@ const Seller = ({
     <Card maxW="sm">
       <CardBody>
         <Stack spacing="3">
+          <div className="adminProfilePhoto">
+            <img
+              className="homepageProfilePhotoImg"
+              src={imagePath}
+              alt="Profile Image"
+            />
+          </div>
           <Text>
             <strong>Name: </strong>
             {name}

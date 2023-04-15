@@ -49,7 +49,7 @@ export const NavigationBar = () => {
       const fetchedBuyer = localStorage.getItem("buyer");
       if (!fetchedBuyer) {
         console.log("navbar", "no buyer");
-        navigate("/login");
+        navigate("/login?type=buyer");
       } else {
         console.log("navbar", "has buyer");
         try {
@@ -103,7 +103,7 @@ export const NavigationBar = () => {
   const handleLogOut = () => {
     console.log("Navigate to: ", "login");
     localStorage.clear();
-    navigate("/login");
+    navigate("/login?type=buyer");
     //return <Navigate to="/" />;
   };
 

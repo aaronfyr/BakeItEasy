@@ -8,6 +8,8 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { AdminContext } from "../context/adminProvider";
 
 function AdminLogin() {
@@ -16,7 +18,6 @@ function AdminLogin() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -33,14 +34,12 @@ function AdminLogin() {
 
     if (response.ok) {
       const admin = await response.json();
-
       localStorage.setItem("admin", JSON.stringify(admin));
       setAdmin(admin);
-      // redirect to homepage
       navigate(`/viewAllReports`);
     } else {
-      // show error message
-      setError("Invalid login credentials. Please try again.");
+      const errorData = await response.json();
+      toast.error(errorData.error);
     }
   };
 
@@ -53,6 +52,7 @@ function AdminLogin() {
       h="xl"
       marginTop="10%"
     >
+      <ToastContainer />
       <Box align="center">
         <img
           width="50px"
@@ -85,11 +85,6 @@ function AdminLogin() {
           />
           <FormLabel>Password</FormLabel>
         </FormControl>
-        {error && (
-          <FormControl>
-            <FormLabel color="red.500">{error}</FormLabel>
-          </FormControl>
-        )}
 
         <Box mt={4} display="flex" alignItems="center">
           <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">
