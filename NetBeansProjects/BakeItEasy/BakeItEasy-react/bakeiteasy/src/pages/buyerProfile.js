@@ -377,7 +377,7 @@ function BuyerProfile() {
                   {(close) => (
                     <div className="modal">
                       <button className="close" onClick={close}>
-                        &times;
+                        <div className="closeButton">X</div>
                       </button>
                       <div className="header"> Report Seller </div>
                       <HStack>
@@ -446,7 +446,7 @@ function BuyerProfile() {
                   {(close) => (
                     <div className="modal">
                       <button className="close" onClick={close}>
-                        &times;
+                        <div className="closeButton">X</div>
                       </button>
                       <div className="header"> Make A Review </div>
 
