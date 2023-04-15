@@ -202,14 +202,14 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
 
     @Override
     public List<Listing> retrieveAllListings() {
-        Query query = em.createQuery("SELECT l FROM Listing l");
+        Query query = em.createQuery("SELECT l FROM Listing l ORDER BY l.dateOfCreation DESC");
 
         return query.getResultList();
     }
 
     @Override
     public List<Listing> retrieveSellerListings(Long sellerId) {
-        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.seller.sellerId = :inSellerId");
+        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.seller.sellerId = :inSellerId ORDER BY l.dateOfCreation DESC");
         query.setParameter("inSellerId", sellerId);
 
         return query.getResultList();
@@ -217,14 +217,14 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
 
     @Override
     public List<Listing> retrieveListingByListingCategory(ListingCategory listingCategory) {
-        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.listingCategory = :inListingCategory");
+        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.listingCategory = :inListingCategory ORDER BY l.dateOfCreation DESC");
         query.setParameter("inListingCategory", listingCategory);
         return query.getResultList();
     }
 
     @Override
     public List<Listing> retrieveListingByListingCategoryAndSellerId(ListingCategory listingCategory, Long sellerId) {
-        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.listingCategory = :inListingCategory AND l.seller.sellerId = :inSellerId");
+        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.listingCategory = :inListingCategory AND l.seller.sellerId = :inSellerId ORDER BY l.dateOfCreation DESC");
         query.setParameter("inListingCategory", listingCategory);
         query.setParameter("inSellerId", sellerId);
         return query.getResultList();
@@ -232,28 +232,28 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
 
     @Override
     public List<Listing> retrieveListingByQuantityGreater(Integer quantityGreaterThan) {
-        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.maxQuantity >= :inQuantityGreaterThan");
+        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.maxQuantity >= :inQuantityGreaterThan ORDER BY l.dateOfCreation DESC");
         query.setParameter("inQuantityGreaterThan", quantityGreaterThan);
         return query.getResultList();
     }
 
     @Override
     public List<Listing> retrieveListingByQuantityLesser(Integer quantityLesserThan) {
-        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.maxQuantity <= :inQuantityLesserThan");
+        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.maxQuantity <= :inQuantityLesserThan ORDER BY l.dateOfCreation DESC");
         query.setParameter("inQuantityLesserThan", quantityLesserThan);
         return query.getResultList();
     }
 
     @Override
     public List<Listing> retrieveListingByPrice(BigDecimal price) {
-        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.price = :inPrice");
+        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.price = :inPrice ORDER BY l.price ASC");
         query.setParameter("inPrice", price);
         return query.getResultList();
     }
 
     @Override
     public List<Listing> retrieveListingByPriceRange(BigDecimal startPrice, BigDecimal endPrice) {
-        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.price BETWEEN :inStartPrice AND :inEndPrice");
+        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.price BETWEEN :inStartPrice AND :inEndPrice ORDER BY l.price ASC");
         query.setParameter("inStartPrice", startPrice);
         query.setParameter("inEndPrice", endPrice);
         return query.getResultList();

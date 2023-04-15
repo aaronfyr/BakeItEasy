@@ -23,7 +23,7 @@ import {
   PopoverCloseButton,
 } from "@chakra-ui/react";
 import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
-import {formatPrice, formatDate} from "../components/formatter";
+import { formatPrice, formatDate } from "../components/formatter";
 import "./resources/default.css";
 import "./resources/listing.css";
 
@@ -38,7 +38,7 @@ function SellerListing() {
   const [listing, setListing] = useState([]);
   const [isEditable, setIsEditable] = useState(false);
   const [preDelete, setPreDelete] = useState(false);
-  const [deleteFailed, setDeleteFailed]= useState(false);
+  const [deleteFailed, setDeleteFailed] = useState(false);
   const [likeNum, setLikeNum] = useState(404);
 
   let navigate = useNavigate();
@@ -49,43 +49,50 @@ function SellerListing() {
 
   //fetch listing deets
   useEffect(() => {
-  fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
-    method: "GET",
-    mode: "cors",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
-        return response.json();
-    })
-    .then((data) => {
-      setListing(data);
-      setLoading(false);
-      console.log("response is", data)
-    })
-    .catch((error) => console.log("ERROR !!!!!" + error));
-}, []);
+    async function fetchData() {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        setListing(data);
+        setLoading(false);
+        console.log("response is", data);
+      } catch (error) {
+        console.log("ERROR !!!!!" + error);
+      }
+    }
+    fetchData();
+  }, []);
 
-    //fetch listing likes
+  //fetch listing likes
   useEffect(() => {
-  fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}/likes`, {
-    method: "GET",
-    mode: "cors",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
+    fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/listings/${id}/likes`,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => {
         return response.json();
-    })
-    .then((data) => {
-      setLikeNum(data);
-      setLoading(false);
-    })
-    .catch((error) => console.log("ERROR !!!!!" + error));
-}, []);
-
+      })
+      .then((data) => {
+        setLikeNum(data);
+        setLoading(false);
+      })
+      .catch((error) => console.log("ERROR !!!!!" + error));
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -129,7 +136,6 @@ function SellerListing() {
     }
 };
 
-
   const handleDelete = () => {
     setPreDelete(false);
     stopEditable();
@@ -142,9 +148,9 @@ function SellerListing() {
     })
       .then((response) => {
         if (!response.ok) {
-            setDeleteFailed(true);
-            setTimeout(() => {
-                setDeleteFailed(false)
+          setDeleteFailed(true);
+          setTimeout(() => {
+            setDeleteFailed(false);
           }, 5000); // 1000 milliseconds = 1 second
         } else {
           console.log("response ok");
@@ -217,14 +223,29 @@ function SellerListing() {
 
   return (
     <div>
-        <SellerNavigationBar/>
+      <SellerNavigationBar />
       <br />
-      <ToastContainer/>
+      <ToastContainer />
       <h1>Listing ID {listing.listingId} </h1>
       <div id="listingContainer">
         <div id="leftListingContainer">
           {/*<div class="slideshow-container"></div>*/}
-          <img alt="upload" style={{width: 700, maxHeight: 400, borderRadius:"5%", objectFit: "cover"}} src={listing.imagePaths[0]}/>
+          <img
+            alt="upload"
+            style={{
+              width: 700,
+              maxHeight: 400,
+              marginLeft: 50,
+              borderRadius: "5%",
+              objectFit: "cover",
+            }}
+            src={
+              listing.imagePaths
+                ? listing.imagePaths[0]
+                : "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80"
+            }
+          />
+
           <Flex justifyContent={"space-between"}></Flex>
           <br />
 
@@ -272,49 +293,53 @@ function SellerListing() {
           )}
 
           <div>
-  <h3>Minimum Preparation Days:</h3>
-  {isEditable ? (
-    <select
-      value={listing.minPrepDays}
-      onChange={(e) =>
-        setListing({ ...listing, minPrepDays: parseInt(e.target.value) })
-      }
-    >
-        <option value="0">0 days</option>
-      <option value="1">1 day</option>
-      <option value="2">2 days</option>
-      <option value="3">3 days</option>
-      <option value="4">4 days</option>
-      <option value="5">5 days</option>
-      <option value="6">6 days</option>
-      <option value="7">7 days</option>
-      <option value="8">8 days</option>
-      <option value="9">9 days</option>
-      <option value="10">10 days</option>
-    </select>
-  ) : (
-    <h2>{listing.minPrepDays} day(s)</h2>
-  )}
-</div>
-<div>
-  <h3>Maximum Quantity:</h3>
-  {isEditable ? (
-    <select
-      value={listing.maxQuantity}
-      onChange={(e) =>
-        setListing({ ...listing, maxQuantity: parseInt(e.target.value) })
-      }
-    >
-      {[...Array(200).keys()].map((num) => (
-        <option value={num + 1}>{num + 1}</option>
-      ))}
-    </select>
-  ) : (
-    <h2>{listing.maxQuantity}</h2>
-  )}
-
-</div>
-
+            <h3>Minimum Preparation Days:</h3>
+            {isEditable ? (
+              <select
+                value={listing.minPrepDays}
+                onChange={(e) =>
+                  setListing({
+                    ...listing,
+                    minPrepDays: parseInt(e.target.value),
+                  })
+                }
+              >
+                <option value="0">0 days</option>
+                <option value="1">1 day</option>
+                <option value="2">2 days</option>
+                <option value="3">3 days</option>
+                <option value="4">4 days</option>
+                <option value="5">5 days</option>
+                <option value="6">6 days</option>
+                <option value="7">7 days</option>
+                <option value="8">8 days</option>
+                <option value="9">9 days</option>
+                <option value="10">10 days</option>
+              </select>
+            ) : (
+              <h2>{listing.minPrepDays} day(s)</h2>
+            )}
+          </div>
+          <div>
+            <h3>Maximum Quantity:</h3>
+            {isEditable ? (
+              <select
+                value={listing.maxQuantity}
+                onChange={(e) =>
+                  setListing({
+                    ...listing,
+                    maxQuantity: parseInt(e.target.value),
+                  })
+                }
+              >
+                {[...Array(200).keys()].map((num) => (
+                  <option value={num + 1}>{num + 1}</option>
+                ))}
+              </select>
+            ) : (
+              <h2>{listing.maxQuantity}</h2>
+            )}
+          </div>
 
           <div style={{ height: 10 }}></div>
           <Flex>
@@ -331,7 +356,17 @@ function SellerListing() {
           </Flex>
           <div style={{ height: 10 }}></div>
           <Flex>
-            <FiHeart style={{alignSelf: "center", marginTop: 5, marginRight: 10, fontSize: 20}}> </FiHeart> <h3 style={{fontSize: 20}}>{likeNum}</h3>
+            <FiHeart
+              style={{
+                alignSelf: "center",
+                marginTop: 5,
+                marginRight: 10,
+                fontSize: 20,
+              }}
+            >
+              {" "}
+            </FiHeart>{" "}
+            <h3 style={{ fontSize: 20 }}>{likeNum}</h3>
           </Flex>
           <Flex>
             {isEditable && !preDelete && (
@@ -352,7 +387,11 @@ function SellerListing() {
           </Flex>
           <div style={{ height: 10 }}></div>
           <h3>Category:</h3>
-          <h2>{(listing.listingCategory).toLowerCase()}</h2>
+          <h2>
+            {listing.listingCategory
+              ? listing.listingCategory.toLowerCase()
+              : ""}
+          </h2>
           {deleteFailed && <h3>You cannot delete this listing.</h3>}
 
           <br></br>
