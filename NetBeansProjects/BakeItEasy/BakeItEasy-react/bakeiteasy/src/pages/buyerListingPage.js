@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+
 import {
   Avatar,
   Button,
@@ -51,6 +52,7 @@ import "./resources/default.css";
 import "./resources/listing.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
+import { Slideshow } from "../components/slideshow";
 
 function BuyerListingPage() {
   const { id } = useParams();
@@ -87,6 +89,7 @@ function BuyerListingPage() {
   const [listingDescription, setListingDescription] = useState(null);
   const [price, setPrice] = useState(null);
   const [listingMaxQty, setListingMaxQty] = useState(null);
+  const [listingImagePaths, setListingImagePaths] = useState([""]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,6 +111,7 @@ function BuyerListingPage() {
         setListingDescription(data.description);
         setPrice(data.price);
         setListingMaxQty(data.maxQuantity);
+        setListingImagePaths(data.imagePaths);
         console.log(`HTTP Response Code: ${response?.status}`);
       } catch (error) {
         if (error instanceof SyntaxError) {
@@ -122,42 +126,6 @@ function BuyerListingPage() {
   }, []);
 
   //console.log(listing);
-
-  /*
-  // for the image slideshow
-  let slideIndex = 1;
-  showSlides(slideIndex);
-
-  // Next/previous controls
-  const plusSlides = (n) => {
-    showSlides((slideIndex += n));
-  };
-
-  // Thumbnail image controls
-  const currentSlide = (n) => {
-    showSlides((slideIndex = n));
-  };
-
-  function showSlides(n) {
-    let i;
-    let slides = document.getElementsByClassName("mySlides");
-    let dots = document.getElementsByClassName("dot");
-    if (n > slides.length) {
-      slideIndex = 1;
-    }
-    if (n < 1) {
-      slideIndex = slides.length;
-    }
-    for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-    }
-    for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-    }
-    slides[slideIndex - 1].style.display = "block";
-    dots[slideIndex - 1].className += " active";
-  }
-  */
 
   // quantity input
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
@@ -235,25 +203,31 @@ function BuyerListingPage() {
     navigate("/");
   };
 
+  // for slideshow
+  const [images, setImages] = useState([
+    "https://images.unsplash.com/photo-1509721434272-b79147e0e708?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
+    "https://images.unsplash.com/photo-1506710507565-203b9f24669b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1536&q=80",
+    "https://images.unsplash.com/photo-1536987333706-fc9adfb10d91?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
+  ]);
+
   return (
     <div>
       <NavigationBar />
       <ToastContainer />
+      <br />
       <div id="listingContainer">
-        <div id="leftListingContainer">
-          <div class="slideshow-container"></div>
+        <div id="buyerLeftListingContainer">
+          <Slideshow imagePaths={listingImagePaths} />
           <Flex justifyContent={"space-between"}>
             <Flex>
-              <div className="button1">Share</div>
-              <div className="button1">
-                <FaHeart />
-                Likes
+              <div className="button1_cancel">
+                <HStack spacing="10px">
+                  <FaHeart />
+                  <div>Like</div>
+                </HStack>
               </div>
             </Flex>
-            <div className="button1">
-              <FaRegCommentAlt />
-              Chat
-            </div>
+            <div></div>
           </Flex>
           <br />
           <h1>{listingName}</h1>
@@ -262,9 +236,9 @@ function BuyerListingPage() {
           <br />
           <div id="buyerListingDetailsGrid">
             <h3>Maximum Quantity Per Order:</h3>
-            <h4>{listingMaxQty}</h4>
+            <h3>{listingMaxQty}</h3>
             <h3>Description:</h3>
-            <h4> {listingDescription}</h4>
+            <h3> {listingDescription}</h3>
           </div>
           <br />
         </div>
@@ -309,7 +283,9 @@ function BuyerListingPage() {
 
             <h3>Quantity:</h3>
             <HStack maxW="320px">
-              <Button {...inc}>+</Button>
+              <Button {...dec} colorScheme="orange">
+                -
+              </Button>
               <Input
                 value={quantity}
                 onChange={(event) => {
@@ -318,7 +294,9 @@ function BuyerListingPage() {
                 }}
                 {...input}
               />
-              <Button {...dec}>-</Button>
+              <Button {...inc} colorScheme="orange">
+                +
+              </Button>
             </HStack>
 
             <h3>Date of Collection:</h3>
