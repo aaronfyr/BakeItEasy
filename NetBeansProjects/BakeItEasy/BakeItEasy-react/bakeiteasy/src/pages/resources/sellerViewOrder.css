@@ -280,3 +280,14 @@ button {
     color: #fff;
     cursor: pointer;
 }
+
+.starRating {
+    display: flex !important;
+    flex-direction: column !important;
+    background-color: rgb(181, 13, 13);
+}
+
+.ratingClass {
+    display: flexbox;
+    flex-direction: row;
+}

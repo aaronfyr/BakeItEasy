@@ -47,10 +47,13 @@
 }
 
 .ordersDisplay {
-    display: flex;
-    overflow-y: scroll;
-    height: 50vh;
-    justify-content: center; /*delete this if not necessary*/
+  display: flex;
+  flex-wrap: wrap;
+  overflow-x: scroll;
+  height: 100vh;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: flex-start;
 }
 
 
@@ -288,6 +291,7 @@ h4 {
   overflow: hidden;
   /* for horizontal aligning of child divs */
   justify-content: center;
+  filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1));
 }
 
 #buyerOrderDetailsGrid {
@@ -465,4 +469,8 @@ h4 {
   padding: 0px 20px 0px 20px;
   margin: 10px 20px 0px 0px;
   background-color: var(--mid-orange);
+}
+
+svg.star-svg {
+  display: inline;
 }

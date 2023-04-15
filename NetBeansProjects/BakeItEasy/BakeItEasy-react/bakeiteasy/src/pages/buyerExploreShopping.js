@@ -6,7 +6,7 @@ import {
   Link,
   useNavigate,
 } from "react-router-dom";
-import "./resources/homepageShopping.css";
+import "../components/resources/homepageShopping.css";
 import {
   Avatar,
   Button,
@@ -26,14 +26,13 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
-  Spacer,
 } from "@chakra-ui/react";
 import { toast, ToastContainer } from "react-toastify";
-import { FiHeart, FiGlobe, FiUsers, FiArrowRight } from "react-icons/fi";
-import ReactLoading from "react-loading";
-import { ListingSellerHeader } from "./listingSellerHeader";
+import { FiHeart, FiGlobe, FiUsers } from "react-icons/fi";
+import { ListingSellerHeader } from "../components/listingSellerHeader";
+import { NavigationBar } from "../components/buyerNavigationBar";
 
-export const BuyerShopping = () => {
+function BuyerExploreShopping() {
   let navigate = useNavigate();
 
   // fetch buyer
@@ -145,18 +144,6 @@ export const BuyerShopping = () => {
   };
 
   const [isLoading, setIsLoading] = useState(true);
-  const renderSellerListingHeader = (lId) => {
-    //const detailsText = await getSellerByLId(lId);
-    //return <p>{detailsText}</p>;
-
-    if (listingSellers[lId]) {
-      return <p>{listingSellers[lId]}</p>;
-    } else {
-      getSellerByLId(lId);
-      return <ReactLoading color={"#000000"} height={"15%"} width={"15%"} />;
-      //return <p>Loading...</p>;
-    }
-  };
 
   // fetch listings
   const [listings, setListings] = useState([]);
@@ -224,116 +211,6 @@ export const BuyerShopping = () => {
     fetchData();
   }, []);
 
-  // fetch current buyer followings listings
-  /*
-  const [followedListings, setFollowedListings] = useState();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/BakeItEasy-war/webresources/listings/`,
-          {
-            method: "GET",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await response.json();
-        console.log(
-          "data: ",
-          data.filter((product) => {
-            console.log("followings: ", followings);
-            console.log(
-              "comparing followings: ",
-              getSellerId(product.listingId),
-              followings.includes(getSellerId(product.listingId))
-            );
-            return followings.includes(getSellerId(product.listingId));
-          })
-        );
-        console.log(`HTTP Response Code: ${response?.status}`);
-      } catch (error) {
-        if (error instanceof SyntaxError) {
-          // Unexpected token < in JSON
-          console.log("There was a SyntaxError", error);
-        }
-      }
-    };
-    fetchData();
-  }, []);
-
-  // fetch listings with sellers
-  
-  const [listings, setListings] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/BakeItEasy-war/webresources/listings/`,
-          {
-            method: "GET",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await response.json();
-        data.forEach(async (obj) => {
-          const lId = obj.listingId;
-          obj.sellerFetchAttempt = true;
-
-          try {
-            const response = await fetch(
-              `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/seller`,
-              {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-            const data = await response.json();
-            //console.log(`HTTP Response Code: ${response?.status}`);
-            //console.log("sellerId: ", data.sellerId);
-            //console.log("sellerUsername: ", data.username);
-            //console.log("sellerName: ", data.name);
-            obj.seller = data;
-            obj.sellerId = data.sellerId;
-            obj.sellerUsername = data.username;
-            obj.sellerName = data.name;
-          } catch (error) {
-            if (error instanceof SyntaxError) {
-              // Unexpected token < in JSON
-              console.log("There was a SyntaxError", error);
-            }
-            obj.sellerId = "User not found";
-            obj.sellerUsername = "User not found";
-            obj.sellerName = "User not found";
-          }
-        }); // wasn't here before
-        setListings(data);
-        console.log("listings during useffect: ", listings);
-        console.log(
-          "listings[0].sellerName during useffect: ",
-          listings[0].sellerName
-        );
-        console.log(`HTTP Response Code: ${response?.status}`);
-      } catch (error) {
-        if (error instanceof SyntaxError) {
-          // Unexpected token < in JSON
-          console.log("There was a SyntaxError", error);
-        }
-      }
-    };
-    fetchData();
-  }, []);
-  */
-
-  //listings.forEach((obj) => getSeller(obj));
-
   // handle filter by category
   const [categoryFilter, setCategoryFilter] = useState(null);
   const [categories, setCategories] = useState([
@@ -375,16 +252,6 @@ export const BuyerShopping = () => {
     navigate(path + listingId);
   };
 
-  // routeChangeToFollowed
-  const routeChangeToFollowed = () => {
-    navigate("/followed");
-  };
-
-  // routeChangeToExplore
-  const routeChangeToExplore = () => {
-    navigate("/explore");
-  };
-
   // handleListingsToLikes
   const [likeListingError, setLikeListingError] = useState(null);
   const handleListingToLikes = async (lId) => {
@@ -415,9 +282,28 @@ export const BuyerShopping = () => {
   let filteredListingsCounterExplore = 0;
   let filteredListingsCounterFollowed = 0;
 
+  // if user is not logged in, redirects to homepage
+  /*
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      if (parsedUser.type === "seller") {
+        setSeller(parsedUser);
+      } else {
+        setBuyer(parsedUser);
+      }
+    } else {
+      navigate("/login");
+    }
+  }, []);
+  */
+
   return (
     <div>
+      <NavigationBar />
       <ToastContainer />
+      <h4 className="search">Search for baked goods:</h4>
       <div className="homepageSearchBar">
         <input
           className="homepageInput"
@@ -460,104 +346,13 @@ export const BuyerShopping = () => {
         </div>
       </div>
 
-      <div class="altShoppingHeader">
-        <div className="altShoppingHeaderTitle"></div>
-        <div className="altShoppingHeaderTitle">
-          <HStack spacing="10px">
-            <FiUsers color="#c75f4a" />
-            <h1>Followed Bakers</h1>
-          </HStack>
-        </div>
-        <div class="shoppingHeaderLink" onClick={() => routeChangeToFollowed()}>
-          <HStack spacing="5px">
-            <h3>View More</h3>
-            <FiArrowRight color="#c75f4a" />
-          </HStack>
-        </div>
+      <div class="shoppingHeader">
+        <HStack spacing="10px">
+          <FiGlobe color="#c75f4a" />
+          <h1>Explore More Bakers</h1>
+        </HStack>
       </div>
-
-      <div className="rowListingsDisplay">
-        {fListings
-          .filter((product) => {
-            if (
-              (product.name && product.name.toLowerCase().includes(search)) ||
-              (product.description &&
-                product.description.toLowerCase().includes(search))
-            ) {
-              if (
-                (categoryFilter &&
-                  product.listingCategory
-                    .toLowerCase()
-                    .includes(categoryFilter)) ||
-                !categoryFilter
-              ) {
-                return product;
-              }
-            }
-            return null;
-          })
-          .map((product) => {
-            filteredListingsCounterFollowed++;
-            return product;
-          })
-          .map((product) => (
-            <div className="homepageProduct">
-              <div class="productSeller">
-                <ListingSellerHeader lId={product.listingId} />
-              </div>
-              <div
-                className="homepageProductContent"
-                onClick={() => routeChangeToListing(product.listingId)}
-              >
-                <div className="productImg">
-                  <img
-                    className="productImg"
-                    src={
-                      product.imagePaths[0]
-                        ? product.imagePaths[0]
-                        : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
-                    }
-                    alt="baked listing"
-                  />
-                </div>
-                <h3>{product.name}</h3>
-                <h5>{product.description}</h5>
-              </div>
-              <div class="productBottomRow">
-                <div class="btn">
-                  <FiHeart
-                    size="1.2rem"
-                    onClick={() => handleListingToLikes(product.listingId)}
-                  />
-                </div>
-                <h3>${product.price}</h3>
-              </div>
-            </div>
-          ))}
-
-        {filteredListingsCounterFollowed === 0 && (
-          <h4 className="search">
-            Unfortunately, no Baked Listings here. Follow more bakers!
-          </h4>
-        )}
-      </div>
-
-      <div class="altShoppingHeader">
-        <div className="altShoppingHeaderTitle"></div>
-        <div className="altShoppingHeaderTitle">
-          <HStack spacing="10px">
-            <FiGlobe color="#c75f4a" />
-            <h1>Explore More Bakers</h1>
-          </HStack>
-        </div>
-        <div class="shoppingHeaderLink" onClick={() => routeChangeToExplore()}>
-          <HStack spacing="5px">
-            <h3>View More</h3>
-            <FiArrowRight color="#c75f4a" />
-          </HStack>
-        </div>
-      </div>
-      <div className="rowListingsDisplay">
+      <div className="listingsDisplay">
         {listings
           .filter((product) => {
             if (
@@ -622,4 +417,6 @@ export const BuyerShopping = () => {
       </div>
     </div>
   );
-};
+}
+
+export default BuyerExploreShopping;

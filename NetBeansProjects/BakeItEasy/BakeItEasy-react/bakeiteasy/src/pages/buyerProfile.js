@@ -5,6 +5,8 @@ import { NavigationBar } from "../components/buyerNavigationBar";
 import { OrderListingHeader } from "../components/orderListingHeader";
 import { OrderListingImage } from "../components/orderListingImage";
 
+import { Rating } from "react-simple-star-rating";
+
 import {
   BrowserRouter as Router,
   useNavigate,
@@ -28,10 +30,11 @@ import {
   useDisclosure,
   Spacer,
   HStack,
+  VStack,
 } from "@chakra-ui/react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaRegStar } from "react-icons/fa";
 import { MdOutlineReport, MdOutlineCancel } from "react-icons/md";
 
 function BuyerProfile() {
@@ -181,6 +184,7 @@ function BuyerProfile() {
       if (response.ok) {
         // redirect to homepage
         console.log("reported seller!");
+        setTitle("-");
         toast.success(`Reported Seller ${sellerUsername}.`);
       } else {
         const errorData = await response.json();
@@ -190,6 +194,40 @@ function BuyerProfile() {
     } else {
       // show error message
       setReportSellerError("Invalid details. Please try again.");
+    }
+  };
+
+  // handleCreateReview
+  const [reviewText, setReviewText] = useState("");
+  const [rating, setRating] = useState(0);
+  const [imagePaths, setImagePath] = useState(["", "text"]);
+  const handleCreateReview = async (event, oId) => {
+    event.preventDefault();
+    const dateCreated = new Date();
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/orders/${oId}/reviews`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          reviewText,
+          rating,
+          imagePaths,
+          dateCreated,
+        }),
+      }
+    );
+    if (response.ok) {
+      // redirect to homepage
+      console.log("created rating: ", oId);
+      toast.success(`Submitted reating for Order #${oId}!`);
+    } else {
+      const errorData = await response.json();
+      console.log("reporting error:", errorData.error);
+      toast.error(errorData.error);
     }
   };
 
@@ -209,10 +247,16 @@ function BuyerProfile() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [overlay, setOverlay] = useState(<OverlayOne />);
 
+  const handleRating = (rate) => {
+    setRating(rate);
+    console.log("handleRating:", rating);
+  };
+
   return (
     <div className="background">
       <ToastContainer />
       <NavigationBar />
+
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         {overlay}
         <ModalContent>
@@ -275,6 +319,7 @@ function BuyerProfile() {
       <br />
       <div class="shoppingHeader">My Orders</div>
       <br />
+
       <div class="ordersDisplay">
         {orders.map((order) => (
           <div id="buyerOrderCard">
@@ -335,46 +380,131 @@ function BuyerProfile() {
                         &times;
                       </button>
                       <div className="header"> Report Seller </div>
-                      <div className="content">
-                        <form
-                          onSubmit={(event) =>
-                            handleReportSeller(event, order.orderId)
-                          }
-                        >
-                          <FormControl mt={4}>
-                            <FormLabel>Title of Report: </FormLabel>
-                            <Input
-                              type="text"
-                              placeholder=" "
-                              value={title}
-                              onChange={(event) => setTitle(event.target.value)}
-                              required
-                            />
-                          </FormControl>
-                          <FormControl mt={4}>
-                            <FormLabel>Reason: </FormLabel>
-                            <Input
-                              type="text"
-                              placeholder=" "
-                              value={reason}
-                              onChange={(event) =>
-                                setReason(event.target.value)
-                              }
-                              required
-                            />
-                          </FormControl>
-                          <Box mt={4} display="flex" alignItems="center">
-                            <Button
-                              bg="#E2725B"
-                              colorScheme="white"
-                              type="submit"
-                              w="100%"
-                            >
-                              Submit Report
-                            </Button>
-                          </Box>
-                        </form>
-                      </div>
+                      <HStack>
+                        <Spacer />
+                        <div className="content">
+                          <form
+                            onSubmit={(event) =>
+                              handleReportSeller(event, order.orderId)
+                            }
+                          >
+                            <FormControl mt={4}>
+                              <FormLabel>Title of Report: </FormLabel>
+                              <Input
+                                type="text"
+                                placeholder=" "
+                                value={title}
+                                onChange={(event) =>
+                                  setTitle(event.target.value)
+                                }
+                                required
+                              />
+                            </FormControl>
+                            <FormControl mt={4}>
+                              <FormLabel>Reason: </FormLabel>
+                              <Input
+                                type="text"
+                                placeholder=" "
+                                value={reason}
+                                onChange={(event) =>
+                                  setReason(event.target.value)
+                                }
+                                required
+                              />
+                            </FormControl>
+                            <Box mt={4} display="flex" alignItems="center">
+                              <Button
+                                bg="#E2725B"
+                                colorScheme="white"
+                                type="submit"
+                                w="100%"
+                              >
+                                Submit Report
+                              </Button>
+                            </Box>
+                          </form>
+                        </div>
+                        <Spacer />
+                      </HStack>
+                    </div>
+                  )}
+                </Popup>
+                <Popup
+                  trigger={
+                    <Flex>
+                      {order.orderStatus === "COMPLETED" && (
+                        <div className="button1_report">
+                          Rate
+                          <FaRegStar size="1.2rem" />
+                        </div>
+                      )}
+                    </Flex>
+                  }
+                  modal
+                  nested
+                >
+                  {(close) => (
+                    <div className="modal">
+                      <button className="close" onClick={close}>
+                        &times;
+                      </button>
+                      <div className="header"> Make A Review </div>
+
+                      <HStack>
+                        <Spacer />
+                        <div className="content">
+                          <form
+                            onSubmit={(event) =>
+                              handleCreateReview(event, order.orderId)
+                            }
+                          >
+                            <FormControl mt={4}>
+                              <FormLabel> Review Title: </FormLabel>
+                              <Input
+                                type="text"
+                                placeholder=" "
+                                value={title}
+                                onChange={(event) =>
+                                  setTitle(event.target.value)
+                                }
+                                required
+                              />
+                            </FormControl>
+                            <FormControl mt={4}>
+                              <FormLabel>Text: </FormLabel>
+                              <Input
+                                type="text"
+                                placeholder=" "
+                                value={reviewText}
+                                onChange={(event) =>
+                                  setReviewText(event.target.value)
+                                }
+                                required
+                              />
+                            </FormControl>
+                            <FormControl mt={4}>
+                              <FormLabel>Rating: </FormLabel>
+                              <Rating
+                                name="simple-controlled"
+                                onClick={handleRating}
+                                initialValue={rating}
+                                className="ratingClass"
+                              />
+                            </FormControl>
+                            <Box mt={4} display="flex" alignItems="center">
+                              <Button
+                                bg="#E2725B"
+                                colorScheme="white"
+                                type="submit"
+                                w="100%"
+                              >
+                                Submit Report
+                              </Button>
+                            </Box>
+                          </form>
+                        </div>
+                        <Spacer />
+                      </HStack>
                     </div>
                   )}
                 </Popup>

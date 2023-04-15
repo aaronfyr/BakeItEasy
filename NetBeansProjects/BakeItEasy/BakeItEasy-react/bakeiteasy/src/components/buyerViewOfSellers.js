@@ -26,14 +26,16 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
-  Spacer,
 } from "@chakra-ui/react";
 import { toast, ToastContainer } from "react-toastify";
-import { FiHeart, FiGlobe, FiUsers, FiArrowRight } from "react-icons/fi";
+import { FiHeart, FiGlobe, FiUsers } from "react-icons/fi";
+import { FaMitten } from "react-icons/fa";
 import ReactLoading from "react-loading";
 import { ListingSellerHeader } from "./listingSellerHeader";
 
-export const BuyerShopping = () => {
+import SellerCard from "../components/sellerCard";
+
+export const BuyerViewOfSellers = () => {
   let navigate = useNavigate();
 
   // fetch buyer
@@ -92,79 +94,13 @@ export const BuyerShopping = () => {
     fetchData();
   }, []);
 
-  // fecth listing sellerId
-  const getSellerId = async (lId) => {
-    try {
-      fetch(
-        `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/seller`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          //console.log("sellerId: ", data.sellerId);
-          return data.sellerId;
-        });
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        // Unexpected token < in JSON
-        console.log("There was a SyntaxError", error);
-      }
-    }
-  };
-
-  const [listingSellers, setListingSellers] = useState({});
-
-  const getSellerByLId = async (lId) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/seller`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await response.json();
-
-      console.log("sellerUsername: ", data.username);
-
-      setListingSellers({ ...listingSellers, [lId]: data.username });
-      return data.username;
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        // Unexpected token < in JSON
-        console.log("There was a SyntaxError", error);
-      }
-    }
-  };
-
-  const [isLoading, setIsLoading] = useState(true);
-  const renderSellerListingHeader = (lId) => {
-    //const detailsText = await getSellerByLId(lId);
-    //return <p>{detailsText}</p>;
-
-    if (listingSellers[lId]) {
-      return <p>{listingSellers[lId]}</p>;
-    } else {
-      getSellerByLId(lId);
-      return <ReactLoading color={"#000000"} height={"15%"} width={"15%"} />;
-      //return <p>Loading...</p>;
-    }
-  };
-
-  // fetch listings
-  const [listings, setListings] = useState([]);
+  // fetch sellers
+  const [sellers, setSellers] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/BakeItEasy-war/webresources/listings/`,
+          `http://localhost:8080/BakeItEasy-war/webresources/sellers/`,
           {
             method: "GET",
             mode: "cors",
@@ -174,7 +110,7 @@ export const BuyerShopping = () => {
           }
         );
         const data = await response.json();
-        setListings(data);
+        setSellers(data);
         console.log(`HTTP Response Code: ${response?.status}`);
       } catch (error) {
         if (error instanceof SyntaxError) {
@@ -375,16 +311,6 @@ export const BuyerShopping = () => {
     navigate(path + listingId);
   };
 
-  // routeChangeToFollowed
-  const routeChangeToFollowed = () => {
-    navigate("/followed");
-  };
-
-  // routeChangeToExplore
-  const routeChangeToExplore = () => {
-    navigate("/explore");
-  };
-
   // handleListingsToLikes
   const [likeListingError, setLikeListingError] = useState(null);
   const handleListingToLikes = async (lId) => {
@@ -412,17 +338,17 @@ export const BuyerShopping = () => {
     }
   };
 
-  let filteredListingsCounterExplore = 0;
-  let filteredListingsCounterFollowed = 0;
+  let filteredSellersCount = 0;
 
   return (
     <div>
       <ToastContainer />
+
       <div className="homepageSearchBar">
         <input
           className="homepageInput"
           name="search"
-          placeholder="Search for Bake Listing here"
+          placeholder="Search by name or username..."
           onChange={handleSearch}
           value={search}
         />
@@ -443,180 +369,35 @@ export const BuyerShopping = () => {
           </svg>
         </button>
       </div>
-      <h4 className="search">Shop by Category:</h4>
 
-      <div class="categoriesContainer">
-        <div className="categoriesDisplay">
-          {categories.map((category) => (
-            <Flex>
-              <div
-                className="category"
-                onClick={() => handleFilterByCateory(category.name)}
-              >
-                {category.name}
-              </div>
-            </Flex>
-          ))}
-        </div>
-      </div>
-
-      <div class="altShoppingHeader">
-        <div className="altShoppingHeaderTitle"></div>
-        <div className="altShoppingHeaderTitle">
-          <HStack spacing="10px">
-            <FiUsers color="#c75f4a" />
-            <h1>Followed Bakers</h1>
-          </HStack>
-        </div>
-        <div class="shoppingHeaderLink" onClick={() => routeChangeToFollowed()}>
-          <HStack spacing="5px">
-            <h3>View More</h3>
-            <FiArrowRight color="#c75f4a" />
-          </HStack>
-        </div>
-      </div>
-
-      <div className="rowListingsDisplay">
-        {fListings
-          .filter((product) => {
+      <div className="sellersDisplay">
+        {sellers
+          .filter((seller) => {
             if (
-              (product.name && product.name.toLowerCase().includes(search)) ||
-              (product.description &&
-                product.description.toLowerCase().includes(search))
+              (seller.name && seller.name.toLowerCase().includes(search)) ||
+              (seller.username &&
+                seller.username.toLowerCase().includes(search))
             ) {
-              if (
-                (categoryFilter &&
-                  product.listingCategory
-                    .toLowerCase()
-                    .includes(categoryFilter)) ||
-                !categoryFilter
-              ) {
-                return product;
-              }
+              return seller;
             }
             return null;
           })
-          .map((product) => {
-            filteredListingsCounterFollowed++;
-            return product;
+          .map((seller) => {
+            filteredSellersCount++;
+            return seller;
           })
-          .map((product) => (
-            <div className="homepageProduct">
-              <div class="productSeller">
-                <ListingSellerHeader lId={product.listingId} />
-              </div>
-              <div
-                className="homepageProductContent"
-                onClick={() => routeChangeToListing(product.listingId)}
-              >
-                <div className="productImg">
-                  <img
-                    className="productImg"
-                    src={
-                      product.imagePaths[0]
-                        ? product.imagePaths[0]
-                        : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
-                    }
-                    alt="baked listing"
-                  />
-                </div>
-                <h3>{product.name}</h3>
-                <h5>{product.description}</h5>
-              </div>
-              <div class="productBottomRow">
-                <div class="btn">
-                  <FiHeart
-                    size="1.2rem"
-                    onClick={() => handleListingToLikes(product.listingId)}
-                  />
-                </div>
-                <h3>${product.price}</h3>
-              </div>
-            </div>
+          .map((seller) => (
+            <SellerCard
+              sellerId={seller.sellerId}
+              name={seller.name}
+              username={seller.username}
+              profilePhoto={seller.imagePath}
+            />
           ))}
 
-        {filteredListingsCounterFollowed === 0 && (
+        {filteredSellersCount === 0 && (
           <h4 className="search">
-            Unfortunately, no Baked Listings here. Follow more bakers!
-          </h4>
-        )}
-      </div>
-
-      <div class="altShoppingHeader">
-        <div className="altShoppingHeaderTitle"></div>
-        <div className="altShoppingHeaderTitle">
-          <HStack spacing="10px">
-            <FiGlobe color="#c75f4a" />
-            <h1>Explore More Bakers</h1>
-          </HStack>
-        </div>
-        <div class="shoppingHeaderLink" onClick={() => routeChangeToExplore()}>
-          <HStack spacing="5px">
-            <h3>View More</h3>
-            <FiArrowRight color="#c75f4a" />
-          </HStack>
-        </div>
-      </div>
-      <div className="rowListingsDisplay">
-        {listings
-          .filter((product) => {
-            if (
-              (product.name && product.name.toLowerCase().includes(search)) ||
-              (product.description &&
-                product.description.toLowerCase().includes(search))
-            ) {
-              if (
-                (categoryFilter &&
-                  product.listingCategory
-                    .toLowerCase()
-                    .includes(categoryFilter)) ||
-                !categoryFilter
-              ) {
-                filteredListingsCounterExplore++;
-                return product;
-              }
-            }
-            return null;
-          })
-          .map((product) => {
-            filteredListingsCounterExplore++;
-            return product;
-          })
-          .map((product) => (
-            <div className="homepageProduct">
-              <div class="productSeller" key={product.listingId}>
-                <ListingSellerHeader lId={product.listingId} />
-              </div>
-              <div
-                class="homepageProductContent"
-                onClick={() => routeChangeToListing(product.listingId)}
-              >
-                <div className="productImg">
-                  <img
-                    className="productImg"
-                    src={
-                      product.imagePaths[0]
-                        ? product.imagePaths[0]
-                        : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
-                    }
-                    alt="baked listing"
-                  />
-                </div>
-                <h3>{product.name}</h3>
-                <h5>{product.description}</h5>
-              </div>
-              <div class="productBottomRow">
-                <FiHeart
-                  size="1.2rem"
-                  onClick={() => handleListingToLikes(product.listingId)}
-                />
-                <h3>${product.price}</h3>
-              </div>
-            </div>
-          ))}
-        {filteredListingsCounterExplore === 0 && (
-          <h4 className="search">
-            Unfortunately, no such Baked Listing. Try another search?
+            Unfortunately, no sellers here. Try another search...
           </h4>
         )}
       </div>

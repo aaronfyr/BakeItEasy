@@ -43,12 +43,30 @@
     border-radius: 20px;
 }
 
+.rowListingsDisplay {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  height: 310px;
+  justify-content: flex-start; /*delete this if not necessary*/
+}
+
 .listingsDisplay {
-    display: flex;
-    flex-wrap: wrap;
-    overflow-y: scroll;
-    height: 50vh;
-    justify-content: center; /*delete this if not necessary*/
+  display: flex;
+  flex-wrap: wrap;
+  overflow-x: scroll;
+  height: 100vh;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.sellersDisplay {
+  display: grid;
+  row-gap: 10px;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  justify-content: center; /*delete this if not necessary*/
 }
 
 .float{
@@ -96,6 +114,22 @@
     background-color: white;
     filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1));
     cursor: pointer;
+}
+
+.homepageProduct {
+  margin: 20px;
+  width: 200px;
+  height: 280px;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: white;
+  filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1));
+  cursor: pointer;
+}
+
+.homepageProductContent {
+  color: var(--dark-text);
+  height: 198px;
 }
 
 .productSeller {
@@ -176,6 +210,41 @@ text-overflow: ellipsis;
   font-size: 16px;
   margin-top: 5px;
   font-weight: 00;
+}
+
+.altShoppingHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-style: solid;
+  border-color: var(--dark-text);
+  border-width: 1px;
+  border-radius: 20px;
+  height: 30px;
+  padding: 0px 30px 0px 30px;
+  margin-top: 5px;
+
+  font-family: var(--reg-font-family);
+  color: var(--dark-text);
+  font-size: 16px;
+  margin-top: 5px;
+  font-weight: 00;
+}
+
+.shoppingHeaderLink {
+  font-family: var(--reg-font-family);
+  color: var(--dark-text);
+  font-size: 16px;
+  font-weight: 00;
+  cursor: pointer;
+}
+
+.shoppingHeaderLink:hover {
+  font-family: var(--reg-font-family);
+  font-size: 16px;
+  font-weight: 00;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .forumHeader {
@@ -463,3 +532,52 @@ img.heartBreakIcon {
   bottom: 0;
 }
 
+.sellerCard {
+  width: 500px;
+  height: 150px;
+  margin:20px;
+  border-radius: 75px 10px 10px 75px;
+  background-color: white;
+  box-shadow: 2px 2px 4px 1px rgba(0,0,0,0.3);
+}
+
+.sellerCardHeader {
+  width: 100%;
+  height: 50px;
+  padding: 10px 10px 0px 10px;
+  margin-bottom: 10px;
+}
+
+.sellerCardDetails {
+  cursor: pointer;
+}
+
+.sellerCardContentGrid {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.sellerCardContentGrid_left {
+  background-color: rgb(210, 210, 210);
+  border-radius: 75px;
+  cursor: pointer;
+  box-shadow: 0px 0px 3px 2px rgba(0,0,0,0.1);
+  overflow: hidden;
+  object-fit: cover;
+  width: 150px
+}
+
+.sellerCardContentGrid_right {
+  padding: 10px;
+}
+
+.sellerCardFooter {
+  width: 280px;
+  height: 50px;
+  padding: 10px 10px 0px 10px;
+  position: absolute;
+  bottom: 0;
+}

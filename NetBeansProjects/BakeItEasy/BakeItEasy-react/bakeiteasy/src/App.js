@@ -19,6 +19,9 @@ import SellerHomepage from "./pages/sellerHomePage";
 import BuyerHomepage from "./pages/buyerHomepage";
 import AdminProfilePage from "./pages/adminProfilePage";
 
+import BuyerFollowedShopping from "./pages/buyerFollowedShopping";
+import BuyerExploreShopping from "./pages/buyerExploreShopping";
+import BuyerSearchSellers from "./pages/buyerSearchSellers";
 import BuyerListingPage from "./pages/buyerListingPage";
 import BuyerLikedListings from "./pages/buyerLikedListings";
 import BuyerProfile from "./pages/buyerProfile";
@@ -55,8 +58,11 @@ function App() {
             <Router>
               <Routes>
                 <Route path="/" element={<BuyerHomepage />} />
+                <Route path="/followed" element={<BuyerFollowedShopping />} />
+                <Route path="/explore" element={<BuyerExploreShopping />} />
                 <Route path="listing/:id" element={<BuyerListingPage />} />
                 <Route path="buyerProfile/:id" element={<BuyerProfile />} />
+                <Route path="/searchSellers" element={<BuyerSearchSellers />} />
                 <Route
                   path="buyerEditAccount/:id"
                   element={<BuyerEditAccount />}

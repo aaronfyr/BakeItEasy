@@ -93,6 +93,12 @@ export const NavigationBar = () => {
     navigate("/forum");
   };
 
+  // Routing to sellers
+  const routeToSearchSellers = () => {
+    console.log("Navigate to: ", "search sellers");
+    navigate("/searchSellers");
+  };
+
   // Handle log out
   const handleLogOut = () => {
     console.log("Navigate to: ", "login");
@@ -133,12 +139,19 @@ export const NavigationBar = () => {
       </Flex>
 
       <Flex align="center">
-        <div id="navChoices" onClick={() => routeToHomePage()}>
-          Shop
-        </div>
-        <div id="navChoices">My Orders</div>
-        <div id="navChoices" onClick={() => routeToForum()}>
+        <div
+          id="navChoices"
+          onClick={() => {
+            routeToForum();
+          }}
+        >
           Forum
+        </div>
+        <div id="navChoices" onClick={() => routeToSearchSellers()}>
+          Find Seller
+        </div>
+        <div id="navChoices" onClick={() => routeToProfile()}>
+          My Orders
         </div>
       </Flex>
 
