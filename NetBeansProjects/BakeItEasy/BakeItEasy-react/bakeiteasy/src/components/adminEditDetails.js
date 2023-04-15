@@ -1,14 +1,14 @@
 import {
+  Box,
+  Button,
   FormControl,
   FormLabel,
   Input,
-  Button,
-  Box,
   Text,
-  Image,
 } from "@chakra-ui/react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AdminEditDetails({
   id,
@@ -17,8 +17,6 @@ function AdminEditDetails({
   password: adminPassword,
 }) {
   const [isLoading, setIsLoading] = useState(null);
-
-  const navigate = useNavigate();
 
   const [name, setName] = useState(adminName);
   const [email, setEmail] = useState(adminEmail);
@@ -53,14 +51,17 @@ function AdminEditDetails({
       setIsLoading(false);
       const admin = await response.json();
       localStorage.setItem("admin", JSON.stringify(admin));
+      toast.success("Details saved!");
     } else {
       // show error message
-      setError("Invalid details. Please try again.");
+      const errorData = await response.json();
+      toast.error(errorData.error);
     }
   };
 
   return (
     <>
+      <ToastContainer />
       <Box
         maxW="xl"
         mx="auto"
@@ -84,6 +85,7 @@ function AdminEditDetails({
               value={name}
               onChange={(event) => setName(event.target.value)}
               required
+              maxLength={128}
             />
             <FormLabel>Name</FormLabel>
           </FormControl>
@@ -94,6 +96,7 @@ function AdminEditDetails({
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               required
+              maxLength={128}
             />
             <FormLabel>Email</FormLabel>
           </FormControl>
@@ -104,6 +107,7 @@ function AdminEditDetails({
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               required
+              maxLength={64}
             />
             <FormLabel>Password</FormLabel>
           </FormControl>
