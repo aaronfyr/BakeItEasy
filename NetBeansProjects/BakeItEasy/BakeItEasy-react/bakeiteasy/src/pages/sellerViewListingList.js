@@ -11,7 +11,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-
+import { ListingStatsMemo } from "../components/listingStatsText";
 
 /*const orderResponse = await fetch(``)*/
 
@@ -173,8 +173,8 @@ const handleCategoryChange = (category) => {
                     </div>
                 </div>
                 <div>
-                    <br></br>
                     <br/>
+                    <ListingStatsMemo lId={listing.listingId}/>
                 </div>
             </div>
         </SellerOrderCard>
