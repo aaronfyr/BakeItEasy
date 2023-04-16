@@ -253,7 +253,7 @@ function BuyerLikedListings() {
       <h4 className="search">View by Category:</h4>
 
       <div class="categoriesContainer">
-        <div className="categoriesDisplay">
+        <div className="homepageCategoriesDisplay">
           {categories.map((category) => (
             <Flex>
               <div

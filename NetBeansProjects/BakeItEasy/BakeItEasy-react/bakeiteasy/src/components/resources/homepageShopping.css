@@ -205,6 +205,10 @@ text-overflow: ellipsis;
   margin-top: 15px;
 }
 
+.emptyMessageContainer {
+  margin-left: 40%;
+}
+
 .shopByCategory {
     font-family: 'Montserrat';
     color: #8B3A3A;

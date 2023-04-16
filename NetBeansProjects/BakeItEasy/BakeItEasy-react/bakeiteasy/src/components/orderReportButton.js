@@ -38,29 +38,43 @@ export function OrderReportButtonNonMemo({ buyerId, oId, orderStatus }) {
   const [ordersChecked, setOrdersChecked] = useState({});
 
   const getReportStatusByOId = async (oId) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/BakeItEasy-war/webresources/orders/${oId}/hasExistingReview`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await response.json();
-      console.log("isOrderReviewed: ", data);
-      console.log("isOrderReviewed typeof: ", typeof data);
-      setIsOrderReviewed({ ...isOrderReviewed, [oId]: data });
-      setOrdersChecked({ ...ordersChecked, [oId]: 1 });
+    const sellerResponse = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/orders/${oId}/seller`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const sellerData = await sellerResponse.json();
+    const sellerId = sellerData.sellerId;
 
-      return data;
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        // Unexpected token < in JSON
-        console.log("There was a SyntaxError", error);
-      } else {
-        console.log("not SyntaxError", error);
+    if (sellerResponse.ok) {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/${sellerId}/hasExistingReport`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        console.log("isOrderReviewed: ", data);
+        console.log("isOrderReviewed typeof: ", typeof data);
+        setIsOrderReviewed({ ...isOrderReviewed, [oId]: data });
+        setOrdersChecked({ ...ordersChecked, [oId]: 1 });
+
+        return data;
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        } else {
+          console.log("not SyntaxError", error);
+        }
       }
     }
   };
@@ -102,11 +116,19 @@ export function OrderReportButtonNonMemo({ buyerId, oId, orderStatus }) {
         // redirect to homepage
         console.log("reported seller!");
         setTitle("-");
-        toast.success(`Reported Seller ${sellerUsername}.`);
+        toast.success(
+          `Reported Seller ${sellerUsername}. Refreshing, please wait...`
+        );
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       } else {
         const errorData = await response.json();
         console.log("reporting error:", errorData.error);
-        toast.error(errorData.error);
+        toast.error(`${errorData.error}. Refreshing, please wait...`);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       }
     } else {
       // show error messageconst
@@ -122,7 +144,7 @@ export function OrderReportButtonNonMemo({ buyerId, oId, orderStatus }) {
         <Popup
           trigger={
             <Flex>
-              {!isOrderReviewed[oId] && orderStatus !== "CANCELLED" && (
+              {!isOrderReviewed[oId] && (
                 <div className="button1_report">
                   <HStack spacing="8px">
                     <div>Report Seller </div>
