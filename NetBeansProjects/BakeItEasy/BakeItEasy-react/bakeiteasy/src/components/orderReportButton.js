@@ -31,13 +31,13 @@ import {
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { FaRegStar } from "react-icons/fa";
-import ReactLoading from "react-loading";
+import { MdOutlineReport } from "react-icons/md";
 
-export function OrderRateButtonNonMemo({ oId, orderStatus }) {
+export function OrderReportButtonNonMemo({ buyerId, oId, orderStatus }) {
   const [isOrderReviewed, setIsOrderReviewed] = useState({});
   const [ordersChecked, setOrdersChecked] = useState({});
 
-  const getReviewStatusByOId = async (oId) => {
+  const getReportStatusByOId = async (oId) => {
     try {
       const response = await fetch(
         `http://localhost:8080/BakeItEasy-war/webresources/orders/${oId}/hasExistingReview`,
@@ -65,43 +65,54 @@ export function OrderRateButtonNonMemo({ oId, orderStatus }) {
     }
   };
 
-  // handleCreateReview
-  const [reviewText, setReviewText] = useState("");
+  // handleReportSeller
   const [title, setTitle] = useState("");
-  const [rating, setRating] = useState(0);
-  const [imagePaths, setImagePath] = useState(["", "text"]);
-  const handleCreateReview = async (event) => {
+  const [reason, setReason] = useState("");
+
+  const handleReportSeller = async (event) => {
     event.preventDefault();
-    const dateCreated = new Date();
-    const response = await fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/orders/${oId}/reviews`,
+    const sellerResponse = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/orders/${oId}/seller`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          title,
-          reviewText,
-          rating,
-          imagePaths,
-          dateCreated,
-        }),
       }
     );
-    if (response.ok) {
-      // redirect to homepage
-      console.log("created rating: ", oId);
-      toast.success(`Submitted review for Order #${oId}!`);
+    const sellerData = await sellerResponse.json();
+    const sellerId = sellerData.sellerId;
+    const sellerUsername = sellerData.username;
+
+    if (sellerResponse.ok) {
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/sellers/${sellerId}/reports`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title,
+            reason,
+          }),
+        }
+      );
+      if (response.ok) {
+        // redirect to homepage
+        console.log("reported seller!");
+        setTitle("-");
+        toast.success(`Reported Seller ${sellerUsername}.`);
+      } else {
+        const errorData = await response.json();
+        console.log("reporting error:", errorData.error);
+        toast.error(errorData.error);
+      }
     } else {
-      const errorData = await response.json();
+      // show error messageconst
+      const errorData = await sellerResponse.json();
       toast.error(errorData.error);
     }
-  };
-
-  const handleRating = (rate) => {
-    setRating(rate);
-    console.log("handleRating:", rating);
   };
 
   // return render statements
@@ -111,11 +122,11 @@ export function OrderRateButtonNonMemo({ oId, orderStatus }) {
         <Popup
           trigger={
             <Flex>
-              {!isOrderReviewed[oId] && orderStatus === "COMPLETED" && (
+              {!isOrderReviewed[oId] && orderStatus !== "CANCELLED" && (
                 <div className="button1_report">
                   <HStack spacing="8px">
-                    <div>Rate</div>
-                    <FaRegStar size="1.2rem" />{" "}
+                    <div>Report Seller </div>
+                    <MdOutlineReport size="1.2rem" />
                   </HStack>
                 </div>
               )}
@@ -129,14 +140,13 @@ export function OrderRateButtonNonMemo({ oId, orderStatus }) {
               <button className="close" onClick={close}>
                 <div className="closeButton">X</div>
               </button>
-              <div className="header"> Make A Review </div>
-
+              <div className="header"> Report Seller </div>
               <HStack>
                 <Spacer />
                 <div className="content">
-                  <form onSubmit={(event) => handleCreateReview(event, oId)}>
+                  <form onSubmit={(event) => handleReportSeller(event)}>
                     <FormControl mt={4}>
-                      <FormLabel> Review Title: </FormLabel>
+                      <FormLabel>Title of Report: </FormLabel>
                       <Input
                         type="text"
                         placeholder=" "
@@ -146,22 +156,13 @@ export function OrderRateButtonNonMemo({ oId, orderStatus }) {
                       />
                     </FormControl>
                     <FormControl mt={4}>
-                      <FormLabel>Text: </FormLabel>
+                      <FormLabel>Reason: </FormLabel>
                       <Input
                         type="text"
                         placeholder=" "
-                        value={reviewText}
-                        onChange={(event) => setReviewText(event.target.value)}
+                        value={reason}
+                        onChange={(event) => setReason(event.target.value)}
                         required
-                      />
-                    </FormControl>
-                    <FormControl mt={4}>
-                      <FormLabel>Rating: </FormLabel>
-                      <Rating
-                        name="simple-controlled"
-                        onClick={handleRating}
-                        initialValue={rating}
-                        className="ratingClass"
                       />
                     </FormControl>
                     <Box mt={4} display="flex" alignItems="center">
@@ -184,8 +185,8 @@ export function OrderRateButtonNonMemo({ oId, orderStatus }) {
       </>
     );
   } else {
-    getReviewStatusByOId(oId);
+    getReportStatusByOId(oId);
   }
 }
 
-export const OrderRateButton = memo(OrderRateButtonNonMemo);
+export const OrderReportButton = memo(OrderReportButtonNonMemo);

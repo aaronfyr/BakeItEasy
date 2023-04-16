@@ -5,6 +5,7 @@ import { NavigationBar } from "../components/buyerNavigationBar";
 import { OrderListingHeader } from "../components/orderListingHeader";
 import { OrderListingImage } from "../components/orderListingImage";
 import { OrderRateButton } from "../components/orderRateButton";
+import { OrderReportButton } from "../components/orderReportButton";
 
 import { Rating } from "react-simple-star-rating";
 
@@ -397,77 +398,11 @@ function BuyerProfile() {
                   )}
                 </Flex>
 
-                <Popup
-                  trigger={
-                    <Flex>
-                      {order.orderStatus !== "CANCELLED" && (
-                        <div className="button1_report">
-                          <HStack spacing="8px">
-                            <div>Report Seller </div>
-                            <MdOutlineReport size="1.2rem" />
-                          </HStack>
-                        </div>
-                      )}
-                    </Flex>
-                  }
-                  modal
-                  nested
-                >
-                  {(close) => (
-                    <div className="modal">
-                      <button className="close" onClick={close}>
-                        <div className="closeButton">X</div>
-                      </button>
-                      <div className="header"> Report Seller </div>
-                      <HStack>
-                        <Spacer />
-                        <div className="content">
-                          <form
-                            onSubmit={(event) =>
-                              handleReportSeller(event, order.orderId)
-                            }
-                          >
-                            <FormControl mt={4}>
-                              <FormLabel>Title of Report: </FormLabel>
-                              <Input
-                                type="text"
-                                placeholder=" "
-                                value={title}
-                                onChange={(event) =>
-                                  setTitle(event.target.value)
-                                }
-                                required
-                              />
-                            </FormControl>
-                            <FormControl mt={4}>
-                              <FormLabel>Reason: </FormLabel>
-                              <Input
-                                type="text"
-                                placeholder=" "
-                                value={reason}
-                                onChange={(event) =>
-                                  setReason(event.target.value)
-                                }
-                                required
-                              />
-                            </FormControl>
-                            <Box mt={4} display="flex" alignItems="center">
-                              <Button
-                                bg="#E2725B"
-                                colorScheme="white"
-                                type="submit"
-                                w="100%"
-                              >
-                                Submit Report
-                              </Button>
-                            </Box>
-                          </form>
-                        </div>
-                        <Spacer />
-                      </HStack>
-                    </div>
-                  )}
-                </Popup>
+                <OrderReportButton
+                  buyerId={buyerId}
+                  oId={order.orderId}
+                  orderStatus={order.orderStatus}
+                />
                 <OrderRateButton
                   oId={order.orderId}
                   orderStatus={order.orderStatus}
