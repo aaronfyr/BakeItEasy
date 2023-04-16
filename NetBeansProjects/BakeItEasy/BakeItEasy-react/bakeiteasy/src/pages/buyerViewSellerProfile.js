@@ -299,7 +299,7 @@ function BuyerViewSellerProfile() {
               stroke-linejoin="round"
               stroke-width="2"
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            ></path>
+            ></path>routeChangeToListing
           </svg>
         </button>
       </div>
@@ -350,8 +350,7 @@ function BuyerViewSellerProfile() {
           <div className="reviewDisplay">
             {reviews.map((review) => (
               <div
-                className="review"
-                onClick={() => routeChangeToListing(review.id)}
+                className="review"                
               >
                 <div class="productSeller">
                   <img
