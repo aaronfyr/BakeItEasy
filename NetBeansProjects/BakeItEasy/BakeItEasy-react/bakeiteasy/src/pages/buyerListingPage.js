@@ -165,7 +165,7 @@ function BuyerListingPage() {
   // handle submit order
   const dateOfCreation = new Date();
   const [quantity, setQuantity] = useState(1);
-  const [dateOfCollection, setDateOfCollection] = useState(new Date());
+  const [dateOfCollection, setDateOfCollection] = useState(null);
   const [description, setDescription] = useState("-");
   const [orderFieldValues, addOrderFieldValue] = useState([]);
   const [error, setError] = useState(null);
@@ -309,6 +309,10 @@ function BuyerListingPage() {
               selected={dateOfCollection}
               onChange={(date) => setDateOfCollection(date)}
               minDate={datePickerMinDate}
+              defaultValue={datePickerMinDate}
+              value={
+                dateOfCollection === null ? datePickerMinDate : dateOfCollection
+              }
             />
 
             <Box mt={4} display="flex" alignItems="center">
