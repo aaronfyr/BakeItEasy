@@ -1,34 +1,12 @@
+import { Flex } from "@chakra-ui/react";
 import { React, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
-import { toast, ToastContainer } from "react-toastify";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-} from "@chakra-ui/react";
-import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
-import {formatPrice, formatDate} from "../components/formatter";
 import "./resources/default.css";
 import "./resources/listing.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
-import { FiHeart } from "react-icons/fi";
 
 function ForumEditPost() {
   console.log("test");
@@ -38,7 +16,9 @@ function ForumEditPost() {
   const [post, setPost] = useState([]);
   const [isEditable, setIsEditable] = useState(false);
   const [preDelete, setPreDelete] = useState(false);
-  const [deleteFailed, setDeleteFailed]= useState(false);
+  const [deleteFailed, setDeleteFailed] = useState(false);
+  const [isBuyer, setIsBuyer] = useState(false);
+  const [isSeller, setIsSeller] = useState(false);
 
   let navigate = useNavigate();
   const routeChangeToSellerProfile = () => {
@@ -48,23 +28,41 @@ function ForumEditPost() {
 
   //fetch listing deets
   useEffect(() => {
-  fetch(`http://localhost:8080/BakeItEasy-war/webresources/posts/${id}`, {
-    method: "GET",
-    mode: "cors",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/posts/${id}`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
         return response.json();
-    })
-    .then((data) => {
-      setPost(data);
-      setLoading(false);
-      console.log("response is", data)
-    })
-    .catch((error) => console.log("ERROR !!!!!" + error));
-}, []);
+      })
+      .then((data) => {
+        setPost(data);
+        setLoading(false);
+        console.log("response is", data);
+      })
+      .catch((error) => console.log("ERROR !!!!!" + error));
+  }, []);
+
+  // fetch current buyer/seller
+  useEffect(() => {
+    async function fetchData() {
+      const fetchedSeller = localStorage.getItem("seller");
+      const fetchedBuyer = localStorage.getItem("buyer");
+
+      if (!fetchedBuyer && !fetchedSeller) {
+        navigate("/login");
+      }
+      if (fetchedBuyer) {
+        setIsBuyer(true);
+      } else {
+        setIsSeller(true);
+      }
+    }
+    fetchData();
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -74,7 +72,7 @@ function ForumEditPost() {
     setIsEditable(false);
   };
 
-   function getCategoryUrl(category) {
+  function getCategoryUrl(category) {
     switch (category) {
       case "DISCUSSION":
         return "https://cdn-icons-png.flaticon.com/512/8286/8286038.png";
@@ -92,33 +90,32 @@ function ForumEditPost() {
   }
 
   const handleUpdate = () => {
-  stopEditable();
-  fetch(`http://localhost:8080/BakeItEasy-war/webresources/posts/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(post),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        toast.error("Update failed");
-        //setDeleteFailed(true);
-        throw new Error("Update failed");
-      } else {
-        toast.success("Post update success");
-        return response.json();
-      }
+    stopEditable();
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/posts/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(post),
     })
-    .then((data) => {
-      // handle successful update
-    })
-    .catch((error) => {
-      /* handle other errors */
-      toast.error(error);
-    });
-};
-
+      .then((response) => {
+        if (!response.ok) {
+          toast.error("Update failed");
+          //setDeleteFailed(true);
+          throw new Error("Update failed");
+        } else {
+          toast.success("Post update success");
+          return response.json();
+        }
+      })
+      .then((data) => {
+        // handle successful update
+      })
+      .catch((error) => {
+        /* handle other errors */
+        toast.error(error);
+      });
+  };
 
   const handleDelete = () => {
     setPreDelete(false);
@@ -132,9 +129,9 @@ function ForumEditPost() {
     })
       .then((response) => {
         if (!response.ok) {
-            setDeleteFailed(true);
-            setTimeout(() => {
-                setDeleteFailed(false)
+          setDeleteFailed(true);
+          setTimeout(() => {
+            setDeleteFailed(false);
           }, 5000); // 1000 milliseconds = 1 second
         } else {
           console.log("response ok");
@@ -153,12 +150,12 @@ function ForumEditPost() {
   };
 
   const categoryOptions = [
-  "LOOKINGFOR",
-  "DISCUSSION",
-  "RECIPES",
-  "SHARINGINGREDIENTS",
-  "QUESTION"
-];
+    "LOOKINGFOR",
+    "DISCUSSION",
+    "RECIPES",
+    "SHARINGINGREDIENTS",
+    "QUESTION",
+  ];
 
   /*
   // for the image slideshow
@@ -198,47 +195,54 @@ function ForumEditPost() {
 
   return (
     <div>
-        <SellerNavigationBar/>
+      {isBuyer && <NavigationBar />}
+      {isSeller && <SellerNavigationBar />}
       <br />
-      <ToastContainer/>
+      <ToastContainer />
 
-      <div style={{display: "flex"}}>
-        <div style={{width:400, height:300}}></div>
+      <div style={{ display: "flex" }}>
+        <div style={{ width: 400, height: 300 }}></div>
         <div id="rightListingContainer">
-            <h1>Post #{post.postId} </h1>
+          <h1>Post #{post.postId} </h1>
           <h3>Title:</h3>
           {isEditable ? (
             <input
               type="text"
               className="inputStyle"
               value={post.title}
-              onChange={(e) =>
-                setPost({ ...post, title: e.target.value })
-              }
+              onChange={(e) => setPost({ ...post, title: e.target.value })}
             />
           ) : (
             <h2>{post.title}</h2>
           )}
           <h3>Category:</h3>
           {isEditable ? (
-  <select
-    className="inputStyle"
-    value={post.postCategory}
-    onChange={(e) => setPost({ ...post, postCategory: e.target.value })}
-  >
-    {categoryOptions.map((option) => (
-      <option key={option} value={option}>
-        {option}
-      </option>
-    ))}
-  </select>
-) : (
-  <h2>{post.postCategory}</h2>
-)}
+            <select
+              className="inputStyle"
+              value={post.postCategory}
+              onChange={(e) =>
+                setPost({ ...post, postCategory: e.target.value })
+              }
+            >
+              {categoryOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <h2>{post.postCategory}</h2>
+          )}
 
-    <img style={{height:200}} alt="categoryimg" src={post.postCategory ? getCategoryUrl(post.postCategory) :
- "https://www.freeiconspng.com/thumbs/flat-icon-png/email-flat-icon-png-26.png"}></img>
-
+          <img
+            style={{ height: 200 }}
+            alt="categoryimg"
+            src={
+              post.postCategory
+                ? getCategoryUrl(post.postCategory)
+                : "https://www.freeiconspng.com/thumbs/flat-icon-png/email-flat-icon-png-26.png"
+            }
+          ></img>
 
           <div style={{ height: 10 }}></div>
           <Flex>

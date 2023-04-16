@@ -44,7 +44,7 @@ import {
   useDisclosure,
   Spacer,
 } from "@chakra-ui/react";
-import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
+import { FaRegCommentAlt, FaHeart, FaPhone } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -57,6 +57,7 @@ import { Slideshow } from "../components/slideshow";
 function BuyerListingPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const whatsappUrl = "https://wa.me/${sellerPhoneNumber}";
 
   // get Buyer info
   const [buyer, setBuyer] = useState(null);
@@ -249,10 +250,24 @@ function BuyerListingPage() {
           <Slideshow imagePaths={listingImagePaths} />
           <Flex justifyContent={"space-between"}>
             <Flex>
-              <div className="button1_cancel" onClick={() => (handleListingToLikes(id))}>
+              <div
+                className="button1_cancel"
+                onClick={() => handleListingToLikes(id)}
+              >
                 <HStack spacing="10px">
                   <FaHeart />
                   <div>Like</div>
+                </HStack>
+              </div>
+              <div
+                className="button1_cancel"
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <HStack spacing="10px">
+                  <FaPhone />
+                  <div>Whatsapp</div>
                 </HStack>
               </div>
             </Flex>
@@ -311,7 +326,11 @@ function BuyerListingPage() {
 
             <h3>Quantity:</h3>
             <HStack maxW="320px">
-              <Button {...dec} style={{marginBottom: 10}} colorScheme="orange">
+              <Button
+                {...dec}
+                style={{ marginBottom: 10 }}
+                colorScheme="orange"
+              >
                 -
               </Button>
               <Input
