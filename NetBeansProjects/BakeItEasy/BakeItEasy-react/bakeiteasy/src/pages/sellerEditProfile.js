@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
 import "./resources/default.css";
 import "./resources/sellerViewOrder.css";
+import "./resources/sellerEditProfile.css";
 
 function SellerEditProfile() {
   const { id } = useParams();
