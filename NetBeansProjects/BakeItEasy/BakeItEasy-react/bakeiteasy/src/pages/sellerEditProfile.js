@@ -1,4 +1,4 @@
-import { Flex, Button } from "@chakra-ui/react";
+import { Flex, Button, HStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
@@ -116,11 +116,11 @@ function SellerEditProfile() {
         )
           .then((response) => {
             if (!response.ok) {
-              toast.error("Failed to update profile. Refreshing...");
+              toast.error("Failed to update profile. Refreshing, please wait...");
 
               setTimeout(() => {
                     window.location.reload();
-                }, 4000);
+                }, 3000);
               throw new Error("Failed to update seller");
             } else {
               console.log("ok response");
@@ -151,6 +151,7 @@ function SellerEditProfile() {
       <div style={{ width: 220 }}>
         <div className="button1" onClick={handleGoBack}>
           <FaArrowLeft />
+          <HStack width={3}/>
           Back to profile
         </div>
       </div>
