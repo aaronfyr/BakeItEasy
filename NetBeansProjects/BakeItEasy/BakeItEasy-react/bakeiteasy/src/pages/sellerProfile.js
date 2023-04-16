@@ -103,7 +103,6 @@ function SellerProfile(props) {
   }, [sellerId, stars]);
 
   //fetch seller
-  console.log("sellerID is", sellerId);
   useEffect(() => {
     if (sellerId) {
       fetch(
@@ -122,7 +121,6 @@ function SellerProfile(props) {
   }, [sellerId]);
 
   //fetch seller follower count
-  console.log("sellerID is", sellerId);
   useEffect(() => {
     if (sellerId) {
       fetch(
@@ -174,7 +172,8 @@ function SellerProfile(props) {
       <SellerNavigationBar />
       <div id="coverPhoto">
         <div id="profilePhoto">
-            <img alt="seller pfp" style={{height: 120, objectFit: "cover"}}src={sellerObj.imagePath}></img>
+            <img alt="" style={{height: 120, objectFit: "cover"}}
+            src = {sellerObj.imagePath? sellerObj.imagePath : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} ></img>
         </div>
       </div>
       <Flex>
@@ -252,15 +251,12 @@ function SellerProfile(props) {
                   src={listing.imagePaths[0] ? listing.imagePaths[0] : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"}
                   alt="listing product"
                 />
-              </div>
 
-              <div className="titleDetails">
-                <h5>{listing.description}</h5>
               </div>
-
               <div class="productBottomRow">
                 <h3>${formatPrice(listing.price)} </h3>
               </div>
+              <h5 style={{color: "#636363"}}>{listing.description}</h5>
             </div>
           ))}
         </div>
