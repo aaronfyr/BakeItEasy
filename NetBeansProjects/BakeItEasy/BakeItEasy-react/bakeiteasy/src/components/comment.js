@@ -298,7 +298,13 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
                 {((!isBuyer && commenterId === sellerId) ||
                   (isBuyer && commenterId === buyerId)) && (
                   <>
-                    <Popup trigger={<FiEdit3 size="1.2rem" />} modal nested>
+                    <Popup
+                      trigger={
+                        <FiEdit3 size="1.2rem" className="pointerButton" />
+                      }
+                      modal
+                      nested
+                    >
                       {(close) => (
                         <div className="modal">
                           <button className="close" onClick={close}>
@@ -343,7 +349,10 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
                     <Popup
                       trigger={
                         <div style={{ marginLeft: "10px" }}>
-                          <MdOutlineCancel size="1.2rem" />
+                          <MdOutlineCancel
+                            size="1.2rem"
+                            className="pointerButton"
+                          />
                         </div>
                       }
                       modal
