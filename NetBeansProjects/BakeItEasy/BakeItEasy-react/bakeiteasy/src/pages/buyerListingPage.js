@@ -53,6 +53,7 @@ import "./resources/listing.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
 import { Slideshow } from "../components/slideshow";
+import { formatPrice, formatDate } from "../components/formatter";
 
 function BuyerListingPage() {
   const { id } = useParams();
@@ -304,11 +305,15 @@ function BuyerListingPage() {
           </Flex>
           <br />
           <h1>{listingName}</h1>
-
+          <h5>Date posted: {formatDate(listing.dateOfCreation)}</h5>
           <br />
           <div id="buyerListingDetailsGrid">
+            <h3>Price</h3>
+            <h3>${formatPrice(listing.price)}</h3>
             <h3>Maximum Quantity Per Order:</h3>
             <h3>{listingMaxQty}</h3>
+            <h3>Minimum Preparation time:</h3>
+            <h3>{listing.minPrepDays} days</h3>
             <h3>Description:</h3>
             <h3> {listingDescription}</h3>
           </div>

@@ -4,6 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
 import { OrderListingHeader } from "../components/orderListingHeader";
 import { OrderListingImage } from "../components/orderListingImage";
+import { OrderRateButton } from "../components/orderRateButton";
 
 import { Rating } from "react-simple-star-rating";
 
@@ -253,7 +254,7 @@ function BuyerProfile() {
     if (response.ok) {
       // redirect to homepage
       console.log("created rating: ", oId);
-      toast.success(`Submitted reating for Order #${oId}!`);
+      toast.success(`Submitted review for Order #${oId}!`);
     } else {
       const errorData = await response.json();
       console.log("reporting error:", errorData.error);
@@ -263,8 +264,8 @@ function BuyerProfile() {
 
   const routeChangeToEditAccountDetails = (buyerId) => {
     console.log("routeChangeToEditAccountDetails: ", buyerId);
-    let path = "/buyerEditAccount/";
-    navigate(path + buyerId);
+    let path = "/buyerEditAccount";
+    navigate(path);
   };
 
   // successful cancelOrder
@@ -347,7 +348,9 @@ function BuyerProfile() {
         </Flex>
       </Flex>
       <br />
-      <div class="shoppingHeader">My Orders</div>
+      <div class="shoppingHeader">
+        <h1>My Orders</h1>
+      </div>
       <br />
 
       <div class="ordersDisplay">
@@ -386,8 +389,10 @@ function BuyerProfile() {
                       className="button1_cancel"
                       onClick={() => handleCancelOrder(order.orderId)}
                     >
-                      Cancel Order
-                      <MdOutlineCancel />
+                      <HStack spacing="8px">
+                        <div>Cancel Order</div>
+                        <MdOutlineCancel />
+                      </HStack>
                     </div>
                   )}
                 </Flex>
@@ -397,8 +402,10 @@ function BuyerProfile() {
                     <Flex>
                       {order.orderStatus !== "CANCELLED" && (
                         <div className="button1_report">
-                          Report Seller
-                          <MdOutlineReport size="1.2rem" />
+                          <HStack spacing="8px">
+                            <div>Report Seller </div>
+                            <MdOutlineReport size="1.2rem" />
+                          </HStack>
                         </div>
                       )}
                     </Flex>
@@ -461,85 +468,10 @@ function BuyerProfile() {
                     </div>
                   )}
                 </Popup>
-                <Popup
-                  trigger={
-                    <Flex>
-                      {order.orderStatus === "COMPLETED" && (
-                        <div className="button1_report">
-                          Rate
-                          <FaRegStar size="1.2rem" />
-                        </div>
-                      )}
-                    </Flex>
-                  }
-                  modal
-                  nested
-                >
-                  {(close) => (
-                    <div className="modal">
-                      <button className="close" onClick={close}>
-                        <div className="closeButton">X</div>
-                      </button>
-                      <div className="header"> Make A Review </div>
-
-                      <HStack>
-                        <Spacer />
-                        <div className="content">
-                          <form
-                            onSubmit={(event) =>
-                              handleCreateReview(event, order.orderId)
-                            }
-                          >
-                            <FormControl mt={4}>
-                              <FormLabel> Review Title: </FormLabel>
-                              <Input
-                                type="text"
-                                placeholder=" "
-                                value={title}
-                                onChange={(event) =>
-                                  setTitle(event.target.value)
-                                }
-                                required
-                              />
-                            </FormControl>
-                            <FormControl mt={4}>
-                              <FormLabel>Text: </FormLabel>
-                              <Input
-                                type="text"
-                                placeholder=" "
-                                value={reviewText}
-                                onChange={(event) =>
-                                  setReviewText(event.target.value)
-                                }
-                                required
-                              />
-                            </FormControl>
-                            <FormControl mt={4}>
-                              <FormLabel>Rating: </FormLabel>
-                              <Rating
-                                name="simple-controlled"
-                                onClick={handleRating}
-                                initialValue={rating}
-                                className="ratingClass"
-                              />
-                            </FormControl>
-                            <Box mt={4} display="flex" alignItems="center">
-                              <Button
-                                bg="#E2725B"
-                                colorScheme="white"
-                                type="submit"
-                                w="100%"
-                              >
-                                Submit Report
-                              </Button>
-                            </Box>
-                          </form>
-                        </div>
-                        <Spacer />
-                      </HStack>
-                    </div>
-                  )}
-                </Popup>
+                <OrderRateButton
+                  oId={order.orderId}
+                  orderStatus={order.orderStatus}
+                />
                 <a
                   className="button1_cancel"
                   href={whatsappUrl}

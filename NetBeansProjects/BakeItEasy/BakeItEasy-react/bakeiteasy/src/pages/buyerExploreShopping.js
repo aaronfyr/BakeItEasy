@@ -26,11 +26,14 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
+  VStack,
 } from "@chakra-ui/react";
 import { toast, ToastContainer } from "react-toastify";
 import { FiHeart, FiGlobe, FiUsers } from "react-icons/fi";
 import { ListingSellerHeader } from "../components/listingSellerHeader";
 import { NavigationBar } from "../components/buyerNavigationBar";
+import { formatPrice, formatDate } from "../components/formatter";
+import { ListingLikeButton } from "../components/listingLikeButton";
 
 function BuyerExploreShopping() {
   let navigate = useNavigate();
@@ -248,7 +251,7 @@ function BuyerExploreShopping() {
   // routeChangeToListing
   const routeChangeToListing = (listingId) => {
     console.log("routechangetolisting: ", listingId);
-    let path = "listing/";
+    let path = "/listing/";
     navigate(path + listingId);
   };
 
@@ -399,12 +402,16 @@ function BuyerExploreShopping() {
                 <h3>{product.name}</h3>
                 <h5>{product.description}</h5>
               </div>
+              <div className="dateRow">
+                <h5>{formatDate(product.dateOfCreation)}</h5>
+              </div>
+
               <div class="productBottomRow">
-                <FiHeart
-                  size="1.2rem"
-                  onClick={() => handleListingToLikes(product.listingId)}
+                <ListingLikeButton
+                  buyerId={buyer.buyerId}
+                  lId={product.listingId}
                 />
-                <h3>${product.price}</h3>
+                <h3>${formatPrice(product.price)}</h3>
               </div>
             </div>
           ))}
