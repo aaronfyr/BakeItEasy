@@ -226,16 +226,15 @@ function SellerListing() {
       <SellerNavigationBar />
       <br />
       <ToastContainer />
-      <h1>Listing ID {listing.listingId} </h1>
+      <h1>Listing: {listing.name} </h1>
       <div id="listingContainer">
-        <div id="leftListingContainer">
+        <div class="leftListingContainer">
           {/*<div class="slideshow-container"></div>*/}
           <img
             alt="upload"
             style={{
               width: 700,
               maxHeight: 400,
-              marginLeft: 50,
               borderRadius: "5%",
               objectFit: "cover",
             }}
@@ -254,7 +253,7 @@ function SellerListing() {
           <br />
         </div>
         <div id="rightListingContainer">
-          <h3>Price:</h3>
+          <h3 className="listingH3">Price:</h3>
           {isEditable ? (
             <input
               type="text"
@@ -265,20 +264,20 @@ function SellerListing() {
               }
             />
           ) : (
-            <h2>${formatPrice(listing.price)}</h2>
+            <h2 className="listingH2">${formatPrice(listing.price)}</h2>
           )}
-          <h3>Name:</h3>
+          <h3 className="listingH3">Name:</h3>
           {isEditable ? (
             <input
               type="text"
-              className="inputStyle"
+              className="listingLabel"
               value={listing.name}
               onChange={(e) => setListing({ ...listing, name: e.target.value })}
             />
           ) : (
-            <h2>{listing.name}</h2>
+            <h2 className="listingH2">{listing.name}</h2>
           )}
-          <h3>Description:</h3>
+          <h3 className="listingH3">Description:</h3>
           {isEditable ? (
             <input
               type="text"
@@ -289,11 +288,11 @@ function SellerListing() {
               }
             />
           ) : (
-            <h2>{listing.description}</h2>
+            <h2 className="listingH2">{listing.description}</h2>
           )}
 
           <div>
-            <h3>Minimum Preparation Days:</h3>
+            <h3 className="listingH3">Minimum Preparation Days:</h3>
             {isEditable ? (
               <select
                 value={listing.minPrepDays}
@@ -317,11 +316,11 @@ function SellerListing() {
                 <option value="10">10 days</option>
               </select>
             ) : (
-              <h2>{listing.minPrepDays} day(s)</h2>
+              <h2 className="listingH2">{listing.minPrepDays} day(s)</h2>
             )}
           </div>
           <div>
-            <h3>Maximum Quantity:</h3>
+            <h3 className="listingH3">Maximum Quantity:</h3>
             {isEditable ? (
               <select
                 value={listing.maxQuantity}
@@ -337,7 +336,7 @@ function SellerListing() {
                 ))}
               </select>
             ) : (
-              <h2>{listing.maxQuantity}</h2>
+              <h2 className="listingH2">{listing.maxQuantity}</h2>
             )}
           </div>
 
@@ -386,8 +385,8 @@ function SellerListing() {
             )}
           </Flex>
           <div style={{ height: 10 }}></div>
-          <h3>Category:</h3>
-          <h2>
+          <h3 className="listingH3">Category:</h3>
+          <h2 className="listingH2">
             {listing.listingCategory
               ? listing.listingCategory.toLowerCase()
               : ""}
@@ -402,6 +401,8 @@ function SellerListing() {
 }
 
 export default SellerListing;
+
+
 
 /*
 <div class="slideshow-container">
