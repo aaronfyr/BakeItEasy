@@ -248,7 +248,7 @@ function BuyerExploreShopping() {
   // routeChangeToListing
   const routeChangeToListing = (listingId) => {
     console.log("routechangetolisting: ", listingId);
-    let path = "listing/";
+    let path = "/listing/";
     navigate(path + listingId);
   };
 

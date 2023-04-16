@@ -348,7 +348,7 @@ export const BuyerViewOfSellers = () => {
         <input
           className="homepageInput"
           name="search"
-          placeholder="Search by name or username..."
+          placeholder="Search by username..."
           onChange={handleSearch}
           value={search}
         />
@@ -374,9 +374,8 @@ export const BuyerViewOfSellers = () => {
         {sellers
           .filter((seller) => {
             if (
-              (seller.name && seller.name.toLowerCase().includes(search)) ||
-              (seller.username &&
-                seller.username.toLowerCase().includes(search))
+              seller.username &&
+              seller.username.toLowerCase().includes(search)
             ) {
               return seller;
             }

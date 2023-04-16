@@ -285,9 +285,8 @@ width:100%;
   margin-top: 5px;
 }
 
-.categoriesDisplay {
+.homepageCategoriesDisplay {
   display: flex;
-  overflow-x: scroll;
   /*justify-content: center; delete this if not necessary*/
 }
 
@@ -337,6 +336,11 @@ width:100%;
 }
 
 .category:hover {
+  background: var(--dark-text);
+  color: white;
+}
+
+.category:checked {
   background: var(--dark-text);
   color: white;
 }

@@ -223,7 +223,7 @@ function BuyerProfile() {
     if (response.ok) {
       // redirect to homepage
       console.log("created rating: ", oId);
-      toast.success(`Submitted reating for Order #${oId}!`);
+      toast.success(`Submitted review for Order #${oId}!`);
     } else {
       const errorData = await response.json();
       console.log("reporting error:", errorData.error);
@@ -292,7 +292,7 @@ function BuyerProfile() {
         <div id="profilePhoto">
           <img
             className="homepageProfilePhotoImg"
-            alt="seller pfp"
+            alt=""
             src={buyerProfilePhoto}
           ></img>
         </div>
