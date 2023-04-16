@@ -26,6 +26,21 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    async function fetchData() {
+      const fetchedBuyer = localStorage.getItem("buyer");
+      const fetchedSeller = localStorage.getItem("seller");
+      if (fetchedBuyer) {
+        console.log("profile", "has buyer");
+        navigate("/");
+      } else if (fetchedSeller) {
+        console.log("profile", "has seller");
+        navigate("/sellerProfile");
+      }
+    }
+    fetchData();
+  }, []);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -80,11 +95,6 @@ function Login() {
   const handlePortalSwitch = () => {
     // navigate to a different page when the button is clicked
     navigate(`/login?type=${type === "seller" ? "buyer" : "seller"}`);
-  };
-
-  const handleHomepageReturn = () => {
-    // navigate to a different page when the button is clicked
-    navigate(`${type === "seller" ? "/sellerHomepage" : "/"}`);
   };
 
   return (
