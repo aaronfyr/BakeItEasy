@@ -43,7 +43,7 @@ function SellerCreateListing() {
   const [listing, setListing] = useState({
     name: '',
     listingCategory: '',
-    price: 9.05,
+    price: 0.00,
     maxQuantity: -1,
     description: '',
     imagePaths: [],
@@ -261,11 +261,12 @@ const handlePriceChange = (e) => {
         <SellerNavigationBar/>
         <br/>
         <div style={{width: 220}}>
-            <div className="button1" onClick={handleGoBack} ><FaArrowLeft/>Back to profile</div>
+            <div className="button1" onClick={handleGoBack} ><FaArrowLeft/><HStack width={2}/>Back to profile</div>
         </div>
         <br/>
         <div className="parent">
             <div id="rightListingContainer">
+                <h1 style={{marginLeft: 510}}>Create A Listing</h1>
                 <form className="form2" onSubmit={handleSubmit}>
       <label>
         Name:
@@ -313,7 +314,7 @@ const handlePriceChange = (e) => {
       <label>
         Minimum Preparation Days:
         <select name="minPrepDays" value={listing.minPrepDays} onChange={handleChange}>
-            <option value="">-- Select minimum preparation days --</option>
+            <option value="">-- Select min. preparation days --</option>
             {[...Array(11)].map((_, index) => (
             <option key={index} value={index}>
                 {index}
@@ -326,7 +327,9 @@ const handlePriceChange = (e) => {
             <input style={{height: 40}} type="file" id="image" name="image" onChange={(e) => setImage(e.target.files[0])}/>
         </div>
 
-      <button type="submit" className="button1">Create Listing</button>
+        <Button bg="#E2725B" colorScheme="white" type="submit"  w="300px">
+                Create Listing
+              </Button>
     </form>
     <br/>
             </div>

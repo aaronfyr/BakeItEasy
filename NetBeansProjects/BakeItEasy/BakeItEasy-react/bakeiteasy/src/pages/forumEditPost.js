@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Button } from "@chakra-ui/react";
 import { React, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -202,9 +202,9 @@ function ForumEditPost() {
 
       <div style={{ display: "flex" }}>
         <div style={{ width: 400, height: 300 }}></div>
-        <div id="rightListingContainer">
-          <h1>Post #{post.postId} </h1>
-          <h3>Title:</h3>
+        <div id="rightListingContainer" style={{marginLeft: 100}}>
+          <h1>Edit Post</h1>
+          <h3 className="listingH3">Title:</h3>
           {isEditable ? (
             <input
               type="text"
@@ -213,9 +213,9 @@ function ForumEditPost() {
               onChange={(e) => setPost({ ...post, title: e.target.value })}
             />
           ) : (
-            <h2>{post.title}</h2>
+            <h2 className="listingH2">{post.title}</h2>
           )}
-          <h3>Category:</h3>
+          <h3 className="listingH3">Category:</h3>
           {isEditable ? (
             <select
               className="inputStyle"
@@ -231,9 +231,9 @@ function ForumEditPost() {
               ))}
             </select>
           ) : (
-            <h2>{post.postCategory}</h2>
+            <h2 className="listingH2">{post.postCategory}</h2>
           )}
-
+        <br/>
           <img
             style={{ height: 200 }}
             alt="categoryimg"
@@ -243,38 +243,40 @@ function ForumEditPost() {
                 : "https://www.freeiconspng.com/thumbs/flat-icon-png/email-flat-icon-png-26.png"
             }
           ></img>
+          <br/>
 
           <div style={{ height: 10 }}></div>
           <Flex>
             {!isEditable && (
-              <button className="button1" onClick={() => setIsEditable(true)}>
+                <Button bg="#E2725B" colorScheme="white" onClick={() => setIsEditable(true)}  w="300px">
                 Edit
-              </button>
+              </Button>
             )}
             {isEditable && (
-              <button className="button1" onClick={handleUpdate}>
+                <Button bg="#E2725B" colorScheme="white" onClick={() => handleUpdate()}  w="300px">
                 Done
-              </button>
+              </Button>
+
             )}
           </Flex>
           <div style={{ height: 10 }}></div>
 
           <Flex>
-            {isEditable && !preDelete && (
+            {/*isEditable && !preDelete && (
               <button className="button1" onClick={() => setPreDelete(true)}>
                 Delete Post
               </button>
-            )}
-            {isEditable && preDelete && (
+            )*/}
+            {/*isEditable && preDelete && (
               <button className="button1" onClick={handleDelete}>
                 Confirm Delete
               </button>
-            )}
-            {isEditable && preDelete && (
+            )*/}
+            {/*isEditable && preDelete && (
               <button className="button1" onClick={() => setPreDelete(false)}>
                 Cancel Delete
               </button>
-            )}
+            )*/}
           </Flex>
           <div style={{ height: 10 }}></div>
           {deleteFailed && <h3>You cannot delete this listing.</h3>}
