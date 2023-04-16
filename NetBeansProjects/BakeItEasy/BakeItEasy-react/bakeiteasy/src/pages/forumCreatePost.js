@@ -8,7 +8,6 @@ import {
   Button,
   Flex,
   Heading,
-  HStack,
   Tooltip,
   IconButton,
   Menu,
@@ -22,6 +21,9 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
+  VStack,
+  HStack,
+  Spacer,
 } from "@chakra-ui/react";
 import {
   FaRegCommentAlt,
@@ -137,96 +139,101 @@ function ForumCreatePost() {
 
   //create post
   const handleSubmit = (e) => {
-
     e.preventDefault();
     if (!isSeller) {
-        var validTitle = buyerPost.title && buyerPost.title.length > 0 && buyerPost.title.length < 257;
-        var validCategory = buyerPost.postCategory !== "";
-        if (validCategory && validTitle) {
-            //buyer create post
-            fetch(
-                `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/posts`,
-                {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(buyerPost),
-                }
-            )
-                .then((response) => {
-                if (!response.ok) {
-                    toast.error("!response.ok");
-                } else {
-                    console.log("listing created");
-                    setCreated(true);
-                    toast.success(
-                    "Post successfully created! Redirecting to profile..."
-                    );
-                    setTimeout(() => {
-                    routeChangeToForum();
-                    }, 8000); // 1000 milliseconds = 1 second
-                }
-                return response.json();
-                })
-                .then((data) => {
-                // handle successful creation
-                })
-                .catch((error) => {
-                toast.error("Failed to create listing. " + error);
-                });
+      var validTitle =
+        buyerPost.title &&
+        buyerPost.title.length > 0 &&
+        buyerPost.title.length < 257;
+      var validCategory = buyerPost.postCategory !== "";
+      if (validCategory && validTitle) {
+        //buyer create post
+        fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/posts`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(buyerPost),
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              toast.error("!response.ok");
+            } else {
+              console.log("listing created");
+              setCreated(true);
+              toast.success(
+                "Post successfully created! Redirecting to profile..."
+              );
+              setTimeout(() => {
+                routeChangeToForum();
+              }, 8000); // 1000 milliseconds = 1 second
             }
-            if (!validCategory) {
-                toast.error("Select a category!");
-            }
-            if (!validTitle) {
-                toast.error("Post must have 1 to 256 characters!")
-            }
+            return response.json();
+          })
+          .then((data) => {
+            // handle successful creation
+          })
+          .catch((error) => {
+            toast.error("Failed to create listing. " + error);
+          });
+      }
+      if (!validCategory) {
+        toast.error("Select a category!");
+      }
+      if (!validTitle) {
+        toast.error("Post must have 1 to 256 characters!");
+      }
     } else {
       //buyer create post
-      var validTitle2 = sellerPost.title && sellerPost.title.length > 0 && sellerPost.title.length < 257;
-        console.log(sellerPost.postCategory, "validcat2")
-      var validCategory2 = sellerPost.postCategory && sellerPost.postCategory !== "";
+      var validTitle2 =
+        sellerPost.title &&
+        sellerPost.title.length > 0 &&
+        sellerPost.title.length < 257;
+      console.log(sellerPost.postCategory, "validcat2");
+      var validCategory2 =
+        sellerPost.postCategory && sellerPost.postCategory !== "";
       if (validCategory2 && validTitle2) {
         fetch(
-        `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/posts`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(sellerPost),
-        }
-      )
-        .then((response) => {
-          if (!response.ok) {
-            toast.error("!response.ok");
-          } else {
-            console.log("listing created");
-            setCreated(true);
-            toast.success(
-              "Post successfully created! Redirecting to profile..."
-            );
-            setTimeout(() => {
-              routeChangeToForum();
-            }, 8000); // 1000 milliseconds = 1 second
+          `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/posts`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(sellerPost),
           }
-          return response.json();
-        })
-        .then((data) => {
-          // handle successful creation
-        })
-        .catch((error) => {
-          toast.error("Failed to create listing. " + error);
-        });
-
-        }
-        if (!validCategory2) {
-                toast.error("Select a category!");
+        )
+          .then((response) => {
+            if (!response.ok) {
+              toast.error("!response.ok");
+            } else {
+              console.log("listing created");
+              setCreated(true);
+              toast.success(
+                "Post successfully created! Redirecting to profile..."
+              );
+              setTimeout(() => {
+                routeChangeToForum();
+              }, 8000); // 1000 milliseconds = 1 second
             }
-            if (!validTitle2) {
-                toast.error("Post must have 1 to 256 characters!")
-            }
+            return response.json();
+          })
+          .then((data) => {
+            // handle successful creation
+          })
+          .catch((error) => {
+            toast.error("Failed to create listing. " + error);
+          });
+      }
+      if (!validCategory2) {
+        toast.error("Select a category!");
+      }
+      if (!validTitle2) {
+        toast.error("Post must have 1 to 256 characters!");
+      }
     }
   };
 
@@ -243,44 +250,45 @@ function ForumCreatePost() {
         </div>
       </div>
       <br />
-      <h1 style={{ marginLeft: 450 }}>Create Post</h1>
-      <div className="parent">
-        <div id="rightListingContainer">
-          <form className="form2" onSubmit={handleSubmit}>
-            <label>Write your post:</label>
-            <textarea
-              name="title"
-              value={buyerPost.title}
-              onChange={handleChange}
-              style={{
-                minHeight: "10px",
-                height: "auto",
-                width: "280px",
-                boxSizing: "border-box",
-              }}
-            />
 
-            <label>
-              Category:
-              <select
-                name="postCategory"
-                value={buyerPost.postCategory}
-                onChange={handleChange}
-              >
-                <option value="">Select a category</option>
-                <option value="DISCUSSION">Discussion</option>
-                <option value="QUESTION">Question</option>
-                <option value="LOOKINGFOR">Looking For</option>
-                <option value="SHARINGINGREDIENTS">Sharing Ingredients</option>
-                <option value="RECIPES">Recipes</option>
-              </select>
-            </label>
-            <button type="submit" className="button1">
-              Create Post
-            </button>
-          </form>
+      <div className="createPostCard">
+        <h1>Create Post</h1>
+        <br />
+        <form className="createPostCardForm" onSubmit={handleSubmit}>
+          <label>Write your post:</label>
+          <textarea
+            name="title"
+            value={buyerPost.title}
+            onChange={handleChange}
+            style={{
+              minHeight: "10px",
+              height: "200px",
+              width: "380px",
+              boxSizing: "border-box",
+            }}
+          />
           <br />
-        </div>
+          <label>
+            Category:
+            <select
+              name="postCategory"
+              value={buyerPost.postCategory}
+              onChange={handleChange}
+            >
+              <option value="">Select a category</option>
+              <option value="DISCUSSION">Discussion</option>
+              <option value="QUESTION">Question</option>
+              <option value="LOOKINGFOR">Looking For</option>
+              <option value="SHARINGINGREDIENTS">Sharing Ingredients</option>
+              <option value="RECIPES">Recipes</option>
+            </select>
+          </label>
+          <button type="submit" className="button1">
+            Create Post
+          </button>
+        </form>
+
+        <br />
       </div>
     </div>
   );
