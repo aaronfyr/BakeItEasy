@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Button } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
@@ -115,11 +115,11 @@ function SellerEditProfile() {
         )
           .then((response) => {
             if (!response.ok) {
-              toast.error("Failed to update profile.");
+              toast.error("Failed to update profile. Refreshing...");
 
               setTimeout(() => {
                     window.location.reload();
-                }, 10000);
+                }, 4000);
               throw new Error("Failed to update seller");
             } else {
               console.log("ok response");
@@ -166,7 +166,7 @@ function SellerEditProfile() {
             <br/>
 
           <div style={{width:400, margin:0}}>
-            <h3>Name:</h3>
+            <h3 className="listingH3">Name:</h3>
           {isEditable ? (
             <input
               type="text"
@@ -177,9 +177,9 @@ function SellerEditProfile() {
               }
             />
           ) : (
-            <h2>{sellerObj.name}</h2>
+            <h2 className="listingH2">{sellerObj.name}</h2>
           )}
-          <h3>Username:</h3>
+          <h3 className="listingH3">Username:</h3>
           {isEditable ? (
             <input
               type="text"
@@ -190,9 +190,9 @@ function SellerEditProfile() {
               }
             />
           ) : (
-            <h2>{sellerObj.username}</h2>
+            <h2 className="listingH2">{sellerObj.username}</h2>
           )}
-          <h3>Phone:</h3>
+          <h3 className="listingH3">Phone:</h3>
           {isEditable ? (
             <input
               type="text"
@@ -204,12 +204,12 @@ function SellerEditProfile() {
               }}
             />
           ) : (
-            <h2>{sellerObj.phoneNo}</h2>
+            <h2 className="listingH2">{sellerObj.phoneNo}</h2>
           )}
            {isEditable && (
             <div>
                 <input
-                style={{ height: 40 }}
+                style={{ height: 40, width:400 }}
                 type="file"
                 id="image"
                 name="image"
@@ -220,20 +220,22 @@ function SellerEditProfile() {
             )}
           <div style={{ height: 10 }}></div>
           <Flex>
-            {!isEditable && (
-              <button className="button1" onClick={() => setIsEditable(true)}>
+            {!isEditable &&
+
+              <Button bg="#E2725B" colorScheme="white" onClick={() => setIsEditable(true)}  w="100%">
                 Edit
-              </button>
-            )}
+              </Button>
+
+            }
             {isEditable && (
-              <button className="button1" onClick={handleUpdate}>
+                <Button bg="#E2725B" colorScheme="white" onClick={() => handleUpdate()}  w="100%">
                 Done
-              </button>
+              </Button>
             )}
           </Flex>
           <div style={{ height: 10 }}></div>
-          <h3>Email:</h3>
-          <h2>{sellerObj.email}</h2>
+          <h3 className="listingH3">Email:</h3>
+          <h2 className="listingH2">{sellerObj.email}</h2>
           </div>
 
 
