@@ -32,6 +32,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { FiHeart, FiGlobe, FiUsers, FiArrowRight } from "react-icons/fi";
 import ReactLoading from "react-loading";
 import { ListingSellerHeader } from "./listingSellerHeader";
+import { formatPrice } from "./formatter";
 
 export const BuyerShopping = () => {
   let navigate = useNavigate();
@@ -614,7 +615,7 @@ export const BuyerShopping = () => {
                   size="1.2rem"
                   onClick={() => handleListingToLikes(product.listingId)}
                 />
-                <h3>${product.price}</h3>
+                <h3>${formatPrice(product.price)}</h3>
               </div>
             </div>
           ))}
