@@ -19,10 +19,12 @@ import entity.Report;
 import entity.Seller;
 import error.exception.BuyerEmailExistException;
 import error.exception.BuyerHasReportedSellerException;
+import error.exception.BuyerIsBannedException;
 import error.exception.BuyerNotFoundException;
 import error.exception.BuyerPhoneNumberExistException;
 import error.exception.BuyerUsernameExistException;
 import error.exception.InputDataValidationException;
+import error.exception.InvalidLoginCredentialException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.PostNotFoundException;
@@ -102,8 +104,14 @@ public class BuyersResource {
         try {
             Buyer buyer = buyerSessionBeanLocal.buyerLogin(email, password);
             return Response.status(200).entity(buyer).type(MediaType.APPLICATION_JSON).build();
-        } catch (Exception e) {
-            JsonObject exception = Json.createObjectBuilder().add("error", "Login invalid").build();
+        } catch (BuyerNotFoundException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Invalid email").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (InvalidLoginCredentialException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Incorrect password").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerIsBannedException e) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Buyer is banned").build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end loginCustomer
