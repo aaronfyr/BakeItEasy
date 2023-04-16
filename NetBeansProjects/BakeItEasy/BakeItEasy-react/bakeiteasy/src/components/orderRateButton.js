@@ -92,10 +92,18 @@ export function OrderRateButtonNonMemo({ oId, orderStatus }) {
     if (response.ok) {
       // redirect to homepage
       console.log("created rating: ", oId);
-      toast.success(`Submitted review for Order #${oId}!`);
+      toast.success(
+        `Submitted review for Order #${oId}! Refreshing, please wait...`
+      );
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
     } else {
       const errorData = await response.json();
-      toast.error(errorData.error);
+      toast.error(`${errorData.error}. Refreshing, please wait...`);
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
     }
   };
 
@@ -171,7 +179,7 @@ export function OrderRateButtonNonMemo({ oId, orderStatus }) {
                         type="submit"
                         w="100%"
                       >
-                        Submit Report
+                        Submit Review
                       </Button>
                     </Box>
                   </form>

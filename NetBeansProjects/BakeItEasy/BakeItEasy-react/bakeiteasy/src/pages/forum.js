@@ -169,7 +169,7 @@ const Forum = () => {
     navigate(path);
   };
 
-    function getCategoryUrl(category) {
+  function getCategoryUrl(category) {
     switch (category.toUpperCase()) {
       case "DISCUSSION":
         return "https://cdn-icons-png.flaticon.com/512/8286/8286038.png";
@@ -229,7 +229,7 @@ const Forum = () => {
       <h4 className="search">Post Categories: </h4>
 
       <div class="categoriesContainer">
-        <div className="categoriesDisplay">
+        <div className="homepageCategoriesDisplay">
           {categories.map((category) => (
             <Flex>
               <div

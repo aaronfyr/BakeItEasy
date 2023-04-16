@@ -545,10 +545,10 @@ export const BuyerShopping = () => {
             </div>
           ))}
 
-        {filteredListingsCounterFollowed === 0 && (
-          <h4 className="search">
-            Unfortunately, no Baked Listings here. Follow more bakers!
-          </h4>
+        {filteredListingsCounterExplore === 0 && (
+          <div className="emptyMessageContainer">
+            <h4 className="search">Unfortunately, no Baked Listings here...</h4>
+          </div>
         )}
       </div>
 
@@ -632,9 +632,9 @@ export const BuyerShopping = () => {
             </div>
           ))}
         {filteredListingsCounterExplore === 0 && (
-          <h4 className="search">
-            Unfortunately, no such Baked Listing. Try another search?
-          </h4>
+          <div className="emptyMessageContainer">
+            <h4 className="search">Unfortunately, no Baked Listings here...</h4>
+          </div>
         )}
       </div>
     </div>
