@@ -34,7 +34,7 @@ import {
 } from "@chakra-ui/react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { FaEdit, FaRegStar } from "react-icons/fa";
+import { FaEdit, FaRegStar, FaPhone } from "react-icons/fa";
 import { MdOutlineReport, MdOutlineCancel } from "react-icons/md";
 
 function BuyerProfile() {
@@ -510,6 +510,17 @@ function BuyerProfile() {
                     </div>
                   )}
                 </Popup>
+                <div
+                  className="button1_report"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ width: "150px" }}
+                >
+                  <HStack spacing="10px">
+                    <div>Whatsapp</div>
+                    <FaPhone />
+                  </HStack>
+                </div>
               </div>
             </div>
           </div>
