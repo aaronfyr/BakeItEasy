@@ -168,7 +168,7 @@ const handleCategoryChange = (category) => {
                     <div className="flexBox">
                         <div className="searchBarButton1" onClick={() => (routeChangeToOrder(listing.listingId))}>
                             <FaListUl style={{alignSelf: "center"}}/>
-                            <h3>view orders</h3>
+                            <h3>View orders</h3>
                         </div>
                     </div>
                 </div>
