@@ -329,7 +329,7 @@ function BuyerProfile() {
             <div id="buyerOrderDetailsGrid">
               <div className="orderDetails_left">
                 <OrderListingHeader oId={order.orderId} />
-                <h4 className="italic">Order No. {order.orderId}</h4>
+                <h4 className="italic">Order ID #{order.orderId}</h4>
 
                 <h4 className="details">
                   Customisation Notes: {order.description}
