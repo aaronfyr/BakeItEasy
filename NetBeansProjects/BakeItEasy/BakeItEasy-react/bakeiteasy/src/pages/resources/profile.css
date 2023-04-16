@@ -350,6 +350,7 @@ h4 {
   border-width: 1px;
   padding: 0px 20px 0px 20px;
   margin: 10px 20px 0px 0px;
+  cursor: pointer;
 }
 .button1_editAccount:hover {
   display: flex;
@@ -365,6 +366,7 @@ h4 {
   padding: 0px 20px 0px 20px;
   margin: 10px 20px 0px 0px;
   background-color: var(--dark-text);
+  cursor: pointer;
 }
 
 .button1_report {
@@ -380,6 +382,7 @@ h4 {
   border-width: 1px;
   padding: 0px 20px 0px 20px;
   margin: 10px 20px 0px 0px;
+  cursor: pointer;
 }
 
 .button1_report:hover {
@@ -396,6 +399,7 @@ h4 {
   padding: 0px 20px 0px 20px;
   margin: 10px 20px 0px 0px;
   background-color: var(--mid-orange);
+  cursor: pointer;
 }
 
 .button1_cancel {

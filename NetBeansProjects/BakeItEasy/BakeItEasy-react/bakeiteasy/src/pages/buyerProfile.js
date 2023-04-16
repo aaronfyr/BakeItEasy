@@ -377,11 +377,11 @@ function BuyerProfile() {
                 <h4 className="italic">Status:</h4>
                 <h2>{order.orderStatus}</h2>
                 {/* <h4 className="italic">Price:</h4> */}
-                <h2 style={{ fontSize: "16px" }}>
+                <h4 className="details">
                   Quantity: {order.quantity} <br />
                   Unit Price: ${order.price} <br />
                   Total: ${order.price * order.quantity}
-                </h2>
+                </h4>
               </div>
               <div className="orderDetails_right">
                 <Flex>
@@ -414,7 +414,7 @@ function BuyerProfile() {
                   rel="noopener noreferrer"
                   style={{ width: "150px" }}
                 >
-                  <HStack spacing="10px">                    
+                  <HStack spacing="10px">
                     <div>Whatsapp</div>
                     <FaPhone />
                   </HStack>
