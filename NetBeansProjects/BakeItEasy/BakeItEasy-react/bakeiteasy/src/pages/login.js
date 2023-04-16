@@ -43,39 +43,35 @@ function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+const response = await fetch(
+  `http://localhost:8080/BakeItEasy-war/webresources/${
+    type === "seller" ? "sellers" : "buyers"
+  }/${email}/${password}`,
+  {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }
+);
 
-    const response = await fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/${
-        type === "seller" ? "sellers" : "buyers"
-      }/${email}/${password}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+if (response.ok) {
+  setIsLoading(false);
+  const user = await response.json();
+  if (type === "seller") {
+    setSeller(user);
+    localStorage.setItem("seller", JSON.stringify(user));
+    navigate(`/sellerProfile`);
+  } else {
+    setBuyer(user);
+    localStorage.setItem("buyer", JSON.stringify(user));
+    navigate(`/`);
+  }
+} else {
+  const errorData = await response.json();
+  toast.error(errorData.error);
+}
 
-    console.log("handle submit", "");
-
-    if (response.ok) {
-      setIsLoading(false);
-      const user = await response.json();
-      if (type === "seller") {
-        setSeller(user);
-        localStorage.setItem("seller", JSON.stringify(user));
-        console.log("seller set: ", user);
-        navigate(`/sellerProfile`);
-      } else {
-        setBuyer(user);
-        localStorage.setItem("buyer", JSON.stringify(user));
-        console.log("buyer set: ", user);
-        navigate(`/`);
-      }
-    } else {
-      const errorData = await response.json();
-      toast.error(errorData.error);
-    }
   };
 
   /*
