@@ -156,7 +156,7 @@ useEffect(() => {
                                         <div style={{
                                             height: '100%',
                                             width: '100%',
-                                            backgroundImage: `url('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png')`,
+                                            backgroundImage: `url(${follower.imagePath})`,
                                             backgroundSize: 'cover',
                                             backgroundPosition: 'center',
                                         }}></div>
@@ -164,7 +164,6 @@ useEffect(() => {
                                         <div style={{width: 10}}></div>
                                     <h2>{follower.name}  (@{follower.username})</h2>
                                 </div>
-                                <h4>{follower.email}</h4>
                                 <div className="flexBox">
                                 </div>
                             </div>
