@@ -224,7 +224,7 @@ useEffect(() => {
                 </div>
                 <div className="sellerOrderCardBodyFlex">
                   <div className="searchBarButton1" onClick={() => routeChangeToOrder(order.orderId)}>
-                    <h5 >click to view order</h5>
+                    <h5 >Click to view order</h5>
                   </div>
                 </div>
               </SellerOrderCard>

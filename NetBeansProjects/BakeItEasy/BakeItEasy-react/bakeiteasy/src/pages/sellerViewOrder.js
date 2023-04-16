@@ -127,13 +127,18 @@ function SellerViewOrder() {
     } else if (order.orderStatus === "CANCELLED") {
       setPending(false);
       setAccepted(false);
-      setRejected(true);
+      setRejected(false);
       setCompleted(false);
     } else if (order.orderStatus === "COMPLETED") {
       setPending(false);
       setAccepted(false);
       setRejected(false);
       setCompleted(true);
+    } else if (order.orderStatus === "REJECTED") {
+       setPending(false);
+      setAccepted(false);
+      setRejected(true);
+      setCompleted(false);
     }
   }, [order]);
 
@@ -165,6 +170,7 @@ function SellerViewOrder() {
   const clickR = async () => {
     setPending(false);
     setRejected(true);
+    console.log("rejected has been set to true");
     try {
       const response = await fetch(
         `http://localhost:8080/BakeItEasy-war/webresources/sellers/${id}/rejectorder`,
