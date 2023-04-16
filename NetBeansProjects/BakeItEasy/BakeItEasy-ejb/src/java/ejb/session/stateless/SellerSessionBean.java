@@ -61,7 +61,8 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
     }
-
+    
+    // checked
     @Override
     public Long createNewSeller(Seller newSeller) throws UnknownPersistenceException, InputDataValidationException, SellerUsernameExistException, SellerEmailExistException, SellerPhoneNumberExistException {
         Set<ConstraintViolation<Seller>> constraintViolations = validator.validate(newSeller);
@@ -99,7 +100,7 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
         }
     }
 
-    
+    // checked
     @Override
     public void updateSeller(Seller updatedSeller) throws SellerNotFoundException, SellerPhoneNumberExistException, SellerUsernameExistException, InputDataValidationException {
         Set<ConstraintViolation<Seller>> constraintViolations = validator.validate(updatedSeller);
@@ -185,7 +186,7 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
             throw new SellerHasOutstandingOrdersException(ex.getMessage());
         }
     }
-
+    // checked
     @Override
     public Seller sellerLogin(String email, String password) throws SellerIsBannedException, InvalidLoginCredentialException, SellerNotFoundException {
         try {
@@ -223,6 +224,7 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
         }
     }
 
+    // checked
     @Override
     public Seller retrieveSellerByUsername(String username) throws SellerNotFoundException {
         Query query = em.createQuery("SELECT s FROM Seller s WHERE s.username = :inUsername");

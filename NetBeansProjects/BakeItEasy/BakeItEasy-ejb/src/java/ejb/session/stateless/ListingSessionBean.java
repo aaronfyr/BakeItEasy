@@ -63,7 +63,8 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
     }
-
+    
+    // checked
     @Override
     public Long createNewListing(Listing newListing, Long sellerId) throws SellerNotFoundException, InputDataValidationException, UnknownPersistenceException {
         Set<ConstraintViolation<Listing>> constraintViolations = validator.validate(newListing);
@@ -92,6 +93,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         }
     }
 
+    // checked
     @Override
     public void updateListing(Listing updatedListing) throws InputDataValidationException, ListingNotFoundException {
         Set<ConstraintViolation<Listing>> constraintViolations = validator.validate(updatedListing);
@@ -110,6 +112,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         }
     }
 
+    // checked
     @Override
     public void likeListing(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException, ListingLikedAlreadyException {
         if (!isListingLikedAlready(buyerId, listingId)) {
@@ -124,6 +127,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
 
     }
 
+    // checked
     @Override
     public void unlikeListing(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException, ListingIsNotLikedException {
         if (isListingLikedAlready(buyerId, listingId)) {
@@ -148,6 +152,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         }
     }
 
+    // checked
     // method to check whether listing is liked by the buyer
     @Override
     public void deleteListing(Long listingId) throws ListingNotFoundException, ListingHasOngoingOrdersException, OrderNotFoundException {

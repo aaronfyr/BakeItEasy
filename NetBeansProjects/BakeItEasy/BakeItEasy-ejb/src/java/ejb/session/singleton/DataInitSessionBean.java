@@ -25,7 +25,6 @@ import entity.Review;
 import entity.Seller;
 import enumeration.ListingCategory;
 import enumeration.PostCategory;
-import error.exception.AdminUsernameExistsException;
 import error.exception.BuyerEmailExistException;
 import error.exception.BuyerNotFoundException;
 import error.exception.BuyerPhoneNumberExistException;
@@ -582,7 +581,7 @@ public class DataInitSessionBean {
 
                 } catch (UnknownPersistenceException | InputDataValidationException | SellerUsernameExistException
                                 | SellerEmailExistException | SellerPhoneNumberExistException | PostNotFoundException
-                                | OrderNotFoundException | AdminUsernameExistsException | SellerNotFoundException
+                                | OrderNotFoundException | SellerNotFoundException
                                 | BuyerNotFoundException | ListingNotFoundException | OrderIsNotPendingException
                                 | OrderIsNotAcceptedException | BuyerPhoneNumberExistException | BuyerEmailExistException | BuyerUsernameExistException | OrderIsNotCompletedException ex ) {
                         System.out.println("Error initialising data: " + ex.getMessage());

@@ -13,7 +13,6 @@ import entity.Buyer;
 import entity.Report;
 import entity.Seller;
 import error.exception.AdminNotFoundException;
-import error.exception.AdminUsernameExistsException;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
@@ -106,7 +105,7 @@ public class AdminsResource {
     public Admin createAdmin(Admin a) {
         try {
             adminSessionBeanLocal.createNewAdmin(a);
-        } catch (AdminUsernameExistsException | UnknownPersistenceException | InputDataValidationException ex) {
+        } catch (UnknownPersistenceException | InputDataValidationException ex) {
             Logger.getLogger(AdminsResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         return a;

@@ -10,7 +10,6 @@ import entity.Buyer;
 import entity.Report;
 import entity.Seller;
 import error.exception.AdminNotFoundException;
-import error.exception.AdminUsernameExistsException;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
@@ -73,7 +72,7 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
     }
     
     @Override
-    public Long createNewAdmin(Admin admin) throws AdminUsernameExistsException, UnknownPersistenceException, InputDataValidationException {
+    public Long createNewAdmin(Admin admin) throws UnknownPersistenceException, InputDataValidationException {
         Set<ConstraintViolation<Admin>> constraintViolations = validator.validate(admin);
 
         if (constraintViolations.isEmpty()) {
