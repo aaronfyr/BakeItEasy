@@ -55,7 +55,7 @@ public class Report implements Serializable {
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(nullable = true)
     @JsonbTransient
-    private Admin admin;
+    private Admin adminReviewer;
 
     public Report() {
     }
@@ -105,12 +105,12 @@ public class Report implements Serializable {
         this.reportee = reportee;
     }
 
-    public Admin getAdmin() {
-        return admin;
+    public Admin getAdminReviewer() {
+        return adminReviewer;
     }
 
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
+    public void setAdminReviewer(Admin adminReviewer) {
+        this.adminReviewer = adminReviewer;
     }
 
     @Override

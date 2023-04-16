@@ -106,7 +106,7 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
     @Override
     public Long assignAdmin(Report report, Long adminId) throws AdminNotFoundException {
         Admin admin = adminSessionBeanLocal.retrieveAdminById(adminId);
-        report.setAdmin(admin);
+        report.setAdminReviewer(admin);
         admin.getReports().add(report);
         em.merge(report);
         return report.getReportId();
@@ -128,7 +128,7 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         oldR.setReason(r.getReason());
         oldR.setReporter(r.getReporter());
         oldR.setReportee(r.getReportee());
-        oldR.setAdmin(r.getAdmin());
+        oldR.setAdminReviewer(r.getAdminReviewer());
     } //end updateReport
     
     // remove report from db
@@ -137,7 +137,7 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         Report report = reportSessionBeanLocal.retrieveReportById(reportId);
         Buyer reporter = report.getReporter();
         Seller reportee = report.getReportee();
-        Admin admin = report.getAdmin();
+        Admin admin = report.getAdminReviewer();
 //        report.setReporter(null);
 //        report.setReportee(null);
 //        report.setAdmin(null);
