@@ -40,6 +40,7 @@ function ForumCreatePost() {
   const { id } = useParams();
   const [sellerId, setSellerId] = useState(null);
   const [buyerId, setBuyerId] = useState(null);
+  const [isBuyer, setIsBuyer] = useState(false);
   const [isSeller, setIsSeller] = useState(false);
   const [buyerPost, setBuyerPost] = useState({
     post: {
@@ -71,6 +72,7 @@ function ForumCreatePost() {
       if (!fetchedSeller) {
         console.log("forum", "is buyer");
         setIsSeller(false);
+        setIsBuyer(true);
         try {
           const parsedUser = JSON.parse(fetchedBuyer);
           console.log("parsedUser.id: ", parsedUser.buyerId);
@@ -241,7 +243,7 @@ function ForumCreatePost() {
     <div>
       <ToastContainer />
       {isSeller && <SellerNavigationBar />}
-      {!isSeller && <NavigationBar />}
+      {isBuyer && <NavigationBar />}
       <br />
       <div style={{ width: 220 }}>
         <div className="button1" onClick={handleGoBack}>
