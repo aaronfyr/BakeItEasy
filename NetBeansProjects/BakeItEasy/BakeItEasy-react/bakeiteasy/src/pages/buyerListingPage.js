@@ -92,6 +92,7 @@ function BuyerListingPage() {
   const [listingMaxQty, setListingMaxQty] = useState(null);
   const [listingImagePaths, setListingImagePaths] = useState([""]);
   const [listingMinPrep, setListingMinPrep] = useState(0);
+  const [listingDate, setListingDate] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -115,6 +116,7 @@ function BuyerListingPage() {
         setListingMaxQty(data.maxQuantity);
         setListingImagePaths(data.imagePaths);
         setListingMinPrep(data.minPrepDays);
+        setListingDate(data.dateOfCreation);
         console.log(`HTTP Response Code: ${response?.status}`);
       } catch (error) {
         if (error instanceof SyntaxError) {
@@ -270,6 +272,8 @@ function BuyerListingPage() {
     "https://images.unsplash.com/photo-1536987333706-fc9adfb10d91?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
   ]);
 
+  console.log("dateofcreation", listingDate);
+
   return (
     <div>
       <NavigationBar />
@@ -305,15 +309,15 @@ function BuyerListingPage() {
           </Flex>
           <br />
           <h1>{listingName}</h1>
-          <h5>Date posted: {formatDate(listing.dateOfCreation)}</h5>
+          <h5>Date posted: {formatDate(listingDate)}</h5>
           <br />
           <div id="buyerListingDetailsGrid">
             <h3>Price</h3>
-            <h3>${formatPrice(listing.price)}</h3>
+            <h3>${formatPrice(price)}</h3>
             <h3>Maximum Quantity Per Order:</h3>
             <h3>{listingMaxQty}</h3>
             <h3>Minimum Preparation time:</h3>
-            <h3>{listing.minPrepDays} days</h3>
+            <h3>{listingMinPrep} days</h3>
             <h3>Description:</h3>
             <h3> {listingDescription}</h3>
           </div>
