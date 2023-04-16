@@ -254,7 +254,7 @@ function BuyerLikedListings() {
                 <div className="productImg">
                   <img
                     className="productImg"
-                    src={require("../assets/scones.jpg")}
+                    src={product.imagePaths[0]}
                     alt="listing product"
                   />
                 </div>
