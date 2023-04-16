@@ -104,37 +104,39 @@ function SellerListing() {
 
   const handleUpdate = () => {
     if (validateListing(listing)) {
-
-  stopEditable();
-  fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(listing),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        toast.error("Update failed");
-        //setDeleteFailed(true);
-        throw new Error("Update failed");
-      } else {
-        toast.success("Listing update success");
-        return response.json();
-      }
-    })
-    .then((data) => {
-      // handle successful update
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
-    })
-    .catch((error) => {
-      /* handle other errors */
-      toast.error(error);
-    });
+      stopEditable();
+      fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/listings/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(listing),
+        }
+      )
+        .then((response) => {
+          if (!response.ok) {
+            toast.error("Update failed");
+            //setDeleteFailed(true);
+            throw new Error("Update failed");
+          } else {
+            toast.success("Listing update success");
+            return response.json();
+          }
+        })
+        .then((data) => {
+          // handle successful update
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
+        })
+        .catch((error) => {
+          /* handle other errors */
+          toast.error(error);
+        });
     }
-};
+  };
 
   const handleDelete = () => {
     setPreDelete(false);
@@ -171,19 +173,19 @@ function SellerListing() {
   function validateListing(listing) {
     var validated = true;
     if (listing.name.length < 1 || listing.name.length > 64) {
-        toast.error("Listing name must contain 1 to 64 characters!");
-        validated = false;
+      toast.error("Listing name must contain 1 to 64 characters!");
+      validated = false;
     }
     if (listing.price < 0) {
-        toast.error("Listing price must not be negative!");
-        validated = false;
+      toast.error("Listing price must not be negative!");
+      validated = false;
     }
     if (listing.description.length < 1 || listing.description.length > 512) {
-        toast.error("Listing description must contain 1 to 512 characters!");
-        validated = false;
+      toast.error("Listing description must contain 1 to 512 characters!");
+      validated = false;
     }
     return validated;
-}
+  }
 
   /*
   // for the image slideshow
@@ -392,7 +394,11 @@ function SellerListing() {
               ? listing.listingCategory.toLowerCase()
               : ""}
           </h2>
-          {deleteFailed && <h3>You cannot delete this listing as pending/accepted orders exist.</h3>}
+          {deleteFailed && (
+            <h3>
+              You cannot delete this listing as it has pending/accepted orders.
+            </h3>
+          )}
 
           <br></br>
         </div>
