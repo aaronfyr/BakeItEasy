@@ -21,7 +21,7 @@ export const theme = extendTheme({
             label: {
               top: 0,
               left: 0,
-              zIndex: 0,
+              zIndex: 1,
               position: "absolute",
               pointerEvents: "none",
               mx: 3,
