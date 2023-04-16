@@ -47,7 +47,7 @@ public class Admin implements Serializable {
     private String password;
     
     @JsonbTransient
-    @OneToMany(mappedBy = "admin", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "adminReviewer", fetch = FetchType.EAGER)
     private List<Report> reports;
     
     public Admin() {

@@ -134,8 +134,8 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
     @Override
     public void removeAdminFromReport(Long reportId) throws ReportNotFoundException {
         Report report = reportSessionBeanLocal.retrieveReportById(reportId);
-        Admin admin = report.getAdmin();
-        report.setAdmin(null);
+        Admin admin = report.getAdminReviewer();
+        report.setAdminReviewer(null);
         admin.getReports().remove(report);
     }
     
@@ -144,7 +144,7 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
     public void removeAdmin(Long adminId) throws AdminNotFoundException {
         Admin admin = adminSessionBeanLocal.retrieveAdminById(adminId);
         for (Report report : admin.getReports()) {
-            report.setAdmin(null);
+            report.setAdminReviewer(null);
         }
         admin.getReports().clear();
         em.remove(admin);

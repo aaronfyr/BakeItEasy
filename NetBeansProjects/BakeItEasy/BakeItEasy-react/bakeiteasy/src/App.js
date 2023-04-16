@@ -15,7 +15,6 @@ import Signup from "./pages/signup";
 import ForgotPassword from "./pages/forgotPassword";
 import ResetPassword from "./pages/resetPassword";
 
-import SellerHomepage from "./pages/sellerHomePage";
 import BuyerHomepage from "./pages/buyerHomepage";
 import AdminProfilePage from "./pages/adminProfilePage";
 
@@ -90,7 +89,6 @@ function App() {
                 <Route path="/viewAllReports" element={<ViewAllReports />} />
                 <Route path="/makeReview" element={<MakeReview />} />
 
-                <Route path="/sellerHomepage" element={<SellerHomepage />} />
                 <Route path="/sellerProfile" element={<SellerProfile />} />
                 <Route
                   path="/editSellerProfile"
