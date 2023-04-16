@@ -20,13 +20,13 @@ import {
   PopoverHeader,
   PopoverBody,
   PopoverArrow,
-  PopoverCloseButton,
+  PopoverCloseButton
 } from "@chakra-ui/react";
 import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
 import { formatPrice, formatDate } from "../components/formatter";
 import "./resources/default.css";
 import "./resources/listing.css";
-
+import { Slideshow } from "../components/slideshow";
 import { NavigationBar } from "../components/buyerNavigationBar";
 import { FiHeart } from "react-icons/fi";
 
@@ -40,6 +40,12 @@ function SellerListing() {
   const [preDelete, setPreDelete] = useState(false);
   const [deleteFailed, setDeleteFailed] = useState(false);
   const [likeNum, setLikeNum] = useState(404);
+    const [images, setImages] = useState([
+    "https://images.unsplash.com/photo-1509721434272-b79147e0e708?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
+    "https://images.unsplash.com/photo-1506710507565-203b9f24669b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1536&q=80",
+    "https://images.unsplash.com/photo-1536987333706-fc9adfb10d91?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
+  ]);
+  const [listingImagePaths, setListingImagePaths] = useState([""]);
 
   let navigate = useNavigate();
   const routeChangeToSellerProfile = () => {
@@ -64,6 +70,7 @@ function SellerListing() {
         const data = await response.json();
         setListing(data);
         setLoading(false);
+        setListingImagePaths(data.imagePaths);
         console.log("response is", data);
       } catch (error) {
         console.log("ERROR !!!!!" + error);
@@ -231,7 +238,8 @@ function SellerListing() {
       <h1>Listing: {listing.name} </h1>
       <div id="listingContainer">
         <div class="leftListingContainer">
-          {/*<div class="slideshow-container"></div>*/}
+            <Slideshow imagePaths={listingImagePaths} />
+          {/*<div class="slideshow-container"></div>
           <img
             alt="upload"
             style={{
@@ -245,7 +253,7 @@ function SellerListing() {
                 ? listing.imagePaths[0]
                 : "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80"
             }
-          />
+          />*/}
 
           <Flex justifyContent={"space-between"}></Flex>
           <br />
