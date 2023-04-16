@@ -261,7 +261,7 @@ const handlePriceChange = (e) => {
         <SellerNavigationBar/>
         <br/>
         <div style={{width: 220}}>
-            <div className="button1" onClick={handleGoBack} ><FaArrowLeft/>Back to profile</div>
+            <div className="button1" onClick={handleGoBack} ><FaArrowLeft/><HStack width={2}/>Back to profile</div>
         </div>
         <br/>
         <div className="parent">

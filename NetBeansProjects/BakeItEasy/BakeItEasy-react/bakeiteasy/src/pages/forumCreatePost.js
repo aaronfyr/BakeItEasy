@@ -246,7 +246,7 @@ function ForumCreatePost() {
       {isBuyer && <NavigationBar />}
       <br />
       <div style={{ width: 220 }}>
-        <div className="button1" onClick={handleGoBack}>
+        <div className="button1" onClick={() => (handleGoBack())}>
           <FaArrowLeft />
           Back to forum
         </div>
