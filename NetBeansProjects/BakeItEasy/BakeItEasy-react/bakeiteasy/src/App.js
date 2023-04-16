@@ -63,7 +63,7 @@ function App() {
                 <Route path="buyerProfile/:id" element={<BuyerProfile />} />
                 <Route path="/searchSellers" element={<BuyerSearchSellers />} />
                 <Route
-                  path="buyerEditAccount/:id"
+                  path="/buyerEditAccount"
                   element={<BuyerEditAccount />}
                 />
                 <Route path="buyerOrder/:id" element={<BuyerViewOrder />} />

@@ -26,11 +26,14 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
+  VStack,
 } from "@chakra-ui/react";
 import { toast, ToastContainer } from "react-toastify";
 import { FiHeart, FiGlobe, FiUsers } from "react-icons/fi";
 import { ListingSellerHeader } from "../components/listingSellerHeader";
 import { NavigationBar } from "../components/buyerNavigationBar";
+import { formatPrice, formatDate } from "../components/formatter";
+import { ListingLikeButton } from "../components/listingLikeButton";
 
 function BuyerFollowedShopping() {
   let navigate = useNavigate();
@@ -400,14 +403,16 @@ function BuyerFollowedShopping() {
                 <h3>{product.name}</h3>
                 <h5>{product.description}</h5>
               </div>
+              <div className="dateRow">
+                <h5>{formatDate(product.dateOfCreation)}</h5>
+              </div>
+
               <div class="productBottomRow">
-                <div class="btn">
-                  <FiHeart
-                    size="1.2rem"
-                    onClick={() => handleListingToLikes(product.listingId)}
-                  />
-                </div>
-                <h3>${product.price}</h3>
+                <ListingLikeButton
+                  buyerId={buyer.buyerId}
+                  lId={product.listingId}
+                />
+                <h3>${formatPrice(product.price)}</h3>
               </div>
             </div>
           ))}

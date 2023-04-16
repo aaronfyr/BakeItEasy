@@ -27,12 +27,14 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   Spacer,
+  VStack,
 } from "@chakra-ui/react";
 import { toast, ToastContainer } from "react-toastify";
 import { FiHeart, FiGlobe, FiUsers, FiArrowRight } from "react-icons/fi";
 import ReactLoading from "react-loading";
 import { ListingSellerHeader } from "./listingSellerHeader";
-import { formatPrice } from "./formatter";
+import { ListingLikeButton } from "./listingLikeButton";
+import { formatPrice, formatDate } from "./formatter";
 
 export const BuyerShopping = () => {
   let navigate = useNavigate();
@@ -528,14 +530,17 @@ export const BuyerShopping = () => {
                 <h3>{product.name}</h3>
                 <h5>{product.description}</h5>
               </div>
+
+              <div className="dateRow">
+                <h5>{formatDate(product.dateOfCreation)}</h5>
+              </div>
+
               <div class="productBottomRow">
-                <div class="btn">
-                  <FiHeart
-                    size="1.2rem"
-                    onClick={() => handleListingToLikes(product.listingId)}
-                  />
-                </div>
-                <h3>${product.price}</h3>
+                <ListingLikeButton
+                  buyerId={buyer.buyerId}
+                  lId={product.listingId}
+                />
+                <h3>${formatPrice(product.price)}</h3>
               </div>
             </div>
           ))}
@@ -585,6 +590,7 @@ export const BuyerShopping = () => {
           })
           .map((product) => {
             filteredListingsCounterExplore++;
+            console.log(product);
             return product;
           })
           .map((product) => (
@@ -592,6 +598,7 @@ export const BuyerShopping = () => {
               <div class="productSeller" key={product.listingId}>
                 <ListingSellerHeader lId={product.listingId} />
               </div>
+
               <div
                 class="homepageProductContent"
                 onClick={() => routeChangeToListing(product.listingId)}
@@ -607,13 +614,18 @@ export const BuyerShopping = () => {
                     alt="baked listing"
                   />
                 </div>
+
                 <h3>{product.name}</h3>
                 <h5>{product.description}</h5>
               </div>
+              <div className="dateRow">
+                <h5>{formatDate(product.dateOfCreation)}</h5>
+              </div>
+
               <div class="productBottomRow">
-                <FiHeart
-                  size="1.2rem"
-                  onClick={() => handleListingToLikes(product.listingId)}
+                <ListingLikeButton
+                  buyerId={buyer.buyerId}
+                  lId={product.listingId}
                 />
                 <h3>${formatPrice(product.price)}</h3>
               </div>

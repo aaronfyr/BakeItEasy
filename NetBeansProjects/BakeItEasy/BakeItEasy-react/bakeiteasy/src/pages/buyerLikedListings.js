@@ -24,9 +24,19 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Spacer,
 } from "@chakra-ui/react";
-
+import { toast, ToastContainer } from "react-toastify";
 import { FiHeart } from "react-icons/fi";
+import { formatPrice, formatDate } from "../components/formatter";
 
 import {
   BrowserRouter as Router,
@@ -96,8 +106,6 @@ function BuyerLikedListings() {
     fetchData();
   }, listings); // IDK IF THIS IS GOOD CODE BUT THIS IS THE ONLY WAY page refreshes after removing anything from listings
 
-  console.log("listings: ", listings);
-
   // handle filter by category
   const [categoryFilter, setCategoryFilter] = useState(null);
   const [categories, setCategories] = useState([
@@ -140,7 +148,6 @@ function BuyerLikedListings() {
   };
 
   // handleRemoveFromLikedListings
-  const [likeListingError, setLikeListingError] = useState(null);
   const handleRemoveFromLikedListings = async (lId) => {
     const response = await fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/${buyer.buyerId}/unlike`,
@@ -152,26 +159,71 @@ function BuyerLikedListings() {
       }
     );
     if (response.ok) {
-      // redirect to homepage
       const newListings = listings.filter((obj) => {
         return obj.listingID !== lId;
       });
       setListings(newListings);
       console.log("unlikedListing# ", lId);
+      toast.success(`Unliked listing #${lId}.`);
+      onOpen();
       // success message
     } else {
-      // show error message
-      setLikeListingError("Invalid details. Please try again.");
+      const errorData = await response.json();
+      toast.error(errorData.error);
     }
   };
 
   let filteredListingsCounterFollowed = 0;
 
+  // successful unlike
+  const OverlayOne = () => (
+    <ModalOverlay
+      bg="blackAlpha.300"
+      backdropFilter="blur(5px) hue-rotate(-10deg)"
+    />
+  );
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [overlay, setOverlay] = useState(<OverlayOne />);
+
   return (
-    <div className="background">
+    <div>
       <NavigationBar />
+      <ToastContainer />
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+        {overlay}
+        <ModalContent>
+          <ModalHeader>Unliked listing!</ModalHeader>
+          <Flex>
+            <Spacer />
+            <ModalBody>
+              <img
+                width="250px"
+                height="250px"
+                src={require("../assets/cancel_order.gif")}
+                alt="listing product"
+              />
+            </ModalBody>
+            <Spacer />
+          </Flex>
+          <Flex>
+            <Spacer />
+            <ModalFooter>
+              <Button
+                onClick={() => window.location.reload()}
+                colorScheme="orange"
+                variant="ghost"
+              >
+                Return
+              </Button>
+            </ModalFooter>
+            <Spacer />
+          </Flex>
+        </ModalContent>
+      </Modal>
       <br />
-      <div class="shoppingHeader">Liked Listings</div>
+      <div class="shoppingHeader">
+        <h1>Liked Listings</h1>
+      </div>
       <br />
       <div className="homepageSearchBar">
         <input
@@ -246,11 +298,14 @@ function BuyerLikedListings() {
             return null;
           })
           .map((product) => (
-            <div className="product">
-              <div onClick={() => routeChangeToListing(product.listingId)}>
-                <div class="productSeller">
-                  <ListingSellerHeader lId={product.listingId} />
-                </div>
+            <div className="homepageProduct">
+              <div class="productSeller">
+                <ListingSellerHeader lId={product.listingId} />
+              </div>
+              <div
+                className="homepageProductContent"
+                onClick={() => routeChangeToListing(product.listingId)}
+              >
                 <div className="productImg">
                   <img
                     className="productImg"
@@ -260,8 +315,11 @@ function BuyerLikedListings() {
                 </div>
 
                 <h3>{product.name}</h3>
-
                 <h5>{product.description}</h5>
+              </div>
+
+              <div className="dateRow">
+                <h5>{formatDate(product.dateOfCreation)}</h5>
               </div>
               <div class="productBottomRow">
                 <div

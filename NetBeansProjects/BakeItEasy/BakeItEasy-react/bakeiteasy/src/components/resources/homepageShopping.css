@@ -124,7 +124,7 @@
 .homepageProduct {
   margin: 20px;
   width: 200px;
-  height: 280px;
+  height: 290px;
   padding: 10px;
   border-radius: 20px;
   background-color: white;
@@ -134,14 +134,14 @@
 
 .homepageProductContent {
   color: var(--dark-text);
-  height: 198px;
+  height: 190px;
 }
 
 .productSeller {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 5px;
+    margin-bottom: 5 px;
 }
 
 .productContent {
@@ -157,6 +157,13 @@
   align-self: end;
 }
 
+
+.dateRow {
+  display: flex;
+  justify-content: flex-start;
+  width:100%;
+  font-style: italic;
+}
 
 
 h3 {

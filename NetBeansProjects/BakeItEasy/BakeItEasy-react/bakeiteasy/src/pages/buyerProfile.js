@@ -4,6 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
 import { OrderListingHeader } from "../components/orderListingHeader";
 import { OrderListingImage } from "../components/orderListingImage";
+import { OrderCancelButton } from "../components/orderCancelButton";
 
 import { Rating } from "react-simple-star-rating";
 
@@ -263,8 +264,8 @@ function BuyerProfile() {
 
   const routeChangeToEditAccountDetails = (buyerId) => {
     console.log("routeChangeToEditAccountDetails: ", buyerId);
-    let path = "/buyerEditAccount/";
-    navigate(path + buyerId);
+    let path = "/buyerEditAccount";
+    navigate(path);
   };
 
   // successful cancelOrder
@@ -347,7 +348,9 @@ function BuyerProfile() {
         </Flex>
       </Flex>
       <br />
-      <div class="shoppingHeader">My Orders</div>
+      <div class="shoppingHeader">
+        <h1>My Orders</h1>
+      </div>
       <br />
 
       <div class="ordersDisplay">
@@ -386,8 +389,10 @@ function BuyerProfile() {
                       className="button1_cancel"
                       onClick={() => handleCancelOrder(order.orderId)}
                     >
-                      Cancel Order
-                      <MdOutlineCancel />
+                      <HStack spacing="8px">
+                        <div>Cancel Order</div>
+                        <MdOutlineCancel />
+                      </HStack>
                     </div>
                   )}
                 </Flex>
@@ -397,8 +402,10 @@ function BuyerProfile() {
                     <Flex>
                       {order.orderStatus !== "CANCELLED" && (
                         <div className="button1_report">
-                          Report Seller
-                          <MdOutlineReport size="1.2rem" />
+                          <HStack spacing="8px">
+                            <div>Report Seller </div>
+                            <MdOutlineReport size="1.2rem" />
+                          </HStack>
                         </div>
                       )}
                     </Flex>
@@ -466,8 +473,10 @@ function BuyerProfile() {
                     <Flex>
                       {order.orderStatus === "COMPLETED" && (
                         <div className="button1_report">
-                          Rate
-                          <FaRegStar size="1.2rem" />
+                          <HStack spacing="8px">
+                            <div>Rate</div>
+                            <FaRegStar size="1.2rem" />{" "}
+                          </HStack>
                         </div>
                       )}
                     </Flex>
