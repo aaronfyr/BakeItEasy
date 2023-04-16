@@ -353,18 +353,6 @@ function BuyerViewSellerProfile() {
           <div className="reviewDisplay">
             {reviews.map((review) => (
               <div className="review">
-                <div class="productSeller">
-                  <img
-                    width="30px"
-                    height="30px"
-                    src={
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png"
-                    }
-                    alt="listing product"
-                  />
-                  <h6>buyer name</h6>
-                </div>
-
                 <div className="reviewTitle">
                   <h2>{review.title}</h2>
                 </div>

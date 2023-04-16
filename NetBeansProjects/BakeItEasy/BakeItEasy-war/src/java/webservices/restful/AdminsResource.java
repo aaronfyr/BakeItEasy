@@ -12,6 +12,7 @@ import entity.Admin;
 import entity.Buyer;
 import entity.Report;
 import entity.Seller;
+import error.exception.AdminEmailExistException;
 import error.exception.AdminNotFoundException;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
@@ -142,42 +143,6 @@ public class AdminsResource {
 //        return Response.status(Response.Status.NO_CONTENT).build();
 //    }
     
-    // assign admin to a report
-    @PUT
-    @Path("/{admin_id}/reports/{report_id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response assignAdminToReport(@PathParam("admin_id") Long aId, @PathParam("report_id") Long rId) {
-        try {
-            Report report = reportSessionBeanLocal.retrieveReportById(rId);
-            reportSessionBeanLocal.assignAdmin(report, aId);
-            return Response.status(200).entity(
-                    report
-            ).type(MediaType.APPLICATION_JSON).build();
-        } catch (NoResultException e) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "Not found")
-                    .build();
-
-            return Response.status(404).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
-        } catch (AdminNotFoundException ex) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "Not found: admin id " + aId)
-                    .build();
-
-            return Response.status(404).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
-        } catch (ReportNotFoundException ex) {
-            JsonObject exception = Json.createObjectBuilder()
-                    .add("error", "Not found: report id " + rId)
-                    .build();
-
-            return Response.status(404).entity(exception)
-                    .type(MediaType.APPLICATION_JSON).build();
-        }
-    } //end assignAdminToReport
-    
     // edit admin
     /*
     {
@@ -208,6 +173,13 @@ public class AdminsResource {
         } catch (AdminNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Not found: admin id " + aId)
+                    .build();
+
+            return Response.status(404).entity(exception)
+                    .type(MediaType.APPLICATION_JSON).build();
+        } catch (AdminEmailExistException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Email already exists")
                     .build();
 
             return Response.status(404).entity(exception)

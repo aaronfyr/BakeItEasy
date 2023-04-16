@@ -14,6 +14,7 @@ import enumeration.OrderStatus;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingNotFoundException;
+import error.exception.OrderHasExistingReview;
 import error.exception.OrderIsNotCompletedException;
 import error.exception.OrderNotFoundException;
 import error.exception.ReviewNotFoundException;
@@ -80,20 +81,22 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
     }
 
     @Override
-    public Long createNewReview(Review review, Long orderId) throws OrderNotFoundException, UnknownPersistenceException, InputDataValidationException, OrderIsNotCompletedException {
+    public Long createNewReview(Review review, Long orderId) throws OrderNotFoundException, UnknownPersistenceException, InputDataValidationException, OrderIsNotCompletedException, OrderHasExistingReview {
         Set<ConstraintViolation<Review>> constraintViolations = validator.validate(review);
 
         if (constraintViolations.isEmpty()) {
             try {
                 Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
-                if (order.getOrderStatus().equals(OrderStatus.COMPLETED)) {
+                if (!order.getOrderStatus().equals(OrderStatus.COMPLETED)) {
+                    throw new OrderIsNotCompletedException("Order must be completed before a review can be made.");
+                } else if (reviewExists(orderId)) {
+                    throw new OrderHasExistingReview("A review already exists for this order.");
+                } else {
                     em.persist(review);
                     review.setOrder(order);
                     order.setReview(review);
                     em.flush();
                     return review.getReviewId();
-                } else {
-                    throw new OrderIsNotCompletedException();
                 }
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
@@ -110,6 +113,16 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
             }
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+        }
+    }
+    
+    @Override
+    public boolean reviewExists(Long orderId) throws OrderNotFoundException {
+        Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
+        if (order.getReview() == null) {
+            return false;
+        } else {
+            return true;
         }
     }
 

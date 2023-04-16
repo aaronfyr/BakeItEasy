@@ -65,6 +65,7 @@ public class Comment implements Serializable {
     }
     
     public Comment(String title, boolean isBuyer) {
+        this();
         this.title = title;
         this.isBuyer = isBuyer;
     }

@@ -18,6 +18,7 @@ import entity.Post;
 import entity.Report;
 import entity.Seller;
 import error.exception.BuyerEmailExistException;
+import error.exception.BuyerHasReportedSellerException;
 import error.exception.BuyerIsBannedException;
 import error.exception.BuyerNotFoundException;
 import error.exception.BuyerPhoneNumberExistException;
@@ -172,6 +173,9 @@ public class BuyersResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         } catch (SellerNotFoundException ex) {
             JsonObject exception = Json.createObjectBuilder().add("error", "Seller not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerHasReportedSellerException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "You have already filed a report against this seller.").build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end createReport
@@ -336,4 +340,11 @@ public class BuyersResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end createComment
+    
+    @GET
+    @Path("/{buyer_id}/{seller_id}/hasExistingReport")
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean hasExistingReport(@PathParam("buyer_id") Long buyerId, @PathParam("seller_id") Long sellerId) {
+        return reportSessionBeanLocal.hasBuyerReportedSeller(buyerId, sellerId);
+    } // end hasExistingReport
 }

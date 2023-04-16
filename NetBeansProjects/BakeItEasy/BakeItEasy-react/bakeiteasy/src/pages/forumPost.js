@@ -4,6 +4,7 @@ import "./resources/sellerViewFollowers.css";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
 import { NavigationBar } from "../components/buyerNavigationBar";
 import { FaRegEdit, FaComment } from "react-icons/fa";
+import { MdOutlineCancel } from "react-icons/md";
 import { formatDate } from "../components/formatter";
 import Comment from "../components/comment";
 import { toast, ToastContainer } from "react-toastify";
@@ -23,20 +24,23 @@ function ForumPost() {
   const [sellerId, setSellerId] = useState(null);
   const [post, setPost] = useState(null);
   const [postId, setPostId] = useState(null);
-   const [showCommentPopup, setShowCommentPopup] = useState(false);
-   const [currentType, setCurrentType] = useState("");
-   const [poster, setPoster] = useState(null);
-   const [isOwnPost, setIsOwnPost] = useState(false);
-   const [posterType, setPosterType] = useState("");
+  const [showCommentPopup, setShowCommentPopup] = useState(false);
+  const [currentType, setCurrentType] = useState("");
+  const [poster, setPoster] = useState(null);
+  const [isOwnPost, setIsOwnPost] = useState(false);
+  const [posterType, setPosterType] = useState("");
+  const [preDelete, setPreDelete] = useState(false);
+  const [deleteFailed, setDeleteFailed] = useState(false);
 
-
+  const routeChangeToSellerProfile = () => {
+    let path = "/sellerProfile";
+    navigate(path);
+  };
 
   const { id } = useParams();
   console.log("post param id ", id);
 
-
-
-     const [buyerNewComment, setBuyerNewComment] = useState({
+  const [buyerNewComment, setBuyerNewComment] = useState({
     title: "",
     isBuyer: true,
     //buyerId: 0,
@@ -71,7 +75,6 @@ function ForumPost() {
                 buyerId: parsedUser.buyerId,
             }
             }); */
-
         } catch (error) {
           console.log(error);
         }
@@ -82,15 +85,21 @@ function ForumPost() {
           const parsedUser = JSON.parse(fetchedSeller);
           console.log("parsedUser.id: ", parsedUser.sellerId);
           setSellerId(parsedUser.sellerId);
-         /*setSellerNewComment(prevState => { //checked
+          /*setSellerNewComment(prevState => { //checked
             return {
                 ...prevState,
                 sellerId: parsedUser.sellerId,
             }
             }); */
-            console.log("seller new comment sellerId set to", sellerNewComment.sellerId)
+          console.log(
+            "seller new comment sellerId set to",
+            sellerNewComment.sellerId
+          );
 
-            console.log("seller id set in comment state is ", sellerNewComment.sellerId);
+          console.log(
+            "seller id set in comment state is ",
+            sellerNewComment.sellerId
+          );
         } catch (error) {
           console.log(error);
         }
@@ -98,7 +107,6 @@ function ForumPost() {
     }
     fetchData();
   }, []);
-
 
   // fetch post
   useEffect(() => {
@@ -118,9 +126,9 @@ function ForumPost() {
         const data = await response.json();
         setPost(data);
         if (data.isBuyer) {
-            setPosterType("buyer");
+          setPosterType("buyer");
         } else {
-            setPosterType("seller");
+          setPosterType("seller");
         }
         return data;
       } catch (error) {
@@ -155,7 +163,6 @@ function ForumPost() {
     fetchComments();
   }, []);
 
-
   // fetch poster
   useEffect(() => {
     async function fetchPoster() {
@@ -173,21 +180,21 @@ function ForumPost() {
         );
         const data = await response.json();
         setPoster(data);
-        console.log(data,"poster info");
+        console.log(data, "poster info");
         if (buyerId && post.isBuyer) {
-            if (buyerId === data.buyerId) {
-                setIsOwnPost(true);
-            }
+          if (buyerId === data.buyerId) {
+            setIsOwnPost(true);
+          }
         }
 
         if (sellerId && !post.isBuyer) {
-            console.log("seller id", sellerId);
-            console.log("postisBuyer", post.isBuyer);
-            console.log("post seller Id", data.sellerId);
-            if (sellerId === data.sellerId) {
-                setIsOwnPost(true);
-            }
-            console.log(isOwnPost);
+          console.log("seller id", sellerId);
+          console.log("postisBuyer", post.isBuyer);
+          console.log("post seller Id", data.sellerId);
+          if (sellerId === data.sellerId) {
+            setIsOwnPost(true);
+          }
+          console.log(isOwnPost);
         }
         return data;
       } catch (error) {
@@ -198,64 +205,94 @@ function ForumPost() {
   }, [post]);
 
   async function createBuyerComment() {
-     try {
-        console.log("creating buyer comment");
+    try {
+      console.log("creating buyer comment");
 
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/${id}/comments`,
+        {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(buyerNewComment),
+        }
+      ).then((response) => {
+        if (!response.ok) {
+          console.log("create buyer comment failed");
+        } else {
+          toast.success("buyer comment created! refreshing...");
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function createSellerComment() {
+    if (sellerNewComment.title !== "") {
+      try {
+        console.log("creating seller comment");
+        console.log("POSTING", sellerNewComment);
         const response = await fetch(
-          `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/${id}/comments`,
+          `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/${id}/comments`,
           {
             method: "POST",
             mode: "cors",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(buyerNewComment),
+            body: JSON.stringify(sellerNewComment),
           }
-        ).then((response) =>{
-            if (!response.ok) {
-                console.log("create buyer comment failed");
-            } else {
-                toast.success("buyer comment created! refreshing...");
-                setTimeout(() => {
+        ).then((response) => {
+          if (!response.ok) {
+            toast.error("response not ok");
+          } else {
+            toast.success("seller comment created! refreshing...");
+            setTimeout(() => {
               window.location.reload();
-                }, 3000);
-            }
-        })
+            }, 3000);
+          }
+        });
       } catch (error) {
-        console.error(error);
+        console.error("ERROR FOR CREATE SELLER COMMENT", error);
       }
+    }
   }
 
-  async function createSellerComment() {
-    if (sellerNewComment.title !== "") {
-        try {
-            console.log("creating seller comment");
-            console.log("POSTING", sellerNewComment)
-            const response = await fetch(
-            `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/${id}/comments`,
-            {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                "Content-Type": "application/json",
-                },
-                body: JSON.stringify(sellerNewComment),
-            }
-            ).then((response) =>{
-                if (!response.ok) {
-                    toast.error("response not ok");
-                } else {
-                    toast.success("seller comment created! refreshing...");
-                    setTimeout(() => {
-                window.location.reload();
-                    }, 3000);
-                }
-            })
-        } catch (error) {
-            console.error("ERROR FOR CREATE SELLER COMMENT", error);
+  const handleDeleteClick = () => {
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/posts/${id}`, {
+      method: "DELETE",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          setDeleteFailed(true);
+          setTimeout(() => {
+            setDeleteFailed(false);
+          }, 5000); // 1000 milliseconds = 1 second
+        } else {
+          console.log("response ok");
+
+          toast.success("Post deleted successfully! Redirecting...");
+          setTimeout(() => {
+            routeChangeToSellerProfile();
+          }, 1000); // 1000 milliseconds = 1 second
         }
-      }
-  }
+        return response.json();
+      })
+      .then((data) => {
+        // handle successful update
+      })
+      .catch((error) => {});
+  };
 
   /*
 RETRIEVE POST BY POST ID
@@ -284,81 +321,68 @@ useEffect(() => {
     fetchFollowers(postId);
 }, [postId]); */
 
+  useEffect(() => {
+    console.log("changed SNC!!!!!", sellerNewComment);
+    createSellerComment();
+  }, [sellerNewComment]);
 
-useEffect(() => {
-  console.log("changed SNC!!!!!",sellerNewComment);
-        createSellerComment();
-
-}, [sellerNewComment]);
-
-useEffect(() => {
-  console.log("changed BNC!!!!!", buyerNewComment);
+  useEffect(() => {
+    console.log("changed BNC!!!!!", buyerNewComment);
     createBuyerComment();
-}, [buyerNewComment]);
+  }, [buyerNewComment]);
 
+  function CommentPopup(props) {
+    const [newComment, setNewComment] = useState("");
 
+    const handleCommentChange = (event) => {
+      setNewComment(event.target.value);
+    };
 
-
-function CommentPopup(props) {
-
-
-  const [newComment, setNewComment] = useState("");
-
-
-  const handleCommentChange = (event) => {
-    setNewComment(event.target.value);
-  };
-
-
-  const handleSubmitComment = () => {
-    // Do something with the comment, e.g. save it to a database
-    console.log("saved comment is", newComment);
-    if (newComment === "") {
+    const handleSubmitComment = () => {
+      // Do something with the comment, e.g. save it to a database
+      console.log("saved comment is", newComment);
+      if (newComment === "") {
         toast.error("comment cannot be blank!");
-    } else if (newComment.length < 1 || newComment.length > 128 ) {
-        toast.error("Your comment must have 1 to 128 characters! Try again.")
-    } else {
-          if(buyerId) {
-        setBuyerNewComment({...buyerNewComment, title: newComment});
+      } else if (newComment.length < 1 || newComment.length > 128) {
+        toast.error("Your comment must have 1 to 128 characters! Try again.");
+      } else {
+        if (buyerId) {
+          setBuyerNewComment({ ...buyerNewComment, title: newComment });
         } else {
-            setSellerNewComment({...sellerNewComment, title: newComment});
+          setSellerNewComment({ ...sellerNewComment, title: newComment });
 
-        console.log("seller ID is", sellerId);
-        console.log("!!!!!!!!!!!!!comment set is", sellerNewComment);
+          console.log("seller ID is", sellerId);
+          console.log("!!!!!!!!!!!!!comment set is", sellerNewComment);
         }
         props.onClose();
-    }
-    // Close the popup
+      }
+      // Close the popup
+    };
 
-  };
+    return (
+      <div style={{ marginLeft: 10 }}>
+        <textarea
+          style={{ color: "black", minWidth: 500 }}
+          value={newComment}
+          onChange={handleCommentChange}
+        />
+        <Flex>
+          <div className="editPostBtn" onClick={handleSubmitComment}>
+            <FaRegEdit style={{ alignSelf: "center" }} />
+            <div style={{ width: 5 }}></div>
+            <h3>Done</h3>
+          </div>
+          <div className="editPostBtn" onClick={handleCloseCommentPopup}>
+            <FaRegEdit style={{ alignSelf: "center" }} />
+            <div style={{ width: 5 }}></div>
+            <h3>close</h3>
+          </div>
+        </Flex>
+      </div>
+    );
+  }
 
-  return (
-    <div style={{marginLeft:10}}>
-      <textarea style={{color: "black", minWidth:500}} value={newComment} onChange={handleCommentChange} />
-      <Flex>
-        <div
-              className="editPostBtn"
-              onClick={handleSubmitComment}
-            >
-              <FaRegEdit style={{ alignSelf: "center" }} />
-              <div style={{ width: 5 }}></div>
-              <h3>done</h3>
-            </div>
-        <div
-              className="editPostBtn"
-              onClick={handleCloseCommentPopup}
-            >
-              <FaRegEdit style={{ alignSelf: "center" }} />
-              <div style={{ width: 5 }}></div>
-              <h3>close</h3>
-            </div>
-      </Flex>
-
-    </div>
-  );
-}
-
- const handleCommentClick = () => {
+  const handleCommentClick = () => {
     setShowCommentPopup(true);
   };
 
@@ -404,16 +428,20 @@ function CommentPopup(props) {
           <div style={{ width: 500 }}>
             <div style={{ height: 40 }}></div>
             <div className="postDiv">
-              <h1>Post #{post.postId}</h1>
-              <h2>{post.title}</h2>
+              <h1 style={{ fontSize: "40px" }}>Post #{post.postId}</h1>
+              <h2 style={{ fontSize: "25px" }}>{post.title}</h2>
               <Flex>
-                <div style={{width:220}}>
-                    <h3>Category: #{post.postCategory}</h3>
+                <div style={{ width: 220 }}>
+                  <h3>Category: #{post.postCategory}</h3>
                 </div>
-                <div style={{width:70}}></div>
-              <h3>created: {formatDate(post.dateCreated)}</h3>
+                <div style={{ width: 70 }}></div>
+                <h3>Created: {formatDate(post.dateCreated)}</h3>
               </Flex>
-              {poster && <h3>posted by: {poster.name} ({posterType})</h3>}
+              {poster && (
+                <h3>
+                  Posted by: {poster.name} ({posterType})
+                </h3>
+              )}
               <br />
               <div
                 style={{
@@ -430,28 +458,35 @@ function CommentPopup(props) {
               </div>
             </div>
             <Flex>
-             {isOwnPost && <div
-              className="editPostBtn"
-              onClick={() => navigate("/forum/editPost/" + id)}
-            >
-              <FaRegEdit style={{ alignSelf: "center" }} />
-              <div style={{ width: 5 }}></div>
-              <h3>edit</h3>
-            </div>}
-            <div
-              className="editPostBtn" onClick={handleCommentClick}
-            >
-              <FaComment style={{ alignSelf: "center" }} />
-              <div style={{ width: 5 }}></div>
-              <h3>comment</h3>
-            </div>
+              {isOwnPost && (
+                <div
+                  className="editPostBtn"
+                  onClick={() => navigate("/forum/editPost/" + id)}
+                >
+                  <FaRegEdit style={{ alignSelf: "center" }} />
+                  <div style={{ width: 5 }}></div>
+                  <h3>Edit</h3>
+                </div>
+              )}
+              <div className="editPostBtn" onClick={handleCommentClick}>
+                <FaComment style={{ alignSelf: "center" }} />
+                <div style={{ width: 5 }}></div>
+                <h3>Comment</h3>
+              </div>
+              <div className="editPostBtn" onClick={handleDeleteClick}>
+                <MdOutlineCancel />
+                <div style={{ width: 5 }}></div>
+                <h3>Delete</h3>
+              </div>
             </Flex>
-            <br/>
+            <br />
             {showCommentPopup && <h3>new comment:</h3>}
             {showCommentPopup && (
-        <CommentPopup style={{marginRight: 20}} onClose={handleCloseCommentPopup} />
-      )}
-
+              <CommentPopup
+                style={{ marginRight: 20 }}
+                onClose={handleCloseCommentPopup}
+              />
+            )}
           </div>
           <div className="orderDisplay">
             <div className="forumHeader">Comments</div>
@@ -465,9 +500,7 @@ function CommentPopup(props) {
                   isBuyer={comment.isBuyer}
                 />
               ))}
-
             </div>
-
           </div>
         </div>
       </div>
