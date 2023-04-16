@@ -44,7 +44,7 @@ import {
   useDisclosure,
   Spacer,
 } from "@chakra-ui/react";
-import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
+import { FaRegCommentAlt, FaHeart, FaPhone } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -129,6 +129,36 @@ function BuyerListingPage() {
 
   //console.log(listing);
 
+  const [whatsappUrl, setWhatsappUrl] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/listings/${id}/sellerPhoneNo`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        setWhatsappUrl("https://wa.me/65" + data);
+        console.log(whatsappUrl);
+        console.log(`HTTP Response Code: ${response?.status}`);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        } else {
+          console.log("Other error: ", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
   // quantity input
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
@@ -165,7 +195,7 @@ function BuyerListingPage() {
   // handle submit order
   const dateOfCreation = new Date();
   const [quantity, setQuantity] = useState(1);
-  const [dateOfCollection, setDateOfCollection] = useState(new Date());
+  const [dateOfCollection, setDateOfCollection] = useState(null);
   const [description, setDescription] = useState("-");
   const [orderFieldValues, addOrderFieldValue] = useState([]);
   const [error, setError] = useState(null);
@@ -208,6 +238,30 @@ function BuyerListingPage() {
     navigate("/");
   };
 
+  const handleListingToLikes = async (lId) => {
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/${buyer.buyerId}/like`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.ok) {
+      // redirect to homepage
+      console.log("likedListing# ", lId);
+      console.log("reported seller!");
+      toast.success(`Liked listing # ${lId}.`);
+      //recolor liked button
+      document.getElementById("btn").style.backgroundColor = "black";
+    } else {
+      // show error message
+      const errorData = await response.json();
+      toast.error("Like failed.");
+    }
+  };
+
   // for slideshow
   const [images, setImages] = useState([
     "https://images.unsplash.com/photo-1509721434272-b79147e0e708?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
@@ -225,18 +279,31 @@ function BuyerListingPage() {
           <Slideshow imagePaths={listingImagePaths} />
           <Flex justifyContent={"space-between"}>
             <Flex>
-              <div className="button1_cancel">
+              <div
+                className="button1_cancel"
+                onClick={() => handleListingToLikes(id)}
+              >
                 <HStack spacing="10px">
                   <FaHeart />
                   <div>Like</div>
                 </HStack>
               </div>
+              <a
+                className="button1_cancel"
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <HStack spacing="10px">
+                  <FaPhone />
+                  <div>Whatsapp</div>
+                </HStack>
+              </a>
             </Flex>
             <div></div>
           </Flex>
           <br />
           <h1>{listingName}</h1>
-          <h3 className="italic">Listing id: {id}</h3>
 
           <br />
           <div id="buyerListingDetailsGrid">
@@ -288,7 +355,11 @@ function BuyerListingPage() {
 
             <h3>Quantity:</h3>
             <HStack maxW="320px">
-              <Button {...dec} colorScheme="orange">
+              <Button
+                {...dec}
+                style={{ marginBottom: 10 }}
+                colorScheme="orange"
+              >
                 -
               </Button>
               <Input
@@ -309,6 +380,10 @@ function BuyerListingPage() {
               selected={dateOfCollection}
               onChange={(date) => setDateOfCollection(date)}
               minDate={datePickerMinDate}
+              defaultValue={datePickerMinDate}
+              value={
+                dateOfCollection === null ? datePickerMinDate : dateOfCollection
+              }
             />
 
             <Box mt={4} display="flex" alignItems="center">

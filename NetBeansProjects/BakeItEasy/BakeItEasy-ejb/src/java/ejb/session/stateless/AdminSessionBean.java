@@ -9,8 +9,8 @@ import entity.Admin;
 import entity.Buyer;
 import entity.Report;
 import entity.Seller;
+import error.exception.AdminEmailExistException;
 import error.exception.AdminNotFoundException;
-import error.exception.AdminUsernameExistsException;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
@@ -73,7 +73,7 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
     }
     
     @Override
-    public Long createNewAdmin(Admin admin) throws AdminUsernameExistsException, UnknownPersistenceException, InputDataValidationException {
+    public Long createNewAdmin(Admin admin) throws UnknownPersistenceException, InputDataValidationException {
         Set<ConstraintViolation<Admin>> constraintViolations = validator.validate(admin);
 
         if (constraintViolations.isEmpty()) {
@@ -121,33 +121,31 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
     }
     
     @Override
-    public void updateAdmin(Admin a) throws NoResultException, AdminNotFoundException {
+    public void updateAdmin(Admin a) throws NoResultException, AdminNotFoundException, AdminEmailExistException {
         Admin oldA = retrieveAdminById(a.getAdminId());
 
-        oldA.setName(a.getName());
-        oldA.setUsername(a.getUsername());
-        oldA.setEmail(a.getEmail());
-        oldA.setPassword(a.getPassword());
-        oldA.setReports(a.getReports());
+        if (isEmailAvailable(a.getEmail())) {
+            oldA.setName(a.getName());
+            oldA.setEmail(a.getEmail());
+            oldA.setPassword(a.getPassword());
+        } else  {
+            throw new AdminEmailExistException("Email already exist!");
+        }
+      
     }
     
-    // remove admin from report
-    @Override
-    public void removeAdminFromReport(Long reportId) throws ReportNotFoundException {
-        Report report = reportSessionBeanLocal.retrieveReportById(reportId);
-        Admin admin = report.getAdmin();
-        report.setAdmin(null);
-        admin.getReports().remove(report);
+    private boolean isEmailAvailable(String email) {
+        Query query = em.createQuery("SELECT a FROM Admin a WHERE a.email = :inEmail");
+        query.setParameter("inEmail", email);
+        List<Admin> admins = query.getResultList();
+
+        return admins.isEmpty();
     }
     
     // delete admin (remove from db)
     @Override
     public void removeAdmin(Long adminId) throws AdminNotFoundException {
         Admin admin = adminSessionBeanLocal.retrieveAdminById(adminId);
-        for (Report report : admin.getReports()) {
-            report.setAdmin(null);
-        }
-        admin.getReports().clear();
         em.remove(admin);
     }
     

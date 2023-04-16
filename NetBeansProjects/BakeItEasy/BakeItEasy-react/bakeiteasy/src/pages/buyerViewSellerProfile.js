@@ -300,6 +300,7 @@ function BuyerViewSellerProfile() {
               stroke-width="2"
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             ></path>
+            routeChangeToListing
           </svg>
         </button>
       </div>
@@ -314,7 +315,9 @@ function BuyerViewSellerProfile() {
           {filteredListings.map((listing) => (
             <div className="product">
               <div class="productSeller">
-                <h3>{listing.name}</h3>
+                <h3 onClick={() => routeChangeToListing(listing.listingId)}>
+                  {listing.name}
+                </h3>
               </div>
               <div
                 className="productContent"
@@ -340,7 +343,7 @@ function BuyerViewSellerProfile() {
                     onClick={() => handleListingToLikes(listing.listingId)}
                   />
                 </div>
-                <h3>${listing.price}</h3>
+                <h3>${parseFloat(listing.price).toFixed(2)}</h3>
               </div>
             </div>
           ))}
@@ -349,22 +352,7 @@ function BuyerViewSellerProfile() {
           <h1>Buyer Reviews</h1>
           <div className="reviewDisplay">
             {reviews.map((review) => (
-              <div
-                className="review"
-                onClick={() => routeChangeToListing(review.id)}
-              >
-                <div class="productSeller">
-                  <img
-                    width="30px"
-                    height="30px"
-                    src={
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png"
-                    }
-                    alt="listing product"
-                  />
-                  <h6>buyer name</h6>
-                </div>
-
+              <div className="review">
                 <div className="reviewTitle">
                   <h2>{review.title}</h2>
                 </div>

@@ -70,5 +70,19 @@ public interface ListingSessionBeanLocal {
     public Seller retrieveSellerByListingId(Long listingId) throws ListingNotFoundException;
 
     public List<Listing> getFollowedSellerListings(Long buyerId) throws BuyerNotFoundException;
+
+    public boolean isListingLikedByCurrentBuyer(Long buyerId, Long listingId) throws BuyerNotFoundException, ListingNotFoundException;
+
+    public Integer getNumberOfPendingOrdersByListingId(Long listingId) throws ListingNotFoundException;
+
+    public Integer getNumberOfAcceptedOrdersByListingId(Long listingId) throws ListingNotFoundException;
+
+    public Integer getNumberOfRejectedOrdersByListingId(Long listingId) throws ListingNotFoundException;
+
+    public Integer getNumberOfCompletedOrdersByListingId(Long listingId) throws ListingNotFoundException;
+
+    public Integer getNumberOfCancelledOrdersByListingId(Long listingId) throws ListingNotFoundException;
+
+    public String getSellerPhoneNoByListingId(Long listingId) throws ListingNotFoundException;
     
 }

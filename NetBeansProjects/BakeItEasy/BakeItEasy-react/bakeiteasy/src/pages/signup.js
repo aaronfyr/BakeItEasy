@@ -149,6 +149,7 @@ function Signup() {
             value={name}
             onChange={(event) => setName(event.target.value)}
             required
+            maxLength={64}
           />
           <FormLabel>Name</FormLabel>
         </FormControl>
@@ -159,6 +160,7 @@ function Signup() {
             value={username}
             onChange={(event) => setUsername(event.target.value)}
             required
+            maxLength={16}
           />
           <FormLabel>Username</FormLabel>
         </FormControl>
@@ -170,6 +172,7 @@ function Signup() {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
+            maxLength={128}
           />
           <FormLabel>Email address</FormLabel>
         </FormControl>
@@ -180,6 +183,7 @@ function Signup() {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
+            maxLength={64}
           />
           <FormLabel>Password</FormLabel>
         </FormControl>
@@ -190,19 +194,23 @@ function Signup() {
             value={phoneNo}
             onChange={(event) => setPhoneNo(event.target.value)}
             required
+            maxLength={128}
           />
           <FormLabel>Phone Number</FormLabel>
         </FormControl>
-        <FormControl mt={4} variant="floating">
-          <Input
-            type="address"
-            placeholder=" "
-            value={address}
-            onChange={(event) => setAddress(event.target.value)}
-            required
-          />
-          <FormLabel>Address</FormLabel>
-        </FormControl>
+        {type === "buyer" && (
+          <FormControl mt={4} variant="floating">
+            <Input
+              type="text"
+              placeholder=" "
+              value={address}
+              onChange={(event) => setAddress(event.target.value)}
+              required
+              maxLength={256}
+            />
+            <FormLabel>Address</FormLabel>
+          </FormControl>
+        )}
 
         <FormLabel mt={6}>Profile picture</FormLabel>
         <Input

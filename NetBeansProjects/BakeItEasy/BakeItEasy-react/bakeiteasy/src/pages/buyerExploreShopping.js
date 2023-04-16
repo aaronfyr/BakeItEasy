@@ -303,7 +303,6 @@ function BuyerExploreShopping() {
     <div>
       <NavigationBar />
       <ToastContainer />
-      <h4 className="search">Search for baked goods:</h4>
       <div className="homepageSearchBar">
         <input
           className="homepageInput"
@@ -312,11 +311,11 @@ function BuyerExploreShopping() {
           onChange={handleSearch}
           value={search}
         />
-        <button className="button">
+        {/*<button className="button">
           <svg
             className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
+            fill="black"
+            stroke="black"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -327,7 +326,7 @@ function BuyerExploreShopping() {
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             ></path>
           </svg>
-        </button>
+  </button>*/}
       </div>
       <h4 className="search">Shop by Category:</h4>
 

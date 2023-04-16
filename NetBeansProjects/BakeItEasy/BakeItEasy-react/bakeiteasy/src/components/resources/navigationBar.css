@@ -4,7 +4,8 @@
 }
 
 :root {
-  --reg-font-family: Helvetica;
+  --reg-font-family: 'Montserrat',
+    sans-serif;
 
   --beige-bg: #F8F5EF;
   --logo: #7D7373;
@@ -26,13 +27,15 @@ a {
 }
 
 h4 {
-  font-family: var(--reg-font-family);
+  font-family: 'Montserrat',
+    sans-serif;
   font-size: 15px;
 }
 
 
 #navChoices {
-  font-family: var(--reg-font-family);
+  font-family: 'Montserrat',
+    sans-serif;
   font-size: 16px;
   width: 150px;
   color: --var(--dark-text);
@@ -58,7 +61,8 @@ h4 {
 
 .logo{
   color: var(--logo);
-  font-family: Helvetica;
+  font-family: 'Montserrat',
+    sans-serif;;
   font-size: 20px;
   font-weight: bold;
   margin-left: 20px;
@@ -68,7 +72,8 @@ h4 {
 
 .logoSubscript{
   color: var(--beige-text);
-  font-family: Helvetica;
+  font-family: 'Montserrat',
+    sans-serif;
   font-size: 12px;
   font-weight: bold;
   margin-left: 10px;
@@ -153,7 +158,7 @@ h4 {
  transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
 }
 .icon-circle:hover {
-  
+
   display: flex;
   color: var(--beige-bg);
  background-color: var(--light-mediterranean-blue);

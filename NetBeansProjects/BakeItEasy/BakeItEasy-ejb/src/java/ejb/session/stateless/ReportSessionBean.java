@@ -12,6 +12,7 @@ import entity.Post;
 import entity.Report;
 import entity.Seller;
 import error.exception.AdminNotFoundException;
+import error.exception.BuyerHasReportedSellerException;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ReportNotFoundException;
@@ -73,20 +74,24 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
     }
     
     @Override
-    public Long createNewReport(Report report, Long reporterId, Long reporteeId) throws BuyerNotFoundException, SellerNotFoundException, UnknownPersistenceException, InputDataValidationException {   
+    public Long createNewReport(Report report, Long reporterId, Long reporteeId) throws BuyerNotFoundException, SellerNotFoundException, UnknownPersistenceException, InputDataValidationException, BuyerHasReportedSellerException {   
         Set<ConstraintViolation<Report>> constraintViolations = validator.validate(report);
 
         if (constraintViolations.isEmpty()) {
             try {
-                em.persist(report);
-                Buyer reporter = buyerSessionBeanLocal.retrieveBuyerById(reporterId);
-                Seller reportee = sellerSessionBeanLocal.retrieveSellerBySellerId(reporteeId);
-                report.setReporter(reporter);
-                report.setReportee(reportee);
-                reporter.getReports().add(report);
-                reportee.getReports().add(report);
-                em.flush();
-                return report.getReportId();
+                if (hasBuyerReportedSeller(reporterId, reporteeId)) {
+                    throw new BuyerHasReportedSellerException("Buyer has already reported this seller!"); 
+                } else {
+                    em.persist(report);
+                    Buyer reporter = buyerSessionBeanLocal.retrieveBuyerById(reporterId);
+                    Seller reportee = sellerSessionBeanLocal.retrieveSellerBySellerId(reporteeId);
+                    report.setReporter(reporter);
+                    report.setReportee(reportee);
+                    reporter.getReports().add(report);
+                    reportee.getReports().add(report);
+                    em.flush();
+                    return report.getReportId();
+                }
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
@@ -101,15 +106,6 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
-    }
-    
-    @Override
-    public Long assignAdmin(Report report, Long adminId) throws AdminNotFoundException {
-        Admin admin = adminSessionBeanLocal.retrieveAdminById(adminId);
-        report.setAdmin(admin);
-        admin.getReports().add(report);
-        em.merge(report);
-        return report.getReportId();
     }
     
     @Override
@@ -128,7 +124,6 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         oldR.setReason(r.getReason());
         oldR.setReporter(r.getReporter());
         oldR.setReportee(r.getReportee());
-        oldR.setAdmin(r.getAdmin());
     } //end updateReport
     
     // remove report from db
@@ -137,14 +132,18 @@ public class ReportSessionBean implements ReportSessionBeanLocal {
         Report report = reportSessionBeanLocal.retrieveReportById(reportId);
         Buyer reporter = report.getReporter();
         Seller reportee = report.getReportee();
-        Admin admin = report.getAdmin();
-//        report.setReporter(null);
-//        report.setReportee(null);
-//        report.setAdmin(null);
         reporter.getReports().remove(report);
         reportee.getReports().remove(report);
-        admin.getReports().remove(report);
         em.remove(report);
+    }
+    
+    @Override
+    public boolean hasBuyerReportedSeller(Long buyerId, Long sellerId) {
+        Query query = em.createQuery("SELECT r FROM Report r WHERE r.reporter.buyerId = :inBuyerId AND r.reportee.sellerId = :inSellerId");
+        query.setParameter("inBuyerId", buyerId);
+        query.setParameter("inSellerId", sellerId);
+        List<Report> reports = query.getResultList();
+        return !reports.isEmpty();
     }
     
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Report>> constraintViolations) {

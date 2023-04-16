@@ -8,8 +8,8 @@ package ejb.session.stateless;
 import entity.Admin;
 import entity.Buyer;
 import entity.Seller;
+import error.exception.AdminEmailExistException;
 import error.exception.AdminNotFoundException;
-import error.exception.AdminUsernameExistsException;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
@@ -29,17 +29,15 @@ public interface AdminSessionBeanLocal {
 
     public Admin retrieveAdminById(Long adminId) throws AdminNotFoundException;
 
-    public Long createNewAdmin(Admin admin) throws AdminUsernameExistsException, UnknownPersistenceException, InputDataValidationException;
+    public Long createNewAdmin(Admin admin) throws UnknownPersistenceException, InputDataValidationException;
 
     public Admin login(String email, String password) throws InvalidLoginCredentialException;
 
     public List<Admin> retrieveAllAdmins();
 
-    public void removeAdminFromReport(Long reportId) throws ReportNotFoundException;
-
     public void removeAdmin(Long adminId) throws AdminNotFoundException;
 
-    public void updateAdmin(Admin a) throws NoResultException, AdminNotFoundException;
+    public void updateAdmin(Admin a) throws NoResultException, AdminNotFoundException, AdminEmailExistException;
     
     public Buyer banBuyer(Long buyerId) throws BuyerNotFoundException;
 

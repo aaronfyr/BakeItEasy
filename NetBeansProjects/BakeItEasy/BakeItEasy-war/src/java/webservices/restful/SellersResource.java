@@ -203,10 +203,10 @@ public class SellersResource {
             Seller seller = sellerSessionBeanLocal.sellerLogin(email, password);
             return Response.status(200).entity(seller).type(MediaType.APPLICATION_JSON).build();
         } catch (InvalidLoginCredentialException e) {
-            JsonObject exception = Json.createObjectBuilder().add("error", "Login invalid").build();
+            JsonObject exception = Json.createObjectBuilder().add("error", "Incorrect password").build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         } catch(SellerNotFoundException e) {
-            JsonObject exception = Json.createObjectBuilder().add("error", "Seller not found").build();
+            JsonObject exception = Json.createObjectBuilder().add("error", "Baker’s email provided does not exist").build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         } catch (SellerIsBannedException e) {
             JsonObject exception = Json.createObjectBuilder().add("error", "Seller is banned").build();

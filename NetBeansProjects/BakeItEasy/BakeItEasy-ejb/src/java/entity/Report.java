@@ -51,11 +51,6 @@ public class Report implements Serializable {
     @JoinColumn(nullable = false)
     @JsonbTransient
     private Seller reportee;
-    
-    @ManyToOne(optional = true, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = true)
-    @JsonbTransient
-    private Admin admin;
 
     public Report() {
     }
@@ -103,14 +98,6 @@ public class Report implements Serializable {
 
     public void setReportee(Seller reportee) {
         this.reportee = reportee;
-    }
-
-    public Admin getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
     }
 
     @Override

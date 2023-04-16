@@ -32,6 +32,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { FiHeart, FiGlobe, FiUsers, FiArrowRight } from "react-icons/fi";
 import ReactLoading from "react-loading";
 import { ListingSellerHeader } from "./listingSellerHeader";
+import { formatPrice } from "./formatter";
 
 export const BuyerShopping = () => {
   let navigate = useNavigate();
@@ -265,7 +266,7 @@ export const BuyerShopping = () => {
   }, []);
 
   // fetch listings with sellers
-  
+
   const [listings, setListings] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -426,6 +427,7 @@ export const BuyerShopping = () => {
           onChange={handleSearch}
           value={search}
         />
+        {/*}
         <button className="button">
           <svg
             className="w-6 h-6"
@@ -441,9 +443,9 @@ export const BuyerShopping = () => {
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             ></path>
           </svg>
-        </button>
+  </button> */}
       </div>
-      <h4 className="search">Shop by Category:</h4>
+      <h4 className="shopByCategory">Shop by Category:</h4>
 
       <div class="categoriesContainer">
         <div className="homepageCategoriesDisplay">
@@ -613,7 +615,7 @@ export const BuyerShopping = () => {
                   size="1.2rem"
                   onClick={() => handleListingToLikes(product.listingId)}
                 />
-                <h3>${product.price}</h3>
+                <h3>${formatPrice(product.price)}</h3>
               </div>
             </div>
           ))}

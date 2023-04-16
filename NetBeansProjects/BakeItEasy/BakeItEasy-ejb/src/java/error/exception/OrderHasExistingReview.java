@@ -9,22 +9,22 @@ package error.exception;
  *
  * @author elysia
  */
-public class AddressNotFoundException extends Exception {
+public class OrderHasExistingReview extends Exception {
 
     /**
-     * Creates a new instance of <code>AddressNotFoundException</code> without
+     * Creates a new instance of <code>OrderHasExistingReview</code> without
      * detail message.
      */
-    public AddressNotFoundException() {
+    public OrderHasExistingReview() {
     }
 
     /**
-     * Constructs an instance of <code>AddressNotFoundException</code> with the
+     * Constructs an instance of <code>OrderHasExistingReview</code> with the
      * specified detail message.
      *
      * @param msg the detail message.
      */
-    public AddressNotFoundException(String msg) {
+    public OrderHasExistingReview(String msg) {
         super(msg);
     }
 }

@@ -9,22 +9,22 @@ package error.exception;
  *
  * @author elysia
  */
-public class AdminUsernameExistsException extends Exception {
+public class BuyerHasReportedSellerException extends Exception {
 
     /**
-     * Creates a new instance of <code>AdminUsernameExistsException</code>
+     * Creates a new instance of <code>BuyerHasReportedSellerException</code>
      * without detail message.
      */
-    public AdminUsernameExistsException() {
+    public BuyerHasReportedSellerException() {
     }
 
     /**
-     * Constructs an instance of <code>AdminUsernameExistsException</code> with
-     * the specified detail message.
+     * Constructs an instance of <code>BuyerHasReportedSellerException</code>
+     * with the specified detail message.
      *
      * @param msg the detail message.
      */
-    public AdminUsernameExistsException(String msg) {
+    public BuyerHasReportedSellerException(String msg) {
         super(msg);
     }
 }

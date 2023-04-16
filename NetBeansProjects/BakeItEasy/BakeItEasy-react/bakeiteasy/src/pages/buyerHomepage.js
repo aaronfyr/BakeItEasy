@@ -34,7 +34,6 @@ function BuyerHomepage() {
   return (
     <div className="background">
       <NavigationBar />
-      <h4 className="search">Search for baked goods:</h4>
       <BuyerShopping />
     </div>
   );

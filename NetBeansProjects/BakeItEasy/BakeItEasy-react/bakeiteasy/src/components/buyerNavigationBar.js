@@ -165,22 +165,7 @@ export const NavigationBar = () => {
 
       <HStack spacing="7px">
         <IconContext.Provider value={{ size: "1.2rem" }}>
-          <Popover>
-            <PopoverTrigger>
-              <div className="icon-circle">
-                <FiBell />
-              </div>
-            </PopoverTrigger>
-            <PopoverContent>
-              <PopoverArrow />
-              <PopoverCloseButton />
-              <PopoverHeader>Notifications!</PopoverHeader>
-              <PopoverBody>You have no new notifications.</PopoverBody>
-            </PopoverContent>
-          </Popover>
-          <div className="icon-circle">
-            <FiMessageSquare />
-          </div>
+
           <div className="icon-circle">
             <FiHeart onClick={() => routeToLikedListings()} />
           </div>
@@ -194,7 +179,7 @@ export const NavigationBar = () => {
               <HStack spacing="10px">
                 <FiUser />
 
-                <p>{buyerName}</p>
+                <p style={{fontFamily: 'Montserrat'}}>{buyerName}</p>
               </HStack>
             </MenuButton>
 

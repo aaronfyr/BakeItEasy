@@ -38,8 +38,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 /**
- * 
- * @author aaronf  
+ *
+ * @author aaronf
  */
 @Stateless
 public class ListingSessionBean implements ListingSessionBeanLocal {
@@ -64,6 +64,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         this.validator = validatorFactory.getValidator();
     }
 
+    // checked
     @Override
     public Long createNewListing(Listing newListing, Long sellerId) throws SellerNotFoundException, InputDataValidationException, UnknownPersistenceException {
         Set<ConstraintViolation<Listing>> constraintViolations = validator.validate(newListing);
@@ -92,6 +93,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         }
     }
 
+    // checked
     @Override
     public void updateListing(Listing updatedListing) throws InputDataValidationException, ListingNotFoundException {
         Set<ConstraintViolation<Listing>> constraintViolations = validator.validate(updatedListing);
@@ -110,6 +112,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         }
     }
 
+    // checked
     @Override
     public void likeListing(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException, ListingLikedAlreadyException {
         if (!isListingLikedAlready(buyerId, listingId)) {
@@ -124,6 +127,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
 
     }
 
+    // checked
     @Override
     public void unlikeListing(Long buyerId, Long listingId) throws ListingNotFoundException, BuyerNotFoundException, ListingIsNotLikedException {
         if (isListingLikedAlready(buyerId, listingId)) {
@@ -148,6 +152,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         }
     }
 
+    // checked
     // method to check whether listing is liked by the buyer
     @Override
     public void deleteListing(Long listingId) throws ListingNotFoundException, ListingHasOngoingOrdersException, OrderNotFoundException {
@@ -299,15 +304,100 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
 
     @Override
     public List<Listing> getFollowedSellerListings(Long buyerId) throws BuyerNotFoundException {
-            Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+        Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
 
-            List<Listing> allFollowedSellerListings = new ArrayList<>();
-            for (Seller followedSeller : buyer.getFollowings()) {
-                allFollowedSellerListings.addAll(followedSeller.getListings());
-            }
-            return allFollowedSellerListings;
+        List<Listing> allFollowedSellerListings = new ArrayList<>();
+        for (Seller followedSeller : buyer.getFollowings()) {
+            allFollowedSellerListings.addAll(followedSeller.getListings());
+        }
+        return allFollowedSellerListings;
     }
 
+    @Override
+    public boolean isListingLikedByCurrentBuyer(Long buyerId, Long listingId) throws BuyerNotFoundException, ListingNotFoundException {
+        Buyer buyer = buyerSessionBeanLocal.retrieveBuyerById(buyerId);
+
+        Listing listing = retrieveListingByListingId(listingId);
+
+        return listing.getLikers().contains(buyer);
+    }
+    // Add isListingLiked with buyer id and listing id
+    
+    @Override
+    public Integer getNumberOfPendingOrdersByListingId(Long listingId) throws ListingNotFoundException {
+        Listing currentListing = retrieveListingByListingId(listingId);
+        
+        int quantity = 0;
+        for (Order order : currentListing.getOrders()) {
+            if (order.getOrderStatus() == OrderStatus.PENDING) {
+                quantity += 1;
+            }
+        }
+        return quantity;
+    }
+    
+    @Override
+    public Integer getNumberOfAcceptedOrdersByListingId(Long listingId) throws ListingNotFoundException {
+        Listing currentListing = retrieveListingByListingId(listingId);
+        
+        int quantity = 0;
+        for (Order order : currentListing.getOrders()) {
+            if (order.getOrderStatus() == OrderStatus.ACCEPTED) {
+                quantity += 1;
+            }
+        }
+        return quantity;
+    }
+    
+    @Override
+    public Integer getNumberOfRejectedOrdersByListingId(Long listingId) throws ListingNotFoundException {
+        Listing currentListing = retrieveListingByListingId(listingId);
+        
+        int quantity = 0;
+        for (Order order : currentListing.getOrders()) {
+            if (order.getOrderStatus() == OrderStatus.REJECTED) {
+                quantity += 1;
+            }
+        }
+        return quantity;
+    }
+    
+    @Override
+    public Integer getNumberOfCompletedOrdersByListingId(Long listingId) throws ListingNotFoundException {
+        Listing currentListing = retrieveListingByListingId(listingId);
+        
+        int quantity = 0;
+        for (Order order : currentListing.getOrders()) {
+            if (order.getOrderStatus() == OrderStatus.COMPLETED) {
+                quantity += 1;
+            }
+        }
+        return quantity;
+    }
+    
+    @Override
+    public Integer getNumberOfCancelledOrdersByListingId(Long listingId) throws ListingNotFoundException {
+        Listing currentListing = retrieveListingByListingId(listingId);
+        
+        int quantity = 0;
+        for (Order order : currentListing.getOrders()) {
+            if (order.getOrderStatus() == OrderStatus.CANCELLED) {
+                quantity += 1;
+            }
+        }
+        return quantity;
+    }
+    
+    @Override
+    public String getSellerPhoneNoByListingId(Long listingId) throws ListingNotFoundException {
+        Listing currentListing = retrieveListingByListingId(listingId);
+        
+        Seller seller = currentListing.getSeller();
+        
+        return seller.getPhoneNo();
+
+    }
+    // Get phone number through listing and order
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Listing>> constraintViolations) {
         String msg = "Input data validation error!:";
 

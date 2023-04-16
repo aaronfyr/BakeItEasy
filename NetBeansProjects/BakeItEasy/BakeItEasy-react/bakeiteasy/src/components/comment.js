@@ -1,48 +1,20 @@
-import { React, useEffect, useState } from "react";
-import Aos from "aos";
-import { toast, ToastContainer } from "react-toastify";
 import {
+  Box,
   Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Divider,
-  Heading,
-  Stack,
-  Text,
-  Flex,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Spacer,
-  HStack,
   FormControl,
   FormLabel,
+  HStack,
   Input,
-  Box,
+  Spacer,
 } from "@chakra-ui/react";
+import { React, useEffect, useState } from "react";
+import { FiEdit3, FiUserMinus, FiUserPlus } from "react-icons/fi";
+import { MdOutlineCancel } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Popup from "reactjs-popup";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-  Navigate,
-  useParams,
-} from "react-router-dom";
 import SellerOrderCard from "../pages/sellerFollowerCard.js";
-import {
-  FiUserPlus,
-  FiUserMinus,
-  FiMessageSquare,
-  FiEdit3,
-} from "react-icons/fi";
+import { formatDate } from "./formatter.js";
 
 const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
   const navigate = useNavigate();
@@ -237,6 +209,28 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
     }
   };
 
+  const handleDelete = async (event) => {
+    event.preventDefault();
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/comments/${commentId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.error);
+    } else {
+      toast.success("Comment deleted successfully.");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
+  };
+
   return (
     <>
       <div className="commentCard">
@@ -298,49 +292,98 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
               <h3>{currentTitle}</h3>
               <div className="commentFooter">
                 <HStack>
-                  <div>posted on: {dateCreated}</div>
+                  <div>Posted on: {formatDate(dateCreated)}</div>
                 </HStack>
                 <Spacer />
                 {((!isBuyer && commenterId === sellerId) ||
                   (isBuyer && commenterId === buyerId)) && (
-                  <Popup trigger={<FiEdit3 size="1.2rem" />} modal nested>
-                    {(close) => (
-                      <div className="modal">
-                        <button className="close" onClick={close}>
-                          &times;
-                        </button>
-                        <div className="header"> Edit Comment </div>
-                        <div className="content">
-                          <form onSubmit={(event) => handleEdit(event)}>
-                            <FormControl mt={4}>
-                              <FormLabel>Comment: </FormLabel>
-                              <Input
-                                type="text"
-                                placeholder=" "
-                                value={title}
-                                onChange={(event) => {
-                                  console.log("onChange: ", event.target.value);
-                                  setTitle(event.target.value);
-                                }}
-                                required
-                              />
-                            </FormControl>
+                  <>
+                    <Popup
+                      trigger={
+                        <FiEdit3 size="1.2rem" className="pointerButton" />
+                      }
+                      modal
+                      nested
+                    >
+                      {(close) => (
+                        <div className="modal">
+                          <button className="close" onClick={close}>
+                            &times;
+                          </button>
+                          <div className="header"> Edit Comment </div>
+                          <div className="content">
+                            <form onSubmit={(event) => handleEdit(event)}>
+                              <FormControl mt={4}>
+                                <FormLabel>Comment: </FormLabel>
+                                <Input
+                                  type="text"
+                                  placeholder=" "
+                                  value={title}
+                                  onChange={(event) => {
+                                    console.log(
+                                      "onChange: ",
+                                      event.target.value
+                                    );
+                                    setTitle(event.target.value);
+                                  }}
+                                  required
+                                />
+                              </FormControl>
 
-                            <Box mt={4} display="flex" alignItems="center">
-                              <Button
-                                bg="#E2725B"
-                                colorScheme="white"
-                                type="submit"
-                                w="100%"
-                              >
-                                Done
-                              </Button>
-                            </Box>
-                          </form>
+                              <Box mt={4} display="flex" alignItems="center">
+                                <Button
+                                  bg="#E2725B"
+                                  colorScheme="white"
+                                  type="submit"
+                                  w="100%"
+                                >
+                                  Done
+                                </Button>
+                              </Box>
+                            </form>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </Popup>
+                      )}
+                    </Popup>
+
+                    <Popup
+                      trigger={
+                        <div style={{ marginLeft: "10px" }}>
+                          <MdOutlineCancel
+                            size="1.2rem"
+                            className="pointerButton"
+                          />
+                        </div>
+                      }
+                      modal
+                      nested
+                    >
+                      {(close) => (
+                        <div className="modal">
+                          <button className="close" onClick={close}>
+                            &times;
+                          </button>
+                          <div className="header">
+                            Are you sure you want to delete this comment?
+                          </div>
+                          <div className="content">
+                            <form onSubmit={(event) => handleDelete(event)}>
+                              <Box mt={4} display="flex" alignItems="center">
+                                <Button
+                                  bg="#E2725B"
+                                  colorScheme="white"
+                                  type="submit"
+                                  w="100%"
+                                >
+                                  Delete
+                                </Button>
+                              </Box>
+                            </form>
+                          </div>
+                        </div>
+                      )}
+                    </Popup>
+                  </>
                 )}
               </div>
             </div>

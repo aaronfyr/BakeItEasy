@@ -34,7 +34,7 @@ import {
 } from "@chakra-ui/react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { FaEdit, FaRegStar } from "react-icons/fa";
+import { FaEdit, FaRegStar, FaPhone } from "react-icons/fa";
 import { MdOutlineReport, MdOutlineCancel } from "react-icons/md";
 
 function BuyerProfile() {
@@ -107,6 +107,36 @@ function BuyerProfile() {
         if (error instanceof SyntaxError) {
           // Unexpected token < in JSON
           console.log("There was a SyntaxError", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
+  const [whatsappUrl, setWhatsappUrl] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/orders/${id}/sellerPhoneNo`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        setWhatsappUrl("https://wa.me/65" + data);
+        console.log(whatsappUrl);
+        console.log(`HTTP Response Code: ${response?.status}`);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        } else {
+          console.log("Other error: ", error);
         }
       }
     };
@@ -329,7 +359,7 @@ function BuyerProfile() {
             <div id="buyerOrderDetailsGrid">
               <div className="orderDetails_left">
                 <OrderListingHeader oId={order.orderId} />
-                <h4 className="italic">Order No. {order.orderId}</h4>
+                <h4 className="italic">Order ID #{order.orderId}</h4>
 
                 <h4 className="details">
                   Customisation Notes: {order.description}
@@ -342,9 +372,11 @@ function BuyerProfile() {
               <div>
                 <h4 className="italic">Status:</h4>
                 <h2>{order.orderStatus}</h2>
-                <h4 className="italic">Price:</h4>
-                <h2>
-                  {order.quantity} x ${order.price}
+                {/* <h4 className="italic">Price:</h4> */}
+                <h2 style={{ fontSize: "16px" }}>
+                  Quantity: {order.quantity} <br />
+                  Unit Price: ${order.price} <br />
+                  Total: ${order.price * order.quantity}
                 </h2>
               </div>
               <div className="orderDetails_right">
@@ -508,6 +540,18 @@ function BuyerProfile() {
                     </div>
                   )}
                 </Popup>
+                <a
+                  className="button1_cancel"
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ width: "150px" }}
+                >
+                  <HStack spacing="10px">
+                    <FaPhone />
+                    <div>Whatsapp</div>
+                  </HStack>
+                </a>
               </div>
             </div>
           </div>

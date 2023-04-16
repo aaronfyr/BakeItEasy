@@ -137,43 +137,58 @@ function ForumCreatePost() {
 
   //create post
   const handleSubmit = (e) => {
+
     e.preventDefault();
     if (!isSeller) {
-      //seller create post
-      fetch(
-        `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/posts`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(buyerPost),
-        }
-      )
-        .then((response) => {
-          if (!response.ok) {
-            toast.error("!response.ok");
-          } else {
-            console.log("listing created");
-            setCreated(true);
-            toast.success(
-              "Post successfully created! Redirecting to profile..."
-            );
-            setTimeout(() => {
-              routeChangeToForum();
-            }, 8000); // 1000 milliseconds = 1 second
-          }
-          return response.json();
-        })
-        .then((data) => {
-          // handle successful creation
-        })
-        .catch((error) => {
-          toast.error("Failed to create listing. " + error);
-        });
+        var validTitle = buyerPost.title && buyerPost.title.length > 0 && buyerPost.title.length < 257;
+        var validCategory = buyerPost.postCategory !== "";
+        if (validCategory && validTitle) {
+            //buyer create post
+            fetch(
+                `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/posts`,
+                {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(buyerPost),
+                }
+            )
+                .then((response) => {
+                if (!response.ok) {
+                    toast.error("!response.ok");
+                } else {
+                    console.log("listing created");
+                    setCreated(true);
+                    toast.success(
+                    "Post successfully created! Redirecting to profile..."
+                    );
+                    setTimeout(() => {
+                    routeChangeToForum();
+                    }, 8000); // 1000 milliseconds = 1 second
+                }
+                return response.json();
+                })
+                .then((data) => {
+                // handle successful creation
+                })
+                .catch((error) => {
+                toast.error("Failed to create listing. " + error);
+                });
+            }
+            if (!validCategory) {
+                toast.error("Select a category!");
+            }
+            if (!validTitle) {
+                toast.error("Post must have 1 to 256 characters!")
+            }
     } else {
       //buyer create post
-      fetch(
+      var validTitle2 = sellerPost.title && sellerPost.title.length > 0 && sellerPost.title.length < 257;
+        console.log(sellerPost.postCategory, "validcat2")
+      var validCategory2 = sellerPost.postCategory && sellerPost.postCategory !== "";
+      if (validCategory2 && validTitle2) {
+        fetch(
         `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/posts`,
         {
           method: "POST",
@@ -204,6 +219,14 @@ function ForumCreatePost() {
         .catch((error) => {
           toast.error("Failed to create listing. " + error);
         });
+
+        }
+        if (!validCategory2) {
+                toast.error("Select a category!");
+            }
+            if (!validTitle2) {
+                toast.error("Post must have 1 to 256 characters!")
+            }
     }
   };
 

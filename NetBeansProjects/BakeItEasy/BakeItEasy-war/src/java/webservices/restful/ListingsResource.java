@@ -57,17 +57,17 @@ public class ListingsResource {
 
     @EJB
     private ListingSessionBeanLocal listingSessionBeanLocal;
-    
+
     @EJB
     private BuyerSessionBeanLocal buyerSessionBeanLocal;
-    
+
     // CHECKED: AARON
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Listing> getAllListings() {
         return listingSessionBeanLocal.retrieveAllListings();
     } // end get all listings
-    
+
     // CHECKED: AARON
     @GET
     @Path("/query")
@@ -123,7 +123,7 @@ public class ListingsResource {
         }
 
     } // end query for listings
-    
+
     // CHECKED: AARON
     @GET
     @Path("/{listing_id}")
@@ -141,7 +141,7 @@ public class ListingsResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } // end get specific listing
-    
+
     // CHECKED: AARON
     @POST
     @Path("/{seller_id}")
@@ -152,7 +152,7 @@ public class ListingsResource {
         listingSessionBeanLocal.createNewListing(listing, sellerId);
         return listing;
     } // end create listing
-    
+
     // CHECKED: AARON
     @DELETE
     @Path("/{listing_id}")
@@ -162,7 +162,7 @@ public class ListingsResource {
             listingSessionBeanLocal.deleteListing(listingId);
             return Response.status(204).build();
         } catch (ListingNotFoundException ex) {
-                        JsonObject exception = Json.createObjectBuilder()
+            JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Listing not found")
                     .build();
 
@@ -181,7 +181,7 @@ public class ListingsResource {
             return Response.status(404).entity(exception).build();
         }
     } //end delete listing
-    
+
     // CHECKED: AARON
     @PUT
     @Path("/{listing_id}")
@@ -206,7 +206,7 @@ public class ListingsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end edit listing
-    
+
     // CHECKED: AARON
     @PUT
     @Path("/{listing_id}/{buyer_id}/like")
@@ -236,7 +236,7 @@ public class ListingsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end like listing
-    
+
     // CHECKED: AARON
     @PUT
     @Path("/{listing_id}/{buyer_id}/unlike")
@@ -266,7 +266,7 @@ public class ListingsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end like listing
-    
+
     @GET
     @Path("/{listing_id}/seller")
     @Produces(MediaType.APPLICATION_JSON)
@@ -283,7 +283,7 @@ public class ListingsResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } // end get specific listing's seller
-    
+
     // CHECKED: AARON
     @PUT
     @Path("/{listing_id}/{buyer_id}/follow")
@@ -313,7 +313,7 @@ public class ListingsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end follow seller
-    
+
     // CHECKED: AARON
     @PUT
     @Path("/{listing_id}/{buyer_id}/unfollow")
@@ -343,7 +343,7 @@ public class ListingsResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end unfollow seller
-    
+
     // CHECKED: ELYSIA
     @GET
     @Path("/{listing_id}/orders")
@@ -352,7 +352,7 @@ public class ListingsResource {
         Listing listing = listingSessionBeanLocal.retrieveListingByListingId(listingId);
         return listing.getOrders();
     } //end getAllListingOrders
-    
+
     // CHECKED: ELYSIA
     @GET
     @Path("/{listing_id}/likes")
@@ -361,7 +361,7 @@ public class ListingsResource {
         Listing listing = listingSessionBeanLocal.retrieveListingByListingId(listingId);
         return listing.getLikers().size();
     } //end getNumberOfListingLikes
-    
+
     // CHECKED: AARON
     @GET
     @Path("/{buyer_id}/followed")
@@ -369,4 +369,60 @@ public class ListingsResource {
     public List<Listing> getAllFollowedSellersListings(@PathParam("buyer_id") Long buyerId) throws BuyerNotFoundException {
         return listingSessionBeanLocal.getFollowedSellerListings(buyerId);
     } //end getAllFollowedSellersListings
+
+    // CHECKED: AARON
+    @GET
+    @Path("/{buyer_id}/{listing_id}/isListingLiked")
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean isListingLikedByCurrentBuyer(@PathParam("listing_id") Long listingId, @PathParam("buyer_id") Long buyerId) throws BuyerNotFoundException, ListingNotFoundException {
+        return listingSessionBeanLocal.isListingLikedByCurrentBuyer(buyerId, listingId);
+    } //end isListingLikedByCurrentBuyer
+
+    // CHECKED: AARON
+    @GET
+    @Path("/{listing_id}/pendingOrdersQuantity")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Integer getNumberOfPendingOrdersByListingId(@PathParam("listing_id") Long listingId) throws ListingNotFoundException {
+        return listingSessionBeanLocal.getNumberOfPendingOrdersByListingId(listingId);
+    } //end getNumberOfPendingOrdersByListingId
+
+    // CHECKED: AARON
+    @GET
+    @Path("/{listing_id}/acceptedOrdersQuantity")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Integer getNumberOfAcceptedOrdersByListingId(@PathParam("listing_id") Long listingId) throws ListingNotFoundException {
+        return listingSessionBeanLocal.getNumberOfAcceptedOrdersByListingId(listingId);
+    } //end getNumberOfAcceptedOrdersByListingId
+
+    // CHECKED: AARON
+    @GET
+    @Path("/{listing_id}/rejectedOrdersQuantity")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Integer getNumberOfRejectedOrdersByListingId(@PathParam("listing_id") Long listingId) throws ListingNotFoundException {
+        return listingSessionBeanLocal.getNumberOfRejectedOrdersByListingId(listingId);
+    } //end getNumberOfRejectedOrdersByListingId
+
+    // CHECKED: AARON
+    @GET
+    @Path("/{listing_id}/completedOrdersQuantity")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Integer getNumberOfCompletedOrdersByListingId(@PathParam("listing_id") Long listingId) throws ListingNotFoundException {
+        return listingSessionBeanLocal.getNumberOfCompletedOrdersByListingId(listingId);
+    } //end getNumberOfCompletedOrdersByListingId
+
+    // CHECKED: AARON
+    @GET
+    @Path("/{listing_id}/cancelledOrdersQuantity")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Integer getNumberOfCancelledOrdersByListingId(@PathParam("listing_id") Long listingId) throws ListingNotFoundException {
+        return listingSessionBeanLocal.getNumberOfCancelledOrdersByListingId(listingId);
+    } //end getNumberOfCancelledOrdersByListingId
+
+    // CHECKED: AARON
+    @GET
+    @Path("/{listing_id}/sellerPhoneNo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getSellerPhoneNoByListingId(@PathParam("listing_id") Long listingId) throws ListingNotFoundException {
+        return listingSessionBeanLocal.getSellerPhoneNoByListingId(listingId);
+    } //end getSellerPhoneNoByListingId
 }

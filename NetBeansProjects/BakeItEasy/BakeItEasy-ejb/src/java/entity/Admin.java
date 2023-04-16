@@ -36,11 +36,6 @@ public class Admin implements Serializable {
     @Size(min = 1, max = 128)
     private String name;
     
-    @Column(nullable = false, length = 16, unique = true)
-    @NotNull
-    @Size(min = 1, max = 16)
-    private String username;
-    
     @Column(nullable = false, length = 128, unique = true)
     @NotNull
     @Size(min = 1, max = 128)
@@ -51,18 +46,12 @@ public class Admin implements Serializable {
     @Size(min = 1, max = 64)
     private String password;
     
-    @JsonbTransient
-    @OneToMany(mappedBy = "admin", fetch = FetchType.EAGER)
-    private List<Report> reports;
-    
     public Admin() {
-        this.reports = new ArrayList<>();
     }
 
-    public Admin(String name, String username, String email, String password) {
+    public Admin(String name, String email, String password) {
         this();
         this.name = name;
-        this.username = username;
         this.email = email;
         this.password = password;
     }
@@ -83,14 +72,6 @@ public class Admin implements Serializable {
         this.name = name;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -105,14 +86,6 @@ public class Admin implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public List<Report> getReports() {
-        return reports;
-    }
-
-    public void setReports(List<Report> reports) {
-        this.reports = reports;
     }
 
     @Override

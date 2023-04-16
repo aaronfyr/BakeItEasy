@@ -17,7 +17,6 @@ import { Link, useNavigate } from "react-router-dom";
 import "./resources/navigationBar.css";
 import "./resources/adminProfilePhotoDisplay.css";
 
-
 function AdminMenuBar() {
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(null);
@@ -60,14 +59,26 @@ function AdminMenuBar() {
           <div className="logo">BakeItEasy</div>
         </Link>
       </Flex>
-      <Flex align="center">
-        <Link to="/viewAllReports" style={{ marginRight: "100px" }}>
+      <Flex align="center" style={{ marginLeft: "200px" }}>
+        <Link
+          id="navChoices"
+          to="/viewAllReports"
+          style={{ marginRight: "50px" }}
+        >
           <Text>Reports</Text>
         </Link>
-        <Link to="/viewAllBuyers" style={{ marginRight: "100px" }}>
+        <Link
+          id="navChoices"
+          to="/viewAllBuyers"
+          style={{ marginRight: "50px" }}
+        >
           <Text>Buyers</Text>
         </Link>
-        <Link to="/viewAllSellers" style={{ marginRight: "100px" }}>
+        <Link
+          id="navChoices"
+          to="/viewAllSellers"
+          style={{ marginRight: "50px" }}
+        >
           <Text>Sellers</Text>
         </Link>
 
@@ -80,7 +91,7 @@ function AdminMenuBar() {
                 rightIcon={<ChevronDownIcon />}
                 type="submit"
                 fontWeight="bold"
-                ml="375px"
+                ml="200px"
               >
                 <Flex align="center">
                   <FiUser style={{ marginRight: "10px" }} />

@@ -15,8 +15,9 @@ import {
   Navigate,
   useParams,
 } from "react-router-dom";
+import { FaRegStar } from "react-icons/fa";
 
-function SellerProfile() {
+function SellerProfile(props) {
   const [search, setSearch] = useState("");
 
   const [seller, setSeller] = useState(null);
@@ -27,6 +28,11 @@ function SellerProfile() {
   const [followerCount, setFollowerCount] = useState(404);
 
   const navigate = useNavigate();
+
+  const { review } = props;
+  const stars = [];
+
+
 
   useEffect(() => {
     async function fetchData() {
@@ -88,8 +94,13 @@ function SellerProfile() {
       }
     )
       .then((response) => response.json())
-      .then((data) => setReviews(data));
-  }, [sellerId]);
+      .then((data) => {
+        setReviews(data);
+        for (let i = 0; i < data.rating; i++) {
+         stars.push(<FaRegStar key={i} />);
+        }
+    });
+  }, [sellerId, stars]);
 
   //fetch seller
   console.log("sellerID is", sellerId);
@@ -261,25 +272,14 @@ function SellerProfile() {
                 className="review"
 
               >
-                <div class="productSeller">
-                  <img
-                    width="30px"
-                    height="30px"
-                    src={
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png"
-                    }
-                    alt="listing product"
-                  />
-                  <h6>buyer name</h6>
-                </div>
 
                 <div className="reviewTitle">
-                  <h2>{review.title}</h2>
+                  <h2 style={{marginTop: 10}}>{review.title}</h2>
                 </div>
 
                 <div class="reviewBottomRow">
-                  <h4>{review.reviewText}</h4>
-                  <h2>rating: {review.rating}</h2>
+                  <h4 style={{marginLeft:10}}>{review.reviewText}</h4>
+                  <h2>rating: {review.rating} / 5</h2>
                 </div>
               </div>
             ))}
