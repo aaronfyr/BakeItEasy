@@ -139,6 +139,8 @@ function SellerViewOrder() {
 
 
   const clickA = async () => {
+    setAccepted(true);
+    setPending(false);
     try {
       const response = await fetch(
         `http://localhost:8080/BakeItEasy-war/webresources/sellers/${id}/acceptorder`,
@@ -161,6 +163,8 @@ function SellerViewOrder() {
   };
 
   const clickR = async () => {
+    setPending(false);
+    setRejected(true);
     try {
       const response = await fetch(
         `http://localhost:8080/BakeItEasy-war/webresources/sellers/${id}/rejectorder`,
@@ -183,6 +187,8 @@ function SellerViewOrder() {
   };
 
   const clickC = async () => {
+    setPending(false);
+    setCompleted(true);
     try {
       const response = await fetch(
         `http://localhost:8080/BakeItEasy-war/webresources/sellers/${id}/completeorder`,
@@ -217,10 +223,10 @@ function SellerViewOrder() {
         <ToastContainer/>
         <br/>
         <div style={{width: 220}}>
-            <div className="button1" onClick={handleGoBack} ><FaArrowLeft/>Back to orders</div>
+            <div className="button1" onClick={handleGoBack} ><FaArrowLeft/> <div style={{width:5}}></div>Back to orders</div>
         </div>
         <br/>
-      <h1 style={{marginLeft: 80}}>Order ID {order.orderId}</h1>
+      <h1 style={{marginLeft: 80}}>Order ID #{order.orderId}</h1>
       <div id="listingContainer">
         <div id="leftListingContainer">
 

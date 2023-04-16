@@ -162,7 +162,7 @@ useEffect(() => {
                                         }}></div>
                                         </div>
                                         <div style={{width: 10}}></div>
-                                    <h2>{follower.name}  (@{follower.username})</h2>
+                                    <h2>(@{follower.username})</h2>
                                 </div>
                                 <div className="flexBox">
                                 </div>

@@ -300,8 +300,8 @@ function BuyerListingPage() {
                 rel="noopener noreferrer"
               >
                 <HStack spacing="10px">
-                  <FaPhone />
                   <div>Whatsapp</div>
+                  <FaPhone />
                 </HStack>
               </a>
             </Flex>

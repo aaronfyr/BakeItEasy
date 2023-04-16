@@ -213,9 +213,9 @@ useEffect(() => {
                     style={{ width: 350, margin: 5 }}
                     className="cardTextBlock"
                   >
-                    <h4>note: {order.description}</h4>
-                    <h4>amount due: ${formatPrice(order.price)}</h4>
-                    <h4>date due: {formatDate(order.dateOfCollection)}</h4>
+                    <h4>Note: {order.description}</h4>
+                    <h4>Amount due: ${formatPrice(order.price)}</h4>
+                    <h4>Date due: {formatDate(order.dateOfCollection)}</h4>
                   </div>
 
                   <div className="orderStatus">

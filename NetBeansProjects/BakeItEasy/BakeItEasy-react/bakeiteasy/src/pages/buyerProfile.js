@@ -414,9 +414,9 @@ function BuyerProfile() {
                   rel="noopener noreferrer"
                   style={{ width: "150px" }}
                 >
-                  <HStack spacing="10px">
-                    <FaPhone />
+                  <HStack spacing="10px">                    
                     <div>Whatsapp</div>
+                    <FaPhone />
                   </HStack>
                 </a>
               </div>

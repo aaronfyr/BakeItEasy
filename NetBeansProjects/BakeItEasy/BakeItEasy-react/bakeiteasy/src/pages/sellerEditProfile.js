@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Button, HStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
 import "./resources/default.css";
 import "./resources/sellerViewOrder.css";
+import "./resources/sellerEditProfile.css";
 
 function SellerEditProfile() {
   const { id } = useParams();
@@ -100,45 +101,42 @@ function SellerEditProfile() {
   };
 
   //edit seller
- const handleUpdate = () => {
-    setIsEditable(false);
+ const handleUpdate = async () => {
+  setIsEditable(false);
 
-    fetch(
-          `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(sellerObj),
-          }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              toast.error("Failed to update profile.");
+  try {
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sellerObj),
+      }
+    );
 
-              setTimeout(() => {
-                    window.location.reload();
-                }, 10000);
-              throw new Error("Failed to update seller");
-            } else {
-              console.log("ok response");
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.error);
+      toast.loading("refreshing...");
 
-              toast.success("Profile updated successfully.");
-            }
-            return response.json();
-          })
-          .then(() => {
-            // handle successful update
-            console.log("pretoast");
-            window.location.reload();
-          })
-          .catch((error) => {
-            /*handle error */
-          });
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+      throw new Error("Failed to update seller");
+    } else {
+      console.log("ok response");
 
-}
-;
+      toast.success("Profile updated successfully.");
+    }
+    console.log("pretoast");
+    window.location.reload();
+  } catch (error) {
+    /*handle error */
+  }
+};
+
 
 
 
@@ -150,6 +148,7 @@ function SellerEditProfile() {
       <div style={{ width: 220 }}>
         <div className="button1" onClick={handleGoBack}>
           <FaArrowLeft />
+          <HStack width={3}/>
           Back to profile
         </div>
       </div>
@@ -166,7 +165,7 @@ function SellerEditProfile() {
             <br/>
 
           <div style={{width:400, margin:0}}>
-            <h3>Name:</h3>
+            <h3 className="listingH3">Name:</h3>
           {isEditable ? (
             <input
               type="text"
@@ -177,9 +176,9 @@ function SellerEditProfile() {
               }
             />
           ) : (
-            <h2>{sellerObj.name}</h2>
+            <h2 className="listingH2">{sellerObj.name}</h2>
           )}
-          <h3>Username:</h3>
+          <h3 className="listingH3">Username:</h3>
           {isEditable ? (
             <input
               type="text"
@@ -190,9 +189,9 @@ function SellerEditProfile() {
               }
             />
           ) : (
-            <h2>{sellerObj.username}</h2>
+            <h2 className="listingH2">{sellerObj.username}</h2>
           )}
-          <h3>Phone:</h3>
+          <h3 className="listingH3">Phone:</h3>
           {isEditable ? (
             <input
               type="text"
@@ -204,12 +203,12 @@ function SellerEditProfile() {
               }}
             />
           ) : (
-            <h2>{sellerObj.phoneNo}</h2>
+            <h2 className="listingH2">{sellerObj.phoneNo}</h2>
           )}
            {isEditable && (
             <div>
                 <input
-                style={{ height: 40 }}
+                style={{ height: 40, width:400 }}
                 type="file"
                 id="image"
                 name="image"
@@ -220,20 +219,22 @@ function SellerEditProfile() {
             )}
           <div style={{ height: 10 }}></div>
           <Flex>
-            {!isEditable && (
-              <button className="button1" onClick={() => setIsEditable(true)}>
+            {!isEditable &&
+
+              <Button bg="#E2725B" colorScheme="white" onClick={() => setIsEditable(true)}  w="100%">
                 Edit
-              </button>
-            )}
+              </Button>
+
+            }
             {isEditable && (
-              <button className="button1" onClick={handleUpdate}>
+                <Button bg="#E2725B" colorScheme="white" onClick={handleUpdate}  w="100%">
                 Done
-              </button>
+              </Button>
             )}
           </Flex>
           <div style={{ height: 10 }}></div>
-          <h3>Email:</h3>
-          <h2>{sellerObj.email}</h2>
+          <h3 className="listingH3">Email:</h3>
+          <h2 className="listingH2">{sellerObj.email}</h2>
           </div>
 
 
