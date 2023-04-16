@@ -95,7 +95,6 @@ public class ReportsResource {
             Report oldReport = reportSessionBeanLocal.retrieveReportById(reportId);
             report.setReporter(oldReport.getReporter());
             report.setReportee(oldReport.getReportee());
-            report.setAdminReviewer(oldReport.getAdminReviewer());
             reportSessionBeanLocal.updateReport(report);
             return Response.status(200).entity(
                     report

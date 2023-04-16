@@ -6,6 +6,7 @@
 package webservices.restful;
 
 import ejb.session.stateless.OrderSessionBeanLocal;
+import ejb.session.stateless.ReportSessionBeanLocal;
 import ejb.session.stateless.ReviewSessionBeanLocal;
 import entity.Buyer;
 import entity.Listing;
@@ -15,6 +16,7 @@ import entity.Seller;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingNotFoundException;
+import error.exception.OrderHasExistingReview;
 import error.exception.OrderIsNotCompletedException;
 import error.exception.OrderNotFoundException;
 import error.exception.UnknownPersistenceException;
@@ -45,6 +47,9 @@ public class OrdersResource {
     @EJB
     private OrderSessionBeanLocal orderSessionBeanLocal;
     
+    @EJB
+    private ReportSessionBeanLocal reportSessionBeanLocal;
+    
     // create a new review
     // request body:
     /*
@@ -59,16 +64,24 @@ public class OrdersResource {
     @Path("/{id}/reviews")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Review createReviewForOrder(@PathParam("id") Long orderId, Review r) {
+    public Response createReviewForOrder(@PathParam("id") Long orderId, Review r) {
         try {
             Order order = orderSessionBeanLocal.retrieveOrderById(orderId);
             reviewSessionBeanLocal.createNewReview(r, orderId);
+            return Response.status(200).entity(r).type(MediaType.APPLICATION_JSON).build();
         } catch (UnknownPersistenceException | InputDataValidationException ex) {
-            Logger.getLogger(AdminsResource.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (OrderNotFoundException | OrderIsNotCompletedException ex) {
-            Logger.getLogger(OrdersResource.class.getName()).log(Level.SEVERE, null, ex);
+            JsonObject exception = Json.createObjectBuilder().add("error", "Unknown Persistence or Input Data Validation error").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Order not found").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderIsNotCompletedException ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "Order not completed").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (OrderHasExistingReview ex) {
+            JsonObject exception = Json.createObjectBuilder().add("error", "A review has previously been created for this order").build();
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
-        return r;
     } //end createReviewForOrder
     
     @POST
@@ -166,4 +179,18 @@ public class OrdersResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end getSeller
+    
+    @GET
+    @Path("/{order_id}/sellerPhoneNo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getSellerPhoneNoByOrderId(@PathParam("order_id") Long orderId) throws OrderNotFoundException {
+        return orderSessionBeanLocal.getSellerPhoneNoByOrderId(orderId);
+    } //end getSellerPhoneNoByOrderId
+
+    @Path("/{id}/hasExistingReview")
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean hasExistingReview(@PathParam("id") Long orderId) throws OrderNotFoundException {
+        return reviewSessionBeanLocal.reviewExists(orderId);
+    } // end hasExistingReview
+
 }

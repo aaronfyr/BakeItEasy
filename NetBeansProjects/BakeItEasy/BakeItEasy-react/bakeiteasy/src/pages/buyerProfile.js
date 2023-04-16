@@ -113,6 +113,36 @@ function BuyerProfile() {
     fetchData();
   }, []);
 
+  const [whatsappUrl, setWhatsappUrl] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/orders/${id}/sellerPhoneNo`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        setWhatsappUrl("https://wa.me/65" + data);
+        console.log(whatsappUrl);
+        console.log(`HTTP Response Code: ${response?.status}`);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        } else {
+          console.log("Other error: ", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
   let navigate = useNavigate();
   const routeChangeToOrder = (id) => {
     let path = "/buyerOrder/";
@@ -510,17 +540,18 @@ function BuyerProfile() {
                     </div>
                   )}
                 </Popup>
-                <div
-                  className="button1_report"
+                <a
+                  className="button1_cancel"
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ width: "150px" }}
                 >
                   <HStack spacing="10px">
-                    <div>Whatsapp</div>
                     <FaPhone />
+                    <div>Whatsapp</div>
                   </HStack>
-                </div>
+                </a>
               </div>
             </div>
           </div>

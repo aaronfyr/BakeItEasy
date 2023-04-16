@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.Report;
 import error.exception.AdminNotFoundException;
+import error.exception.BuyerHasReportedSellerException;
 import error.exception.BuyerNotFoundException;
 import error.exception.InputDataValidationException;
 import error.exception.ReportNotFoundException;
@@ -29,9 +30,9 @@ public interface ReportSessionBeanLocal {
 
     public List<Report> retrieveAllReports();
 
-    public Long createNewReport(Report report, Long reporterId, Long reporteeId) throws BuyerNotFoundException, SellerNotFoundException, UnknownPersistenceException, InputDataValidationException;
-
-    public Long assignAdmin(Report report, Long adminId) throws AdminNotFoundException;
+    public Long createNewReport(Report report, Long reporterId, Long reporteeId) throws BuyerNotFoundException, SellerNotFoundException, UnknownPersistenceException, InputDataValidationException, BuyerHasReportedSellerException;
 
     public void updateReport(Report r) throws NoResultException, ReportNotFoundException;
+
+    public boolean hasBuyerReportedSeller(Long buyerId, Long sellerId);
 }

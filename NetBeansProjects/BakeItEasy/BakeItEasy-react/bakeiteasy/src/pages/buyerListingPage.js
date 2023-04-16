@@ -57,7 +57,6 @@ import { Slideshow } from "../components/slideshow";
 function BuyerListingPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const whatsappUrl = "https://wa.me/${sellerPhoneNumber}";
 
   // get Buyer info
   const [buyer, setBuyer] = useState(null);
@@ -129,6 +128,36 @@ function BuyerListingPage() {
   }, []);
 
   //console.log(listing);
+
+  const [whatsappUrl, setWhatsappUrl] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/listings/${id}/sellerPhoneNo`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        setWhatsappUrl("https://wa.me/65" + data);
+        console.log(whatsappUrl);
+        console.log(`HTTP Response Code: ${response?.status}`);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // Unexpected token < in JSON
+          console.log("There was a SyntaxError", error);
+        } else {
+          console.log("Other error: ", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
 
   // quantity input
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
@@ -259,7 +288,7 @@ function BuyerListingPage() {
                   <div>Like</div>
                 </HStack>
               </div>
-              <div
+              <a
                 className="button1_cancel"
                 href={whatsappUrl}
                 target="_blank"
@@ -269,7 +298,7 @@ function BuyerListingPage() {
                   <FaPhone />
                   <div>Whatsapp</div>
                 </HStack>
-              </div>
+              </a>
             </Flex>
             <div></div>
           </Flex>

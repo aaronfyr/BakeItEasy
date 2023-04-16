@@ -265,34 +265,33 @@ function ForumPost() {
   }
 
   const handleDeleteClick = () => {
-      fetch(`http://localhost:8080/BakeItEasy-war/webresources/posts/${id}`, {
-        method: "DELETE",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    fetch(`http://localhost:8080/BakeItEasy-war/webresources/posts/${id}`, {
+      method: "DELETE",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          setDeleteFailed(true);
+          setTimeout(() => {
+            setDeleteFailed(false);
+          }, 5000); // 1000 milliseconds = 1 second
+        } else {
+          console.log("response ok");
+
+          toast.success("Post deleted successfully! Redirecting...");
+          setTimeout(() => {
+            routeChangeToSellerProfile();
+          }, 1000); // 1000 milliseconds = 1 second
+        }
+        return response.json();
       })
-        .then((response) => {
-          if (!response.ok) {
-            setDeleteFailed(true);
-            setTimeout(() => {
-              setDeleteFailed(false);
-            }, 5000); // 1000 milliseconds = 1 second
-          } else {
-            console.log("response ok");
-  
-            toast.success("Post deleted successfully! Redirecting...");
-            setTimeout(() => {
-              routeChangeToSellerProfile();
-            }, 1000); // 1000 milliseconds = 1 second
-          }
-          return response.json();
-        })
-        .then((data) => {
-          // handle successful update
-        })
-        .catch((error) => {});
-    
+      .then((data) => {
+        // handle successful update
+      })
+      .catch((error) => {});
   };
 
   /*
@@ -371,7 +370,7 @@ useEffect(() => {
           <div className="editPostBtn" onClick={handleSubmitComment}>
             <FaRegEdit style={{ alignSelf: "center" }} />
             <div style={{ width: 5 }}></div>
-            <h3>done</h3>
+            <h3>Done</h3>
           </div>
           <div className="editPostBtn" onClick={handleCloseCommentPopup}>
             <FaRegEdit style={{ alignSelf: "center" }} />
@@ -429,18 +428,18 @@ useEffect(() => {
           <div style={{ width: 500 }}>
             <div style={{ height: 40 }}></div>
             <div className="postDiv">
-              <h1>Post #{post.postId}</h1>
-              <h2>{post.title}</h2>
+              <h1 style={{ fontSize: "40px" }}>Post #{post.postId}</h1>
+              <h2 style={{ fontSize: "25px" }}>{post.title}</h2>
               <Flex>
                 <div style={{ width: 220 }}>
                   <h3>Category: #{post.postCategory}</h3>
                 </div>
                 <div style={{ width: 70 }}></div>
-                <h3>created: {formatDate(post.dateCreated)}</h3>
+                <h3>Created: {formatDate(post.dateCreated)}</h3>
               </Flex>
               {poster && (
                 <h3>
-                  posted by: {poster.name} ({posterType})
+                  Posted by: {poster.name} ({posterType})
                 </h3>
               )}
               <br />
@@ -466,18 +465,18 @@ useEffect(() => {
                 >
                   <FaRegEdit style={{ alignSelf: "center" }} />
                   <div style={{ width: 5 }}></div>
-                  <h3>edit</h3>
+                  <h3>Edit</h3>
                 </div>
               )}
               <div className="editPostBtn" onClick={handleCommentClick}>
                 <FaComment style={{ alignSelf: "center" }} />
                 <div style={{ width: 5 }}></div>
-                <h3>comment</h3>
+                <h3>Comment</h3>
               </div>
               <div className="editPostBtn" onClick={handleDeleteClick}>
                 <MdOutlineCancel />
                 <div style={{ width: 5 }}></div>
-                <h3>delete</h3>
+                <h3>Delete</h3>
               </div>
             </Flex>
             <br />
