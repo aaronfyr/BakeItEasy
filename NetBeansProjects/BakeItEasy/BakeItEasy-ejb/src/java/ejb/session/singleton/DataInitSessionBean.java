@@ -26,11 +26,13 @@ import entity.Seller;
 import enumeration.ListingCategory;
 import enumeration.PostCategory;
 import error.exception.BuyerEmailExistException;
+import error.exception.BuyerHasReportedSellerException;
 import error.exception.BuyerNotFoundException;
 import error.exception.BuyerPhoneNumberExistException;
 import error.exception.BuyerUsernameExistException;
 import error.exception.InputDataValidationException;
 import error.exception.ListingNotFoundException;
+import error.exception.OrderHasExistingReview;
 import error.exception.OrderIsNotAcceptedException;
 import error.exception.OrderIsNotCompletedException;
 import error.exception.OrderIsNotPendingException;
@@ -45,6 +47,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -581,10 +585,10 @@ public class DataInitSessionBean {
 
                 } catch (UnknownPersistenceException | InputDataValidationException | SellerUsernameExistException
                                 | SellerEmailExistException | SellerPhoneNumberExistException | PostNotFoundException
-                                | OrderNotFoundException | SellerNotFoundException
-                                | BuyerNotFoundException | ListingNotFoundException | OrderIsNotPendingException
+                                | OrderNotFoundException | SellerNotFoundException | OrderHasExistingReview
+                                | BuyerNotFoundException | ListingNotFoundException | OrderIsNotPendingException | BuyerHasReportedSellerException
                                 | OrderIsNotAcceptedException | BuyerPhoneNumberExistException | BuyerEmailExistException | BuyerUsernameExistException | OrderIsNotCompletedException ex ) {
                         System.out.println("Error initialising data: " + ex.getMessage());
-                }
+            }
         }
 }

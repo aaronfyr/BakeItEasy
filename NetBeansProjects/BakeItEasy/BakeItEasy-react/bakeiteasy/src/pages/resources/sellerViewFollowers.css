@@ -267,4 +267,5 @@ body {
 
 .editPostBtn:hover {
     background-color: lightgray;
+    cursor: pointer;
 }

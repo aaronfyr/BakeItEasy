@@ -46,12 +46,7 @@ public class Admin implements Serializable {
     @Size(min = 1, max = 64)
     private String password;
     
-    @JsonbTransient
-    @OneToMany(mappedBy = "adminReviewer", fetch = FetchType.EAGER)
-    private List<Report> reports;
-    
     public Admin() {
-        this.reports = new ArrayList<>();
     }
 
     public Admin(String name, String email, String password) {
@@ -91,14 +86,6 @@ public class Admin implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public List<Report> getReports() {
-        return reports;
-    }
-
-    public void setReports(List<Report> reports) {
-        this.reports = reports;
     }
 
     @Override
