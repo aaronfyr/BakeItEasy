@@ -37,6 +37,11 @@ function ForumPost() {
     navigate(path);
   };
 
+  const routeChangeToForum = () => {
+    let path = "/forum";
+    navigate(path);
+  };
+
   const { id } = useParams();
   console.log("post param id ", id);
 
@@ -283,7 +288,7 @@ function ForumPost() {
 
           toast.success("Post deleted successfully! Redirecting...");
           setTimeout(() => {
-            routeChangeToSellerProfile();
+            routeChangeToForum();
           }, 1000); // 1000 milliseconds = 1 second
         }
         return response.json();

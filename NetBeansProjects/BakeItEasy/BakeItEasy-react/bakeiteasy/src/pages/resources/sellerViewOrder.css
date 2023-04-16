@@ -254,6 +254,12 @@ h4 {
     width: 400px;
 }
 
+.createPostCardForm{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+
 label {
     display: block;
     margin-bottom: 10px;
