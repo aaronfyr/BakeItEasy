@@ -206,7 +206,7 @@ public class SellersResource {
             JsonObject exception = Json.createObjectBuilder().add("error", "Incorrect password").build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         } catch(SellerNotFoundException e) {
-            JsonObject exception = Json.createObjectBuilder().add("error", "Invalid email").build();
+            JsonObject exception = Json.createObjectBuilder().add("error", "Baker’s email provided does not exist").build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         } catch (SellerIsBannedException e) {
             JsonObject exception = Json.createObjectBuilder().add("error", "Seller is banned").build();

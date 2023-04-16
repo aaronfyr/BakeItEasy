@@ -105,7 +105,7 @@ public class BuyersResource {
             Buyer buyer = buyerSessionBeanLocal.buyerLogin(email, password);
             return Response.status(200).entity(buyer).type(MediaType.APPLICATION_JSON).build();
         } catch (BuyerNotFoundException e) {
-            JsonObject exception = Json.createObjectBuilder().add("error", "Invalid email").build();
+            JsonObject exception = Json.createObjectBuilder().add("error", "Buyer’s email provided does not exist").build();
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         } catch (InvalidLoginCredentialException e) {
             JsonObject exception = Json.createObjectBuilder().add("error", "Incorrect password").build();
