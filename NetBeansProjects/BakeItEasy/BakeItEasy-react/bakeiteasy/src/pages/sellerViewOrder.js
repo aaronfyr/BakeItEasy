@@ -42,6 +42,10 @@ function SellerViewOrder() {
   const [order, setOrder] = useState([]);
   const [orderId, setOrderId] = useState("");
   const [buyer, setBuyer] = useState([]);
+  const [listing, setListing] =([]);
+  const [url, setUrl]=useState("https://handletheheat.com/wp-content/uploads/2015/03/Best-Birthday-Cake-with-milk-chocolate-buttercream-SQUARE.jpg");
+
+  var img = "https://handletheheat.com/wp-content/uploads/2015/03/Best-Birthday-Cake-with-milk-chocolate-buttercream-SQUARE.jpg";
 
 
 
@@ -70,10 +74,35 @@ function SellerViewOrder() {
     .then((response) => response.json())
     .then((data) => {
       setBuyer(data);
+      console.log(id, "order id before listing fetch");
     })
     .catch((error) => {
       console.error(error);
-    });
+    })
+    .then(
+
+        fetch(`http://localhost:8080/BakeItEasy-war/webresources/orders/${id}/listing`, {
+    method: "GET",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+        if (!response.ok) {
+            console.log("listing fetch failed");
+            toast.error("listing fetch failed");
+        }
+        return response.json();
+    })
+    .then((data) => {
+        console.log("listing data is", data);
+        setUrl(data.imagePaths[0]);
+      setListing(data);
+    }))
+    ;
+
+
 }, []);
 
 
@@ -107,6 +136,7 @@ function SellerViewOrder() {
       setCompleted(true);
     }
   }, [order]);
+
 
   const clickA = async () => {
     try {
@@ -193,31 +223,45 @@ function SellerViewOrder() {
       <h1 style={{marginLeft: 80}}>Order ID {order.orderId}</h1>
       <div id="listingContainer">
         <div id="leftListingContainer">
-          <div class="slideshow-container"></div>
+
           <Flex justifyContent={"space-between"}></Flex>
           <br />
-
+            <img style={{width: 600, borderRadius:"10px", marginRight:80}}alt="listing pic" src={url}></img>
           <br />
           <div id="listingDetailsGrid"></div>
           <br />
         </div>
         <div id="rightListingContainer">
-            <h3>Buyer</h3>
-          <h2>id #{buyer.buyerId}</h2>
-          <h2>@{buyer.username}</h2>
-          <h3>Price:</h3>
-          <h2>${formatPrice(order.price)}</h2>
-          <h3>Quantity:</h3>
-          <h2>{order.quantity}</h2>
-          <h3>Description:</h3>
-          <h2>{order.description}</h2>
-          <h3>Address:</h3>
-          <h2>{order.address}</h2>
-          <h3>Collection Date:</h3>
-          <h2>{formatDate(order.dateOfCollection)}</h2>
-          <h3>Buyer:</h3>
-          <h3>Order Status:</h3>
-          <h2>{order.orderStatus}</h2>
+            <br/>
+            <h3 className="listingH3">Buyer</h3>
+          <h2 className="listingH2">@{buyer.username}</h2>
+
+
+
+          <h3 className="listingH3">Description:</h3>
+          <h2 className="listingH2">{order.description}</h2>
+          <h3 className="listingH3">Address:</h3>
+          <h2 className="listingH2">{order.address}</h2>
+          <h3 className="listingH3">Collection Date:</h3>
+          <h2 className="listingH2">{formatDate(order.dateOfCollection)}</h2>
+          <h3 className="listingH3">Order Status:</h3>
+          <h2 className="listingH2">{order.orderStatus}</h2>
+          <Flex>
+                <div>
+                    <h3 className="listingH3">Price:</h3>
+                      <h2 className="listingH2">${formatPrice(order.price)}</h2>
+                </div>
+                <div style={{width: 40}}></div>
+                <div>
+                    <h3  className="listingH3">Quantity:</h3>
+                         <h2 className="listingH2">{order.quantity}</h2>
+                </div>
+                <div style={{width: 40}}></div>
+                <div>
+                    <h3  className="listingH3">Total amount:</h3>
+                     <h2 className="listingH2">${formatPrice(parseFloat(order.quantity) * parseFloat(order.price))}</h2>
+                </div>
+            </Flex>
           <br></br>
           <Flex>
             {isPending && !isRejected && (

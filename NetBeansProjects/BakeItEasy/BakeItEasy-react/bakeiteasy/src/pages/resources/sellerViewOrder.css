@@ -22,9 +22,10 @@
 
 #leftListingContainer {
     width: 100%;
+    display: flex-start;
 }
 
-#rightListingContainer {
+.rightListingContainer {
     width: 500px;
     padding-left: 10px;
 }
@@ -32,6 +33,16 @@
 /*for the image slideshow*/
 * {
     box-sizing: border-box
+}
+
+.listingH2 {
+    font-size: 17px;
+}
+
+.listingH3 {
+    font-size: 20px;
+    font-family: 'Montserrat';
+    font-weight: bolder;
 }
 
 /* Slideshow container */

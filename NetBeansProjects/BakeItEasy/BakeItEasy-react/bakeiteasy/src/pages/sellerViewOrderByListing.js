@@ -24,6 +24,7 @@ const SellerViewOrderByListing = () => {
       const [sellerId, setSellerId] = useState(null);
   const { id } = useParams();
   const orderBuyer = getOrderBuyer();
+  const [imgPlaceholder, setImgPlaceholder] = ("https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80");
 
 
 useEffect(() => {
@@ -95,7 +96,10 @@ useEffect(() => {
       },
     })
       .then((response) => response.json())
-      .then((data) => setListing(data));
+      .then((data) => {
+        setListing(data);
+        setImgPlaceholder(data.imagePaths[0]);
+        });
   }, []);
 
   let navigate = useNavigate();
@@ -114,7 +118,6 @@ useEffect(() => {
         <SellerNav/>
       <div className="dropdownRow">
         <div className="heading">
-          <h1 style={{ fontWeight: "bolder", fontSize: 20 }}>My Listing #{listing.listingId} Orders</h1>
         </div>
       </div>
       <div className="searchBarSection">
@@ -145,14 +148,19 @@ useEffect(() => {
         <div className="orderDisplay">
           <SellerOrderCard>
             <div className="cardTextBlock" style={{ width: 1000 }}>
-              <h1>{listing.name}</h1>
             </div>
+            <h1>{listing.name}</h1>
             <div className="sellerOrderCardBodyFlex">
               <div className="sellerOrderCardBodyFlex">
                 <img
                   alt="cake"
                   style={imgStyle}
-                  src={"https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80"} /*listing.imagePaths[0]*/
+
+                  src={
+              listing.imagePaths
+                ? listing.imagePaths[0]
+                : "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80"
+            }
                 />
               </div>
 
@@ -160,23 +168,28 @@ useEffect(() => {
                 style={{ width: 500, marginLeft: 20 }}
                 className="cardTextBlock"
               >
-                <h2>CATEGORY: {listing.listingCategory}</h2>
                 <br></br>
-                <h2>DESCRIPTION:</h2>
-                <body>{listing.description}</body>
-                <h2>PRICE:</h2>
-                <body>${formatPrice(listing.price)}</body>
+                <br></br>
                 <Flex>
-                    <div>
-                        <h2>qty left:</h2>
-                         <body> {listing.maxQuantity}</body>
-                    </div>
-                    <div style={{width: 15}}></div>
-                    <div>
-                        <h2>prep days:</h2>
-                         <body> {listing.minPrepDays}</body>
-                    </div>
-
+                    <h2>Category:</h2>
+                    {!listing.listingCategory && <div className="listDetails">{listing.listingCategory}</div> }
+                    {listing.listingCategory && <div className="listDetails">{listing.listingCategory.toLowerCase()}</div> }
+                </Flex>
+                <Flex>
+                    <h2>Description:</h2>
+                    <div className="listDetails">{listing.description}</div>
+                </Flex>
+                <Flex>
+                    <h2>Price:</h2>
+                    <div className="listDetails">${formatPrice(listing.price)}</div>
+                </Flex>
+                <Flex>
+                    <h2>Max Quantity:</h2>
+                    <div className="listDetails">{listing.maxQuantity}</div>
+                </Flex>
+                <Flex>
+                    <h2>Preparation Days Needed:</h2>
+                    <div className="listDetails">{listing.minPrepDays}</div>
                 </Flex>
               </div>
             </div>
@@ -187,7 +200,7 @@ useEffect(() => {
           {filteredOrders.map((order) => (
             <div
               className="orderComp"
-              onClick={() => routeChangeToOrder(order.orderId)}
+
             >
               <SellerOrderCard>
                 <div className="sellerOrderCardHeader">
@@ -210,8 +223,8 @@ useEffect(() => {
                   </div>
                 </div>
                 <div className="sellerOrderCardBodyFlex">
-                  <div className="searchBarButton1">
-                    <h5>click to view order</h5>
+                  <div className="searchBarButton1" onClick={() => routeChangeToOrder(order.orderId)}>
+                    <h5 >click to view order</h5>
                   </div>
                 </div>
               </SellerOrderCard>

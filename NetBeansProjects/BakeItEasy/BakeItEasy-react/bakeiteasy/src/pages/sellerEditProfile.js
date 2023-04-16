@@ -116,6 +116,10 @@ function SellerEditProfile() {
           .then((response) => {
             if (!response.ok) {
               toast.error("Failed to update profile.");
+
+              setTimeout(() => {
+                    window.location.reload();
+                }, 10000);
               throw new Error("Failed to update seller");
             } else {
               console.log("ok response");
@@ -151,17 +155,18 @@ function SellerEditProfile() {
       </div>
       <br />
       <div className="parent">
-        <div id="rightListingContainer">
+        <div className="rightListingContainer">
           <h1 style={{ textAlign:"center" }}>
             Edit My Profile
           </h1>
           <br/>
-          <div style={{width:260, display: "block", margin: "auto"}}>
+          <div style={{width:200, display: "block", margin: "auto", justifySelf:"center"}}>
             <img style={{borderRadius: '50%', objectFit: 'cover', width: '200px', height: '200px'}}
           src={sellerObj.imagePath ? sellerObj.imagePath : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} alt="pfp"/></div>
             <br/>
 
-          <h3>Name:</h3>
+          <div style={{width:400, margin:0}}>
+            <h3>Name:</h3>
           {isEditable ? (
             <input
               type="text"
@@ -229,6 +234,9 @@ function SellerEditProfile() {
           <div style={{ height: 10 }}></div>
           <h3>Email:</h3>
           <h2>{sellerObj.email}</h2>
+          </div>
+
+
           <br></br>
         </div>
       </div>

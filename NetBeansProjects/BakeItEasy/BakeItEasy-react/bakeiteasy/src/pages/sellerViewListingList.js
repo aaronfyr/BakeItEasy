@@ -158,18 +158,23 @@ const handleCategoryChange = (category) => {
             </div>
             <div className="sellerOrderCardBodyFlex">
                 <div className="sellerOrderCardBodyFlex">
-                    <img alt="cake" style={imgStyle} src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80"/>
+                    <img alt="cake" style={imgStyle} src={listing.imagePaths[0] ? listing.imagePaths[0] : "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80"}/>
                 </div>
 
                 <div style={{width: 400}} className="cardTextBlock">
-                    <h2>{listing.name} [${formatPrice(listing.price)}]</h2>
-                    <h4>{listing.listingCategory}</h4>
+                    <h2 style={{fontWeight:"bolder"}}>{listing.name} [${formatPrice(listing.price)}]</h2>
+                    {!listing.listingCategory && <h4>loading...</h4>}
+                    {listing.listingCategory && <h4>{listing.listingCategory.toLowerCase()}</h4>}
                     <div className="flexBox">
                         <div className="searchBarButton1" onClick={() => (routeChangeToOrder(listing.listingId))}>
                             <FaListUl style={{alignSelf: "center"}}/>
                             <h3>view orders</h3>
                         </div>
                     </div>
+                </div>
+                <div>
+                    <br></br>
+                    <br/>
                 </div>
             </div>
         </SellerOrderCard>
@@ -185,7 +190,7 @@ const handleCategoryChange = (category) => {
 const pfpStyle = {padding: 0.5, borderRadius: "50%", width: 30, height: 30,
                     objectFit: "cover", background: "grey", display:"block" }
 
-const imgStyle = {height: 150, width: 150, objectFit:"cover", borderRadius: 10}
+const imgStyle = {height: 150, width: 150, objectFit:"cover", borderRadius: 10, marginRight:20}
 
 
 

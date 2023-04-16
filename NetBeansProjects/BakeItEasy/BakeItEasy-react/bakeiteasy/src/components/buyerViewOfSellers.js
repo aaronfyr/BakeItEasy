@@ -201,7 +201,7 @@ export const BuyerViewOfSellers = () => {
   }, []);
 
   // fetch listings with sellers
-  
+
   const [listings, setListings] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -374,7 +374,7 @@ export const BuyerViewOfSellers = () => {
         {sellers
           .filter((seller) => {
             if (
-              (seller.name && seller.name.toLowerCase().includes(search)) ||
+              //(seller.name && seller.name.toLowerCase().includes(search)) ||
               (seller.username &&
                 seller.username.toLowerCase().includes(search))
             ) {

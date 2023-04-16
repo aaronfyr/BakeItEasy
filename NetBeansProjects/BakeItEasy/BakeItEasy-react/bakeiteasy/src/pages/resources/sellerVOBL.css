@@ -95,6 +95,12 @@ body {
     background-color: white;
 }
 
+.listDetails {
+    margin-top: 3px;
+    margin-left: 10px;
+    padding: 0;
+}
+
 .cardTextBlock h2 {
     color: #8B3A3A;
     font-family: 'Montserrat', sans-serif;
@@ -135,6 +141,10 @@ body {
     color: black;
 }
 
+.searchBarButton1:hover {
+    cursor: hover;
+}
+
 .button1_follow {
     display: flex;
     align-items: center;
@@ -149,7 +159,7 @@ body {
     padding: 0px 20px 0px 20px;
     margin: 10px 20px 0px 0px;
   }
-  
+
   .button1_follow:hover {
     display: flex;
     align-items: center;
