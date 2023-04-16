@@ -342,9 +342,11 @@ function BuyerProfile() {
               <div>
                 <h4 className="italic">Status:</h4>
                 <h2>{order.orderStatus}</h2>
-                <h4 className="italic">Price:</h4>
-                <h2>
-                  {order.quantity} x ${order.price}
+                {/* <h4 className="italic">Price:</h4> */}
+                <h2 style={{ fontSize: "16px" }}>
+                  Quantity: {order.quantity} <br />
+                  Unit Price: ${order.price} <br />
+                  Total: ${order.price * order.quantity}
                 </h2>
               </div>
               <div className="orderDetails_right">
