@@ -156,19 +156,19 @@ export function ListingStatsText({ lId }) {
       <div
       >
         <Flex>
-            <h3 style={{color:"darkgray"}}>pending:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{pending}</h5>
+            <h3 style={{color:"darkgray"}}>Pending:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{pending}</h5>
         </Flex>
         <Flex>
-            <h3 style={{color:"mediumseagreen"}}>accepted:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{accepted}</h5>
+            <h3 style={{color:"mediumseagreen"}}>Accepted:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{accepted}</h5>
         </Flex>
         <Flex>
-            <h3 style={{color: "darkgreen"}}>completed:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{completed}</h5>
+            <h3 style={{color: "darkgreen"}}>Completed:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{completed}</h5>
         </Flex>
         <Flex>
-            <h3>rejected:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{rejected}</h5>
+            <h3>Rejected:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{rejected}</h5>
         </Flex>
         <Flex>
-            <h3 style={{color: "#4D5C74"}}>cancelled:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{cancelled}</h5>
+            <h3 style={{color: "#4D5C74"}}>Cancelled:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{cancelled}</h5>
         </Flex>
 
       </div>
