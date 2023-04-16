@@ -16,12 +16,9 @@ function AdminEditDetails({
   email: adminEmail,
   password: adminPassword,
 }) {
-  const [isLoading, setIsLoading] = useState(null);
-
   const [name, setName] = useState(adminName);
   const [email, setEmail] = useState(adminEmail);
   const [password, setPassword] = useState(adminPassword);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     setName(adminName);
@@ -48,7 +45,6 @@ function AdminEditDetails({
     );
 
     if (response.ok) {
-      setIsLoading(false);
       const admin = await response.json();
       localStorage.setItem("admin", JSON.stringify(admin));
       toast.success("Details saved!");
@@ -111,11 +107,6 @@ function AdminEditDetails({
             />
             <FormLabel>Password</FormLabel>
           </FormControl>
-          {error && (
-            <FormControl>
-              <FormLabel color="red.500">{error}</FormLabel>
-            </FormControl>
-          )}
 
           <Box mt={4} display="flex" alignItems="center">
             <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">
