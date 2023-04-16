@@ -33,12 +33,11 @@ import "reactjs-popup/dist/index.css";
 import { FaRegStar } from "react-icons/fa";
 import ReactLoading from "react-loading";
 
-export function OrderCancelButtonNonMemo({ oId, order }) {
-  const navigate = useNavigate();
+export function OrderRateButtonNonMemo({ oId, orderStatus }) {
   const [isOrderReviewed, setIsOrderReviewed] = useState({});
   const [ordersChecked, setOrdersChecked] = useState({});
 
-  const getReviewStatusByOId = async () => {
+  const getReviewStatusByOId = async (oId) => {
     try {
       const response = await fetch(
         `http://localhost:8080/BakeItEasy-war/webresources/orders/${oId}/hasExistingReview`,
@@ -60,16 +59,18 @@ export function OrderCancelButtonNonMemo({ oId, order }) {
       if (error instanceof SyntaxError) {
         // Unexpected token < in JSON
         console.log("There was a SyntaxError", error);
+      } else {
+        console.log("not SyntaxError", error);
       }
     }
   };
 
   // handleCreateReview
   const [reviewText, setReviewText] = useState("");
-  const [title, setTitle] = useState[""];
+  const [title, setTitle] = useState("");
   const [rating, setRating] = useState(0);
   const [imagePaths, setImagePath] = useState(["", "text"]);
-  const handleCreateReview = async (event, oId) => {
+  const handleCreateReview = async (event) => {
     event.preventDefault();
     const dateCreated = new Date();
     const response = await fetch(
@@ -94,7 +95,6 @@ export function OrderCancelButtonNonMemo({ oId, order }) {
       toast.success(`Submitted review for Order #${oId}!`);
     } else {
       const errorData = await response.json();
-      console.log("reporting error:", errorData.error);
       toast.error(errorData.error);
     }
   };
@@ -112,7 +112,7 @@ export function OrderCancelButtonNonMemo({ oId, order }) {
           <Popup
             trigger={
               <Flex>
-                {order.orderStatus === "COMPLETED" && (
+                {orderStatus === "COMPLETED" && (
                   <div className="button1_report">
                     <HStack spacing="8px">
                       <div>Rate</div>
@@ -135,11 +135,7 @@ export function OrderCancelButtonNonMemo({ oId, order }) {
                 <HStack>
                   <Spacer />
                   <div className="content">
-                    <form
-                      onSubmit={(event) =>
-                        handleCreateReview(event, order.orderId)
-                      }
-                    >
+                    <form onSubmit={(event) => handleCreateReview(event, oId)}>
                       <FormControl mt={4}>
                         <FormLabel> Review Title: </FormLabel>
                         <Input
@@ -193,8 +189,7 @@ export function OrderCancelButtonNonMemo({ oId, order }) {
     );
   } else {
     getReviewStatusByOId(oId);
-    return <ReactLoading color={"#D3D3D3"} height={"15%"} width={"15%"} />;
   }
 }
 
-export const OrderCancelButton = memo(OrderCancelButtonNonMemo);
+export const OrderRateButton = memo(OrderRateButtonNonMemo);
