@@ -165,19 +165,7 @@ export const SellerNavigationBar = () => {
 
       <HStack spacing="15px">
         <IconContext.Provider value={{ color: "#7D7373", size: "1.5rem" }}>
-          <Popover>
-            <PopoverTrigger>
-              <FiBell />
-            </PopoverTrigger>
-            <PopoverContent>
-              <PopoverArrow />
-              <PopoverCloseButton />
-              <PopoverHeader>Notifications!</PopoverHeader>
-              <PopoverBody>You have no new notifications.</PopoverBody>
-            </PopoverContent>
-          </Popover>
-          <FiMessageSquare />
-          <FiHeart />
+
 
           <Menu>
             <MenuButton
@@ -188,7 +176,7 @@ export const SellerNavigationBar = () => {
             >
               <HStack spacing="10px">
                 <FiUser />
-                <p>{sellerName}</p>
+                <p style={{fontFamily: 'Montserrat'}}>{sellerName}</p>
               </HStack>
             </MenuButton>
 
@@ -200,7 +188,7 @@ export const SellerNavigationBar = () => {
                 }}
               >
                 <FaUserCircle />
-                Edit Account
+                View Account
               </MenuItem>
               <MenuItem
                 gap="0.7rem"

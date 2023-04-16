@@ -43,7 +43,7 @@ function SellerEditProfile() {
   const [sellerId, setSellerId] = useState(null);
   const [sellerObj, setSellerObj] = useState([]);
   const [isEditable, setIsEditable] = useState(false);
-  const [image, setImage] = useState("")
+  const [sendUpdate, setSendUpdate] = useState(false);
 
   const navigate = useNavigate();
 
@@ -95,71 +95,76 @@ function SellerEditProfile() {
     window.history.back();
   };
 
-  //edit seller
-  const handleUpdate = () => {
-    toast.loading("loading, please wait");
-    setIsEditable(false);
+  const fileUpload = (newFile) => {
 
+  // Only upload image if it's not empty
     const data = new FormData();
-    data.append("file", image);
+    data.append("file", newFile);
     data.append("upload_preset","module-buddies");
     data.append("cloud_name","nelsonchoo456");
 
+    fetch("https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload", {
+      method: "POST",
+      body: data,
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+            toast.error("failed to upload image, try again")
+          // handle error
+        }
+      })
+      .then((data) => {
+        console.log("cloud url is", data.url);
+        setSellerObj((prevListing) => ({
+          ...prevListing,
+          imagePath: data.url,
+        }));
+        console.log("imagePath after setting is", sellerObj.imagePath);
+        console.log(sellerObj);
+        // Call second fetch after the first one finishes
 
-  fetch("https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload", {
-    method: "POST",
-    body: data,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    } else {
-      toast.dismiss();
-      toast.error("rsponse for cloud upload not ok");
-    }
-  })
-  .then((data) => {
-    console.log("cloud url is", data.url);
-    //setSellerObj({ ...sellerObj, imagePath: data.url});
-    setSellerObj(prevListing => {
-      prevListing.imagePath = data.url;
-    return {
-    ...prevListing,
-    imagePath: prevListing.imagePath
+      });
   };
-    });
-    console.log("imagePath after setting is", sellerObj.imagePath);
+
+  //edit seller
+ const handleUpdate = () => {
+    setIsEditable(false);
 
     fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(sellerObj),
-      }
-    )
-      .then((response) => {
-        if (!response.ok) {
-          toast.error("Failed to update profile.");
-          throw new Error("Failed to update seller");
-        } else {
-          console.log("ok response");
-          toast.success("Profile updated successfully.");
-        }
-        return response.json();
-      })
-      .then(() => {
-        // handle successful update
-        console.log("pretoast");
-        window.location.reload();
-      })
-      .catch((error) => {
-        /*handle error */
-      });
-  })
+          `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(sellerObj),
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              toast.error("Failed to update profile.");
+              throw new Error("Failed to update seller");
+            } else {
+              console.log("ok response");
 
-  };
+              toast.success("Profile updated successfully.");
+            }
+            return response.json();
+          })
+          .then(() => {
+            // handle successful update
+            console.log("pretoast");
+            window.location.reload();
+          })
+          .catch((error) => {
+            /*handle error */
+          });
+
+}
+;
+
 
   return (
     <div>
@@ -181,7 +186,7 @@ function SellerEditProfile() {
           <br/>
           <div style={{width:260, display: "block", margin: "auto"}}>
             <img style={{borderRadius: '50%', objectFit: 'cover', width: '200px', height: '200px'}}
-          src={sellerObj.imagePath} alt="pfp"/></div>
+          src={sellerObj.imagePath ? sellerObj.imagePath : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} alt="pfp"/></div>
             <br/>
           <h3>Name:</h3>
           {isEditable ? (
@@ -224,9 +229,18 @@ function SellerEditProfile() {
             <h2>{sellerObj.phoneNo}</h2>
           )}
 
-           {isEditable && <div >
-            <input style={{height: 40}} type="file" id="image" name="image" onChange={(e) => setImage(e.target.files[0])}/>
-        </div> }
+           {isEditable && (
+            <div>
+                <input
+                style={{ height: 40 }}
+                type="file"
+                id="image"
+                name="image"
+                accept=".jpeg, .png, .jpg"
+                onChange={(e) => fileUpload(e.target.files[0])}
+                />
+            </div>
+            )}
           <div style={{ height: 10 }}></div>
           <Flex>
             {!isEditable && (

@@ -29,11 +29,12 @@ h1 {
 }
 
 .searchBar {
-    display: flex;
     align-items: center;
     background-color: white;
     border: 1px solid;
     border-radius: 20px;
+    width: 400px;
+    overflow-y: visible;
 }
 
 .searchBar2 {
@@ -45,9 +46,11 @@ h1 {
 }
 
 .input {
-    width: 250px;
+    margin-top: 10px;
+    width: 400px;
     border: none;
     border-radius: 20px;
+    height: 30px;
 }
 
 .inputMyOrdersSearch {
@@ -64,16 +67,17 @@ h1 {
     color: black;
     height: 20px;
     width: 20px;
-    align-self:self-start;
-    margin-left: 10px;
+    margin-left: 80px;
+    justify-self: center;
 }
 
 .profileSearchInput {
-    width: 1360px;
+    width: 1180px;
     border: none;
     border-radius: 20px;
     height: 38px;
     margin: 2px;
+    padding-right: 80px;
 }
 
 .button {

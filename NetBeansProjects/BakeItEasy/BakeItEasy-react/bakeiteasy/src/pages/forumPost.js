@@ -315,7 +315,7 @@ function CommentPopup(props) {
     console.log("saved comment is", newComment);
     if (newComment === "") {
         toast.error("comment cannot be blank!");
-    } else if (newComment.title.length < 1 || newComment.title.length > 128 ) {
+    } else if (newComment.length < 1 || newComment.length > 128 ) {
         toast.error("Your comment must have 1 to 128 characters! Try again.")
     } else {
           if(buyerId) {

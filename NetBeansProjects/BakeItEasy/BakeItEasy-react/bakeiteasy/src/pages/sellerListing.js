@@ -392,7 +392,7 @@ function SellerListing() {
               ? listing.listingCategory.toLowerCase()
               : ""}
           </h2>
-          {deleteFailed && <h3>You cannot delete this listing.</h3>}
+          {deleteFailed && <h3>You cannot delete this listing as pending/accepted orders exist.</h3>}
 
           <br></br>
         </div>

@@ -231,11 +231,13 @@ img.productImg {
 
 .profileListingsDisplay {
     display: flex;
-    width: 1000px;
-    height: 100vh;
-    overflow-y: scroll;
+    width: 800px;
+    flex-wrap: wrap;
+    height: 370px;
+    overflow-x: hidden;
     justify-content: center;
     /*delete this if not necessary*/
+
 }
 
 
@@ -334,6 +336,7 @@ h4 {
 .reviewDisplay {
     width: 350px;
     overflow-y: scroll;
+    overflow-x: hidden;
     justify-content: center;
     /*delete this if not necessary*/
 }

@@ -292,7 +292,7 @@ function BuyerProfile() {
         <div id="profilePhoto">
           <img
             className="homepageProfilePhotoImg"
-            alt="seller pfp"
+            alt=""
             src={buyerProfilePhoto}
           ></img>
         </div>
