@@ -3,25 +3,13 @@ import "./resources/profile.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
 
-import {
-  BrowserRouter as Router,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import {
-  Flex,
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-} from "@chakra-ui/react";
-import Popup from "reactjs-popup";
-import "reactjs-popup/dist/index.css";
-import { FaEdit, FaArrowRight } from "react-icons/fa";
+import { Flex, FormLabel, Input, Image } from "@chakra-ui/react";
+import { FaArrowRight } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "reactjs-popup/dist/index.css";
 
 function BuyerEditAccount() {
   const navigate = useNavigate();
@@ -32,6 +20,7 @@ function BuyerEditAccount() {
   const [buyerUsername, setBuyerUsername] = useState("");
   const [buyerAddress, setBuyerAddress] = useState("");
   const [buyerPhoneNo, setBuyerPhoneNo] = useState("");
+  const [buyerImagePath, setBuyerImagePath] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -52,6 +41,7 @@ function BuyerEditAccount() {
           setBuyerUsername(parsedUser.username);
           setBuyerAddress(parsedUser.address);
           setBuyerPhoneNo(parsedUser.phoneNo);
+          setBuyerImagePath(parsedUser.imagePath);
         } catch (error) {
           console.log(error);
         }
@@ -84,7 +74,6 @@ function BuyerEditAccount() {
   //edit buyer
   const [isEditable, setIsEditable] = useState(false);
   const [buyerObj, setBuyerObj] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
   const handleUpdate = async () => {
     setIsEditable(false);
 
@@ -103,6 +92,9 @@ function BuyerEditAccount() {
       const errorData = await response.json();
       toast.error(errorData.error);
     } else {
+      console.log(buyerObj);
+
+      localStorage.setItem("buyer", JSON.stringify(buyerObj));
       toast.success("Profile updated successfully.");
     }
   };
@@ -111,12 +103,58 @@ function BuyerEditAccount() {
   const routeChangeToProfile = () => {
     navigate(`/buyerProfile/${buyerId}`);
   };
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      toast.loading("loading, please wait!");
+
+      const fileType = file.type;
+      if (fileType === "image/jpeg" || fileType === "image/png") {
+        const data = new FormData();
+        data.append("file", file);
+        data.append("upload_preset", "module-buddies");
+        data.append("cloud_name", "nelsonchoo456");
+
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload",
+          {
+            method: "POST",
+            body: data,
+          }
+        );
+        toast.dismiss();
+
+        if (response.ok) {
+          const responseData = await response.json();
+          console.log("CLOUD URL", responseData.url);
+          setBuyerImagePath(responseData.url);
+          console.log(buyerImagePath);
+          setBuyerObj({ ...buyerObj, imagePath: responseData.url });
+          console.log(buyerObj);
+        } else {
+          const errorData = await response.json();
+          toast.error(errorData.error);
+        }
+      } else {
+        toast.error("Invalid picture format. Please try again.");
+      }
+    }
+  };
+
   return (
     <div className="background">
       <NavigationBar />
       <ToastContainer />
       <div id="coverPhoto">
-        <div id="profilePhoto"></div>
+        <div id="profilePhoto">
+          <img
+            className="homepageProfilePhotoImg"
+            alt="seller pfp"
+            src={buyerImagePath}
+          ></img>
+        </div>
       </div>
       <Flex justifyContent={"space-between"}>
         <div id="userDetails">
@@ -186,8 +224,23 @@ function BuyerEditAccount() {
               }
             />
           ) : (
-            <h2>{buyerObj.phoneNo}</h2>
+            <h2>{buyerObj.address}</h2>
           )}
+          <h3>Profile picture</h3>
+          {isEditable ? (
+            <>
+              <Input
+                type="file"
+                placeholder=" "
+                onChange={handleImageChange}
+                accept="image/jpeg, image/png"
+              />
+              <Image src={buyerImagePath} />
+            </>
+          ) : (
+            buyerImagePath && <Image src={buyerImagePath} />
+          )}
+
           <div style={{ height: 10 }}></div>
           <Flex>
             {!isEditable && (
