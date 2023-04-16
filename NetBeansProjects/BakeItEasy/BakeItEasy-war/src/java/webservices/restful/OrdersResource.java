@@ -166,4 +166,11 @@ public class OrdersResource {
                     .type(MediaType.APPLICATION_JSON).build();
         }
     } //end getSeller
+    
+    @GET
+    @Path("/{order_id}/sellerPhoneNo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getSellerPhoneNoByOrderId(@PathParam("order_id") Long orderId) throws OrderNotFoundException {
+        return orderSessionBeanLocal.getSellerPhoneNoByOrderId(orderId);
+    } //end getSellerPhoneNoByOrderId
 }
