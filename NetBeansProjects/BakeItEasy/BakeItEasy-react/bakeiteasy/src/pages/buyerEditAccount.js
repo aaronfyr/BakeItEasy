@@ -171,8 +171,8 @@ function BuyerEditAccount() {
       </Flex>
       <div className="parent">
         <div id="rightListingContainer">
-          <h1 style={{ marginLeft: 80 }}>
-            Edit My Profile: Buyer ID #{buyerId}
+          <h1 style={{ textAlign:"center" }}>
+            Edit My Profile
           </h1>
           <h3>Name:</h3>
           {isEditable ? (
