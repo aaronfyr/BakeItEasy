@@ -152,6 +152,7 @@ export function ListingStatsText({ lId }) {
 
   // return render statements
   if (lId) {
+    getNumbersForListing(lId);
     return (
       <div
       >
