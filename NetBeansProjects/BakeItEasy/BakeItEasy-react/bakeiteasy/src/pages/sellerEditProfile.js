@@ -101,45 +101,42 @@ function SellerEditProfile() {
   };
 
   //edit seller
- const handleUpdate = () => {
-    setIsEditable(false);
+ const handleUpdate = async () => {
+  setIsEditable(false);
 
-    fetch(
-          `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(sellerObj),
-          }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              toast.error("Failed to update profile. Refreshing, please wait...");
+  try {
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sellerObj),
+      }
+    );
 
-              setTimeout(() => {
-                    window.location.reload();
-                }, 3000);
-              throw new Error("Failed to update seller");
-            } else {
-              console.log("ok response");
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.error);
+      toast.loading("refreshing...");
 
-              toast.success("Profile updated successfully.");
-            }
-            return response.json();
-          })
-          .then(() => {
-            // handle successful update
-            console.log("pretoast");
-            window.location.reload();
-          })
-          .catch((error) => {
-            /*handle error */
-          });
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+      throw new Error("Failed to update seller");
+    } else {
+      console.log("ok response");
 
-}
-;
+      toast.success("Profile updated successfully.");
+    }
+    console.log("pretoast");
+    window.location.reload();
+  } catch (error) {
+    /*handle error */
+  }
+};
+
 
 
 
@@ -230,7 +227,7 @@ function SellerEditProfile() {
 
             }
             {isEditable && (
-                <Button bg="#E2725B" colorScheme="white" onClick={() => handleUpdate()}  w="100%">
+                <Button bg="#E2725B" colorScheme="white" onClick={handleUpdate}  w="100%">
                 Done
               </Button>
             )}
