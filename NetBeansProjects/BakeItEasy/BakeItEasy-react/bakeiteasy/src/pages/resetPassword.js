@@ -44,7 +44,7 @@ function ResetPassword() {
     });
 
     if (response.ok) {
-      const data = await response.json();
+      //const data = await response.json();
       navigate(`/login?type=${type}`);
     } else {
       setError("Passwords do not match. Please try again.");

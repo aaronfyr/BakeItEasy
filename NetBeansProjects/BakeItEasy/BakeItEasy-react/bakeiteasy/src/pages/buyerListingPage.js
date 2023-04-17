@@ -289,7 +289,6 @@ function BuyerListingPage() {
           </Flex>
           <br />
           <h5>
-            {" "}
             <ListingSellerHeader lId={listingId} />
           </h5>
           <h1>{listingName}</h1>

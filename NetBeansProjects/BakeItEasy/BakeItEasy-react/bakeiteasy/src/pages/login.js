@@ -14,7 +14,6 @@ import "react-toastify/dist/ReactToastify.css";
 import "./resources/login.css";
 
 function Login() {
-  const [isLoading, setIsLoading] = useState(null);
 
   const type = new URLSearchParams(useLocation().search).get("type");
   const navigate = useNavigate();
@@ -52,7 +51,6 @@ function Login() {
     );
 
     if (response.ok) {
-      setIsLoading(false);
       const user = await response.json();
       if (type === "seller") {
         localStorage.setItem("seller", JSON.stringify(user));

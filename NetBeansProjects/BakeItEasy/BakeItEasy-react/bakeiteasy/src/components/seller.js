@@ -48,7 +48,7 @@ const Seller = ({
             <img
               className="homepageProfilePhotoImg"
               src={imagePath}
-              alt="Profile Image"
+              alt="Profile"
             />
           </div>
           <Text>
