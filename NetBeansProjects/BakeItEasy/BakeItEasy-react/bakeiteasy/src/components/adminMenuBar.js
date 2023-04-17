@@ -77,7 +77,7 @@ function AdminMenuBar() {
         <Link
           id="navChoices"
           to="/viewAllSellers"
-          style={{ marginRight: "50px" }}
+          style={{ marginRight: "25px" }}
         >
           <Text>Sellers</Text>
         </Link>
@@ -91,7 +91,6 @@ function AdminMenuBar() {
                 rightIcon={<ChevronDownIcon />}
                 type="submit"
                 fontWeight="bold"
-                ml="200px"
               >
                 <Flex align="center">
                   <FiUser style={{ marginRight: "10px" }} />
