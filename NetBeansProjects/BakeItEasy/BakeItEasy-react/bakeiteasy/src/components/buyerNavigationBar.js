@@ -33,7 +33,7 @@ import {
 
 import { IconContext } from "react-icons";
 import { FaUser, FaUserCircle, FaBell } from "react-icons/fa";
-import { FiHeart, FiUser, FiBell, FiMessageSquare } from "react-icons/fi";
+import { FiHeart, FiUser } from "react-icons/fi";
 import { IoLogOut } from "react-icons/io5";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
@@ -167,7 +167,7 @@ export const NavigationBar = () => {
         <IconContext.Provider value={{ size: "1.2rem" }}>
 
           <div className="icon-circle">
-            <FiHeart onClick={() => routeToLikedListings()} />
+            <FiHeart style={{cursor: "pointer"}}onClick={() => routeToLikedListings()} />
           </div>
           <Menu>
             <MenuButton
