@@ -17,19 +17,19 @@ function ForumPost() {
   const [buyerId, setBuyerId] = useState(null);
   const [sellerId, setSellerId] = useState(null);
   const [post, setPost] = useState(null);
-  const [postId, setPostId] = useState(null);
   const [showCommentPopup, setShowCommentPopup] = useState(false);
   const [currentType, setCurrentType] = useState("");
   const [poster, setPoster] = useState(null);
   const [isOwnPost, setIsOwnPost] = useState(false);
   const [posterType, setPosterType] = useState("");
-  const [preDelete, setPreDelete] = useState(false);
   const [deleteFailed, setDeleteFailed] = useState(false);
 
-  const routeChangeToSellerProfile = () => {
+  let navigate = useNavigate();
+
+  /* const routeChangeToSellerProfile = () => {
     let path = "/sellerProfile";
     navigate(path);
-  };
+  }; */
 
   const routeChangeToForum = () => {
     let path = "/forum";
@@ -105,7 +105,7 @@ function ForumPost() {
       }
     }
     fetchData();
-  }, []);
+  }, [navigate, sellerNewComment.sellerId]);
 
   // fetch post
   useEffect(() => {
@@ -135,7 +135,7 @@ function ForumPost() {
       }
     }
     fetchPost();
-  }, []);
+  }, [id]);
 
   // fetch comments
   useEffect(() => {
@@ -160,7 +160,7 @@ function ForumPost() {
       }
     }
     fetchComments();
-  }, []);
+  }, [id]);
 
   // fetch poster
   useEffect(() => {
@@ -201,67 +201,7 @@ function ForumPost() {
       }
     }
     fetchPoster();
-  }, [post]);
-
-  async function createBuyerComment() {
-    try {
-      console.log("creating buyer comment");
-
-      const response = await fetch(
-        `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/${id}/comments`,
-        {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(buyerNewComment),
-        }
-      ).then((response) => {
-        if (!response.ok) {
-          console.log("create buyer comment failed");
-        } else {
-          toast.success("buyer comment created! refreshing...");
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
-        }
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async function createSellerComment() {
-    if (sellerNewComment.title !== "") {
-      try {
-        console.log("creating seller comment");
-        console.log("POSTING", sellerNewComment);
-        const response = await fetch(
-          `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/${id}/comments`,
-          {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(sellerNewComment),
-          }
-        ).then((response) => {
-          if (!response.ok) {
-            toast.error("response not ok");
-          } else {
-            toast.success("seller comment created! refreshing...");
-            setTimeout(() => {
-              window.location.reload();
-            }, 1000);
-          }
-        });
-      } catch (error) {
-        console.error("ERROR FOR CREATE SELLER COMMENT", error);
-      }
-    }
-  }
+  }, [post, buyerId, id, isOwnPost, posterType, sellerId]);
 
   const handleDeleteClick = () => {
     fetch(`http://localhost:8080/BakeItEasy-war/webresources/posts/${id}`, {
@@ -322,13 +262,71 @@ useEffect(() => {
 
   useEffect(() => {
     console.log("changed SNC!!!!!", sellerNewComment);
+    async function createSellerComment() {
+      if (sellerNewComment.title !== "") {
+        try {
+          console.log("creating seller comment");
+          console.log("POSTING", sellerNewComment);
+          const response = await fetch(
+            `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/${id}/comments`,
+            {
+              method: "POST",
+              mode: "cors",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(sellerNewComment),
+            }
+          ).then((response) => {
+            if (!response.ok) {
+              toast.error("response not ok");
+            } else {
+              toast.success("seller comment created! refreshing...");
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000);
+            }
+          });
+        } catch (error) {
+          console.error("ERROR FOR CREATE SELLER COMMENT", error);
+        }
+      }
+    }
     createSellerComment();
-  }, [sellerNewComment]);
+  }, [sellerNewComment, id, sellerId]);
 
   useEffect(() => {
     console.log("changed BNC!!!!!", buyerNewComment);
+    async function createBuyerComment() {
+      try {
+        console.log("creating buyer comment");
+  
+        const response = await fetch(
+          `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/${id}/comments`,
+          {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(buyerNewComment),
+          }
+        ).then((response) => {
+          if (!response.ok) {
+            console.log("create buyer comment failed");
+          } else {
+            toast.success("buyer comment created! refreshing...");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          }
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
     createBuyerComment();
-  }, [buyerNewComment]);
+  }, [buyerNewComment, id , buyerId]);
 
   function CommentPopup(props) {
     const [newComment, setNewComment] = useState("");
@@ -387,7 +385,6 @@ useEffect(() => {
     setShowCommentPopup(false);
   };
 
-  let navigate = useNavigate();
   if (!post || !comments) {
     return <div>Loading...</div>;
   }

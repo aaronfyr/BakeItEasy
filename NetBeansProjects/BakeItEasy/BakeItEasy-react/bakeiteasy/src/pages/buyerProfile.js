@@ -29,9 +29,9 @@ import "reactjs-popup/dist/index.css";
 
 function BuyerProfile() {
   const { id } = useParams();
+  let navigate = useNavigate();
 
   //fetch buyer
-  const [buyer, setBuyer] = useState(null);
   const [buyerName, setBuyerName] = useState("Log In");
   const [buyerUsername, setBuyerUsername] = useState("Log In");
   const [buyerId, setBuyerId] = useState(null);
@@ -47,7 +47,6 @@ function BuyerProfile() {
         console.log("profile", "has buyer");
         try {
           const parsedUser = JSON.parse(fetchedBuyer);
-          setBuyer(parsedUser);
           console.log("parsedUser: ", parsedUser);
           console.log("parsedUser.name: ", parsedUser.name);
           setBuyerName(parsedUser.name);
@@ -60,7 +59,7 @@ function BuyerProfile() {
       }
     }
     fetchData();
-  }, []);
+  }, [navigate]);
 
   // fetch orders
   const [orders, setOrders] = useState([]);
@@ -101,7 +100,7 @@ function BuyerProfile() {
       }
     };
     fetchData();
-  }, []);
+  }, [navigate]);
 
   const [whatsappUrl, setWhatsappUrl] = useState(null);
   useEffect(() => {
@@ -131,16 +130,9 @@ function BuyerProfile() {
       }
     };
     fetchData();
-  }, []);
-
-  let navigate = useNavigate();
-  const routeChangeToOrder = (id) => {
-    let path = "/buyerOrder/";
-    navigate(path + id);
-  };
+  }, [whatsappUrl, id]);
 
   // handleCancelOrder
-  const [cancelOrderError, setCancelOrderError] = useState(null);
   const [cancelOrderSuccess, setCancelOrderSuccess] = useState(null);
   const handleCancelOrder = async (oId) => {
     const response = await fetch(

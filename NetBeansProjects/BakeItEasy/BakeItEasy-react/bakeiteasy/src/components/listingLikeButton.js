@@ -1,11 +1,9 @@
 import React, { memo, useState } from "react";
 import { FiHeart } from "react-icons/fi";
 import ReactLoading from "react-loading";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export function ListingLikeButtonNonMemo({ buyerId, lId }) {
-  const navigate = useNavigate();
   const [isListingLiked, setIsListingLiked] = useState({});
   const [listingsChecked, setListingsChecked] = useState({});
 

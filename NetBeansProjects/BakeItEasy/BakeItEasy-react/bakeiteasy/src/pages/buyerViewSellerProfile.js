@@ -8,6 +8,7 @@ import "./resources/sellerProfile.css";
 
 function BuyerViewSellerProfile() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   // fetch current buyer
   const [buyer, setBuyer] = useState();
@@ -31,16 +32,13 @@ function BuyerViewSellerProfile() {
       }
     }
     fetchData();
-  }, []);
+  }, [navigate]);
 
   const [search, setSearch] = useState("");
 
   const [seller, setSeller] = useState(null);
   const [sellerName, setSellerName] = useState("Log In");
   const [sellerUsername, setSellerUsername] = useState("");
-  const [sellerObj, setSellerObj] = useState([]);
-
-  const navigate = useNavigate();
 
   // fetch current buyer followings
   const [followings, setFollowings] = useState();
@@ -86,7 +84,7 @@ function BuyerViewSellerProfile() {
       }
     };
     fetchData();
-  }, []);
+  }, [followings, id, isFollowing, navigate]);
 
   // fetch seller
   useEffect(() => {
@@ -103,7 +101,7 @@ function BuyerViewSellerProfile() {
         setSellerName(data.name);
         setSellerUsername(data.username);
       });
-  }, []);
+  }, [id]);
 
   // fetch listings
   const [listings, setListings] = useState([]);
@@ -120,7 +118,7 @@ function BuyerViewSellerProfile() {
     )
       .then((response) => response.json())
       .then((data) => setListings(data));
-  }, []);
+  }, [id]);
 
   // fetch reviews
   const [reviews, setReviews] = useState([]);
@@ -137,11 +135,7 @@ function BuyerViewSellerProfile() {
     )
       .then((response) => response.json())
       .then((data) => setReviews(data));
-  }, []);
-
-  const handleGoBack = () => {
-    window.history.back();
-  };
+  }, [id]);
 
   const filteredListings = listings.filter(
     (listing) =>
@@ -202,7 +196,7 @@ function BuyerViewSellerProfile() {
   };
 
   // handleListingsToLikes
-  const [likeListingError, setLikeListingError] = useState(null);
+  /* const [likeListingError, setLikeListingError] = useState(null);
   const handleListingToLikes = async (lId) => {
     const response = await fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/${buyer.buyerId}/like`,
@@ -226,7 +220,7 @@ function BuyerViewSellerProfile() {
       toast.error(errorData.error);
       setLikeListingError("Invalid details. Please try again.");
     }
-  };
+  }; */
 
   const routeChangeToListing = (lId) => {
     let path = "/listing/" + lId;

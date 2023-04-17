@@ -11,7 +11,6 @@ import {
 import { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { FiUser } from "react-icons/fi";
-
 import { IoLogOut } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import "./resources/adminProfilePhotoDisplay.css";
@@ -32,7 +31,7 @@ function AdminMenuBar() {
       }
     }
     fetchData();
-  }, []);
+  }, [navigate]);
 
   const handleLogout = () => {
     // Clear session/token data

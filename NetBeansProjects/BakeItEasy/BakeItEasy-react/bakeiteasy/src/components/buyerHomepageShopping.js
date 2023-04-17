@@ -27,7 +27,7 @@ export const BuyerShopping = () => {
       }
     }
     fetchData();
-  }, []);
+  }, [navigate]);
 
   // fetch current buyer followings
   const [followings, setFollowings] = useState();
@@ -66,7 +66,7 @@ export const BuyerShopping = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [navigate]);
 
   // fecth listing sellerId
   const getSellerId = async (lId) => {
@@ -120,7 +120,6 @@ export const BuyerShopping = () => {
     }
   };
 
-  const [isLoading, setIsLoading] = useState(true);
   const renderSellerListingHeader = (lId) => {
     //const detailsText = await getSellerByLId(lId);
     //return <p>{detailsText}</p>;
@@ -198,7 +197,7 @@ export const BuyerShopping = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [navigate]);
 
   // fetch current buyer followings listings
   /*

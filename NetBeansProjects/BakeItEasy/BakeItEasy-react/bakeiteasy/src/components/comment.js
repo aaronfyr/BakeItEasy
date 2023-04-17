@@ -56,7 +56,7 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
         setCommenterUsername(data.username);
         setCommenterProfilePhoto(data.imagePath);
       });
-  }, []);
+  }, [commentId, isBuyer]);
 
   /* FOLLOWING FUNCTIONS */
   console.log("isCommentByABuyer:", isBuyer);
@@ -95,7 +95,7 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
       }
     }
     fetchData();
-  }, []);
+  }, [navigate]);
 
   // fetch current buyer followings
   const [followings, setFollowings] = useState();
@@ -136,7 +136,7 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
       }
     };
     fetchData();
-  }, []);
+  }, [commenterId]);
 
   // handleFollowSeller
   const handleFollowSeller = async (sId) => {
@@ -184,7 +184,6 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
   };
 
   //edit buyer
-  const [commentObj, setCommentObj] = useState([]);
   const [title, setTitle] = useState([]);
   const handleEdit = async (event) => {
     event.preventDefault();
