@@ -121,14 +121,14 @@ export function OrderReportButtonNonMemo({ buyerId, oId, orderStatus }) {
         );
         setTimeout(() => {
           window.location.reload();
-        }, 3000);
+        }, 1000);
       } else {
         const errorData = await response.json();
         console.log("reporting error:", errorData.error);
         toast.error(`${errorData.error}. Refreshing, please wait...`);
         setTimeout(() => {
           window.location.reload();
-        }, 3000);
+        }, 2000);
       }
     } else {
       // show error messageconst

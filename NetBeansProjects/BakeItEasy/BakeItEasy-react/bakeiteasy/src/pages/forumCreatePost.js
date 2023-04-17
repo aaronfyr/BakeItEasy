@@ -171,7 +171,7 @@ function ForumCreatePost() {
               );
               setTimeout(() => {
                 routeChangeToForum();
-              }, 8000); // 1000 milliseconds = 1 second
+              }, 1000); // 1000 milliseconds = 1 second
             }
             return response.json();
           })
@@ -219,7 +219,7 @@ function ForumCreatePost() {
               );
               setTimeout(() => {
                 routeChangeToForum();
-              }, 8000); // 1000 milliseconds = 1 second
+              }, 1000); // 1000 milliseconds = 1 second
             }
             return response.json();
           })

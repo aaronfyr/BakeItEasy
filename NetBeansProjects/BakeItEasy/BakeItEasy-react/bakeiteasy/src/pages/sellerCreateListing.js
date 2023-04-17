@@ -223,7 +223,7 @@ function validateListing(listing) {
             setImage("");
             setTimeout(() => {
                 routeChangeToSellerProfile();
-            }, 5000); // 1000 milliseconds = 1 second
+            }, 1000); // 1000 milliseconds = 1 second
             }
             return response.json();
         })

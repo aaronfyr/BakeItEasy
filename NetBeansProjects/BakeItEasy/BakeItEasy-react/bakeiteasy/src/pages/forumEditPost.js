@@ -132,14 +132,14 @@ function ForumEditPost() {
           setDeleteFailed(true);
           setTimeout(() => {
             setDeleteFailed(false);
-          }, 5000); // 1000 milliseconds = 1 second
+          }, 2000); // 1000 milliseconds = 1 second
         } else {
           console.log("response ok");
 
           toast.success("Post deleted successfully! Redirecting...");
           setTimeout(() => {
             routeChangeToSellerProfile();
-          }, 3000); // 1000 milliseconds = 1 second
+          }, 1000); // 1000 milliseconds = 1 second
         }
         return response.json();
       })
