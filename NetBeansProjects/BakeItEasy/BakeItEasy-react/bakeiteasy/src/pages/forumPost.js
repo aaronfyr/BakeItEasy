@@ -477,7 +477,7 @@ useEffect(() => {
               </div>
             </Flex>
             <br />
-            {showCommentPopup && <h3>new comment:</h3>}
+            {showCommentPopup && <h3>New comment:</h3>}
             {showCommentPopup && (
               <CommentPopup
                 style={{ marginRight: 20 }}
