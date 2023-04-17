@@ -24,9 +24,11 @@ import enumeration.ListingCategory;
 import error.exception.BuyerIsFollowingSellerAlreadyException;
 import error.exception.BuyerIsNotFollowingSellerException;
 import error.exception.BuyerNotFoundException;
+import error.exception.CurrentPasswordDoesNotMatchException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
 import error.exception.ListingNotFoundException;
+import error.exception.NewAndConfirmPasswordsDoNotMatchException;
 import error.exception.OrderIsNotAcceptedException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
@@ -585,6 +587,41 @@ public class SellersResource {
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
         }
     } //end createComment
+    
+    @PUT
+    @Path("/{seller_id}/changePassword")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateSellerPassword(@PathParam("seller_id") Long sellerId, @QueryParam("currentPassword") String currentPassword, @QueryParam("newPassword") String newPassword, @QueryParam("confirmPassword") String confirmPassword) {
+        try {
+            sellerSessionBeanLocal.updateSellerPassword(sellerId, currentPassword, newPassword, confirmPassword);
+            return Response.status(204).build();
+        } catch (InputDataValidationException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Input data validation exception")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (NewAndConfirmPasswordsDoNotMatchException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "New password and confirm password does not match!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (SellerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Seller id given does not exist!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (CurrentPasswordDoesNotMatchException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Current password entered does not match user's password!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end updateSellerPassword
 }
 
 /*

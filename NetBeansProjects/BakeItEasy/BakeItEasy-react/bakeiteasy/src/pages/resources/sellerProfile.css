@@ -184,6 +184,7 @@ h5 {
 .category:hover {
     background: var(--dark-text);
     color: white;
+    cursor: pointer;
 }
 
 img {}
@@ -381,6 +382,7 @@ h4 {
 
 
 .editProfileBtn {
+
     display: flex;
     align-items: center;
     border-radius: 20px;
@@ -401,6 +403,7 @@ h4 {
 }
 
 .followersBtn {
+    cursor: pointer;
     display: flex;
     align-items: center;
     border-radius: 20px;
@@ -434,6 +437,7 @@ h4 {
 
 .newListBtn:hover {
     background-color: lightgray;
+    cursor: pointer;
 }
 
 .button1_follow {

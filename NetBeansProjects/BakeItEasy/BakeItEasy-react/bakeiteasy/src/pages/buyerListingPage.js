@@ -393,6 +393,7 @@ function BuyerListingPage() {
               value={
                 dateOfCollection === null ? datePickerMinDate : dateOfCollection
               }
+              required
             />
 
             <Box mt={4} display="flex" alignItems="center">

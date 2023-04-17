@@ -7,8 +7,10 @@ package ejb.session.stateless;
 
 import entity.Buyer;
 import entity.Seller;
+import error.exception.CurrentPasswordDoesNotMatchException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
+import error.exception.NewAndConfirmPasswordsDoNotMatchException;
 import error.exception.OrderIsNotAcceptedException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
@@ -54,5 +56,7 @@ public interface SellerSessionBeanLocal {
     public void completeOrder(Long orderId) throws OrderNotFoundException, OrderIsNotAcceptedException;
 
     public List<Buyer> retrieveListOfFollowers(Long sellerId) throws SellerNotFoundException;
+
+    public void updateSellerPassword(Long sellerId, String currentPassword, String newPassword, String confirmPassword) throws SellerNotFoundException, NewAndConfirmPasswordsDoNotMatchException, CurrentPasswordDoesNotMatchException, InputDataValidationException;
     
 }

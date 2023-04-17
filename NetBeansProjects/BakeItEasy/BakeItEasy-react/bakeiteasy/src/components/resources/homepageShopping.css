@@ -360,6 +360,7 @@ width:100%;
 .category:hover {
   background: var(--dark-text);
   color: white;
+  cursor: pointer;
 }
 
 .category:checked {

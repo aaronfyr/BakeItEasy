@@ -187,14 +187,14 @@ function SellerProfile(props) {
           onClick={() => routeChangeToSellerEditProfile()}
         >
           <FaRegEdit style={{ marginRight: 5 }} />
-          edit profile
+          Edit profile
         </div>
         <div
           className="followersBtn"
           onClick={() => routeChangeToViewFollowers()}
         >
           <FaRegUser style={{ marginRight: 5 }} />
-          {followerCount} follower(s)
+          {followerCount} Follower(s)
         </div>
       </Flex>
       <h2>Search for my listing:</h2>
@@ -232,7 +232,7 @@ function SellerProfile(props) {
             onClick={() => routeChangeToCreateListing()}
           >
             <FaPlus style={{ alignSelf: "center", paddingRight: 5 }} />
-            create listing
+            Create listing
           </div>
         </Flex>
       </div>

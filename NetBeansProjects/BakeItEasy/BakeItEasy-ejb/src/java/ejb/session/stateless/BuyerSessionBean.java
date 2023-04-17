@@ -17,9 +17,11 @@ import error.exception.BuyerIsNotFollowingSellerException;
 import error.exception.BuyerNotFoundException;
 import error.exception.BuyerPhoneNumberExistException;
 import error.exception.BuyerUsernameExistException;
+import error.exception.CurrentPasswordDoesNotMatchException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
 import error.exception.ListingNotFoundException;
+import error.exception.NewAndConfirmPasswordsDoNotMatchException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
@@ -132,24 +134,6 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
     }
 
     @Override
-    public void editBuyer(Buyer buyer) throws BuyerNotFoundException {
-        try {
-            Buyer buyerToUpdate = retrieveBuyerById(buyer.getBuyerId());
-
-            buyerToUpdate.setName(buyer.getName());
-            buyerToUpdate.setEmail(buyer.getEmail());
-            buyerToUpdate.setUsername(buyer.getUsername());
-            buyerToUpdate.setPassword(buyer.getPassword());
-            buyerToUpdate.setPhoneNo(buyer.getPhoneNo());
-            buyerToUpdate.setIsBanned(buyer.isIsBanned());
-            buyerToUpdate.setAddress(buyer.getAddress());
-            buyerToUpdate.setImagePath(buyer.getImagePath());
-        } catch (BuyerNotFoundException ex) {
-            throw new BuyerNotFoundException(ex.getMessage());
-        }
-    }
-
-    @Override
     public void deleteBuyer(Long buyerId) throws BuyerNotFoundException {
         try {
             Buyer buyer = retrieveBuyerById(buyerId);
@@ -208,14 +192,14 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
             if (buyerToUpdate.getPhoneNo().equals(updatedBuyer.getPhoneNo())
                     && buyerToUpdate.getUsername().equals(updatedBuyer.getUsername())) {
                 buyerToUpdate.setName(updatedBuyer.getName());
-                buyerToUpdate.setPassword(updatedBuyer.getPassword());
+//                buyerToUpdate.setPassword(updatedBuyer.getPassword());
                 buyerToUpdate.setImagePath(updatedBuyer.getImagePath());
                 buyerToUpdate.setAddress(updatedBuyer.getAddress());
             } else if (!buyerToUpdate.getPhoneNo().equals(updatedBuyer.getPhoneNo())
                     && buyerToUpdate.getUsername().equals(updatedBuyer.getUsername())) { // phone change, username same
                 if (isPhoneNumberAvailable(updatedBuyer.getPhoneNo())) {
                     buyerToUpdate.setName(updatedBuyer.getName());
-                    buyerToUpdate.setPassword(updatedBuyer.getPassword());
+//                    buyerToUpdate.setPassword(updatedBuyer.getPassword());
                     buyerToUpdate.setPhoneNo(updatedBuyer.getPhoneNo());
                     buyerToUpdate.setImagePath(updatedBuyer.getImagePath());
                     buyerToUpdate.setAddress(updatedBuyer.getAddress());
@@ -226,7 +210,7 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
                     && !buyerToUpdate.getUsername().equals(updatedBuyer.getUsername())) { // phone same, username change
                 if (isUsernameAvailable(updatedBuyer.getUsername())) {
                     buyerToUpdate.setName(updatedBuyer.getName());
-                    buyerToUpdate.setPassword(updatedBuyer.getPassword());
+//                    buyerToUpdate.setPassword(updatedBuyer.getPassword());
                     buyerToUpdate.setUsername(updatedBuyer.getUsername());
                     buyerToUpdate.setImagePath(updatedBuyer.getImagePath());
                     buyerToUpdate.setAddress(updatedBuyer.getAddress());
@@ -238,7 +222,7 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
                 if (isPhoneNumberAvailable(updatedBuyer.getPhoneNo())) {
                     if (isUsernameAvailable(updatedBuyer.getUsername())) {
                         buyerToUpdate.setName(updatedBuyer.getName());
-                        buyerToUpdate.setPassword(updatedBuyer.getPassword());
+//                        buyerToUpdate.setPassword(updatedBuyer.getPassword());
                         buyerToUpdate.setPhoneNo(updatedBuyer.getPhoneNo());
                         buyerToUpdate.setUsername(updatedBuyer.getUsername());
                         buyerToUpdate.setImagePath(updatedBuyer.getImagePath());
@@ -252,6 +236,27 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
             }
 
         } else {
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+        }
+    }
+    
+    @Override
+    public void updateBuyerPassword(Long buyerId, String currentPassword, String newPassword, String confirmPassword) throws BuyerNotFoundException, NewAndConfirmPasswordsDoNotMatchException, CurrentPasswordDoesNotMatchException, InputDataValidationException {
+        Buyer buyerToUpdate = retrieveBuyerById(buyerId);
+        if (currentPassword.equals(buyerToUpdate.getPassword())) {
+            if (newPassword.equals(confirmPassword)) {
+                buyerToUpdate.setPassword(newPassword);
+            } else {
+                throw new NewAndConfirmPasswordsDoNotMatchException("New password and confirm password does not match!");
+            }
+            
+        } else {
+            throw new CurrentPasswordDoesNotMatchException("Current password entered does not match user's password!");
+        }
+        
+        Set<ConstraintViolation<Buyer>> constraintViolations = validator.validate(buyerToUpdate);
+        
+        if (!constraintViolations.isEmpty()) {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }

@@ -96,7 +96,7 @@ cursor: pointer;
 }
 
 .profileSearchInput {
-    width: 1180px;
+    width: 100%;
     border: none;
     border-radius: 20px;
     height: 38px;

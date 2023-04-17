@@ -47,7 +47,7 @@ function AdminMenuBar() {
       <Flex align="center">
         <Link
           to="/adminProfilePage"
-          style={{ display: "flex", alignItems: "center", marginLeft: "75px" }}
+          style={{ display: "flex", alignItems: "center" }}
         >
           <img
             width="50px"
@@ -59,7 +59,7 @@ function AdminMenuBar() {
           <div className="logo">BakeItEasy</div>
         </Link>
       </Flex>
-      <Flex align="center" style={{ marginLeft: "200px" }}>
+      <Flex align="center" style={{ marginLeft: "50px" }}>
         <Link
           id="navChoices"
           to="/viewAllReports"
@@ -77,7 +77,7 @@ function AdminMenuBar() {
         <Link
           id="navChoices"
           to="/viewAllSellers"
-          style={{ marginRight: "50px" }}
+          style={{ marginRight: "25px" }}
         >
           <Text>Sellers</Text>
         </Link>
@@ -91,7 +91,6 @@ function AdminMenuBar() {
                 rightIcon={<ChevronDownIcon />}
                 type="submit"
                 fontWeight="bold"
-                ml="200px"
               >
                 <Flex align="center">
                   <FiUser style={{ marginRight: "10px" }} />

@@ -1,6 +1,6 @@
 import { Flex, Button, HStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaRegEdit } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -64,6 +64,10 @@ function SellerEditProfile() {
 
   const handleGoBack = () => {
     window.history.back();
+  };
+
+  const handleChangePw = () => {
+    navigate("/sellerChangePassword");
   };
 
   const fileUpload = (newFile) => {
@@ -235,6 +239,10 @@ function SellerEditProfile() {
           <div style={{ height: 10 }}></div>
           <h3 className="listingH3">Email:</h3>
           <h2 className="listingH2">{sellerObj.email}</h2>
+
+          <Button bg="#E2725B" colorScheme="white" onClick={handleChangePw}  w="100%">
+                Change password
+              </Button>
           </div>
 
 

@@ -97,12 +97,18 @@ function BuyerEditAccount() {
     );
     if (!response.ok) {
       const errorData = await response.json();
-      toast.error(errorData.error);
+      toast.error(errorData.error + ", refreshing...", { autoClose: 2500 });
+      setTimeout(() => {
+        window.location.reload();
+      }, 2500);
     } else {
       console.log(buyerObj);
 
       localStorage.setItem("buyer", JSON.stringify(buyerObj));
       toast.success("Profile updated successfully.");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     }
   };
 
