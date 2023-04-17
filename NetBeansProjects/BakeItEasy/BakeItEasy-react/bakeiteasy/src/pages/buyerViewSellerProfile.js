@@ -4,7 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
 
 import { FiHeart } from "react-icons/fi";
-import { Flex, flexbox } from "@chakra-ui/react";
+import { Flex, flexbox, HStack } from "@chakra-ui/react";
 import {
   BrowserRouter as Router,
   Route,
@@ -246,6 +246,7 @@ function BuyerViewSellerProfile() {
     <div className="background">
       <ToastContainer />
       <NavigationBar />
+      <br />
       <div id="coverPhoto">
         <div id="profilePhoto">
           <img
@@ -279,14 +280,14 @@ function BuyerViewSellerProfile() {
         )}
       </Flex>
       <h2>Search for Listing:</h2>
-      <div class="searchBar">
+      <div class="searchBar2">
         <input
-          className="input"
+          className="profileSearchInput"
           onChange={(e) => {
             setSearch(e.target.value.toLowerCase());
           }}
         />
-        <button className="button">
+        <button className="searchIcon">
           <svg
             className="w-6 h-6"
             fill="none"
@@ -304,49 +305,49 @@ function BuyerViewSellerProfile() {
           </svg>
         </button>
       </div>
-
-      <div className="sellerProducts">
-        <Flex>
-          <h1>Seller Products</h1>
-        </Flex>
-      </div>
-      <div className="flexBox">
-        <div className="profileListingsDisplay">
-          {filteredListings.map((listing) => (
-            <div className="product">
-              <div class="productSeller">
-                <h3 onClick={() => routeChangeToListing(listing.listingId)}>
-                  {listing.name}
-                </h3>
-              </div>
-              <div
-                className="productContent"
-                onClick={() => routeChangeToListing(listing.listingId)}
-              >
-                <div className="productImg">
-                  <img
-                    className="productImg"
-                    src={
-                      listing.imagePaths[0]
-                        ? listing.imagePaths[0]
-                        : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
-                    }
-                    alt="baked listing"
-                  />
+      <br />
+      <div className="contentGrid">
+        <div div className="flexGrowBox">
+          <div div className="flexGrowBox_header">
+            <h1>Seller Products</h1>
+          </div>
+          <div className="profileListingsDisplay">
+            {filteredListings.map((listing) => (
+              <div className="product">
+                <div class="productSeller">
+                  <h3 onClick={() => routeChangeToListing(listing.listingId)}>
+                    {listing.name}
+                  </h3>
                 </div>
-                <h5>{listing.description}</h5>
-              </div>
-              <div class="productBottomRow">
-                <div class="btn">
-                  <FiHeart
-                    size="1.2rem"
-                    onClick={() => handleListingToLikes(listing.listingId)}
-                  />
+                <div
+                  className="productContent"
+                  onClick={() => routeChangeToListing(listing.listingId)}
+                >
+                  <div className="productImg">
+                    <img
+                      className="productImg"
+                      src={
+                        listing.imagePaths[0]
+                          ? listing.imagePaths[0]
+                          : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
+                      }
+                      alt="baked listing"
+                    />
+                  </div>
+                  <h5>{listing.description}</h5>
                 </div>
-                <h3>${parseFloat(listing.price).toFixed(2)}</h3>
+                <div class="productBottomRow">
+                  <div class="btn">
+                    <FiHeart
+                      size="1.2rem"
+                      onClick={() => handleListingToLikes(listing.listingId)}
+                    />
+                  </div>
+                  <h3>${parseFloat(listing.price).toFixed(2)}</h3>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
         <div className="flexGrowBox">
           <h1>Buyer Reviews</h1>
@@ -354,11 +355,11 @@ function BuyerViewSellerProfile() {
             {reviews.map((review) => (
               <div className="review">
                 <div className="reviewTitle">
-                  <h2>{review.title}</h2>
+                  <h2 style={{ marginTop: 10 }}>{review.title}</h2>
                 </div>
 
                 <div class="reviewBottomRow">
-                  <h4>{review.reviewText}</h4>
+                  <h4 style={{ marginLeft: 10 }}>{review.reviewText}</h4>
                   <h2>rating: {review.rating}</h2>
                 </div>
               </div>
