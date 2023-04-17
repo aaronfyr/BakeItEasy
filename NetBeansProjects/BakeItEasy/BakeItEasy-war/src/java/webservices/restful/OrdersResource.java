@@ -193,5 +193,12 @@ public class OrdersResource {
     public boolean hasExistingReview(@PathParam("id") Long orderId) throws OrderNotFoundException {
         return reviewSessionBeanLocal.reviewExists(orderId);
     } // end hasExistingReview
+    
+    @GET
+    @Path("/{id}/buyerPhoneNo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getBuyerPhoneNoFromOrderId(@PathParam("id") Long orderId) throws OrderNotFoundException {
+        return orderSessionBeanLocal.getBuyerPhoneNoByOrderId(orderId);
+    } // end getBuyerPhoneNoFromOrderId
 
 }

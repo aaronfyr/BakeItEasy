@@ -44,5 +44,7 @@ public interface OrderSessionBeanLocal {
     public Seller getSeller(Long orderId) throws OrderNotFoundException;
 
     public String getSellerPhoneNoByOrderId(Long orderId) throws OrderNotFoundException;
+
+    public String getBuyerPhoneNoByOrderId(Long orderId) throws OrderNotFoundException;
     
 }
