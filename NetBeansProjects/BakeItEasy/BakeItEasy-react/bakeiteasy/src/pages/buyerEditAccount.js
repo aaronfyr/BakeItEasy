@@ -98,6 +98,9 @@ function BuyerEditAccount() {
     if (!response.ok) {
       const errorData = await response.json();
       toast.error(errorData.error);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } else {
       console.log(buyerObj);
 
