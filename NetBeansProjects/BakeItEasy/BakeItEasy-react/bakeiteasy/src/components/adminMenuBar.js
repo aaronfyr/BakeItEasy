@@ -91,7 +91,7 @@ function AdminMenuBar() {
                 rightIcon={<ChevronDownIcon />}
                 type="submit"
                 fontWeight="bold"
-                ml="200px"
+                ml="50px"
               >
                 <Flex align="center">
                   <FiUser style={{ marginRight: "10px" }} />
