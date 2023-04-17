@@ -170,9 +170,18 @@ export const SellerCalendar = () => {
           }
         );
         const data = await response.json();
+        const filteredData = data.filter((order) => {
+          if (
+            order.orderStatus &&
+            (order.orderStatus === "ACCEPTED" ||
+              order.orderStatus === "COMPLETED")
+          ) {
+            return order;
+          }
+        });
 
         // set list of orders
-        setOrders(data);
+        setOrders(filteredData);
         console.log("orders: ", orders);
         console.log(`HTTP Response Code: ${response?.status}`);
 
@@ -235,12 +244,14 @@ export const SellerCalendar = () => {
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{state.event.title}</ModalHeader>
+          <ModalHeader>
+            <h1>{state.event.title}</h1>
+          </ModalHeader>
           <ModalCloseButton />
 
           <ModalBody>
             <div>
-              <p>{state.event.start.toDateString()}</p>
+              <h3>{state.event.start.toDateString()}</h3>
               <EventListingDetails oId={titleToId(state.event.title)} />
             </div>
             <Flex>

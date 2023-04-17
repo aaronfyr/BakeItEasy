@@ -185,6 +185,7 @@ h5 {
 .category:hover {
     background: var(--dark-text);
     color: white;
+    cursor: pointer;
 }
 
 img {}
@@ -232,9 +233,9 @@ img.productImg {
 
 .profileListingsDisplay {
     display: flex;
-    width: 800px;
+    width: 100%;
     flex-wrap: wrap;
-    height: 370px;
+    height: 100%;
     overflow-x: hidden;
     justify-content: center;
     /*delete this if not necessary*/
@@ -335,7 +336,8 @@ h4 {
 }
 
 .reviewDisplay {
-    width: 350px;
+    width: 100%;
+    height: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
     justify-content: center;
@@ -399,7 +401,7 @@ h4 {
 }
 
 .editProfileBtn:hover {
-    background-color: lightgray;
+    background-color: var(--light-orange);
 }
 
 .followersBtn {
@@ -437,6 +439,7 @@ h4 {
 
 .newListBtn:hover {
     background-color: lightgray;
+    cursor: pointer;
 }
 
 .button1_follow {

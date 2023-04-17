@@ -13,7 +13,7 @@ import {
   HStack,
   Button,
 } from "@chakra-ui/react";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "reactjs-popup/dist/index.css";
@@ -96,9 +96,9 @@ function BuyerEditAccount() {
       }
     );
     if (!response.ok) {
-       const errorData = await response.json();
-        toast.error(errorData.error + ", refreshing...", {autoClose: 2500});
-        setTimeout(() => {
+      const errorData = await response.json();
+      toast.error(errorData.error + ", refreshing...", { autoClose: 2500 });
+      setTimeout(() => {
         window.location.reload();
       }, 2500);
     } else {
@@ -198,12 +198,13 @@ function BuyerEditAccount() {
         <Flex>
           <div className="button1" onClick={() => routeChangeToProfile()}>
             <HStack spacing="10px">
+              <FaArrowLeft />
               <div>Back to Profile</div>
-              <FaArrowRight />
             </HStack>
           </div>
         </Flex>
       </Flex>
+      <br />
       <div className="parent">
         <div id="rightListingContainer">
           <h1 style={{ textAlign: "center" }}>Edit My Profile</h1>
@@ -232,99 +233,100 @@ function BuyerEditAccount() {
             />
           </div>
           <br />
-
-          <h3 className="listingH3">Name:</h3>
-          {isEditable ? (
-            <input
-              type="text"
-              className="inputStyle"
-              value={buyerObj.name}
-              onChange={(e) =>
-                setBuyerObj({ ...buyerObj, name: e.target.value })
-              }
-            />
-          ) : (
-            <h2 className="listingH2">{buyerObj.name}</h2>
-          )}
-          <h3 className="listingH3">Username:</h3>
-          {isEditable ? (
-            <input
-              type="text"
-              className="inputStyle"
-              value={buyerObj.username}
-              onChange={(e) =>
-                setBuyerObj({ ...buyerObj, username: e.target.value })
-              }
-            />
-          ) : (
-            <h2>{buyerObj.username}</h2>
-          )}
-          <h3 className="listingH3">Phone:</h3>
-          {isEditable ? (
-            <input
-              type="text"
-              className="inputStyle"
-              value={buyerObj.phoneNo}
-              onChange={(e) =>
-                setBuyerObj({ ...buyerObj, phoneNo: e.target.value })
-              }
-            />
-          ) : (
-            <h2>{buyerObj.phoneNo}</h2>
-          )}
-          <h3 className="listingH3">Address:</h3>
-          {isEditable ? (
-            <input
-              type="text"
-              className="inputStyle"
-              value={buyerObj.address}
-              onChange={(e) =>
-                setBuyerObj({ ...buyerObj, address: e.target.value })
-              }
-            />
-          ) : (
-            <h2>{buyerObj.address}</h2>
-          )}
-          <div style={{ height: 10 }}></div>
-          {isEditable && (
-            <div>
+          <div style={{ width: 400, marginLeft: "auto", marginRight: "auto" }}>
+            <h3 className="listingH3">Name:</h3>
+            {isEditable ? (
               <input
-                style={{ height: 40, width: 400 }}
-                type="file"
-                id="image"
-                name="image"
-                accept=".jpeg, .png, .jpg"
-                onChange={(e) => fileUpload(e.target.files[0])}
+                type="text"
+                className="inputStyle"
+                value={buyerObj.name}
+                onChange={(e) =>
+                  setBuyerObj({ ...buyerObj, name: e.target.value })
+                }
               />
-            </div>
-          )}
-          <div style={{ height: 10 }}></div>
-          <Flex>
-            {!isEditable && (
-              <Button
-                bg="#E2725B"
-                colorScheme="white"
-                onClick={() => setIsEditable(true)}
-                w="100%"
-              >
-                Edit
-              </Button>
+            ) : (
+              <h2 className="listingH2">{buyerObj.name}</h2>
             )}
+            <h3 className="listingH3">Username:</h3>
+            {isEditable ? (
+              <input
+                type="text"
+                className="inputStyle"
+                value={buyerObj.username}
+                onChange={(e) =>
+                  setBuyerObj({ ...buyerObj, username: e.target.value })
+                }
+              />
+            ) : (
+              <h2>{buyerObj.username}</h2>
+            )}
+            <h3 className="listingH3">Phone:</h3>
+            {isEditable ? (
+              <input
+                type="text"
+                className="inputStyle"
+                value={buyerObj.phoneNo}
+                onChange={(e) =>
+                  setBuyerObj({ ...buyerObj, phoneNo: e.target.value })
+                }
+              />
+            ) : (
+              <h2>{buyerObj.phoneNo}</h2>
+            )}
+            <h3>Address:</h3>
+            {isEditable ? (
+              <input
+                type="text"
+                className="inputStyle"
+                value={buyerObj.address}
+                onChange={(e) =>
+                  setBuyerObj({ ...buyerObj, address: e.target.value })
+                }
+              />
+            ) : (
+              <h2>{buyerObj.address}</h2>
+            )}
+            <div style={{ height: 10 }}></div>
             {isEditable && (
-              <Button
-                bg="#E2725B"
-                colorScheme="white"
-                onClick={handleUpdate}
-                w="100%"
-              >
-                Done
-              </Button>
+              <div>
+                <input
+                  style={{ height: 40, width: 400 }}
+                  type="file"
+                  id="image"
+                  name="image"
+                  accept=".jpeg, .png, .jpg"
+                  onChange={(e) => fileUpload(e.target.files[0])}
+                />
+              </div>
             )}
-          </Flex>
+            <div style={{ height: 10 }}></div>
+            <Flex>
+              {!isEditable && (
+                <Button
+                  bg="#E2725B"
+                  colorScheme="white"
+                  onClick={() => setIsEditable(true)}
+                  w="100%"
+                >
+                  Edit
+                </Button>
+              )}
+              {isEditable && (
+                <Button
+                  bg="#E2725B"
+                  colorScheme="white"
+                  onClick={handleUpdate}
+                  w="100%"
+                >
+                  Done
+                </Button>
+              )}
+            </Flex>
 
-          <div style={{ height: 10 }}></div>
-          <h3 className="listingH3">Email:</h3>
-          <h2 className="listingH2">{buyerEmail}</h2>
+            <div style={{ height: 10 }}></div>
+            <h3 className="listingH3">Email:</h3>
+            <h2 className="listingH2">{buyerEmail}</h2>
+          </div>
           <br></br>
         </div>
       </div>

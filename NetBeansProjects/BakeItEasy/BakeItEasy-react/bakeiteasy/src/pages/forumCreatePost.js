@@ -162,7 +162,7 @@ function ForumCreatePost() {
         )
           .then((response) => {
             if (!response.ok) {
-              toast.error("!response.ok");
+              toast.error("Unable to create post.");
             } else {
               console.log("listing created");
               setCreated(true);
@@ -179,7 +179,7 @@ function ForumCreatePost() {
             // handle successful creation
           })
           .catch((error) => {
-            toast.error("Failed to create listing. " + error);
+            toast.error("Failed to create post. " + error);
           });
       }
       if (!validCategory) {
@@ -246,9 +246,11 @@ function ForumCreatePost() {
       {isBuyer && <NavigationBar />}
       <br />
       <div style={{ width: 220 }}>
-        <div className="button1" onClick={() => (handleGoBack())}>
-          <FaArrowLeft />
-          Back to forum
+        <div className="button1" onClick={() => handleGoBack()}>
+          <HStack spacing="10px">
+            <FaArrowLeft />
+            <div>Back to forum</div>
+          </HStack>
         </div>
       </div>
       <br />
@@ -285,9 +287,14 @@ function ForumCreatePost() {
               <option value="RECIPES">Recipes</option>
             </select>
           </label>
-          <button type="submit" className="button1">
+          <Button
+            bg="#E2725B"
+            colorScheme="white"
+            onClick={handleSubmit}
+            w="380px"
+          >
             Create Post
-          </button>
+          </Button>
         </form>
 
         <br />

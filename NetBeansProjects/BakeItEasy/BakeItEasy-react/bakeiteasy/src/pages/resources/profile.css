@@ -169,6 +169,7 @@ h5 {
 .category:hover {
   background: var(--dark-text);
   color: white;
+  cursor: pointer;
 }
 
 img {
@@ -463,6 +464,7 @@ h4 {
   padding: 0px 20px 0px 20px;
   margin: 10px 20px 0px 0px;
   background-color: var(--mid-orange);
+  cursor: pointer;
 }
 
 svg.star-svg {

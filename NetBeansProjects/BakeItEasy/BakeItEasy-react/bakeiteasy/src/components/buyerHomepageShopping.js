@@ -456,6 +456,7 @@ export const BuyerShopping = () => {
               <div
                 className="category"
                 onClick={() => handleFilterByCateory(category.name)}
+                key={category.name}
               >
                 {category.name}
               </div>
@@ -508,7 +509,7 @@ export const BuyerShopping = () => {
             return product;
           })
           .map((product) => (
-            <div className="homepageProduct">
+            <div className="homepageProduct" key={product.listingId}>
               <div class="productSeller">
                 <ListingSellerHeader lId={product.listingId} />
               </div>
@@ -594,7 +595,7 @@ export const BuyerShopping = () => {
             return product;
           })
           .map((product) => (
-            <div className="homepageProduct">
+            <div className="homepageProduct" key={product.listingId}>
               <div class="productSeller" key={product.listingId}>
                 <ListingSellerHeader lId={product.listingId} />
               </div>

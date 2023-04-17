@@ -232,7 +232,7 @@ function SellerProfile(props) {
             onClick={() => routeChangeToCreateListing()}
           >
             <FaPlus style={{ alignSelf: "center", paddingRight: 5 }} />
-            create listing
+            Create listing
           </div>
         </Flex>
       </div>
