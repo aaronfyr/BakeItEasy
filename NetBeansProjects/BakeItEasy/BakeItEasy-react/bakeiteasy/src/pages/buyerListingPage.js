@@ -1,59 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 import {
-  Avatar,
+  Box,
   Button,
   Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
   FormControl,
   FormLabel,
+  HStack,
   Input,
-  Box,
-  Select,
-  Text,
-  Image,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  useNumberInput,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
-  useDisclosure,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Select,
   Spacer,
+  useDisclosure,
+  useNumberInput,
 } from "@chakra-ui/react";
-import { FaRegCommentAlt, FaHeart, FaPhone } from "react-icons/fa";
 import DatePicker from "react-datepicker";
+import { FaHeart, FaPhone } from "react-icons/fa";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./resources/default.css";
 import "./resources/listing.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
+import { formatDate, formatPrice } from "../components/formatter";
 import { Slideshow } from "../components/slideshow";
-import { formatPrice, formatDate } from "../components/formatter";
+import { ListingSellerHeader } from "../components/listingSellerHeader";
 
 function BuyerListingPage() {
   const { id } = useParams();
@@ -86,6 +64,7 @@ function BuyerListingPage() {
 
   // get Listing info
   const [listing, setListing] = useState(null);
+  const [listingId, setListingId] = useState(null);
   const [listingName, setListingName] = useState(null);
   const [listingDescription, setListingDescription] = useState(null);
   const [price, setPrice] = useState(null);
@@ -110,6 +89,7 @@ function BuyerListingPage() {
         const data = await response.json();
         //console.log("fetched data: ", data);
         setListing(data);
+        setListingId(data.listingId);
         setListingName(data.name);
         setListingDescription(data.description);
         setPrice(data.price);
@@ -308,8 +288,12 @@ function BuyerListingPage() {
             <div></div>
           </Flex>
           <br />
+          <h5>
+            {" "}
+            <ListingSellerHeader lId={listingId} />
+          </h5>
           <h1>{listingName}</h1>
-          <h5>Date posted: {formatDate(listingDate)}</h5>
+          <h5>Date posted: {formatDate(listingDate)} </h5>
           <br />
           <div id="buyerListingDetailsGrid">
             <h3>Price</h3>
