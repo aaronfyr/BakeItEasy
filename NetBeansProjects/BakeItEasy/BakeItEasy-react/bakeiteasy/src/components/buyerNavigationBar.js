@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import "./resources/navigationBar.css";
 
+
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { IconContext } from "react-icons";
 import { FaUserCircle } from "react-icons/fa";
@@ -147,7 +148,7 @@ export const NavigationBar = () => {
       <HStack spacing="7px">
         <IconContext.Provider value={{ size: "1.2rem" }}>
           <div className="icon-circle">
-            <FiHeart onClick={() => routeToLikedListings()} />
+            <FiHeart style={{cursor: "pointer"}}onClick={() => routeToLikedListings()} />
           </div>
           <Menu>
             <MenuButton
