@@ -262,9 +262,13 @@ const handlePriceChange = (e) => {
             <div className="button1" onClick={handleGoBack} ><FaArrowLeft/><HStack width={2}/>Back to profile</div>
         </div>
         <br/>
+        <div style={{display: "flex", justifyContent: "center"}}>
+            <h1>Create A Listing</h1>
+        </div>
         <div className="parent">
-            <div id="rightListingContainer">
-                <h1 style={{marginLeft: 510}}>Create A Listing</h1>
+
+            <div style={{display: "flex", justifyContent: "center", width:400}}>
+
                 <form className="form2" onSubmit={handleSubmit}>
       <label>
         Name:
