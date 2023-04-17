@@ -10,12 +10,12 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { FiHeart, FiUser, FiBell, FiMessageSquare } from "react-icons/fi";
+import { FiUser } from "react-icons/fi";
 
 import { IoLogOut } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
-import "./resources/navigationBar.css";
 import "./resources/adminProfilePhotoDisplay.css";
+import "./resources/navigationBar.css";
 
 function AdminMenuBar() {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ function AdminMenuBar() {
   };
 
   return (
-    <div className="navbar">
+    <div className="navbar" style={{ justifyContent: "flex-start" }}>
       <Flex align="center">
         <Link
           to="/adminProfilePage"
@@ -54,31 +54,18 @@ function AdminMenuBar() {
             height="50px"
             hspace="30px"
             src={require("../assets/bakeiteasy-logo.png")}
-            alt="BakeItEasy"
           ></img>
           <div className="logo">BakeItEasy</div>
         </Link>
       </Flex>
-      <Flex align="center" style={{ marginLeft: "50px" }}>
-        <Link
-          id="navChoices"
-          to="/viewAllReports"
-          style={{ marginRight: "50px" }}
-        >
+      <Flex align="center" style={{ marginLeft: "30%" }}>
+        <Link id="navChoices" to="/viewAllReports">
           <Text>Reports</Text>
         </Link>
-        <Link
-          id="navChoices"
-          to="/viewAllBuyers"
-          style={{ marginRight: "50px" }}
-        >
+        <Link id="navChoices" to="/viewAllBuyers">
           <Text>Buyers</Text>
         </Link>
-        <Link
-          id="navChoices"
-          to="/viewAllSellers"
-          style={{ marginRight: "25px" }}
-        >
+        <Link id="navChoices" to="/viewAllSellers">
           <Text>Sellers</Text>
         </Link>
 
@@ -91,6 +78,7 @@ function AdminMenuBar() {
                 rightIcon={<ChevronDownIcon />}
                 type="submit"
                 fontWeight="bold"
+                ml="10%"
               >
                 <Flex align="center">
                   <FiUser style={{ marginRight: "10px" }} />
@@ -115,7 +103,6 @@ function AdminMenuBar() {
             </Menu>
           </>
         )}
-        <div style={{ width: "75px" }}></div>
       </Flex>
     </div>
   );
