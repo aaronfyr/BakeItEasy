@@ -47,7 +47,7 @@ function AdminMenuBar() {
       <Flex align="center">
         <Link
           to="/adminProfilePage"
-          style={{ display: "flex", alignItems: "center", marginLeft: "75px" }}
+          style={{ display: "flex", alignItems: "center" }}
         >
           <img
             width="50px"
@@ -59,7 +59,7 @@ function AdminMenuBar() {
           <div className="logo">BakeItEasy</div>
         </Link>
       </Flex>
-      <Flex align="center" style={{ marginLeft: "200px" }}>
+      <Flex align="center" style={{ marginLeft: "50px" }}>
         <Link
           id="navChoices"
           to="/viewAllReports"
