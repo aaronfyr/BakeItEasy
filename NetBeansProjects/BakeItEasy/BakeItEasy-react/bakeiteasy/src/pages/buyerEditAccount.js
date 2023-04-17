@@ -326,6 +326,14 @@ function BuyerEditAccount() {
             <div style={{ height: 10 }}></div>
             <h3 className="listingH3">Email:</h3>
             <h2 className="listingH2">{buyerEmail}</h2>
+            <Button
+                  bg="#E2725B"
+                  colorScheme="white"
+                  onClick={() => (navigate("/buyerChangePassword"))}
+                  w="100%"
+                >
+                  Change password
+                </Button>
           </div>
           <br></br>
         </div>
