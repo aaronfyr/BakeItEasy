@@ -162,7 +162,7 @@ if (response.ok) {
 
           <Box mt={4} display="flex" alignItems="center">
             <Link
-              to={`/forgotPassword?type=${type}`}
+              to={`mailto:bakeiteasy@gmail.com`}
               style={{ color: "#E2725B", textDecoration: "underline" }}
             >
               Forgot password?
