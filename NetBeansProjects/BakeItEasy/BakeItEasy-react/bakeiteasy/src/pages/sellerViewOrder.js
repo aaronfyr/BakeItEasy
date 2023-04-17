@@ -1,42 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { SellerNavigationBar } from "../components/sellerNavigationBar";
-import { toast, ToastContainer } from "react-toastify";
+import { Flex, HStack } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import {
-  Avatar,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-} from "@chakra-ui/react";
-import {
-  FaRegCommentAlt,
-  FaHeart,
-  FaCheck,
-  FaTimes,
-  FaRegStar,
   FaArrowLeft,
-  FaPhone
+  FaCheck,
+  FaPhone,
+  FaRegStar,
+  FaTimes,
 } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { SellerNavigationBar } from "../components/sellerNavigationBar";
 
+import { formatDate, formatPrice } from "../components/formatter";
 import "./resources/default.css";
 import "./resources/sellerEditProfile.css";
-import { formatPrice, formatDate } from "../components/formatter";
-import { NavigationBar } from "../components/buyerNavigationBar";
-import useOrderBuyer from "../components/getOrderBuyer";
 
 function SellerViewOrder() {
   const { id } = useParams();
@@ -331,7 +308,7 @@ function SellerViewOrder() {
               </div>
             )}
             <a
-              className="button1_cancel"
+              className="button1"
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
