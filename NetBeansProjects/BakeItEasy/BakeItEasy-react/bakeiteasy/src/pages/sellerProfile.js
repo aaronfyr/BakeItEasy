@@ -231,6 +231,15 @@ function SellerProfile(props) {
         <div div className="flexGrowBox">
           <div div className="flexGrowBox_header">
             <h1>Seller Products</h1>
+            <div
+              className="newListBtn"
+              onClick={() => routeChangeToCreateListing()}
+            >
+              <HStack>
+                <FaPlus />
+                <div>Create listing </div>
+              </HStack>
+            </div>
           </div>
           <div className="profileListingsDisplay">
             {filteredListings.map((listing) => (
