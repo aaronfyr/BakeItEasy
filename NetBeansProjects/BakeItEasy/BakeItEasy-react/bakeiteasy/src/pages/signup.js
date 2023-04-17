@@ -220,14 +220,6 @@ function Signup() {
           </Button>
         </Box>
 
-        <Box mt={4} display="flex" alignItems="center">
-          <Link
-            to={`/forgotPassword?type=${type}`}
-            style={{ color: "#E2725B", textDecoration: "underline" }}
-          >
-            Forgot password?
-          </Link>
-        </Box>
 
         <Box
           maxW="xl"
