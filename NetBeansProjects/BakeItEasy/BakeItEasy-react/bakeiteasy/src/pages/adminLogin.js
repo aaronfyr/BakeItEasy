@@ -10,11 +10,9 @@ import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AdminContext } from "../context/adminProvider";
 
 function AdminLogin() {
   const navigate = useNavigate();
-  const { setAdmin } = useContext(AdminContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +33,6 @@ function AdminLogin() {
     if (response.ok) {
       const admin = await response.json();
       localStorage.setItem("admin", JSON.stringify(admin));
-      setAdmin(admin);
       navigate(`/viewAllReports`);
     } else {
       const errorData = await response.json();

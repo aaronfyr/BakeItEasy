@@ -11,8 +11,6 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BuyerContext } from "../context/buyerProvider";
-import { SellerContext } from "../context/sellerProvider";
 import "./resources/login.css";
 
 function Login() {
@@ -20,8 +18,6 @@ function Login() {
 
   const type = new URLSearchParams(useLocation().search).get("type");
   const navigate = useNavigate();
-  const { setBuyer } = useContext(BuyerContext);
-  const { setSeller } = useContext(SellerContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -59,11 +55,9 @@ if (response.ok) {
   setIsLoading(false);
   const user = await response.json();
   if (type === "seller") {
-    setSeller(user);
     localStorage.setItem("seller", JSON.stringify(user));
     navigate(`/sellerProfile`);
   } else {
-    setBuyer(user);
     localStorage.setItem("buyer", JSON.stringify(user));
     navigate(`/`);
   }

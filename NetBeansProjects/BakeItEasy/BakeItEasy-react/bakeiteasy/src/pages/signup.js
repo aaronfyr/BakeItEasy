@@ -12,9 +12,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { BuyerContext } from "../context/buyerProvider";
-import { SellerContext } from "../context/sellerProvider";
-
 function Signup() {
   const type = new URLSearchParams(useLocation().search).get("type");
   const navigate = useNavigate();
@@ -27,9 +24,6 @@ function Signup() {
   const [address, setAddress] = useState("");
   const [imagePath, setImagePath] = useState(null);
   const [profilePic, setProfilePic] = useState(null);
-
-  const { setBuyer } = useContext(BuyerContext);
-  const { setSeller } = useContext(SellerContext);
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -103,12 +97,10 @@ function Signup() {
     if (response.ok) {
       const user = await response.json();
       if (type === "seller") {
-        setSeller(user);
         localStorage.setItem("seller", JSON.stringify(user));
         console.log("seller set: ", user);
         navigate(`/sellerProfile`);
       } else {
-        setBuyer(user);
         localStorage.setItem("buyer", JSON.stringify(user));
         console.log("buyer set: ", user);
         navigate(`/`);
