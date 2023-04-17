@@ -6,12 +6,9 @@ import { NavigationBar } from "../components/buyerNavigationBar";
 import { useNavigate } from "react-router-dom";
 
 import {
-  Flex,
-  FormLabel,
-  Input,
-  Image,
-  HStack,
   Button,
+  Flex,
+  HStack
 } from "@chakra-ui/react";
 import { FaArrowLeft } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";

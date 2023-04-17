@@ -1,6 +1,6 @@
-import { FormControl, FormLabel, Input, Button, Box } from "@chakra-ui/react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ForgotPassword() {
   const type = new URLSearchParams(useLocation().search).get("type");

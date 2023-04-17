@@ -1,21 +1,12 @@
+import { Flex } from "@chakra-ui/react";
 import { React, useEffect, useState } from "react";
-import "./resources/sellerProfile.css";
-import { SellerNavigationBar } from "../components/sellerNavigationBar";
-import { FaRegEdit, FaRegUser, FaPlus } from "react-icons/fa";
-import { Flex, flexbox } from "@chakra-ui/react";
-import { ToastContainer, toast } from "react-toastify";
+import { FaPlus, FaRegEdit, FaRegStar, FaRegUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { formatPrice } from "../components/formatter";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-  Navigate,
-  useParams,
-} from "react-router-dom";
-import { FaRegStar } from "react-icons/fa";
+import { SellerNavigationBar } from "../components/sellerNavigationBar";
+import "./resources/sellerProfile.css";
 
 function SellerProfile(props) {
   const [search, setSearch] = useState("");
@@ -31,8 +22,6 @@ function SellerProfile(props) {
 
   const { review } = props;
   const stars = [];
-
-
 
   useEffect(() => {
     async function fetchData() {
@@ -66,7 +55,6 @@ function SellerProfile(props) {
   useEffect(() => {
     console.log("fetching listings for " + sellerId);
     fetch(
-
       `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/listings`,
       {
         method: "GET",
@@ -97,9 +85,9 @@ function SellerProfile(props) {
       .then((data) => {
         setReviews(data);
         for (let i = 0; i < data.rating; i++) {
-         stars.push(<FaRegStar key={i} />);
+          stars.push(<FaRegStar key={i} />);
         }
-    });
+      });
   }, [sellerId, stars]);
 
   //fetch seller
@@ -172,8 +160,15 @@ function SellerProfile(props) {
       <SellerNavigationBar />
       <div id="coverPhoto">
         <div id="profilePhoto">
-            <img alt="" style={{height: 120, objectFit: "cover"}}
-            src = {sellerObj.imagePath? sellerObj.imagePath : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} ></img>
+          <img
+            alt=""
+            style={{ height: 120, objectFit: "cover" }}
+            src={
+              sellerObj.imagePath
+                ? sellerObj.imagePath
+                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+            }
+          ></img>
         </div>
       </div>
       <Flex>
@@ -248,15 +243,18 @@ function SellerProfile(props) {
               <div className="productImg">
                 <img
                   className="productImg"
-                  src={listing.imagePaths[0] ? listing.imagePaths[0] : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"}
+                  src={
+                    listing.imagePaths[0]
+                      ? listing.imagePaths[0]
+                      : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
+                  }
                   alt="listing product"
                 />
-
               </div>
               <div class="productBottomRow">
                 <h3>${formatPrice(listing.price)} </h3>
               </div>
-              <h5 style={{color: "#636363"}}>{listing.description}</h5>
+              <h5 style={{ color: "#636363" }}>{listing.description}</h5>
             </div>
           ))}
         </div>
@@ -264,17 +262,13 @@ function SellerProfile(props) {
           <h1>Buyer Reviews</h1>
           <div className="reviewDisplay">
             {reviews.map((review) => (
-              <div
-                className="review"
-
-              >
-
+              <div className="review">
                 <div className="reviewTitle">
-                  <h2 style={{marginTop: 10}}>{review.title}</h2>
+                  <h2 style={{ marginTop: 10 }}>{review.title}</h2>
                 </div>
 
                 <div class="reviewBottomRow">
-                  <h4 style={{marginLeft:10}}>{review.reviewText}</h4>
+                  <h4 style={{ marginLeft: 10 }}>{review.reviewText}</h4>
                   <h2>Rating: {review.rating} / 5</h2>
                 </div>
               </div>

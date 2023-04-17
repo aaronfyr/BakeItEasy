@@ -1,34 +1,13 @@
+import { Flex } from "@chakra-ui/react";
 import { React, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { FiHeart } from "react-icons/fi";
+import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { formatPrice } from "../components/formatter";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
-import { toast, ToastContainer } from "react-toastify";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton
-} from "@chakra-ui/react";
-import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
-import { formatPrice, formatDate } from "../components/formatter";
+import { Slideshow } from "../components/slideshow";
 import "./resources/default.css";
 import "./resources/listing.css";
-import { Slideshow } from "../components/slideshow";
-import { NavigationBar } from "../components/buyerNavigationBar";
-import { FiHeart } from "react-icons/fi";
 
 function SellerListing() {
   console.log("test");
@@ -40,7 +19,7 @@ function SellerListing() {
   const [preDelete, setPreDelete] = useState(false);
   const [deleteFailed, setDeleteFailed] = useState(false);
   const [likeNum, setLikeNum] = useState(404);
-    const [images, setImages] = useState([
+  const [images, setImages] = useState([
     "https://images.unsplash.com/photo-1509721434272-b79147e0e708?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
     "https://images.unsplash.com/photo-1506710507565-203b9f24669b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1536&q=80",
     "https://images.unsplash.com/photo-1536987333706-fc9adfb10d91?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80",
@@ -238,7 +217,7 @@ function SellerListing() {
       <h1>Listing: {listing.name} </h1>
       <div id="listingContainer">
         <div class="leftListingContainer">
-            <Slideshow imagePaths={listingImagePaths} />
+          <Slideshow imagePaths={listingImagePaths} />
           {/*<div class="slideshow-container"></div>
           <img
             alt="upload"
@@ -415,8 +394,6 @@ function SellerListing() {
 }
 
 export default SellerListing;
-
-
 
 /*
 <div class="slideshow-container">

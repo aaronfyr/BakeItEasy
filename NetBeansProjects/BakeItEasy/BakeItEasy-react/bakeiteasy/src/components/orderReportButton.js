@@ -1,37 +1,19 @@
-import { React, useEffect, useState, memo } from "react";
-import { toast, ToastContainer } from "react-toastify";
-
-import { Rating } from "react-simple-star-rating";
+import { React, memo, useState } from "react";
+import { toast } from "react-toastify";
 
 import {
-  BrowserRouter as Router,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
-
-import {
-  Flex,
   Box,
   Button,
+  Flex,
   FormControl,
   FormLabel,
-  Input,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Spacer,
   HStack,
-  VStack,
+  Input,
+  Spacer,
 } from "@chakra-ui/react";
+import { MdOutlineReport } from "react-icons/md";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { FaRegStar } from "react-icons/fa";
-import { MdOutlineReport } from "react-icons/md";
 
 export function OrderReportButtonNonMemo({ buyerId, oId, orderStatus }) {
   const [isOrderReviewed, setIsOrderReviewed] = useState({});

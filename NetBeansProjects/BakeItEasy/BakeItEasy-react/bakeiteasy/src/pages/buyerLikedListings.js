@@ -2,46 +2,24 @@ import { React, useEffect, useState } from "react";
 import "./resources/default.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
-import { BuyerShopping } from "../components/buyerHomepageShopping";
 import { ListingSellerHeader } from "../components/listingSellerHeader";
 
 import {
-  Avatar,
   Button,
   Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
-  useDisclosure,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spacer,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { toast, ToastContainer } from "react-toastify";
-import { FiHeart } from "react-icons/fi";
-import { formatPrice, formatDate } from "../components/formatter";
+import { ToastContainer, toast } from "react-toastify";
+import { formatDate } from "../components/formatter";
 
-import {
-  BrowserRouter as Router,
-  useNavigate, // Be sure to add this import
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function BuyerLikedListings() {
   const navigate = useNavigate();

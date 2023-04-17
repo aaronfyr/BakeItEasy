@@ -1,38 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { SellerNavigationBar } from "../components/sellerNavigationBar";
+import { Button, HStack } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
-import { toast, ToastContainer } from "react-toastify";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Heading,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-  VStack,
-  HStack,
-  Spacer,
-} from "@chakra-ui/react";
-import {
-  FaRegCommentAlt,
-  FaHeart,
-  FaCheck,
-  FaTimes,
-  FaRegStar,
-  FaArrowLeft,
-} from "react-icons/fa";
+import { SellerNavigationBar } from "../components/sellerNavigationBar";
 
 import "./resources/default.css";
 import "./resources/sellerViewOrder.css";

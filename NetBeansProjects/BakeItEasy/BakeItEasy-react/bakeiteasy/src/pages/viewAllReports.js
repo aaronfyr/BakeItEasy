@@ -12,7 +12,7 @@ import {
   ModalOverlay,
   Spacer,
   Text,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import AdminMenuBar from "../components/adminMenuBar";
@@ -135,7 +135,6 @@ function ViewAllReports() {
       toast.error(errorData.error);
     }
   };
-
 
   const handleDismissReport = async (report) => {
     console.log("handleDismissReport:", report.reportId);

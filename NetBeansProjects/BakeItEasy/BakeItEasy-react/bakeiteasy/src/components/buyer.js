@@ -4,11 +4,9 @@ import {
   CardBody,
   CardFooter,
   Divider,
-  Heading,
   Stack,
   Text,
 } from "@chakra-ui/react";
-
 
 const Buyer = ({
   buyerId,

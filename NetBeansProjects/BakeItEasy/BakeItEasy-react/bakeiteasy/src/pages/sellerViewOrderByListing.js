@@ -1,33 +1,24 @@
-import { color } from "framer-motion";
-import React, { useState, useEffect } from "react";
+import { Flex } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { formatDate, formatPrice } from "../components/formatter.js";
+import getOrderBuyer from "../components/getOrderBuyer";
+import { SellerNavigationBar as SellerNav } from "../components/sellerNavigationBar";
 import "./resources/sellerVOBL.css";
 import SellerOrderCard from "./sellerOrderCard.js";
-import { SellerNavigationBar as SellerNav } from "../components/sellerNavigationBar";
-import { FaCheck } from "react-icons/fa";
-import getOrderBuyer from "../components/getOrderBuyer"
-import { formatPrice, formatDate } from '../components/formatter.js';
-import { Flex } from "@chakra-ui/react";
-import {
-  BrowserRouter as Router,
-  useNavigate,
-  useParams,
-  Link,
-} from "react-router-dom";
-import Seller from "../components/seller";
-
 
 const SellerViewOrderByListing = () => {
   const [orders, setOrders] = useState([]);
   const [search, setSearch] = useState("");
   const [listing, setListing] = useState([]);
-    const [seller, setSeller] = useState([]);
-      const [sellerId, setSellerId] = useState(null);
+  const [seller, setSeller] = useState([]);
+  const [sellerId, setSellerId] = useState(null);
   const { id } = useParams();
   const orderBuyer = getOrderBuyer();
-  const [imgPlaceholder, setImgPlaceholder] = ("https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80");
+  const [imgPlaceholder, setImgPlaceholder] =
+    "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80";
 
-
-useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       const fetchedSeller = localStorage.getItem("seller");
       /*if (!fetchedBuyer) {
@@ -45,7 +36,6 @@ useEffect(() => {
           console.log("parsedUser: ", parsedUser);
           console.log("parsedUser.id: ", parsedUser.sellerId);
           setSellerId(parsedUser.sellerId);
-
         } catch (error) {
           console.log(error);
         }
@@ -68,23 +58,22 @@ useEffect(() => {
   //SUPPOSED TO BE get orders by listing, but now it's get orders by seller
   //yay fixed
   useEffect(() => {
-  if (sellerId) {
-    fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/listings/${id}/orders`,
-      {
-        //get seller id from storage
-        method: "GET",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => setOrders(data));
-  }
-}, [sellerId]);
-
+    if (sellerId) {
+      fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/listings/${id}/orders`,
+        {
+          //get seller id from storage
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => setOrders(data));
+    }
+  }, [sellerId]);
 
   //get listing
   useEffect(() => {
@@ -99,7 +88,7 @@ useEffect(() => {
       .then((data) => {
         setListing(data);
         setImgPlaceholder(data.imagePaths[0]);
-        });
+      });
   }, []);
 
   let navigate = useNavigate();
@@ -115,10 +104,9 @@ useEffect(() => {
 
   return (
     <div>
-        <SellerNav/>
+      <SellerNav />
       <div className="dropdownRow">
-        <div className="heading">
-        </div>
+        <div className="heading"></div>
       </div>
       <div className="searchBarSection">
         <div class="searchBar">
@@ -147,20 +135,18 @@ useEffect(() => {
         </div>
         <div className="orderDisplay">
           <SellerOrderCard>
-            <div className="cardTextBlock" style={{ width: 1000 }}>
-            </div>
+            <div className="cardTextBlock" style={{ width: 1000 }}></div>
             <h1>{listing.name}</h1>
             <div className="sellerOrderCardBodyFlex">
               <div className="sellerOrderCardBodyFlex">
                 <img
                   alt="cake"
                   style={imgStyle}
-
                   src={
-              listing.imagePaths
-                ? listing.imagePaths[0]
-                : "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80"
-            }
+                    listing.imagePaths
+                      ? listing.imagePaths[0]
+                      : "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80"
+                  }
                 />
               </div>
 
@@ -171,25 +157,33 @@ useEffect(() => {
                 <br></br>
                 <br></br>
                 <Flex>
-                    <h2>Category:</h2>
-                    {!listing.listingCategory && <div className="listDetails">{listing.listingCategory}</div> }
-                    {listing.listingCategory && <div className="listDetails">{listing.listingCategory.toLowerCase()}</div> }
+                  <h2>Category:</h2>
+                  {!listing.listingCategory && (
+                    <div className="listDetails">{listing.listingCategory}</div>
+                  )}
+                  {listing.listingCategory && (
+                    <div className="listDetails">
+                      {listing.listingCategory.toLowerCase()}
+                    </div>
+                  )}
                 </Flex>
                 <Flex>
-                    <h2>Description:</h2>
-                    <div className="listDetails">{listing.description}</div>
+                  <h2>Description:</h2>
+                  <div className="listDetails">{listing.description}</div>
                 </Flex>
                 <Flex>
-                    <h2>Price:</h2>
-                    <div className="listDetails">${formatPrice(listing.price)}</div>
+                  <h2>Price:</h2>
+                  <div className="listDetails">
+                    ${formatPrice(listing.price)}
+                  </div>
                 </Flex>
                 <Flex>
-                    <h2>Max Quantity:</h2>
-                    <div className="listDetails">{listing.maxQuantity}</div>
+                  <h2>Max Quantity:</h2>
+                  <div className="listDetails">{listing.maxQuantity}</div>
                 </Flex>
                 <Flex>
-                    <h2>Preparation Days Needed:</h2>
-                    <div className="listDetails">{listing.minPrepDays}</div>
+                  <h2>Preparation Days Needed:</h2>
+                  <div className="listDetails">{listing.minPrepDays}</div>
                 </Flex>
               </div>
             </div>
@@ -198,13 +192,10 @@ useEffect(() => {
 
         <div className="orderDisplay">
           {filteredOrders.map((order) => (
-            <div
-              className="orderComp"
-
-            >
+            <div className="orderComp">
               <SellerOrderCard>
                 <div className="sellerOrderCardHeader">
-                    <h1>Order ID #{order.orderId}</h1>
+                  <h1>Order ID #{order.orderId}</h1>
                 </div>
                 <div className="sellerOrderCardBodyFlex">
                   <div className="sellerOrderCardBodyFlex"></div>
@@ -223,8 +214,11 @@ useEffect(() => {
                   </div>
                 </div>
                 <div className="sellerOrderCardBodyFlex">
-                  <div className="searchBarButton1" onClick={() => routeChangeToOrder(order.orderId)}>
-                    <h5 >Click to view order</h5>
+                  <div
+                    className="searchBarButton1"
+                    onClick={() => routeChangeToOrder(order.orderId)}
+                  >
+                    <h5>Click to view order</h5>
                   </div>
                 </div>
               </SellerOrderCard>
@@ -235,7 +229,6 @@ useEffect(() => {
     </div>
   );
 };
-
 
 const pfpStyle = {
   padding: 0.5,

@@ -1,38 +1,15 @@
-import { React, useEffect, useState } from "react";
-import Aos from "aos";
-import { toast, ToastContainer } from "react-toastify";
-import { formatDate } from "./formatter";
 import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Divider,
-  Heading,
-  Stack,
-  Text,
-  Flex,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Spacer,
   HStack,
+  Spacer
 } from "@chakra-ui/react";
+import Aos from "aos";
+import { React, useEffect, useState } from "react";
+import { FiMessageSquare, FiUserMinus, FiUserPlus } from "react-icons/fi";
 import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-  Navigate,
-  useParams,
+  useNavigate
 } from "react-router-dom";
-import { FiUserPlus, FiUserMinus, FiMessageSquare } from "react-icons/fi";
+import { toast } from "react-toastify";
+import { formatDate } from "./formatter";
 
 const Post = ({ postId, title, dateCreated, postCategory, isBuyer, categoryImage }) => {
   const navigate = useNavigate();
