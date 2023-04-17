@@ -52,8 +52,6 @@ export function ListingLikeButtonNonMemo({ buyerId, lId }) {
       console.log("reported seller!");
       toast.success(`Liked listing #${lId}.`);
       setIsListingLiked({ ...isListingLiked, [lId]: true });
-      //recolor liked button
-      document.getElementById("btn").style.backgroundColor = "black";
     } else {
       // show error message
       const errorData = await response.json();

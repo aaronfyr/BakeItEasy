@@ -2,6 +2,7 @@ import { React, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
 import { OrderListingHeader } from "../components/orderListingHeader";
+import { OrderSellerHeader } from "../components/orderSellerHeader";
 import { OrderListingImage } from "../components/orderListingImage";
 import { OrderRateButton } from "../components/orderRateButton";
 import { OrderReportButton } from "../components/orderReportButton";
@@ -349,6 +350,7 @@ function BuyerProfile() {
             </div>
             <div id="buyerOrderDetailsGrid">
               <div className="orderDetails_left">
+                <OrderSellerHeader oId={order.orderId} />
                 <OrderListingHeader oId={order.orderId} />
                 <h4 className="italic">Order ID #{order.orderId}</h4>
 

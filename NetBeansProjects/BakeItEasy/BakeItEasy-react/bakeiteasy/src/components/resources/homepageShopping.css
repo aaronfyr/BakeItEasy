@@ -144,9 +144,25 @@
     margin-bottom: 5 px;
 }
 
+.lineProductSeller {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5 px;
+  /*cuts lines off after 1 line*/
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+  
+
 .productContent {
   color: var(--dark-text);
   height: 168px;
+  display: flex;
+  flex-direction: column;
 }
 
 .productBottomRow {
@@ -171,6 +187,14 @@ h3 {
   font-weight: 600;
   font-size: 17px;
   margin-top: 5px;
+}
+
+.listingTitleOneLine {
+  /*cuts lines off after 1 line*/
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 
 .productName {

@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
+import { ListingLikeButton } from "../components/listingLikeButton";
 import "./resources/sellerProfile.css";
 import { FiHeart } from "react-icons/fi";
 import { Flex, flexbox, HStack } from "@chakra-ui/react";
@@ -313,8 +314,11 @@ function BuyerViewSellerProfile() {
           <div className="profileListingsDisplay">
             {filteredListings.map((listing) => (
               <div className="product">
-                <div class="productSeller">
-                  <h3 onClick={() => routeChangeToListing(listing.listingId)}>
+                <div class="lineProductSeller">
+                  <h3
+                    className="listingTitleOneLine"
+                    onClick={() => routeChangeToListing(listing.listingId)}
+                  >
                     {listing.name}
                   </h3>
                 </div>
@@ -333,15 +337,14 @@ function BuyerViewSellerProfile() {
                       alt="baked listing"
                     />
                   </div>
-                  <h5>{listing.description}</h5>
+                  <h5 style={{ color: "#636363" }}>{listing.description}</h5>
                 </div>
+
                 <div class="productBottomRow">
-                  <div class="btn">
-                    <FiHeart
-                      size="1.2rem"
-                      onClick={() => handleListingToLikes(listing.listingId)}
-                    />
-                  </div>
+                  <ListingLikeButton
+                    buyerId={buyerId}
+                    lId={listing.listingId}
+                  />
                   <h3>${parseFloat(listing.price).toFixed(2)}</h3>
                 </div>
               </div>
