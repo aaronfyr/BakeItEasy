@@ -1,26 +1,7 @@
+import { Flex } from "@chakra-ui/react";
 import React from "react";
+import { FaHeart, FaRegCommentAlt } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-} from "@chakra-ui/react";
-import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
 
 import "./resources/default.css";
 import "./resources/listing.css";

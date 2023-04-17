@@ -1,41 +1,22 @@
 import { React, useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-  Navigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import "./resources/navigationBar.css";
 import {
-  Avatar,
   Button,
   Flex,
-  Heading,
   HStack,
-  Tooltip,
-  IconButton,
   Menu,
   MenuButton,
-  MenuList,
   MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-  Spacer,
+  MenuList,
 } from "@chakra-ui/react";
+import "./resources/navigationBar.css";
 
-import { IconContext } from "react-icons";
-import { FaUser, FaUserCircle, FaBell } from "react-icons/fa";
-import { FiHeart, FiUser, FiBell, FiMessageSquare } from "react-icons/fi";
-import { IoLogOut } from "react-icons/io5";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { IconContext } from "react-icons";
+import { FaUserCircle } from "react-icons/fa";
+import { FiHeart, FiUser } from "react-icons/fi";
+import { IoLogOut } from "react-icons/io5";
 
 export const NavigationBar = () => {
   const [seller, setSeller] = useState(null);
@@ -165,7 +146,6 @@ export const NavigationBar = () => {
 
       <HStack spacing="7px">
         <IconContext.Provider value={{ size: "1.2rem" }}>
-
           <div className="icon-circle">
             <FiHeart onClick={() => routeToLikedListings()} />
           </div>
@@ -179,7 +159,7 @@ export const NavigationBar = () => {
               <HStack spacing="10px">
                 <FiUser />
 
-                <p style={{fontFamily: 'Montserrat'}}>{buyerName}</p>
+                <p style={{ fontFamily: "Montserrat" }}>{buyerName}</p>
               </HStack>
             </MenuButton>
 

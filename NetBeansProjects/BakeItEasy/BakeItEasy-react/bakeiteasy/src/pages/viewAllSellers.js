@@ -1,7 +1,7 @@
-import { Grid, GridItem, Box, Text } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import Seller from "../components/seller";
 import AdminMenuBar from "../components/adminMenuBar";
+import Seller from "../components/seller";
 
 function ViewAllSellers() {
   const [sellers, setSellers] = useState([]);

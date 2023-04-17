@@ -1,43 +1,30 @@
 import { React, useEffect, useState } from "react";
-import "./resources/profile.css";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
 import { OrderListingHeader } from "../components/orderListingHeader";
 import { OrderListingImage } from "../components/orderListingImage";
 import { OrderRateButton } from "../components/orderRateButton";
 import { OrderReportButton } from "../components/orderReportButton";
+import "./resources/profile.css";
 
-import { Rating } from "react-simple-star-rating";
-
-import {
-  BrowserRouter as Router,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
-  Flex,
-  Box,
   Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Spacer,
+  Flex,
   HStack,
-  VStack,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Spacer,
+  useDisclosure,
 } from "@chakra-ui/react";
-import Popup from "reactjs-popup";
+import { FaEdit, FaPhone } from "react-icons/fa";
+import { MdOutlineCancel } from "react-icons/md";
 import "reactjs-popup/dist/index.css";
-import { FaEdit, FaRegStar, FaPhone } from "react-icons/fa";
-import { MdOutlineReport, MdOutlineCancel } from "react-icons/md";
 
 function BuyerProfile() {
   const { id } = useParams();

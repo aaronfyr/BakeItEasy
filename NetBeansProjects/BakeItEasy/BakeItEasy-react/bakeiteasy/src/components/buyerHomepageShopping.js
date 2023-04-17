@@ -1,40 +1,13 @@
-import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-} from "react-router-dom";
-import "./resources/homepageShopping.css";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-  Spacer,
-  VStack,
-} from "@chakra-ui/react";
-import { toast, ToastContainer } from "react-toastify";
-import { FiHeart, FiGlobe, FiUsers, FiArrowRight } from "react-icons/fi";
+import { Flex, HStack } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { FiArrowRight, FiGlobe, FiUsers } from "react-icons/fi";
 import ReactLoading from "react-loading";
-import { ListingSellerHeader } from "./listingSellerHeader";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { formatDate, formatPrice } from "./formatter";
 import { ListingLikeButton } from "./listingLikeButton";
-import { formatPrice, formatDate } from "./formatter";
+import { ListingSellerHeader } from "./listingSellerHeader";
+import "./resources/homepageShopping.css";
 
 export const BuyerShopping = () => {
   let navigate = useNavigate();

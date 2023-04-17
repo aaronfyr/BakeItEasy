@@ -1,37 +1,7 @@
-import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import "./resources/homepageShopping.css";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-} from "@chakra-ui/react";
-import { toast, ToastContainer } from "react-toastify";
-import { FiHeart, FiGlobe, FiUsers } from "react-icons/fi";
-import { FaMitten } from "react-icons/fa";
-import ReactLoading from "react-loading";
-import { ListingSellerHeader } from "./listingSellerHeader";
 
 import SellerCard from "../components/sellerCard";
 

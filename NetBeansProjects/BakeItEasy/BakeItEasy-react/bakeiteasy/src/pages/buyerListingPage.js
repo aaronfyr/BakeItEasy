@@ -30,8 +30,8 @@ import "./resources/listing.css";
 
 import { NavigationBar } from "../components/buyerNavigationBar";
 import { formatDate, formatPrice } from "../components/formatter";
-import { Slideshow } from "../components/slideshow";
 import { ListingSellerHeader } from "../components/listingSellerHeader";
+import { Slideshow } from "../components/slideshow";
 
 function BuyerListingPage() {
   const { id } = useParams();

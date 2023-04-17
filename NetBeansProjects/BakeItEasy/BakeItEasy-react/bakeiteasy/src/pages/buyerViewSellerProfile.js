@@ -1,19 +1,11 @@
 import { React, useEffect, useState } from "react";
-import "./resources/sellerProfile.css";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
+import "./resources/sellerProfile.css";
 
+import { Flex } from "@chakra-ui/react";
 import { FiHeart } from "react-icons/fi";
-import { Flex, flexbox } from "@chakra-ui/react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-  Navigate,
-  useParams,
-} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function BuyerViewSellerProfile() {
   const { id } = useParams();

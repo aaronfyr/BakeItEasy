@@ -1,13 +1,13 @@
 import {
+  Box,
+  Button,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
-  Button,
-  Box,
-  FormErrorMessage,
 } from "@chakra-ui/react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ResetPassword() {
   const params = new URLSearchParams(useLocation().search);
@@ -82,9 +82,12 @@ function ResetPassword() {
             required
           />
           <FormLabel>Password</FormLabel>
-
         </FormControl>
-        <FormControl mt={4} variant="floating"  isInvalid={password !== confirmPassword}>
+        <FormControl
+          mt={4}
+          variant="floating"
+          isInvalid={password !== confirmPassword}
+        >
           <Input
             type="password"
             placeholder=" "

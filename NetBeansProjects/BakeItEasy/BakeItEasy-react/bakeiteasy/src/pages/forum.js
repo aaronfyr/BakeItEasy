@@ -1,42 +1,13 @@
-import { color } from "framer-motion";
-import React, { useState, useEffect } from "react";
-import Aos from "aos";
+import { Flex, HStack } from "@chakra-ui/react";
 import "aos/dist/aos.css";
-import "./resources/forum.css";
-import SellerOrderCard from "./sellerOrderCard.js";
-import CategoryDropdown from "../components/categoryDropdown";
-import { SellerNavigationBar } from "../components/sellerNavigationBar";
+import React, { useEffect, useState } from "react";
+import { FiPlus, FiUsers } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
-import { FaComments } from "react-icons/fa";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-} from "@chakra-ui/react";
-import { toast, ToastContainer } from "react-toastify";
-import { FiHeart, FiGlobe, FiUsers, FiPlus } from "react-icons/fi";
-import ReactLoading from "react-loading";
-import {
-  BrowserRouter as Router,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
 import Post from "../components/post";
+import { SellerNavigationBar } from "../components/sellerNavigationBar";
+import "./resources/forum.css";
 
 const Forum = () => {
   let navigate = useNavigate();

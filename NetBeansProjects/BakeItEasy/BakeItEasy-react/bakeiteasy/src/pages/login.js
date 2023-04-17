@@ -1,14 +1,14 @@
 import {
+  Box,
+  Button,
   FormControl,
   FormLabel,
-  Input,
-  Button,
-  Box,
-  Text,
   Image,
+  Input,
+  Text,
 } from "@chakra-ui/react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState, useContext, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./resources/login.css";
@@ -39,33 +39,32 @@ function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-const response = await fetch(
-  `http://localhost:8080/BakeItEasy-war/webresources/${
-    type === "seller" ? "sellers" : "buyers"
-  }/${email}/${password}`,
-  {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }
-);
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/${
+        type === "seller" ? "sellers" : "buyers"
+      }/${email}/${password}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-if (response.ok) {
-  setIsLoading(false);
-  const user = await response.json();
-  if (type === "seller") {
-    localStorage.setItem("seller", JSON.stringify(user));
-    navigate(`/sellerProfile`);
-  } else {
-    localStorage.setItem("buyer", JSON.stringify(user));
-    navigate(`/`);
-  }
-} else {
-  const errorData = await response.json();
-  toast.error(errorData.error);
-}
-
+    if (response.ok) {
+      setIsLoading(false);
+      const user = await response.json();
+      if (type === "seller") {
+        localStorage.setItem("seller", JSON.stringify(user));
+        navigate(`/sellerProfile`);
+      } else {
+        localStorage.setItem("buyer", JSON.stringify(user));
+        navigate(`/`);
+      }
+    } else {
+      const errorData = await response.json();
+      toast.error(errorData.error);
+    }
   };
 
   /*

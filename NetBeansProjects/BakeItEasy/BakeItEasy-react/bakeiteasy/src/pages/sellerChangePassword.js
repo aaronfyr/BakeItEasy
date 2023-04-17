@@ -1,14 +1,11 @@
-import { Flex, Button } from "@chakra-ui/react";
+import { Button, Flex, HStack } from "@chakra-ui/react";
 import { React, useEffect, useState } from "react";
+import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
 import "./resources/default.css";
 import "./resources/listing.css";
-import { FaArrowLeft } from "react-icons/fa";
-import { HStack } from "@chakra-ui/react";
-
-import { NavigationBar } from "../components/buyerNavigationBar";
 
 function SellerChangePassword() {
   const { id } = useParams();
@@ -23,7 +20,6 @@ function SellerChangePassword() {
   const [cfmPw, setCfmPw] = useState("");
 
   let navigate = useNavigate();
-
 
   useEffect(() => {
     async function fetchData() {
@@ -49,50 +45,46 @@ function SellerChangePassword() {
     fetchData();
   }, []);
 
-
-
   //edit seller
- const handleChangePassword = async () => {
-  setIsEditable(false);
+  const handleChangePassword = async () => {
+    setIsEditable(false);
 
-  console.log("seller ID is", sellerId);
+    console.log("seller ID is", sellerId);
     console.log("seller current password entered is", currentPw);
     console.log("seller NEW pw", newPw);
-    console.log("seller CFM pw", cfmPw)
+    console.log("seller CFM pw", cfmPw);
 
+    try {
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/changePassword?currentPassword=${currentPw}&newPassword=${newPw}&confirmPassword=${cfmPw}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  try {
-    const response = await fetch(
-      `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/changePassword?currentPassword=${currentPw}&newPassword=${newPw}&confirmPassword=${cfmPw}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      if (!response.ok) {
+        const errorData = await response.json();
+        toast.error(errorData.error);
+        toast.loading("refreshing...");
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 2500);
+        throw new Error("Failed to change password");
+      } else {
+        toast.success("Password updated successfully.");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      toast.error(errorData.error);
-      toast.loading("refreshing...");
-
-      setTimeout(() => {
-        window.location.reload();
-      }, 2500);
-      throw new Error("Failed to change password");
-    } else {
-      toast.success("Password updated successfully.");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      console.log("pretoast");
+    } catch (error) {
+      /*handle error */
     }
-    console.log("pretoast");
-  } catch (error) {
-    /*handle error */
-  }
-};
-
+  };
 
   return (
     <div>
@@ -101,47 +93,54 @@ function SellerChangePassword() {
       <ToastContainer />
 
       <div style={{ display: "flex" }}>
-
         <div style={{ width: 400, height: 300 }}>
-            <div className="button1" style={{width:250}}onClick={() => (window.history.back())}>
-          <FaArrowLeft />
-          <HStack width={3}/>
-          Back to edit profile
-        </div>
+          <div
+            className="button1"
+            style={{ width: 250 }}
+            onClick={() => window.history.back()}
+          >
+            <FaArrowLeft />
+            <HStack width={3} />
+            Back to edit profile
+          </div>
         </div>
 
-        <div id="rightListingContainer" style={{marginLeft: 100}}>
+        <div id="rightListingContainer" style={{ marginLeft: 100 }}>
           <h1>Change password</h1>
-            <br/>
-        <h3 className="listingH4">Current password:</h3>
-             <input
-              type="password"
-              className="inputStyle"
-              onChange={(e) => setCurrentPw(e.target.value)}
-            />
+          <br />
+          <h3 className="listingH4">Current password:</h3>
+          <input
+            type="password"
+            className="inputStyle"
+            onChange={(e) => setCurrentPw(e.target.value)}
+          />
 
           <h3 className="listingH4">New password:</h3>
 
-            <input
-              type="password"
-              className="inputStyle"
-              onChange={(e) => setNewPw(e.target.value)}
-            />
+          <input
+            type="password"
+            className="inputStyle"
+            onChange={(e) => setNewPw(e.target.value)}
+          />
 
           <h3 className="listingH4">Confirm password:</h3>
-             <input
-              type="password"
-              className="inputStyle"
-              onChange={(e) => setCfmPw(e.target.value)}
-            />
-
-
+          <input
+            type="password"
+            className="inputStyle"
+            onChange={(e) => setCfmPw(e.target.value)}
+          />
 
           <div style={{ height: 10 }}></div>
           <Flex>
-                <Button bg="#E2725B" colorScheme="white" isDisabled={!isEditable} onClick={handleChangePassword}  w="400px">
-                Confirm
-              </Button>
+            <Button
+              bg="#E2725B"
+              colorScheme="white"
+              isDisabled={!isEditable}
+              onClick={handleChangePassword}
+              w="400px"
+            >
+              Confirm
+            </Button>
           </Flex>
           <div style={{ height: 10 }}></div>
 

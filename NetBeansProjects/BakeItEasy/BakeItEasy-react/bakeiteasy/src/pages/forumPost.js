@@ -1,20 +1,14 @@
-import { color } from "framer-motion";
-import React, { useState, useEffect } from "react";
-import "./resources/sellerViewFollowers.css";
-import { SellerNavigationBar } from "../components/sellerNavigationBar";
-import { NavigationBar } from "../components/buyerNavigationBar";
-import { FaRegEdit, FaComment } from "react-icons/fa";
-import { MdOutlineCancel } from "react-icons/md";
-import { formatDate } from "../components/formatter";
-import Comment from "../components/comment";
-import { toast, ToastContainer } from "react-toastify";
 import { Flex } from "@chakra-ui/react";
-import {
-  BrowserRouter as Router,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
-import Popup from "reactjs-popup";
+import React, { useEffect, useState } from "react";
+import { FaComment, FaRegEdit } from "react-icons/fa";
+import { MdOutlineCancel } from "react-icons/md";
+import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { NavigationBar } from "../components/buyerNavigationBar";
+import Comment from "../components/comment";
+import { formatDate } from "../components/formatter";
+import { SellerNavigationBar } from "../components/sellerNavigationBar";
+import "./resources/sellerViewFollowers.css";
 
 /*const orderResponse = await fetch(``)*/
 

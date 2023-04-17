@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AdminMenuBar from "../components/adminMenuBar";
 import AdminEditDetails from "../components/adminEditDetails";
+import AdminMenuBar from "../components/adminMenuBar";
 import "./resources/default.css";
 
 function AdminProfilePage() {

@@ -1,35 +1,7 @@
-import React, { useState, memo } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-  Navigate,
-  useParams,
-} from "react-router-dom";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-  Spacer,
-} from "@chakra-ui/react";
+import { HStack } from "@chakra-ui/react";
+import React, { memo, useState } from "react";
 import ReactLoading from "react-loading";
+import { useNavigate } from "react-router-dom";
 
 export function ListingSellerHeaderNonMemo({ lId }) {
   const navigate = useNavigate();

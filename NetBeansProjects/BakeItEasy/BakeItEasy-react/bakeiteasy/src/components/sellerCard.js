@@ -1,37 +1,9 @@
-import { React, useEffect, useState } from "react";
+import { Flex, HStack } from "@chakra-ui/react";
 import Aos from "aos";
-import { toast, ToastContainer } from "react-toastify";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Divider,
-  Heading,
-  Stack,
-  Text,
-  Flex,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Spacer,
-  HStack,
-} from "@chakra-ui/react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-  Navigate,
-  useParams,
-} from "react-router-dom";
-import { FiUserPlus, FiUserMinus, FiMessageSquare } from "react-icons/fi";
+import { React, useEffect, useState } from "react";
+import { FiUserMinus, FiUserPlus } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Seller = ({ sellerId, name, username, profilePhoto }) => {
   const navigate = useNavigate();
