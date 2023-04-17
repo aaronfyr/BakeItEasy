@@ -1,23 +1,22 @@
 import {
+  Box,
+  Button,
+  Flex,
   Grid,
   GridItem,
-  Box,
-  Text,
-  Flex,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
-  useDisclosure,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spacer,
-  Button,
+  Text,
+  useDisclosure
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import Report from "../components/report";
 import AdminMenuBar from "../components/adminMenuBar";
+import Report from "../components/report";
 
 import { ToastContainer, toast } from "react-toastify";
 
@@ -137,6 +136,27 @@ function ViewAllReports() {
     }
   };
 
+
+  const handleDismissReport = async (report) => {
+    console.log("handleDismissReport:", report.reportId);
+    const response = await fetch(
+      `http://localhost:8080/BakeItEasy-war/webresources/reports/${report.reportId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.ok) {
+      toast.success("Report dismissed.");
+      window.location.reload();
+    } else {
+      const errorData = await response.json();
+      toast.error(errorData.error);
+    }
+  };
   /*
   const handleBan = async (reportedUser) => {
     console.log("handleban:", reportedUser);
@@ -312,6 +332,7 @@ function ViewAllReports() {
                 reason={report.reason}
                 onBan={handleBanSeller}
                 onUnban={handleUnbanSeller}
+                onDismiss={handleDismissReport}
               />
             </GridItem>
           ))}

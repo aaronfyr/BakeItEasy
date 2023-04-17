@@ -1,4 +1,3 @@
-import { React, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -8,19 +7,10 @@ import {
   Heading,
   Stack,
   Text,
-  Flex,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Spacer,
 } from "@chakra-ui/react";
+import { React, useEffect, useState } from "react";
 
-const Report = ({ reportId, title, reason, onBan, onUnban }) => {
+const Report = ({ reportId, title, reason, onBan, onUnban, onDismiss }) => {
   console.log(reportId);
 
   // fetch reporter
@@ -76,16 +66,6 @@ const Report = ({ reportId, title, reason, onBan, onUnban }) => {
       });
   }, [reporteeIsBanned]);
 
-  const handleBanClick = async (event) => {
-    event.preventDefault();
-    const confirmed = window.confirm("Are you sure you want to ban this user?");
-    if (!confirmed) {
-      return;
-    }
-    setReporteeIsBanned(true);
-    await onBan(reportee);
-  };
-
   const handleBan = async (event) => {
     event.preventDefault();
 
@@ -109,6 +89,18 @@ const Report = ({ reportId, title, reason, onBan, onUnban }) => {
       return;
     }
     onUnban({ reportId, title, reason, reporter, reportee });
+  };
+
+  const handleDismiss = async (event) => {
+    event.preventDefault();
+
+    const confirmed = window.confirm(
+      "Are you sure you want to dismiss this report?"
+    );
+    if (!confirmed) {
+      return;
+    }
+    onDismiss({ reportId, title, reason, reporter, reportee });
   };
 
   return (
@@ -153,15 +145,38 @@ const Report = ({ reportId, title, reason, onBan, onUnban }) => {
             </div>
             <Text>{reporteeUsername}</Text>
           </div>
-          {reporteeIsBanned ? (
-            <Button bg="#E2725B" colorScheme="white" onClick={handleUnban}>
-              Unban
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            {reporteeIsBanned ? (
+              <Button
+                bg="#E2725B"
+                colorScheme="white"
+                onClick={handleUnban}
+                flex="1"
+                marginRight="2"
+              >
+                Unban
+              </Button>
+            ) : (
+              <Button
+                bg="#E2725B"
+                colorScheme="white"
+                onClick={handleBan}
+                flex="1"
+                marginRight="2"
+              >
+                Ban
+              </Button>
+            )}
+
+            <Button
+              bg="#E2725B"
+              colorScheme="white"
+              onClick={handleDismiss}
+              flex="1"
+            >
+              Dismiss
             </Button>
-          ) : (
-            <Button bg="#E2725B" colorScheme="white" onClick={handleBan}>
-              Ban
-            </Button>
-          )}
+          </div>
         </Stack>
       </CardBody>
 
