@@ -15,9 +15,11 @@ import error.exception.BuyerIsNotFollowingSellerException;
 import error.exception.BuyerNotFoundException;
 import error.exception.BuyerPhoneNumberExistException;
 import error.exception.BuyerUsernameExistException;
+import error.exception.CurrentPasswordDoesNotMatchException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
 import error.exception.ListingNotFoundException;
+import error.exception.NewAndConfirmPasswordsDoNotMatchException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
@@ -38,8 +40,6 @@ public interface BuyerSessionBeanLocal {
 
     public List<Buyer> searchBuyersByName(String name);
 
-    public void editBuyer(Buyer buyer) throws BuyerNotFoundException;
-
     public void deleteBuyer(Long buyerId) throws BuyerNotFoundException;
 
     public Buyer buyerLogin(String email, String password) throws InvalidLoginCredentialException, BuyerNotFoundException, BuyerIsBannedException;
@@ -59,5 +59,7 @@ public interface BuyerSessionBeanLocal {
     public void followSellerThroughProfile(Long buyerId, Long sellerId) throws SellerNotFoundException, BuyerNotFoundException, BuyerIsFollowingSellerAlreadyException;
 
     public void unfollowSellerThroughProfile(Long buyerId, Long sellerId) throws SellerNotFoundException, BuyerNotFoundException, BuyerIsNotFollowingSellerException;
+
+    public void updateBuyerPassword(Long buyerId, String currentPassword, String newPassword, String confirmPassword) throws BuyerNotFoundException, NewAndConfirmPasswordsDoNotMatchException, CurrentPasswordDoesNotMatchException, InputDataValidationException;
 
 }
