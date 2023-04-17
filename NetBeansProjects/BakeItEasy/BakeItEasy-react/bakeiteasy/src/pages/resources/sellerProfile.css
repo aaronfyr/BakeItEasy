@@ -179,6 +179,7 @@ h5 {
     border-width: 1px;
     padding: 0px 20px 0px 20px;
     margin: 0px 20px 0px 0px;
+    cursor: pointer;
 }
 
 .category:hover {
@@ -234,7 +235,7 @@ img.productImg {
     display: flex;
     width:100%;
     flex-wrap: wrap;
-    height: 370px;
+    height: 100%;
     overflow-x: hidden;
     justify-content: center;
     /*delete this if not necessary*/

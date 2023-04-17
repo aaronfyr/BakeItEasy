@@ -167,6 +167,7 @@ function SellerProfile(props) {
     <div>
       <ToastContainer />
       <SellerNavigationBar />
+      <br />
       <div id="coverPhoto">
         <div id="profilePhoto">
           <img
