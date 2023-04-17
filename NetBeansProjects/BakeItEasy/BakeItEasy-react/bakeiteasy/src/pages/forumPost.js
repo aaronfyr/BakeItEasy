@@ -230,7 +230,7 @@ function ForumPost() {
           toast.success("buyer comment created! refreshing...");
           setTimeout(() => {
             window.location.reload();
-          }, 3000);
+          }, 1000);
         }
       });
     } catch (error) {
@@ -260,7 +260,7 @@ function ForumPost() {
             toast.success("seller comment created! refreshing...");
             setTimeout(() => {
               window.location.reload();
-            }, 3000);
+            }, 1000);
           }
         });
       } catch (error) {
@@ -282,14 +282,14 @@ function ForumPost() {
           setDeleteFailed(true);
           setTimeout(() => {
             setDeleteFailed(false);
-          }, 3000); // 1000 milliseconds = 1 second
+          }, 2000); // 1000 milliseconds = 1 second
         } else {
           console.log("response ok");
 
           toast.success("Post deleted successfully! Redirecting...");
           setTimeout(() => {
             routeChangeToForum();
-          }, 3000); // 1000 milliseconds = 1 second
+          }, 1000); // 1000 milliseconds = 1 second
         }
         return response.json();
       })

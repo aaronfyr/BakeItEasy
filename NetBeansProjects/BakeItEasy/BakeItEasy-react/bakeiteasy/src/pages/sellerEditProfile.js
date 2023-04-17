@@ -123,7 +123,7 @@ function SellerEditProfile() {
 
       setTimeout(() => {
         window.location.reload();
-      }, 3000);
+      }, 2000);
       throw new Error("Failed to update seller");
     } else {
       console.log("ok response");
