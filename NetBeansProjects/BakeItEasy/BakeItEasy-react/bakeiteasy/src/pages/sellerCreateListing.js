@@ -272,7 +272,7 @@ const handlePriceChange = (e) => {
                 <form className="form2" onSubmit={handleSubmit}>
       <label>
         Name:
-        <input type="text" name="name" value={listing.name} onChange={handleChange} />
+        <input type="text" name="name" style={{width:320}}value={listing.name} onChange={handleChange} />
       </label>
       <label>
         Category:
@@ -291,6 +291,7 @@ const handlePriceChange = (e) => {
       <input
         type="text"
         name="price"
+        style={{width:320}}
         value={listing.price}
         onChange={handlePriceChange}
       />
@@ -310,7 +311,7 @@ const handlePriceChange = (e) => {
 
       <label>
         Description:
-        <input type="text" name="description" value={listing.description} onChange={handleChange} />
+        <input type="text" name="description" style={{width:320}} value={listing.description} onChange={handleChange} />
       </label>
 
       <label>
@@ -326,10 +327,10 @@ const handlePriceChange = (e) => {
         </label>
 
         <div >
-            <input style={{height: 40}} type="file" id="image" name="image" onChange={(e) => setImage(e.target.files[0])}/>
+            <input style={{height: 40, width:320}} type="file" id="image" name="image" onChange={(e) => setImage(e.target.files[0])}/>
         </div>
 
-        <Button bg="#E2725B" colorScheme="white" type="submit"  w="300px">
+        <Button bg="#E2725B" colorScheme="white" type="submit"  w="320px">
                 Create Listing
               </Button>
     </form>
