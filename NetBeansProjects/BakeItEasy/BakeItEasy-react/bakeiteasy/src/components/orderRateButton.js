@@ -14,6 +14,7 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 import { FaRegStar } from "react-icons/fa";
+import { FiCheck } from "react-icons/fi";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 
@@ -100,6 +101,16 @@ export function OrderRateButtonNonMemo({ oId, orderStatus }) {
   if (ordersChecked[oId]) {
     return (
       <>
+        {isOrderReviewed[oId] && orderStatus === "COMPLETED" && (
+          <Flex>
+            <div className="button1_reviewed">
+              <HStack spacing="8px">
+                <FiCheck size="1.2rem" />
+                <div>Reviewed</div>
+              </HStack>
+            </div>
+          </Flex>
+        )}
         <Popup
           trigger={
             <Flex>

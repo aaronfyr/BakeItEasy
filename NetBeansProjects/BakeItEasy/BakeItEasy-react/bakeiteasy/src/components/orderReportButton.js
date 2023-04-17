@@ -12,6 +12,7 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 import { MdOutlineReport } from "react-icons/md";
+import { FiCheck } from "react-icons/fi";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 
@@ -123,6 +124,15 @@ export function OrderReportButtonNonMemo({ buyerId, oId, orderStatus }) {
   if (ordersChecked[oId]) {
     return (
       <>
+        {isOrderReviewed[oId] && orderStatus === "COMPLETED" && (
+          <Flex>
+            <div className="button1_reported">
+              <HStack spacing="8px">
+                <FiCheck size="1.2rem" /> <div>Seller Reported</div>
+              </HStack>
+            </div>
+          </Flex>
+        )}
         <Popup
           trigger={
             <Flex>

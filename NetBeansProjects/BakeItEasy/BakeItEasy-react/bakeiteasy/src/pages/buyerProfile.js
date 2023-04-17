@@ -362,7 +362,21 @@ function BuyerProfile() {
               </div>
               <div>
                 <h4 className="italic">Status:</h4>
-                <h2>{order.orderStatus}</h2>
+                {order.orderStatus === "COMPLETED" && (
+                  <h2 className="COMPLETED">{order.orderStatus}</h2>
+                )}
+                {order.orderStatus === "REJECTED" && (
+                  <h2 className="REJECTED">{order.orderStatus}</h2>
+                )}
+                {order.orderStatus === "PENDING" && (
+                  <h2 className="PENDING">{order.orderStatus}</h2>
+                )}
+                {order.orderStatus === "CANCELLED" && (
+                  <h2 className="CANCELLED">{order.orderStatus}</h2>
+                )}
+                {order.orderStatus === "ACCEPTED" && (
+                  <h2 className="ACCEPTED">{order.orderStatus}</h2>
+                )}
                 {/* <h4 className="italic">Price:</h4> */}
                 <h4 className="details">
                   Quantity: {order.quantity} <br />

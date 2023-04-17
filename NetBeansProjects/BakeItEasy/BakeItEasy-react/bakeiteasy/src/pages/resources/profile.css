@@ -386,6 +386,32 @@ h4 {
   cursor: pointer;
 }
 
+.button1_reviewed {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  color: #d1a000;
+  padding: 0px 5px 0px 0px;
+  margin: 10px 20px 0px 0px;
+  cursor: pointer;
+}
+
+.button1_reported {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  color: #d13b00;
+  padding: 0px 5px 0px 0px;
+  margin: 10px 20px 0px 0px;
+  cursor: pointer;
+}
+
 .button1_report:hover {
   display: flex;
   align-items: center;
@@ -498,4 +524,20 @@ svg.star-svg {
 
 .pointerButton {
   cursor: pointer;
+}
+
+.CANCELLED {
+  color: var(--light-text);
+}
+
+.COMPLETED {
+  color: #64b476;
+}
+
+.PENDING {
+  color: #507659;
+}
+
+.REJECTED {
+  color: #7e3232;
 }
