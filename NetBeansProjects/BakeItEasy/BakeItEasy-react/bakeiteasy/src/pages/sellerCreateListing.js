@@ -200,8 +200,6 @@ function validateListing(listing) {
         console.log("LISTING after setlisting in 1st fetch", listing)
         console.log("image path of listings state is", listing.imagePaths[0]);
         toast.dismiss();
-        toast.success("image uploaded");
-
         // check if imagePaths[0] is not empty before executing second fetch
         if (listing.imagePaths[0] !== "") {
         // Create the listing after image upload
