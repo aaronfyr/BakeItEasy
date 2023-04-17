@@ -96,16 +96,19 @@ function BuyerEditAccount() {
       }
     );
     if (!response.ok) {
-      const errorData = await response.json();
-      toast.error(errorData.error);
-      setTimeout(() => {
+       const errorData = await response.json();
+        toast.error(errorData.error + ", refreshing...", {autoClose: 2500});
+        setTimeout(() => {
         window.location.reload();
-      }, 2000);
+      }, 2500);
     } else {
       console.log(buyerObj);
 
       localStorage.setItem("buyer", JSON.stringify(buyerObj));
       toast.success("Profile updated successfully.");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     }
   };
 
@@ -269,7 +272,7 @@ function BuyerEditAccount() {
           ) : (
             <h2>{buyerObj.phoneNo}</h2>
           )}
-          <h3>Address:</h3>
+          <h3 className="listingH3">Address:</h3>
           {isEditable ? (
             <input
               type="text"
