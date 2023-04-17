@@ -282,14 +282,14 @@ function ForumPost() {
           setDeleteFailed(true);
           setTimeout(() => {
             setDeleteFailed(false);
-          }, 5000); // 1000 milliseconds = 1 second
+          }, 3000); // 1000 milliseconds = 1 second
         } else {
           console.log("response ok");
 
           toast.success("Post deleted successfully! Redirecting...");
           setTimeout(() => {
             routeChangeToForum();
-          }, 1000); // 1000 milliseconds = 1 second
+          }, 3000); // 1000 milliseconds = 1 second
         }
         return response.json();
       })
