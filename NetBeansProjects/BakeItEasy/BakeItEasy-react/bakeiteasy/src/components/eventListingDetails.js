@@ -6,7 +6,7 @@ export function EventListingDetails({ oId }) {
 
   console.log("oid: ", oId);
   const [buyer, setBuyer] = useState(null);
-  const [buyerName, setBuyerName] = useState(null);
+  const [buyerUsername, setBuyerUsername] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,7 +22,7 @@ export function EventListingDetails({ oId }) {
         );
         const data = await response.json();
         setBuyer(data);
-        setBuyerName(data.username);
+        setBuyerUsername(data.username);
         console.log(`HTTP Response Code: ${response?.status}`);
       } catch (error) {
         if (error instanceof SyntaxError) {
@@ -36,6 +36,7 @@ export function EventListingDetails({ oId }) {
 
   // fetch listing
   const [listing, setListing] = useState(null);
+  const [listingStatus, setListingStatus] = useState(null);
   const [listingName, setListingName] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
@@ -66,8 +67,11 @@ export function EventListingDetails({ oId }) {
 
   return (
     <>
-      <p>Buyer: {buyerName}</p>
-      <p>Listing Name: {listingName}</p>
+      <br />
+      <h3>Buyer:</h3>
+      <h1>@{buyerUsername}</h1>
+      <h3>For listing:</h3>
+      <h1>{listingName}</h1>
     </>
   );
 }

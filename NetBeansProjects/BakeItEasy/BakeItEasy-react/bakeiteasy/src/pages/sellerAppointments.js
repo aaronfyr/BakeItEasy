@@ -17,6 +17,8 @@ import {
   FormControl,
   FormLabel,
   Input,
+  HStack,
+  Spacer,
 } from "@chakra-ui/react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
@@ -56,9 +58,18 @@ function SellerAppointments() {
   }, []);
 
   return (
-    <div className="background">
+    <div>
       <SellerNavigationBar />
-      <SellerCalendar />
+      <br />
+      <div className="calendarContainer">
+        <HStack>
+          <Spacer />
+          <h1>Appointments</h1>
+          <br />
+          <Spacer />
+        </HStack>
+        <SellerCalendar />
+      </div>
     </div>
   );
 }

@@ -340,6 +340,7 @@ function BuyerExploreShopping() {
               <div
                 className="category"
                 onClick={() => handleFilterByCateory(category.name)}
+                key={category.name}
               >
                 {category.name}
               </div>
@@ -380,7 +381,7 @@ function BuyerExploreShopping() {
             return product;
           })
           .map((product) => (
-            <div className="homepageProduct">
+            <div className="homepageProduct" key={product.listingId}>
               <div class="productSeller" key={product.listingId}>
                 <ListingSellerHeader lId={product.listingId} />
               </div>

@@ -341,6 +341,7 @@ function BuyerFollowedShopping() {
               <div
                 className="category"
                 onClick={() => handleFilterByCateory(category.name)}
+                key={category.name}
               >
                 {category.name}
               </div>
@@ -381,7 +382,7 @@ function BuyerFollowedShopping() {
             return product;
           })
           .map((product) => (
-            <div className="homepageProduct">
+            <div className="homepageProduct" key={product.listingId}>
               <div class="productSeller">
                 <ListingSellerHeader lId={product.listingId} />
               </div>
