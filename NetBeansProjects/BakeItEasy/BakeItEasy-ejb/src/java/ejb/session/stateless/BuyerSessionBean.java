@@ -210,6 +210,7 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
                 buyerToUpdate.setName(updatedBuyer.getName());
                 buyerToUpdate.setPassword(updatedBuyer.getPassword());
                 buyerToUpdate.setImagePath(updatedBuyer.getImagePath());
+                buyerToUpdate.setAddress(updatedBuyer.getAddress());
             } else if (!buyerToUpdate.getPhoneNo().equals(updatedBuyer.getPhoneNo())
                     && buyerToUpdate.getUsername().equals(updatedBuyer.getUsername())) { // phone change, username same
                 if (isPhoneNumberAvailable(updatedBuyer.getPhoneNo())) {
@@ -217,6 +218,7 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
                     buyerToUpdate.setPassword(updatedBuyer.getPassword());
                     buyerToUpdate.setPhoneNo(updatedBuyer.getPhoneNo());
                     buyerToUpdate.setImagePath(updatedBuyer.getImagePath());
+                    buyerToUpdate.setAddress(updatedBuyer.getAddress());
                 } else {
                     throw new BuyerPhoneNumberExistException("New phone number provided exist!");
                 }
@@ -227,6 +229,7 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
                     buyerToUpdate.setPassword(updatedBuyer.getPassword());
                     buyerToUpdate.setUsername(updatedBuyer.getUsername());
                     buyerToUpdate.setImagePath(updatedBuyer.getImagePath());
+                    buyerToUpdate.setAddress(updatedBuyer.getAddress());
                 } else {
                     throw new BuyerUsernameExistException("New username provided exist!");
                 }
@@ -239,6 +242,7 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
                         buyerToUpdate.setPhoneNo(updatedBuyer.getPhoneNo());
                         buyerToUpdate.setUsername(updatedBuyer.getUsername());
                         buyerToUpdate.setImagePath(updatedBuyer.getImagePath());
+                        buyerToUpdate.setAddress(updatedBuyer.getAddress());
                     } else {
                         throw new BuyerUsernameExistException("New username provided exist!");
                     }
