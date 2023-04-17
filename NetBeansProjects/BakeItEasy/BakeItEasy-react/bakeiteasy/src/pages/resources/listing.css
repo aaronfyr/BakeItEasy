@@ -47,6 +47,12 @@ h2 {
     font-weight: bolder;
 }
 
+.listingH4 {
+    font-size: 20px;
+    font-family: 'Montserrat';
+    font-weight: lighter;
+}
+
 .listingLabel h3 {
     font-size: 20px;
 }

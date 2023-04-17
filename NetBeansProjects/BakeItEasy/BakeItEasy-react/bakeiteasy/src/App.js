@@ -48,6 +48,8 @@ import ForumPost from "./pages/forumPost";
 import ForumCreatePost from "./pages/forumCreatePost";
 import ForumEditPost from "./pages/forumEditPost";
 
+import SellerChangePassword from "./pages/sellerChangePassword";
+
 function App() {
   return (
     <ChakraProvider theme={theme}>
@@ -120,6 +122,8 @@ function App() {
                 <Route path="/forum/post/:id" element={<ForumPost />} />
                 <Route path="/forum/createPost" element={<ForumCreatePost />} />
                 <Route path="/forum/editPost/:id" element={<ForumEditPost />} />
+
+                <Route path="/sellerChangePassword" element={<SellerChangePassword />} />
               </Routes>
             </Router>
           </AdminProvider>
