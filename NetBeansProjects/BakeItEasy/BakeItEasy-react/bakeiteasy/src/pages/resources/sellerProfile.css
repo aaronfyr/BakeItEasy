@@ -184,6 +184,7 @@ h5 {
 .category:hover {
     background: var(--dark-text);
     color: white;
+    cursor: pointer;
 }
 
 img {}
