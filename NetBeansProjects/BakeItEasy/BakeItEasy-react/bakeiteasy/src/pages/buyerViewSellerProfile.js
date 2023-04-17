@@ -1,8 +1,7 @@
 import { React, useEffect, useState } from "react";
-import "./resources/sellerProfile.css";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { NavigationBar } from "../components/buyerNavigationBar";
-
+import "./resources/sellerProfile.css";
 import { FiHeart } from "react-icons/fi";
 import { Flex, flexbox, HStack } from "@chakra-ui/react";
 import {

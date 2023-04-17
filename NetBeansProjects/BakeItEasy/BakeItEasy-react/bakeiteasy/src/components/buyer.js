@@ -4,11 +4,9 @@ import {
   CardBody,
   CardFooter,
   Divider,
-  Heading,
   Stack,
   Text,
 } from "@chakra-ui/react";
-
 
 const Buyer = ({
   buyerId,
@@ -52,7 +50,7 @@ const Buyer = ({
             <img
               className="homepageProfilePhotoImg"
               src={imagePath}
-              alt="Profile Image"
+              alt="Profile"
             />
           </div>
           <Text>

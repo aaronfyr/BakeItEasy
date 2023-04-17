@@ -1,35 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { Button, HStack } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
-import {toast, ToastContainer} from "react-toastify";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-} from "@chakra-ui/react";
-import {
-  FaRegCommentAlt,
-  FaHeart,
-  FaCheck,
-  FaTimes,
-  FaRegStar,
-  FaArrowLeft
-} from "react-icons/fa";
 
 import "./resources/default.css";
 import "./resources/sellerViewOrder.css";
@@ -41,19 +15,19 @@ function SellerCreateListing() {
   const [isEditable, setIsEditable] = useState(false);
   const [image, setImage] = useState("");
   const [listing, setListing] = useState({
-    name: '',
-    listingCategory: '',
-    price: 0.00,
+    name: "",
+    listingCategory: "",
+    price: 0.0,
     maxQuantity: -1,
-    description: '',
+    description: "",
     imagePaths: [],
-    minPrepDays: -1
+    minPrepDays: -1,
   });
   const [created, setCreated] = useState(false);
 
   const navigate = useNavigate();
 
-useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       const fetchedSeller = localStorage.getItem("seller");
       /*if (!fetchedBuyer) {
@@ -71,7 +45,6 @@ useEffect(() => {
           console.log("parsedUser: ", parsedUser);
           console.log("parsedUser.id: ", parsedUser.sellerId);
           setSellerId(parsedUser.sellerId);
-
         } catch (error) {
           console.log(error);
         }
@@ -80,203 +53,218 @@ useEffect(() => {
     fetchData();
   }, []);
 
-   const routeChangeToSellerProfile = () => {
+  const routeChangeToSellerProfile = () => {
     let path = "/sellerProfile";
     navigate(path);
   };
 
-//fetch seller
+  //fetch seller
   //console.log("sellerID is", sellerId);
   useEffect(() => {
-    if (sellerId){
-    fetch(`http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch seller");
+    if (sellerId) {
+      fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}`,
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-        return response.json()
-      }
       )
-      .then((data) => setSellerObj(data));
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch seller");
+          }
+          return response.json();
+        })
+        .then((data) => setSellerObj(data));
     }
   }, [sellerId]);
 
   const handleGoBack = () => {
-    window.history.back()
+    window.history.back();
   };
 
-const handleChange = (event) => {
-  const { name, value } = event.target;
+  const handleChange = (event) => {
+    const { name, value } = event.target;
 
-  if (name === "listingCategory") {
-    setListing((prevListing) => ({
-      ...prevListing,
-      listingCategory: value,
-    }));
-  } else {
-    setListing((prevListing) => ({
-      ...prevListing,
-      [name]: (name === 'maxQuantity' || name === 'minPrepDays') ? parseInt(value) : (name === 'price' ? parseFloat(value) : value),
-    }));
-  }
-};
+    if (name === "listingCategory") {
+      setListing((prevListing) => ({
+        ...prevListing,
+        listingCategory: value,
+      }));
+    } else {
+      setListing((prevListing) => ({
+        ...prevListing,
+        [name]:
+          name === "maxQuantity" || name === "minPrepDays"
+            ? parseInt(value)
+            : name === "price"
+            ? parseFloat(value)
+            : value,
+      }));
+    }
+  };
 
-function validateListing(listing) {
+  function validateListing(listing) {
     var validated = true;
     if (listing.name.length < 1 || listing.name.length > 64) {
-        toast.error("Listing name must contain 1 to 64 characters!");
-        validated = false;
+      toast.error("Listing name must contain 1 to 64 characters!");
+      validated = false;
     }
     if (listing.listingCategory === "") {
-        toast.error("Select a category!");
-        validated = false;
+      toast.error("Select a category!");
+      validated = false;
     }
     if (listing.price < 0) {
-        toast.error("Listing price must not be negative!");
-        validated = false;
+      toast.error("Listing price must not be negative!");
+      validated = false;
     }
     if (listing.maxQuantity < 0) {
-        toast.error("Select max quantity!");
-        validated = false;
+      toast.error("Select max quantity!");
+      validated = false;
     }
     if (listing.description.length < 1 || listing.description.length > 512) {
-        toast.error("Listing description must contain 1 to 512 characters!");
-        validated = false;
+      toast.error("Listing description must contain 1 to 512 characters!");
+      validated = false;
     }
     if (listing.minPrepDays < 0) {
-        toast.error("Select minimum prep days!");
-        validated = false;
+      toast.error("Select minimum prep days!");
+      validated = false;
     }
 
     if (image === "") {
-        toast.error("Upload an image!");
-        validated = false;
+      toast.error("Upload an image!");
+      validated = false;
     }
     return validated;
-}
-
-
-
+  }
 
   //create listing
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  e.preventDefault();
+    if (validateListing(listing)) {
+      toast.loading("loading, please wait!");
+      const data = new FormData();
+      data.append("file", image);
+      data.append("upload_preset", "module-buddies");
+      data.append("cloud_name", "nelsonchoo456");
 
-  if (validateListing(listing)) {
-    toast.loading("loading, please wait!");
-    const data = new FormData();
-    data.append("file", image);
-    data.append("upload_preset","module-buddies");
-    data.append("cloud_name","nelsonchoo456");
-
-    fetch("https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload", {
+      fetch("https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload", {
         method: "POST",
         body: data,
-    })
-    .then((res) => {
-        if (res.ok) {
-        return res.json();
-        } else {
-        toast.dismiss();
-        toast.error("rsponse for cloud upload not ok");
-        }
-    })
-    .then((data) => {
-        console.log("CLOUD URL", data.url);
-        setListing(prevListing => {
-        prevListing.imagePaths[0] = data.url;
-        return {
-        ...prevListing,
-        imagePaths: prevListing.imagePaths
-    };
-        });
-        console.log("LISTING after setlisting in 1st fetch", listing)
-        console.log("image path of listings state is", listing.imagePaths[0]);
-        toast.dismiss();
-        // check if imagePaths[0] is not empty before executing second fetch
-        if (listing.imagePaths[0] !== "") {
-        // Create the listing after image upload
-        fetch(`http://localhost:8080/BakeItEasy-war/webresources/listings/${sellerId}`, {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify(listing),
-        })
-        .then((response) => {
-            if (!response.ok) {
-            toast.error("!response.ok");
-            } else {
-            console.log("listing created");
-            console.log(response);
-            setCreated(true);
-            toast.success("Listing successfully created! Redirecting to profile...");
-            setImage("");
-            setTimeout(() => {
-                routeChangeToSellerProfile();
-            }, 1000); // 1000 milliseconds = 1 second
-            }
-            return response.json();
+      })
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            toast.dismiss();
+            toast.error("rsponse for cloud upload not ok");
+          }
         })
         .then((data) => {
-            // handle successful creation
-        })
-        .catch((error) => {
-            toast.error("Failed to create listing. " + error);
-            throw new Error("Failed to create listing");
+          console.log("CLOUD URL", data.url);
+          setListing((prevListing) => {
+            prevListing.imagePaths[0] = data.url;
+            return {
+              ...prevListing,
+              imagePaths: prevListing.imagePaths,
+            };
+          });
+          console.log("LISTING after setlisting in 1st fetch", listing);
+          console.log("image path of listings state is", listing.imagePaths[0]);
+          toast.dismiss();
+          // check if imagePaths[0] is not empty before executing second fetch
+          if (listing.imagePaths[0] !== "") {
+            // Create the listing after image upload
+            fetch(
+              `http://localhost:8080/BakeItEasy-war/webresources/listings/${sellerId}`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(listing),
+              }
+            )
+              .then((response) => {
+                if (!response.ok) {
+                  toast.error("!response.ok");
+                } else {
+                  console.log("listing created");
+                  console.log(response);
+                  setCreated(true);
+                  toast.success(
+                    "Listing successfully created! Redirecting to profile..."
+                  );
+                  setImage("");
+                  setTimeout(() => {
+                    routeChangeToSellerProfile();
+                  }, 1000); // 1000 milliseconds = 1 second
+                }
+                return response.json();
+              })
+              .then((data) => {
+                // handle successful creation
+              })
+              .catch((error) => {
+                toast.error("Failed to create listing. " + error);
+                throw new Error("Failed to create listing");
+              });
+          }
         });
-        }
-    });
-  }
-};
+    }
+  };
 
-const handlePriceChange = (e) => {
-  const { value } = e.target;
-  const regex = /^[0-9.]*$/;
-  if (regex.test(value) || value === '') {
-    setListing({
-      ...listing,
-      price: value,
-    });
-  }
-};
-
-
-
-
-
+  const handlePriceChange = (e) => {
+    const { value } = e.target;
+    const regex = /^[0-9.]*$/;
+    if (regex.test(value) || value === "") {
+      setListing({
+        ...listing,
+        price: value,
+      });
+    }
+  };
 
   return (
     <div>
-        <ToastContainer/>
-        <SellerNavigationBar/>
-        <br/>
-        <div style={{width: 220}}>
-            <div className="button1" onClick={handleGoBack} ><FaArrowLeft/><HStack width={2}/>Back to profile</div>
+      <ToastContainer />
+      <SellerNavigationBar />
+      <br />
+      <div style={{ width: 220 }}>
+        <div className="button1" onClick={handleGoBack}>
+          <FaArrowLeft />
+          <HStack width={2} />
+          Back to profile
         </div>
-        <br/>
-        <div style={{display: "flex", justifyContent: "center"}}>
-            <h1>Create A Listing</h1>
-        </div>
-        <div className="parent">
-
-            <div style={{display: "flex", justifyContent: "center", width:400}}>
-
-                <form className="form2" onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <input type="text" name="name" style={{width:320}}value={listing.name} onChange={handleChange} />
-      </label>
-      <label>
-        Category:
-            <select name="listingCategory" value={listing.listingCategory} onChange={handleChange}>
+      </div>
+      <br />
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <h1>Create A Listing</h1>
+      </div>
+      <div className="parent">
+        <div style={{ display: "flex", justifyContent: "center", width: 400 }}>
+          <form className="form2" onSubmit={handleSubmit}>
+            <label>
+              Name:
+              <input
+                type="text"
+                name="name"
+                style={{ width: 320 }}
+                value={listing.name}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Category:
+              <select
+                name="listingCategory"
+                value={listing.listingCategory}
+                onChange={handleChange}
+              >
                 <option value="">Select a category</option>
                 <option value="SAVORY">Savory</option>
                 <option value="BREAD">Bread</option>
@@ -284,59 +272,78 @@ const handlePriceChange = (e) => {
                 <option value="MUFFINCUPCAKE">Muffin/Cupcake</option>
                 <option value="PASTRYTART">Pastry/Tart</option>
                 <option value="PIE">Pie</option>
-            </select>
-        </label>
-       <label>
-      Price:
-      <input
-        type="text"
-        name="price"
-        style={{width:320}}
-        value={listing.price}
-        onChange={handlePriceChange}
-      />
-    </label>
-      <label>
-        Max Quantity:
-        <select name="maxQuantity" value={listing.maxQuantity} onChange={handleChange}>
-            <option value="">-- Select quantity --</option>
-            {[...Array(100)].map((_, index) => (
-            <option key={index} value={index + 1}>
-                {index + 1}
-            </option>
-            ))}
-  </select>
-</label>
+              </select>
+            </label>
+            <label>
+              Price:
+              <input
+                type="text"
+                name="price"
+                style={{ width: 320 }}
+                value={listing.price}
+                onChange={handlePriceChange}
+              />
+            </label>
+            <label>
+              Max Quantity:
+              <select
+                name="maxQuantity"
+                value={listing.maxQuantity}
+                onChange={handleChange}
+              >
+                <option value="">-- Select quantity --</option>
+                {[...Array(100)].map((_, index) => (
+                  <option key={index} value={index + 1}>
+                    {index + 1}
+                  </option>
+                ))}
+              </select>
+            </label>
 
+            <label>
+              Description:
+              <input
+                type="text"
+                name="description"
+                style={{ width: 320 }}
+                value={listing.description}
+                onChange={handleChange}
+              />
+            </label>
 
-      <label>
-        Description:
-        <input type="text" name="description" style={{width:320}} value={listing.description} onChange={handleChange} />
-      </label>
+            <label>
+              Minimum Preparation Days:
+              <select
+                name="minPrepDays"
+                value={listing.minPrepDays}
+                onChange={handleChange}
+              >
+                <option value="">-- Select min. preparation days --</option>
+                {[...Array(11)].map((_, index) => (
+                  <option key={index} value={index}>
+                    {index}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-      <label>
-        Minimum Preparation Days:
-        <select name="minPrepDays" value={listing.minPrepDays} onChange={handleChange}>
-            <option value="">-- Select min. preparation days --</option>
-            {[...Array(11)].map((_, index) => (
-            <option key={index} value={index}>
-                {index}
-            </option>
-            ))}
-        </select>
-        </label>
-
-        <div >
-            <input style={{height: 40, width:320}} type="file" id="image" name="image" onChange={(e) => setImage(e.target.files[0])}/>
-        </div>
-
-        <Button bg="#E2725B" colorScheme="white" type="submit"  w="320px">
-                Create Listing
-              </Button>
-    </form>
-    <br/>
+            <div>
+              <input
+                style={{ height: 40, width: 320 }}
+                type="file"
+                id="image"
+                name="image"
+                onChange={(e) => setImage(e.target.files[0])}
+              />
             </div>
+
+            <Button bg="#E2725B" colorScheme="white" type="submit" w="320px">
+              Create Listing
+            </Button>
+          </form>
+          <br />
         </div>
+      </div>
     </div>
   );
 }

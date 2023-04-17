@@ -1,7 +1,7 @@
-import { Grid, GridItem, Box, Text } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import Buyer from "../components/buyer";
 import AdminMenuBar from "../components/adminMenuBar";
+import Buyer from "../components/buyer";
 
 function ViewAllBuyers() {
   const [buyers, setBuyers] = useState([]);

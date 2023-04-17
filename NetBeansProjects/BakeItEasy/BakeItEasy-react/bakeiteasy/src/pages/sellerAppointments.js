@@ -1,28 +1,13 @@
 import { React, useEffect, useState } from "react";
 import "./resources/profile.css";
 
-import { SellerNavigationBar } from "../components/sellerNavigationBar";
 import { SellerCalendar } from "../components/sellerCalendar.js";
+import { SellerNavigationBar } from "../components/sellerNavigationBar";
 
-import {
-  BrowserRouter as Router,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import {
-  Flex,
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  HStack,
-  Spacer,
-} from "@chakra-ui/react";
-import Popup from "reactjs-popup";
+import { HStack, Spacer } from "@chakra-ui/react";
 import "reactjs-popup/dist/index.css";
-import { FaEdit } from "react-icons/fa";
 
 function SellerAppointments() {
   const navigate = useNavigate();

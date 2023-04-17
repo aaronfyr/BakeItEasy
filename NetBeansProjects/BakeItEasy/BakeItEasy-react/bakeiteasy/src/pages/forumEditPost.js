@@ -1,4 +1,4 @@
-import { Flex, Button } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
 import { React, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -202,7 +202,7 @@ function ForumEditPost() {
 
       <div style={{ display: "flex" }}>
         <div style={{ width: 400, height: 300 }}></div>
-        <div id="rightListingContainer" style={{marginLeft: 100}}>
+        <div id="rightListingContainer" style={{ marginLeft: 100 }}>
           <h1>Edit Post</h1>
           <h3 className="listingH3">Title:</h3>
           {isEditable ? (
@@ -233,7 +233,7 @@ function ForumEditPost() {
           ) : (
             <h2 className="listingH2">{post.postCategory}</h2>
           )}
-        <br/>
+          <br />
           <img
             style={{ height: 200 }}
             alt="categoryimg"
@@ -243,20 +243,29 @@ function ForumEditPost() {
                 : "https://www.freeiconspng.com/thumbs/flat-icon-png/email-flat-icon-png-26.png"
             }
           ></img>
-          <br/>
+          <br />
 
           <div style={{ height: 10 }}></div>
           <Flex>
             {!isEditable && (
-                <Button bg="#E2725B" colorScheme="white" onClick={() => setIsEditable(true)}  w="300px">
+              <Button
+                bg="#E2725B"
+                colorScheme="white"
+                onClick={() => setIsEditable(true)}
+                w="300px"
+              >
                 Edit
               </Button>
             )}
             {isEditable && (
-                <Button bg="#E2725B" colorScheme="white" onClick={() => handleUpdate()}  w="300px">
+              <Button
+                bg="#E2725B"
+                colorScheme="white"
+                onClick={() => handleUpdate()}
+                w="300px"
+              >
                 Done
               </Button>
-
             )}
           </Flex>
           <div style={{ height: 10 }}></div>

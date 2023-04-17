@@ -1,27 +1,23 @@
-import { React, useEffect, useState, useMemo } from "react";
-import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import FullCalendar from "@fullcalendar/react";
+import { React, useEffect, useState } from "react";
 
 import { EventListingDetails } from "./eventListingDetails";
 
-import {
-  BrowserRouter as Router,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
   Button,
+  Flex,
   Modal,
-  ModalContent,
-  ModalOverlay,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
-  Flex,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spacer,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 //import timeGridPlugin from "@fullcalendar/timegrid";

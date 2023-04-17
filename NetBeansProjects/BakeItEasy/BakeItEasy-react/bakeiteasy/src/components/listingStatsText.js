@@ -1,35 +1,7 @@
-import React, { useState, memo } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-  Navigate,
-  useParams,
-} from "react-router-dom";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-  Spacer,
-} from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
+import React, { memo, useState } from "react";
 import ReactLoading from "react-loading";
+import { useNavigate } from "react-router-dom";
 
 export function ListingStatsText({ lId }) {
   const navigate = useNavigate();
@@ -43,9 +15,8 @@ export function ListingStatsText({ lId }) {
   const [listingSellerIds, setListingSellerIds] = useState({});
 
   const getNumbersForListing = async (lId) => {
-
     //pending
-     try {
+    try {
       const response = await fetch(
         `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/pendingOrdersQuantity`,
         {
@@ -66,7 +37,7 @@ export function ListingStatsText({ lId }) {
     }
 
     //accepted
-     try {
+    try {
       const response = await fetch(
         `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/acceptedOrdersQuantity`,
         {
@@ -154,30 +125,42 @@ export function ListingStatsText({ lId }) {
   if (lId) {
     getNumbersForListing(lId);
     return (
-      <div
-      >
+      <div>
         <Flex>
-            <h3 style={{color:"darkgray"}}>Pending:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{pending}</h5>
+          <h3 style={{ color: "darkgray" }}>Pending:</h3>{" "}
+          <h5 style={{ marginTop: 5, fontSize: 15, marginLeft: 7 }}>
+            {pending}
+          </h5>
         </Flex>
         <Flex>
-            <h3 style={{color:"mediumseagreen"}}>Accepted:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{accepted}</h5>
+          <h3 style={{ color: "mediumseagreen" }}>Accepted:</h3>{" "}
+          <h5 style={{ marginTop: 5, fontSize: 15, marginLeft: 7 }}>
+            {accepted}
+          </h5>
         </Flex>
         <Flex>
-            <h3 style={{color: "darkgreen"}}>Completed:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{completed}</h5>
+          <h3 style={{ color: "darkgreen" }}>Completed:</h3>{" "}
+          <h5 style={{ marginTop: 5, fontSize: 15, marginLeft: 7 }}>
+            {completed}
+          </h5>
         </Flex>
         <Flex>
-            <h3>Rejected:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{rejected}</h5>
+          <h3>Rejected:</h3>{" "}
+          <h5 style={{ marginTop: 5, fontSize: 15, marginLeft: 7 }}>
+            {rejected}
+          </h5>
         </Flex>
         <Flex>
-            <h3 style={{color: "#4D5C74"}}>Cancelled:</h3> <h5 style={{marginTop:5, fontSize:15, marginLeft:7}}>{cancelled}</h5>
+          <h3 style={{ color: "#4D5C74" }}>Cancelled:</h3>{" "}
+          <h5 style={{ marginTop: 5, fontSize: 15, marginLeft: 7 }}>
+            {cancelled}
+          </h5>
         </Flex>
-
       </div>
     );
   } else {
     getNumbersForListing(lId);
     return <ReactLoading color={"black"} height={"15%"} width={"15%"} />;
-
   }
 }
 

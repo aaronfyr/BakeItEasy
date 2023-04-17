@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 function CategoryDropdown(props) {
-const [selectedOption, setSelectedOption] = useState("");
-    const categories = [
+  const [selectedOption, setSelectedOption] = useState("");
+  const categories = [
     { name: "Cake" },
     { name: "Cupcakes" },
     { name: "Bread" },
@@ -22,27 +22,28 @@ const [selectedOption, setSelectedOption] = useState("");
     { name: "Birthday" },
     { name: "Wedding" },
     { name: "Graduation" },
-    ];
+  ];
 
-    const handleDropdownChange = (e) => {
+  const handleDropdownChange = (e) => {
     const selectedValue = e.target.value;
     setSelectedOption(selectedValue);
     props.onCategoryChange(selectedValue);
   };
 
-
-
   return (
-     <select style={{fontFamily: 'Montserrat'}} value={selectedOption} onChange={handleDropdownChange}>
+    <select
+      style={{ fontFamily: "Montserrat" }}
+      value={selectedOption}
+      onChange={handleDropdownChange}
+    >
       {categories.map((option) => (
-        <option value={option.name} key={option.name} >
+        <option value={option.name} key={option.name}>
           {option.name}
         </option>
       ))}
     </select>
   );
-
-  }
+}
 //key={option.id}
 
 export default CategoryDropdown;

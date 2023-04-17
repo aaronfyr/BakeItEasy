@@ -6,12 +6,9 @@ import { NavigationBar } from "../components/buyerNavigationBar";
 import { useNavigate } from "react-router-dom";
 
 import {
-  Flex,
-  FormLabel,
-  Input,
-  Image,
-  HStack,
   Button,
+  Flex,
+  HStack
 } from "@chakra-ui/react";
 import { FaArrowLeft } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
@@ -326,6 +323,14 @@ function BuyerEditAccount() {
             <div style={{ height: 10 }}></div>
             <h3 className="listingH3">Email:</h3>
             <h2 className="listingH2">{buyerEmail}</h2>
+            <Button
+                  bg="#E2725B"
+                  colorScheme="white"
+                  onClick={() => (navigate("/buyerChangePassword"))}
+                  w="100%"
+                >
+                  Change password
+                </Button>
           </div>
           <br></br>
         </div>

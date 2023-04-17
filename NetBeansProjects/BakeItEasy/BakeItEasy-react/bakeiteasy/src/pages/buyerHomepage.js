@@ -1,13 +1,10 @@
-import { React, useEffect, useState } from "react";
+import { React, useState } from "react";
 import "./resources/default.css";
 
-import { NavigationBar } from "../components/buyerNavigationBar";
 import { BuyerShopping } from "../components/buyerHomepageShopping";
+import { NavigationBar } from "../components/buyerNavigationBar";
 
-import {
-  BrowserRouter as Router,
-  useNavigate, // Be sure to add this import
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function BuyerHomepage() {
   const [seller, setSeller] = useState(null);

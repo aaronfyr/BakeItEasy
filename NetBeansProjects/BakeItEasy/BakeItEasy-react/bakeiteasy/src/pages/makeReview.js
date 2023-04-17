@@ -1,16 +1,16 @@
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Image,
+  Input,
+  Text,
+  Textarea,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { StarIcon } from "../components/starIcon";
-import {
-  Box,
-  FormControl,
-  FormLabel,
-  Textarea,
-  Input,
-  Button,
-  Image,
-  Text,
-} from "@chakra-ui/react";
 
 function MakeReview({ order }) {
   const navigate = useNavigate();

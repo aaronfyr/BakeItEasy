@@ -1,37 +1,8 @@
-import React, { useState, memo } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-  Navigate,
-  useParams,
-} from "react-router-dom";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-  Spacer,
-} from "@chakra-ui/react";
-import ReactLoading from "react-loading";
+import React, { memo, useState } from "react";
 import { FiHeart } from "react-icons/fi";
-import { toast, ToastContainer } from "react-toastify";
+import ReactLoading from "react-loading";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export function ListingLikeButtonNonMemo({ buyerId, lId }) {
   const navigate = useNavigate();

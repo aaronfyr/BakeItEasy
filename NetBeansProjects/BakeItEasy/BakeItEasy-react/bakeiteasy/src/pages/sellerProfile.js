@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import "./resources/sellerProfile.css";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
-import { FaRegEdit, FaRegUser, FaPlus } from "react-icons/fa";
+import { FaRegEdit, FaRegUser, FaPlus, FaRegStar } from "react-icons/fa";
 import { Flex, flexbox, HStack, Spacer } from "@chakra-ui/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,7 +15,6 @@ import {
   Navigate,
   useParams,
 } from "react-router-dom";
-import { FaRegStar } from "react-icons/fa";
 
 function SellerProfile(props) {
   const [search, setSearch] = useState("");
@@ -232,16 +231,6 @@ function SellerProfile(props) {
         <div div className="flexGrowBox">
           <div div className="flexGrowBox_header">
             <h1>Seller Products</h1>
-
-            <div
-              className="newListBtn"
-              onClick={() => routeChangeToCreateListing()}
-            >
-              <HStack>
-                <FaPlus />
-                <div>Create listing </div>
-              </HStack>
-            </div>
           </div>
           <div className="profileListingsDisplay">
             {filteredListings.map((listing) => (
@@ -293,40 +282,3 @@ function SellerProfile(props) {
 }
 
 export default SellerProfile;
-
-/*
-    {
-      id: 1,
-      title: "Loved the brownies",
-      reviewText: "Super yummy, not too sweet, perfect with tea" ,
-      date:"01-07-2022" ,
-      rating:5,
-    },
-    {
-      id: 2,
-      title: "Loved the cake",
-      reviewText: "For a party, kids loved it, tasty cream. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-      date: "23-03-2023",
-      rating:5,
-    },
-    {
-      id: 3,
-      title: "Will buy again!",
-      reviewText: "Custom ordered a jelly cake with specific instructions, cake was well done to my request.Excepteur sint occaecat cupidatat non proident.",
-      date: "13-05-2023" ,
-      rating:5,
-    },
-    {
-      id: 4,
-      title: "Average strawberry pie",
-      reviewText: "Not a bad item but costs so much and doesn't taste better than commercial pies. Excepteur sint occaecat cupidatat non proident.",
-      date: "08-09-2023",
-      rating:3,
-    },
-    {
-      id: 5,
-      title: "Rude seller",
-      reviewText: "Took really long to reply to my requests and was rude on text. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      date: "18-02-2023" ,
-      rating:1,
-    }, */

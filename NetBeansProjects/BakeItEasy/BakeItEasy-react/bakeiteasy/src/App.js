@@ -1,12 +1,7 @@
 import React from "react";
-//import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import fetchListings from "./context/listings";
 import { ChakraProvider } from "@chakra-ui/react";
-import { BuyerProvider } from "./context/buyerProvider";
-import { SellerProvider } from "./context/sellerProvider";
-import { AdminProvider } from "./context/adminProvider";
 import { theme } from "./components/floatingLabel";
 
 import Login from "./pages/login";
@@ -49,86 +44,68 @@ import ForumCreatePost from "./pages/forumCreatePost";
 import ForumEditPost from "./pages/forumEditPost";
 
 import SellerChangePassword from "./pages/sellerChangePassword";
+import BuyerChangePassword from "./pages/buyerChangePassword";
 
 function App() {
   return (
     <ChakraProvider theme={theme}>
-      <BuyerProvider>
-        <SellerProvider>
-          <AdminProvider>
-            <Router>
-              <Routes>
-                <Route path="/" element={<BuyerHomepage />} />
-                <Route path="/followed" element={<BuyerFollowedShopping />} />
-                <Route path="/explore" element={<BuyerExploreShopping />} />
-                <Route path="listing/:id" element={<BuyerListingPage />} />
-                <Route path="buyerProfile/:id" element={<BuyerProfile />} />
-                <Route path="/searchSellers" element={<BuyerSearchSellers />} />
-                <Route
-                  path="/buyerEditAccount"
-                  element={<BuyerEditAccount />}
-                />
-                <Route path="buyerOrder/:id" element={<BuyerViewOrder />} />
-                <Route
-                  path="/buyerViewSellerProfile/:id"
-                  element={<BuyerViewSellerProfile />}
-                />
-                <Route
-                  path="/buyerLikedListings"
-                  element={<BuyerLikedListings />}
-                />
-                <Route path="/login" element={<Login />} />
-                <Route path="/adminLogin" element={<AdminLogin />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/forgotPassword" element={<ForgotPassword />} />
-                <Route path="/resetPassword" element={<ResetPassword />} />
-                <Route
-                  path="/adminProfilePage"
-                  element={<AdminProfilePage />}
-                />
-                <Route path="/viewAllBuyers" element={<ViewAllBuyers />} />
-                <Route path="/viewAllSellers" element={<ViewAllSellers />} />
-                <Route path="/viewAllReports" element={<ViewAllReports />} />
-                <Route path="/makeReview" element={<MakeReview />} />
+      <Router>
+        <Routes>
+          <Route path="/" element={<BuyerHomepage />} />
+          <Route path="/followed" element={<BuyerFollowedShopping />} />
+          <Route path="/explore" element={<BuyerExploreShopping />} />
+          <Route path="listing/:id" element={<BuyerListingPage />} />
+          <Route path="buyerProfile/:id" element={<BuyerProfile />} />
+          <Route path="/searchSellers" element={<BuyerSearchSellers />} />
+          <Route path="/buyerEditAccount" element={<BuyerEditAccount />} />
+          <Route path="buyerOrder/:id" element={<BuyerViewOrder />} />
+          <Route
+            path="/buyerViewSellerProfile/:id"
+            element={<BuyerViewSellerProfile />}
+          />
+          <Route path="/buyerLikedListings" element={<BuyerLikedListings />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/adminLogin" element={<AdminLogin />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/resetPassword" element={<ResetPassword />} />
+          <Route path="/adminProfilePage" element={<AdminProfilePage />} />
+          <Route path="/viewAllBuyers" element={<ViewAllBuyers />} />
+          <Route path="/viewAllSellers" element={<ViewAllSellers />} />
+          <Route path="/viewAllReports" element={<ViewAllReports />} />
+          <Route path="/makeReview" element={<MakeReview />} />
 
-                <Route path="/sellerProfile" element={<SellerProfile />} />
-                <Route
-                  path="/editSellerProfile"
-                  element={<SellerEditProfile />}
-                />
-                <Route path="sellerOrder/:id" element={<SellerViewOrder />} />
-                <Route path="/sellerOrderMgmt" element={<SellerOrderMgmt />} />
-                <Route
-                  path="/sellerOrderMgmt/listing/:id"
-                  element={<SellerViewOrderByListing />}
-                />
-                <Route
-                  path="/sellerListing/:id"
-                  element={<SellerListingPage />}
-                />
-                <Route
-                  path="/sellerAppointments"
-                  element={<SellerAppointments />}
-                />
-                <Route
-                  path="/sellerCreateListing"
-                  element={<SellerCreateListing />}
-                />
-                <Route
-                  path="/sellerViewFollowers"
-                  element={<SellerViewFollowers />}
-                />
-                <Route path="/forum" element={<Forum />} />
-                <Route path="/forum/post/:id" element={<ForumPost />} />
-                <Route path="/forum/createPost" element={<ForumCreatePost />} />
-                <Route path="/forum/editPost/:id" element={<ForumEditPost />} />
+          <Route path="/sellerProfile" element={<SellerProfile />} />
+          <Route path="/editSellerProfile" element={<SellerEditProfile />} />
+          <Route path="sellerOrder/:id" element={<SellerViewOrder />} />
+          <Route path="/sellerOrderMgmt" element={<SellerOrderMgmt />} />
+          <Route
+            path="/sellerOrderMgmt/listing/:id"
+            element={<SellerViewOrderByListing />}
+          />
+          <Route path="/sellerListing/:id" element={<SellerListingPage />} />
+          <Route path="/sellerAppointments" element={<SellerAppointments />} />
+          <Route
+            path="/sellerCreateListing"
+            element={<SellerCreateListing />}
+          />
+          <Route
+            path="/sellerViewFollowers"
+            element={<SellerViewFollowers />}
+          />
+          <Route path="/forum" element={<Forum />} />
+          <Route path="/forum/post/:id" element={<ForumPost />} />
+          <Route path="/forum/createPost" element={<ForumCreatePost />} />
+          <Route path="/forum/editPost/:id" element={<ForumEditPost />} />
 
-                <Route path="/sellerChangePassword" element={<SellerChangePassword />} />
-              </Routes>
-            </Router>
-          </AdminProvider>
-        </SellerProvider>
-      </BuyerProvider>
+          <Route
+            path="/sellerChangePassword"
+            element={<SellerChangePassword />}
+          />
+          <Route path="/buyerChangePassword" element={<BuyerChangePassword />} />
+        </Routes>
+      </Router>
+
     </ChakraProvider>
   );
 }

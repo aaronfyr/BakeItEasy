@@ -54,6 +54,7 @@ function AdminMenuBar() {
             height="50px"
             hspace="30px"
             src={require("../assets/bakeiteasy-logo.png")}
+            alt="BakeItEasy"
           ></img>
           <div className="logo">BakeItEasy</div>
         </Link>
