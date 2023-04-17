@@ -1,13 +1,13 @@
 :root {
     --reg-font-family: Helvetica;
-  
+
     --beige-bg: #F8F5EF;
     --logo: #7D7373;
-  
+
     --beige-text: #7D7373;
     --dark-text: #3D3D3D;
     --light-text: #676A6C;
-  
+
     --mid-orange: #E2725B;
     --light-orange: #E9AEA2;
     --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -79,7 +79,7 @@ cursor: pointer;
 
 .inputMyOrdersSearch {
     margin-top: 10px;
-    width: 250px;
+    width: 340px;
     height: 30px;
     border: none;
     border-radius: 20px;
@@ -92,7 +92,7 @@ cursor: pointer;
     height: 20px;
     width: 20px;
     margin-left: 80px;
-    justify-self: center;
+    justify-self: start;
 }
 
 .profileSearchInput {
