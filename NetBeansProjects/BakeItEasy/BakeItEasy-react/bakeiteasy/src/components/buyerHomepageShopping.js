@@ -545,7 +545,7 @@ export const BuyerShopping = () => {
             </div>
           ))}
 
-        {filteredListingsCounterExplore === 0 && (
+        {filteredListingsCounterFollowed === 0 && (
           <div className="emptyMessageContainer">
             <h4 className="search">Unfortunately, no Baked Listings here...</h4>
           </div>
