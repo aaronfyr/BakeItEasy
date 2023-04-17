@@ -275,7 +275,7 @@ function SellerProfile(props) {
 
                 <div class="reviewBottomRow">
                   <h4 style={{marginLeft:10}}>{review.reviewText}</h4>
-                  <h2>rating: {review.rating} / 5</h2>
+                  <h2>Rating: {review.rating} / 5</h2>
                 </div>
               </div>
             ))}

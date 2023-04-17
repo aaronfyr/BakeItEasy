@@ -251,8 +251,7 @@ h4 {
 /*these are for create listing cuz im lazy*/
 .form2 {
     display: block;
-    width: 400px;
-    margin-left: 450px;
+    width:320px;
 }
 
 .createPostCardForm{
