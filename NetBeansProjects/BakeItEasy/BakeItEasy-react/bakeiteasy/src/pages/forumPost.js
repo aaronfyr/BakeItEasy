@@ -378,9 +378,7 @@ useEffect(() => {
             <h3>Done</h3>
           </div>
           <div className="editPostBtn" onClick={handleCloseCommentPopup}>
-            <FaRegEdit style={{ alignSelf: "center" }} />
-            <div style={{ width: 5 }}></div>
-            <h3>close</h3>
+            <h3>Close</h3>
           </div>
         </Flex>
       </div>
