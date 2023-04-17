@@ -1,20 +1,12 @@
+import { HStack, Spacer } from "@chakra-ui/react";
 import { React, useEffect, useState } from "react";
-import "./resources/sellerProfile.css";
-import { SellerNavigationBar } from "../components/sellerNavigationBar";
-import { FaRegEdit, FaRegUser, FaPlus, FaRegStar } from "react-icons/fa";
-import { Flex, flexbox, HStack, Spacer } from "@chakra-ui/react";
-import { ToastContainer, toast } from "react-toastify";
+import { FaPlus, FaRegEdit, FaRegStar, FaRegUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { formatPrice } from "../components/formatter";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-  Navigate,
-  useParams,
-} from "react-router-dom";
+import { SellerNavigationBar } from "../components/sellerNavigationBar";
+import "./resources/sellerProfile.css";
 
 function SellerProfile(props) {
   const [search, setSearch] = useState("");
