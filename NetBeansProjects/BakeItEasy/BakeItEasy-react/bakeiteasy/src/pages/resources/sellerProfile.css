@@ -232,7 +232,7 @@ img.productImg {
 
 .profileListingsDisplay {
     display: flex;
-    width: 800px;
+    width:100%;
     flex-wrap: wrap;
     height: 370px;
     overflow-x: hidden;
@@ -325,8 +325,17 @@ h4 {
 }
 
 .flexGrowBox {
-    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
 
+.flexGrowBox_header {
+    display: flex;
+    padding-left:20px;
+    padding-right:40px;
+    width:100%;
+    justify-content: space-between;
 }
 
 .flexBox {
@@ -335,7 +344,7 @@ h4 {
 }
 
 .reviewDisplay {
-    width: 350px;
+    width: 270px;
     overflow-y: scroll;
     overflow-x: hidden;
     justify-content: center;
@@ -343,11 +352,10 @@ h4 {
 }
 
 .review {
-    margin: 20px;
-    width: 300px;
-    height: 150px;
-    padding: 10px;
-    padding-left: 20px;
+    margin-top: 20px;
+    width: 250px;
+    height: 120px;
+    padding: 5px 10px 5px 10px;
     border-radius: 10px;
     background-color: white;
 }
@@ -469,4 +477,9 @@ h4 {
     padding: 0px 20px 0px 20px;
     margin: 10px 20px 0px 0px;
     background-color: var(--mid-orange);
+  }
+
+  .contentGrid {
+    display: grid;
+    grid-template-columns: 1fr 270px;
   }

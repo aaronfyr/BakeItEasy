@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 import "./resources/sellerProfile.css";
 import { SellerNavigationBar } from "../components/sellerNavigationBar";
 import { FaRegEdit, FaRegUser, FaPlus } from "react-icons/fa";
-import { Flex, flexbox } from "@chakra-ui/react";
+import { Flex, flexbox, HStack, Spacer } from "@chakra-ui/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { formatPrice } from "../components/formatter";
@@ -31,8 +31,6 @@ function SellerProfile(props) {
 
   const { review } = props;
   const stars = [];
-
-
 
   useEffect(() => {
     async function fetchData() {
@@ -66,7 +64,6 @@ function SellerProfile(props) {
   useEffect(() => {
     console.log("fetching listings for " + sellerId);
     fetch(
-
       `http://localhost:8080/BakeItEasy-war/webresources/sellers/${sellerId}/listings`,
       {
         method: "GET",
@@ -97,9 +94,9 @@ function SellerProfile(props) {
       .then((data) => {
         setReviews(data);
         for (let i = 0; i < data.rating; i++) {
-         stars.push(<FaRegStar key={i} />);
+          stars.push(<FaRegStar key={i} />);
         }
-    });
+      });
   }, [sellerId, stars]);
 
   //fetch seller
@@ -167,21 +164,28 @@ function SellerProfile(props) {
   };
 
   return (
-    <div className="background">
+    <div>
       <ToastContainer />
       <SellerNavigationBar />
       <div id="coverPhoto">
         <div id="profilePhoto">
-            <img alt="" style={{height: 120, objectFit: "cover"}}
-            src = {sellerObj.imagePath? sellerObj.imagePath : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} ></img>
+          <img
+            alt=""
+            style={{ height: 120, objectFit: "cover" }}
+            src={
+              sellerObj.imagePath
+                ? sellerObj.imagePath
+                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+            }
+          ></img>
         </div>
       </div>
-      <Flex>
+      <HStack>
         <div id="userDetails">
           <h1>{sellerObj.name}</h1>
           <h5>@{sellerObj.username}</h5>
         </div>
-
+        <Spacer />
         <div
           className="editProfileBtn"
           onClick={() => routeChangeToSellerEditProfile()}
@@ -196,7 +200,7 @@ function SellerProfile(props) {
           <FaRegUser style={{ marginRight: 5 }} />
           {followerCount} Follower(s)
         </div>
-      </Flex>
+      </HStack>
       <h2>Search for my listing:</h2>
       <div class="searchBar2">
         <input
@@ -222,59 +226,60 @@ function SellerProfile(props) {
           </svg>
         </button>
       </div>
+      <br />
+      <div className="contentGrid">
+        <div div className="flexGrowBox">
+          <div div className="flexGrowBox_header">
+            <h1>Seller Products</h1>
 
-      {/*NAVBAR HERE BUT IT DOESNT WORK IDK WHY */}
-      <div className="sellerProducts">
-        <Flex>
-          <h1>Seller Products</h1>
-          <div
-            className="newListBtn"
-            onClick={() => routeChangeToCreateListing()}
-          >
-            <FaPlus style={{ alignSelf: "center", paddingRight: 5 }} />
-            Create listing
-          </div>
-        </Flex>
-      </div>
-      <div className="flexBox">
-        <div className="profileListingsDisplay">
-          {filteredListings.map((listing) => (
             <div
-              className="product"
-              onClick={() => routeChangeToListing(listing.listingId)}
+              className="newListBtn"
+              onClick={() => routeChangeToCreateListing()}
             >
-              <div class="productSeller"></div>
-              <h3>{listing.name}</h3>
-              <div className="productImg">
-                <img
-                  className="productImg"
-                  src={listing.imagePaths[0] ? listing.imagePaths[0] : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"}
-                  alt="listing product"
-                />
-
-              </div>
-              <div class="productBottomRow">
-                <h3>${formatPrice(listing.price)} </h3>
-              </div>
-              <h5 style={{color: "#636363"}}>{listing.description}</h5>
+              <HStack>
+                <FaPlus />
+                <div>Create listing </div>
+              </HStack>
             </div>
-          ))}
+          </div>
+          <div className="profileListingsDisplay">
+            {filteredListings.map((listing) => (
+              <div
+                className="product"
+                onClick={() => routeChangeToListing(listing.listingId)}
+              >
+                <div class="productSeller"></div>
+                <h3>{listing.name}</h3>
+                <div className="productImg">
+                  <img
+                    className="productImg"
+                    src={
+                      listing.imagePaths[0]
+                        ? listing.imagePaths[0]
+                        : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
+                    }
+                    alt="listing product"
+                  />
+                </div>
+                <div class="productBottomRow">
+                  <h3>${formatPrice(listing.price)} </h3>
+                </div>
+                <h5 style={{ color: "#636363" }}>{listing.description}</h5>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="flexGrowBox">
           <h1>Buyer Reviews</h1>
           <div className="reviewDisplay">
             {reviews.map((review) => (
-              <div
-                className="review"
-
-              >
-
+              <div className="review">
                 <div className="reviewTitle">
-                  <h2 style={{marginTop: 10}}>{review.title}</h2>
+                  <h2 style={{ marginTop: 10 }}>{review.title}</h2>
                 </div>
 
                 <div class="reviewBottomRow">
-                  <h4 style={{marginLeft:10}}>{review.reviewText}</h4>
+                  <h4 style={{ marginLeft: 10 }}>{review.reviewText}</h4>
                   <h2>rating: {review.rating} / 5</h2>
                 </div>
               </div>
