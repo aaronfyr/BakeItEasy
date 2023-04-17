@@ -436,6 +436,7 @@ h4 {
 
 .newListBtn:hover {
     background-color: lightgray;
+    cursor: pointer;
 }
 
 .button1_follow {

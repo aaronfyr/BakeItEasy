@@ -246,8 +246,8 @@ function ForumCreatePost() {
       {isBuyer && <NavigationBar />}
       <br />
       <div style={{ width: 220 }}>
-        <div className="button1" onClick={() => (handleGoBack())}>
-          <FaArrowLeft />
+        <div className="button1" onClick={() => handleGoBack()}>
+          <FaArrowLeft style={{ marginRight: "4px" }} />
           Back to forum
         </div>
       </div>
@@ -285,9 +285,9 @@ function ForumCreatePost() {
               <option value="RECIPES">Recipes</option>
             </select>
           </label>
-          <button type="submit" className="button1">
+          <Button bg="#E2725B" colorScheme="white" type="submit" w="100%">
             Create Post
-          </button>
+          </Button>
         </form>
 
         <br />
