@@ -1,18 +1,13 @@
 import { Flex } from "@chakra-ui/react";
 import React, { memo, useState } from "react";
 import ReactLoading from "react-loading";
-import { useNavigate } from "react-router-dom";
 
 export function ListingStatsText({ lId }) {
-  const navigate = useNavigate();
   const [pending, setPending] = useState(0);
   const [accepted, setAccepted] = useState(0);
   const [completed, setCompleted] = useState(0);
   const [cancelled, setCancelled] = useState(0);
   const [rejected, setRejected] = useState(0);
-  const [listingSellers, setListingSellers] = useState({});
-  const [listingSellerImages, setListingSellerImages] = useState({});
-  const [listingSellerIds, setListingSellerIds] = useState({});
 
   const getNumbersForListing = async (lId) => {
     //pending

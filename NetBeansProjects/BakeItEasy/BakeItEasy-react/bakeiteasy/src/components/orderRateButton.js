@@ -54,7 +54,7 @@ export function OrderRateButtonNonMemo({ oId, orderStatus }) {
   const [reviewText, setReviewText] = useState("");
   const [title, setTitle] = useState("");
   const [rating, setRating] = useState(0);
-  const [imagePaths, setImagePath] = useState(["", "text"]);
+  const [imagePaths] = useState(["", "text"]);
   const handleCreateReview = async (event) => {
     event.preventDefault();
     const dateCreated = new Date();

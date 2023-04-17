@@ -11,7 +11,6 @@ function BuyerViewSellerProfile() {
   const navigate = useNavigate();
 
   // fetch current buyer
-  const [buyer, setBuyer] = useState();
   const [buyerId, setBuyerId] = useState();
   const [buyerProfilePhoto, setBuyerProfilePhoto] = useState();
   useEffect(() => {
@@ -23,7 +22,6 @@ function BuyerViewSellerProfile() {
       } else {
         try {
           const parsedUser = JSON.parse(fetchedBuyer);
-          setBuyer(parsedUser);
           setBuyerId(parsedUser.buyerId);
           setBuyerProfilePhoto(parsedUser.imagePath);
         } catch (error) {
@@ -36,7 +34,6 @@ function BuyerViewSellerProfile() {
 
   const [search, setSearch] = useState("");
 
-  const [seller, setSeller] = useState(null);
   const [sellerName, setSellerName] = useState("Log In");
   const [sellerUsername, setSellerUsername] = useState("");
 
@@ -97,7 +94,6 @@ function BuyerViewSellerProfile() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setSeller(data);
         setSellerName(data.name);
         setSellerUsername(data.username);
       });
@@ -146,7 +142,6 @@ function BuyerViewSellerProfile() {
   );
 
   // handleFollowSeller
-  const [followSellerError, setFollowSellerError] = useState(null);
   const handleFollowSeller = async () => {
     const response = await fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/sellers/${id}/${buyerId}/follow`,
@@ -165,12 +160,10 @@ function BuyerViewSellerProfile() {
       // show error message
       const errorData = await response.json();
       toast.error(errorData.error);
-      setFollowSellerError("Invalid details. Please try again.");
     }
   };
 
   // handleUnfollowSeller
-  const [unfollowSellerError, setUnfollowSellerError] = useState(null);
   const handleUnfollowSeller = async () => {
     const response = await fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/sellers/${id}/${buyerId}/unfollow`,
@@ -191,7 +184,6 @@ function BuyerViewSellerProfile() {
       // show error message
       const errorData = await response.json();
       toast.error(errorData.error);
-      setUnfollowSellerError("Invalid details. Please try again.");
     }
   };
 

@@ -133,7 +133,6 @@ function BuyerProfile() {
   }, [whatsappUrl, id]);
 
   // handleCancelOrder
-  const [cancelOrderSuccess, setCancelOrderSuccess] = useState(null);
   const handleCancelOrder = async (oId) => {
     const response = await fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/buyers/${oId}/cancelorder`,
@@ -150,7 +149,6 @@ function BuyerProfile() {
       console.log("cancelled order: ", oId);
       toast.success(`Cancelled Order #${oId}.`);
       onOpen();
-      setCancelOrderSuccess("Successfully Cancelled Order");
     } else {
       // show error message
 
@@ -160,11 +158,10 @@ function BuyerProfile() {
   };
 
   // handleReportSeller
-  const [reportSellerError, setReportSellerError] = useState(null);
-  const [title, setTitle] = useState("");
-  const [reason, setReason] = useState("");
+  /* const [title, setTitle] = useState("");
+  const [reason] = useState(""); */
 
-  const handleReportSeller = async (event, oId) => {
+  /* const handleReportSeller = async (event, oId) => {
     event.preventDefault();
     const sellerResponse = await fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/orders/${oId}/seller`,
@@ -203,17 +200,14 @@ function BuyerProfile() {
         console.log("reporting error:", errorData.error);
         toast.error(errorData.error);
       }
-    } else {
-      // show error message
-      setReportSellerError("Invalid details. Please try again.");
     }
-  };
+  }; */
 
   // handleCreateReview
-  const [reviewText, setReviewText] = useState("");
+  /* const [reviewText] = useState("");
   const [rating, setRating] = useState(0);
-  const [imagePaths, setImagePath] = useState(["", "text"]);
-  const handleCreateReview = async (event, oId) => {
+  const [imagePaths] = useState(["", "text"]); */
+  /* const handleCreateReview = async (event, oId) => {
     event.preventDefault();
     const dateCreated = new Date();
     const response = await fetch(
@@ -241,7 +235,7 @@ function BuyerProfile() {
       console.log("reporting error:", errorData.error);
       toast.error(errorData.error);
     }
-  };
+  }; */
 
   const routeChangeToEditAccountDetails = (buyerId) => {
     console.log("routeChangeToEditAccountDetails: ", buyerId);
@@ -257,13 +251,13 @@ function BuyerProfile() {
     />
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [overlay, setOverlay] = useState(<OverlayOne />);
+  const [overlay] = useState(<OverlayOne />);
 
-  const handleRating = (rate) => {
+  /* const handleRating = (rate) => {
     setRating(rate);
     console.log("handleRating:", rating);
   };
-
+ */
   return (
     <div className="background">
       <ToastContainer />

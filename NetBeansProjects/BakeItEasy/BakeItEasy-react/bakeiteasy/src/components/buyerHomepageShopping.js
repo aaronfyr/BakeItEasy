@@ -1,9 +1,8 @@
 import { Flex, HStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { FiArrowRight, FiGlobe, FiUsers } from "react-icons/fi";
-import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { formatDate, formatPrice } from "./formatter";
 import { ListingLikeButton } from "./listingLikeButton";
 import { ListingSellerHeader } from "./listingSellerHeader";
@@ -30,7 +29,6 @@ export const BuyerShopping = () => {
   }, [navigate]);
 
   // fetch current buyer followings
-  const [followings, setFollowings] = useState();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,8 +52,6 @@ export const BuyerShopping = () => {
             },
           }
         );
-        const data = await response.json();
-        setFollowings(data.map((fol) => fol.sellerId));
 
         console.log(`HTTP Response Code: ${response?.status}`);
       } catch (error) {
@@ -69,7 +65,7 @@ export const BuyerShopping = () => {
   }, [navigate]);
 
   // fecth listing sellerId
-  const getSellerId = async (lId) => {
+  /* const getSellerId = async (lId) => {
     try {
       fetch(
         `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/seller`,
@@ -91,11 +87,11 @@ export const BuyerShopping = () => {
         console.log("There was a SyntaxError", error);
       }
     }
-  };
+  }; */
 
-  const [listingSellers, setListingSellers] = useState({});
+  /* const [listingSellers, setListingSellers] = useState({}); */
 
-  const getSellerByLId = async (lId) => {
+  /* const getSellerByLId = async (lId) => {
     try {
       const response = await fetch(
         `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/seller`,
@@ -118,9 +114,9 @@ export const BuyerShopping = () => {
         console.log("There was a SyntaxError", error);
       }
     }
-  };
+  }; */
 
-  const renderSellerListingHeader = (lId) => {
+  /* const renderSellerListingHeader = (lId) => {
     //const detailsText = await getSellerByLId(lId);
     //return <p>{detailsText}</p>;
 
@@ -131,7 +127,7 @@ export const BuyerShopping = () => {
       return <ReactLoading color={"#000000"} height={"15%"} width={"15%"} />;
       //return <p>Loading...</p>;
     }
-  };
+  }; */
 
   // fetch listings
   const [listings, setListings] = useState([]);
@@ -311,7 +307,7 @@ export const BuyerShopping = () => {
 
   // handle filter by category
   const [categoryFilter, setCategoryFilter] = useState(null);
-  const [categories, setCategories] = useState([
+  const [categories] = useState([
     { name: "Savory" },
     { name: "Bread" },
     { name: "Cake" },
@@ -361,7 +357,7 @@ export const BuyerShopping = () => {
   };
 
   // handleListingsToLikes
-  const [likeListingError, setLikeListingError] = useState(null);
+  /* const [likeListingError, setLikeListingError] = useState(null);
   const handleListingToLikes = async (lId) => {
     const response = await fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/${buyer.buyerId}/like`,
@@ -385,7 +381,7 @@ export const BuyerShopping = () => {
       toast.error(errorData.error);
       setLikeListingError("Invalid details. Please try again.");
     }
-  };
+  }; */
 
   let filteredListingsCounterExplore = 0;
   let filteredListingsCounterFollowed = 0;

@@ -20,7 +20,6 @@ import { FiHeart, FiUser } from "react-icons/fi";
 import { IoLogOut } from "react-icons/io5";
 
 export const NavigationBar = () => {
-  const [seller, setSeller] = useState(null);
   const [buyer, setBuyer] = useState(null);
   const [buyerName, setBuyerName] = useState("Log In");
   const [buyerId, setBuyerId] = useState(null);
@@ -48,7 +47,7 @@ export const NavigationBar = () => {
       }
     }
     fetchData();
-  }, []);
+  }, [navigate]);
 
   // Routing to Buyer Profile
   const routeToProfile = () => {

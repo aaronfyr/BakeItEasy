@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "./resources/homepageShopping.css";
 
 import SellerCard from "../components/sellerCard";
@@ -9,7 +9,6 @@ export const BuyerViewOfSellers = () => {
   let navigate = useNavigate();
 
   // fetch buyer
-  const [buyer, setBuyer] = useState(null);
   useEffect(() => {
     async function fetchData() {
       const buyer = localStorage.getItem("buyer");
@@ -18,15 +17,12 @@ export const BuyerViewOfSellers = () => {
         navigate("/login");
       } else {
         console.log("homepage: ", "has buyer");
-        const parsedUser = JSON.parse(buyer);
-        setBuyer(parsedUser);
       }
     }
     fetchData();
-  }, []);
+  }, [navigate]);
 
   // fetch current buyer followings
-  const [followings, setFollowings] = useState();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -50,8 +46,6 @@ export const BuyerViewOfSellers = () => {
             },
           }
         );
-        const data = await response.json();
-        setFollowings(data.map((fol) => fol.sellerId));
 
         console.log(`HTTP Response Code: ${response?.status}`);
       } catch (error) {
@@ -62,7 +56,7 @@ export const BuyerViewOfSellers = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [navigate]);
 
   // fetch sellers
   const [sellers, setSellers] = useState([]);
@@ -93,7 +87,6 @@ export const BuyerViewOfSellers = () => {
   }, []);
 
   // fetch listings by followed sellers
-  const [fListings, setFListings] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -117,8 +110,6 @@ export const BuyerViewOfSellers = () => {
             },
           }
         );
-        const data = await response.json();
-        setFListings(data);
         console.log(`HTTP Response Code: ${response?.status}`);
       } catch (error) {
         if (error instanceof SyntaxError) {
@@ -128,7 +119,7 @@ export const BuyerViewOfSellers = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [navigate]);
 
   // fetch current buyer followings listings
   /*
@@ -241,17 +232,8 @@ export const BuyerViewOfSellers = () => {
   //listings.forEach((obj) => getSeller(obj));
 
   // handle filter by category
-  const [categoryFilter, setCategoryFilter] = useState(null);
-  const [categories, setCategories] = useState([
-    { name: "Savory" },
-    { name: "Bread" },
-    { name: "Cake" },
-    { name: "Cupcake" },
-    { name: "Tart" },
-    { name: "Pie" },
-  ]);
 
-  const handleFilterByCateory = (categoryName) => {
+  /* const handleFilterByCateory = (categoryName) => {
     const categoryNameLowerCase = categoryName.toLowerCase();
     if (categoryFilter === categoryNameLowerCase) {
       // set category status to not selected
@@ -263,7 +245,7 @@ export const BuyerViewOfSellers = () => {
       console.log("filter category: ", categoryName);
       setCategoryFilter(categoryName.toLowerCase());
     }
-  };
+  }; */
 
   // handleSearch
   const [search, setSearch] = useState("");
@@ -275,8 +257,7 @@ export const BuyerViewOfSellers = () => {
   };
 
   // handleListingsToLikes
-  const [likeListingError, setLikeListingError] = useState(null);
-  const handleListingToLikes = async (lId) => {
+  /* const handleListingToLikes = async (lId) => {
     const response = await fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/listings/${lId}/${buyer.buyerId}/like`,
       {
@@ -297,9 +278,8 @@ export const BuyerViewOfSellers = () => {
       // show error message
       const errorData = await response.json();
       toast.error(errorData.error);
-      setLikeListingError("Invalid details. Please try again.");
     }
-  };
+  }; */
 
   let filteredSellersCount = 0;
 

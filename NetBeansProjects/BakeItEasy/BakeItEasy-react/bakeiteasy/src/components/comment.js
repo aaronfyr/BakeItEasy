@@ -25,9 +25,7 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
   }
 
   // fetch commenter
-  const [commenter, setCommenter] = useState();
   const [commenterId, setCommenterId] = useState();
-  const [commenterName, setCommenterName] = useState();
   const [commenterUsername, setCommenterUsername] = useState();
   const [commenterProfilePhoto, setCommenterProfilePhoto] = useState();
   useEffect(() => {
@@ -46,13 +44,11 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
       .then((response) => response.json())
       .then((data) => {
         console.log("commenter: ", data);
-        setCommenter(data);
         if (isBuyer) {
           setCommenterId(data.buyerId);
         } else {
           setCommenterId(data.sellerId);
         }
-        setCommenterName(data.name);
         setCommenterUsername(data.username);
         setCommenterProfilePhoto(data.imagePath);
       });
@@ -61,7 +57,6 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
   /* FOLLOWING FUNCTIONS */
   console.log("isCommentByABuyer:", isBuyer);
   // fetch current viewer if it's a buyer, then fetch its following
-  const [buyer, setBuyer] = useState();
   const [buyerId, setBuyerId] = useState();
   const [sellerId, setSellerId] = useState(null);
   const [isCurrentUserABuyer, setIsCurrentUserABuyer] = useState(false);
@@ -78,7 +73,6 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
         setIsCurrentUserABuyer(true);
         try {
           const parsedUser = JSON.parse(fetchedBuyer);
-          setBuyer(parsedUser);
           setBuyerId(parsedUser.buyerId);
         } catch (error) {
           console.log(error);
@@ -98,7 +92,6 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
   }, [navigate]);
 
   // fetch current buyer followings
-  const [followings, setFollowings] = useState();
   const [isFollowing, setIsFollowing] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
@@ -122,7 +115,6 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
           }
         );
         const data = await response.json();
-        setFollowings(data);
         const checkIsFollowing = data.some(
           (val) => val.sellerId.toString() === commenterId
         );

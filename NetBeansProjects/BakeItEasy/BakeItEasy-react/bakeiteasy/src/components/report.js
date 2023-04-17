@@ -15,7 +15,6 @@ const Report = ({ reportId, title, reason, onBan, onUnban, onDismiss }) => {
 
   // fetch reporter
   const [reporter, setReporter] = useState();
-  const [reporterName, setReporterName] = useState();
   const [reporterUsername, setReporterUsername] = useState();
   const [reporterImagePath, setReporterImagePath] = useState();
   useEffect(() => {
@@ -33,15 +32,13 @@ const Report = ({ reportId, title, reason, onBan, onUnban, onDismiss }) => {
       .then((data) => {
         console.log("reporter: ", reporter);
         setReporter(data);
-        setReporterName(data.name);
         setReporterUsername(data.username);
         setReporterImagePath(data.imagePath);
       });
-  }, []);
+  }, [reportId, reporter]);
 
   // fetch reportee
   const [reportee, setReportee] = useState();
-  const [reporteeName, setReporteeName] = useState();
   const [reporteeUsername, setReporteeUsername] = useState();
   const [reporteeIsBanned, setReporteeIsBanned] = useState();
   const [reporteeImagePath, setReporteeImagePath] = useState();
@@ -59,12 +56,11 @@ const Report = ({ reportId, title, reason, onBan, onUnban, onDismiss }) => {
       .then((response) => response.json())
       .then((data) => {
         setReportee(data);
-        setReporteeName(data.name);
         setReporteeUsername(data.username);
         setReporteeIsBanned(data.isBanned);
         setReporteeImagePath(data.imagePath);
       });
-  }, [reporteeIsBanned]);
+  }, [reporteeIsBanned, reportId]);
 
   const handleBan = async (event) => {
     event.preventDefault();

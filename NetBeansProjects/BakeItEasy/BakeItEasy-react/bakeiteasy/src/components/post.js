@@ -17,9 +17,7 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer, categoryImage
   console.log("in post:", postId);
 
   // fetch poster
-  const [user, setUser] = useState();
   const [userId, setUserId] = useState();
-  const [userName, setUserName] = useState();
   const [userUsername, setUserUsername] = useState();
   const [userProfilePhoto, setUserProfilePhoto] = useState();
   useEffect(() => {
@@ -38,23 +36,19 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer, categoryImage
       .then((response) => response.json())
       .then((data) => {
         //console.log("post user: ", data);
-        setUser(data);
         if (isBuyer) {
           setUserId(data.buyerId);
         } else {
           setUserId(data.sellerId);
         }
-        setUserName(data.name);
         setUserUsername(data.username);
         setUserProfilePhoto(data.imagePath);
       });
-  }, []);
+  }, [isBuyer, postId]);
 
   /* FOLLOWING FUNCTIONS */
   // fetch current viewer if it's a buyer, then fetch its following
-  const [buyer, setBuyer] = useState();
   const [buyerId, setBuyerId] = useState();
-  const [sellerId, setSellerId] = useState(null);
   const [isCurrentUserABuyer, setIsCurrentUserABuyer] = useState(false);
   useEffect(() => {
     async function fetchData() {
@@ -68,7 +62,6 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer, categoryImage
         setIsCurrentUserABuyer(true);
         try {
           const parsedUser = JSON.parse(fetchedBuyer);
-          setBuyer(parsedUser);
           setBuyerId(parsedUser.buyerId);
           /*if (parsedUser.buyerId === commenterId) {
             setIsCurrentUserComment(true);
@@ -79,8 +72,6 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer, categoryImage
       } else {
         setIsCurrentUserABuyer(false);
         try {
-          const parsedUser = JSON.parse(fetchedSeller);
-          setSellerId(parsedUser.sellerId);
           /*if (parsedUser.sellerId === commenterId) {
             setIsCurrentUserComment(true);
           }*/
@@ -90,10 +81,9 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer, categoryImage
       }
     }
     fetchData();
-  }, []);
+  }, [navigate]);
 
   // fetch current buyer followings
-  const [followings, setFollowings] = useState();
   const [isFollowing, setIsFollowing] = useState();
   useEffect(() => {
     const fetchData = async () => {
@@ -116,7 +106,6 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer, categoryImage
             }
           );
           const data = await response.json();
-          setFollowings(data);
           //console.log("sellerProfile, followings: ", followings);
           const checkIsFollowing = data.some(
             (val) => val.sellerId.toString() === userId
@@ -134,7 +123,7 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer, categoryImage
       }
     };
     fetchData();
-  }, []);
+  }, [userId]);
 
   // handleFollowSeller
   const handleFollowSeller = async (sId) => {

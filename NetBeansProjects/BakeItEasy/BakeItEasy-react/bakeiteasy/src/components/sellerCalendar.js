@@ -76,7 +76,7 @@ function getDate(dayString) {
 }
 
 export const SellerCalendar = () => {
-  function getDate(dayString) {
+  /* function getDate(dayString) {
     const today = new Date();
     const year = today.getFullYear().toString();
     let month = (today.getMonth() + 1).toString();
@@ -86,13 +86,11 @@ export const SellerCalendar = () => {
     }
 
     return dayString.replace("YEAR", year).replace("MONTH", month);
-  }
+  } */
 
   const navigate = useNavigate();
 
   // Fetch this seller details
-  const [seller, setSeller] = useState(null);
-  const [sellerName, setSellerName] = useState("Log In");
   const [sellerId, setSellerId] = useState(null);
 
   useEffect(() => {
@@ -105,10 +103,8 @@ export const SellerCalendar = () => {
         console.log("navbar", "has seller");
         try {
           const parsedUser = JSON.parse(fetchedSeller);
-          setSeller(parsedUser);
           console.log("parsedUser: ", parsedUser);
           console.log("parsedUser.name: ", parsedUser.name);
-          setSellerName(parsedUser.name);
           console.log("parsedUser.id: ", parsedUser.sellerId);
           setSellerId(parsedUser.sellerId);
         } catch (error) {
@@ -117,7 +113,7 @@ export const SellerCalendar = () => {
       }
     }
     fetchData();
-  }, []);
+  }, [navigate]);
 
   // fetch orders
   const [orders, setOrders] = useState([]);
@@ -200,7 +196,7 @@ export const SellerCalendar = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [navigate, orders]);
 
   const [state, setState] = useState({
     event: {
