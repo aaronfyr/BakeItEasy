@@ -5,7 +5,14 @@ import { NavigationBar } from "../components/buyerNavigationBar";
 
 import { useNavigate } from "react-router-dom";
 
-import { Flex, FormLabel, Input, Image } from "@chakra-ui/react";
+import {
+  Flex,
+  FormLabel,
+  Input,
+  Image,
+  HStack,
+  Button,
+} from "@chakra-ui/react";
 import { FaArrowRight } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -91,6 +98,9 @@ function BuyerEditAccount() {
     if (!response.ok) {
       const errorData = await response.json();
       toast.error(errorData.error);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } else {
       console.log(buyerObj);
 
@@ -143,38 +153,84 @@ function BuyerEditAccount() {
     }
   };
 
-  return (
-    <div className="background">
-      <NavigationBar />
-      <ToastContainer />
-      <div id="coverPhoto">
-        <div id="profilePhoto">
-          <img
-            className="homepageProfilePhotoImg"
-            alt="seller pfp"
-            src={buyerImagePath}
-          ></img>
-        </div>
-      </div>
-      <Flex justifyContent={"space-between"}>
-        <div id="userDetails">
-          <h1>{buyerName}</h1>
+  const fileUpload = (newFile) => {
+    // Only upload image if it's not empty
+    const data = new FormData();
+    data.append("file", newFile);
+    data.append("upload_preset", "module-buddies");
+    data.append("cloud_name", "nelsonchoo456");
 
-          <h4>details</h4>
-        </div>
+    fetch("https://api.cloudinary.com/v1_1/nelsonchoo456/image/upload", {
+      method: "POST",
+      body: data,
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          toast.error("failed to upload image, try again");
+          // handle error
+        }
+      })
+      .then((data) => {
+        console.log("cloud url is", data.url);
+
+        setBuyerObj((prevListing) => ({
+          ...prevListing,
+          imagePath: data.url,
+        }));
+        console.log("imagePath after setting is", buyerObj.imagePath);
+        console.log(buyerObj);
+        // Call second fetch after the first one finishes
+      });
+  };
+
+  return (
+    <div>
+      <NavigationBar />
+      <br />
+      <ToastContainer />
+
+      <Flex justifyContent={"space-between"}>
         <Flex>
           <div className="button1" onClick={() => routeChangeToProfile()}>
-            Back to Profile
-            <FaArrowRight />
+            <HStack spacing="10px">
+              <div>Back to Profile</div>
+              <FaArrowRight />
+            </HStack>
           </div>
         </Flex>
       </Flex>
       <div className="parent">
         <div id="rightListingContainer">
-          <h1 style={{ textAlign:"center" }}>
-            Edit My Profile
-          </h1>
-          <h3>Name:</h3>
+          <h1 style={{ textAlign: "center" }}>Edit My Profile</h1>
+          <br />
+          <div
+            style={{
+              width: 200,
+              display: "block",
+              margin: "auto",
+              justifySelf: "center",
+            }}
+          >
+            <img
+              style={{
+                borderRadius: "50%",
+                objectFit: "cover",
+                width: "200px",
+                height: "200px",
+              }}
+              src={
+                buyerObj.imagePath
+                  ? buyerObj.imagePath
+                  : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+              }
+              alt="pfp"
+            />
+          </div>
+          <br />
+
+          <h3 className="listingH3">Name:</h3>
           {isEditable ? (
             <input
               type="text"
@@ -185,9 +241,9 @@ function BuyerEditAccount() {
               }
             />
           ) : (
-            <h2>{buyerObj.name}</h2>
+            <h2 className="listingH2">{buyerObj.name}</h2>
           )}
-          <h3>Username:</h3>
+          <h3 className="listingH3">Username:</h3>
           {isEditable ? (
             <input
               type="text"
@@ -200,7 +256,7 @@ function BuyerEditAccount() {
           ) : (
             <h2>{buyerObj.username}</h2>
           )}
-          <h3>Phone:</h3>
+          <h3 className="listingH3">Phone:</h3>
           {isEditable ? (
             <input
               type="text"
@@ -226,38 +282,46 @@ function BuyerEditAccount() {
           ) : (
             <h2>{buyerObj.address}</h2>
           )}
-          <h3>Profile picture</h3>
-          {isEditable ? (
-            <>
-              <Input
+          <div style={{ height: 10 }}></div>
+          {isEditable && (
+            <div>
+              <input
+                style={{ height: 40, width: 400 }}
                 type="file"
-                placeholder=" "
-                onChange={handleImageChange}
-                accept="image/jpeg, image/png"
+                id="image"
+                name="image"
+                accept=".jpeg, .png, .jpg"
+                onChange={(e) => fileUpload(e.target.files[0])}
               />
-              <Image src={buyerImagePath} />
-            </>
-          ) : (
-            buyerImagePath && <Image src={buyerImagePath} />
+            </div>
           )}
-
           <div style={{ height: 10 }}></div>
           <Flex>
             {!isEditable && (
-              <button className="button1" onClick={() => setIsEditable(true)}>
+              <Button
+                bg="#E2725B"
+                colorScheme="white"
+                onClick={() => setIsEditable(true)}
+                w="100%"
+              >
                 Edit
-              </button>
+              </Button>
             )}
             {isEditable && (
-              <button className="button1" onClick={handleUpdate}>
+              <Button
+                bg="#E2725B"
+                colorScheme="white"
+                onClick={handleUpdate}
+                w="100%"
+              >
                 Done
-              </button>
+              </Button>
             )}
           </Flex>
 
           <div style={{ height: 10 }}></div>
-          <h3>Email:</h3>
-          <h2>{buyerEmail}</h2>
+          <h3 className="listingH3">Email:</h3>
+          <h2 className="listingH2">{buyerEmail}</h2>
           <br></br>
         </div>
       </div>

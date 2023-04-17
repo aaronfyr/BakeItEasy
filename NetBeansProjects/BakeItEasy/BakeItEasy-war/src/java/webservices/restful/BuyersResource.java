@@ -23,8 +23,10 @@ import error.exception.BuyerIsBannedException;
 import error.exception.BuyerNotFoundException;
 import error.exception.BuyerPhoneNumberExistException;
 import error.exception.BuyerUsernameExistException;
+import error.exception.CurrentPasswordDoesNotMatchException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
+import error.exception.NewAndConfirmPasswordsDoNotMatchException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.PostNotFoundException;
@@ -32,8 +34,6 @@ import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -45,6 +45,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -347,4 +348,39 @@ public class BuyersResource {
     public boolean hasExistingReport(@PathParam("buyer_id") Long buyerId, @PathParam("seller_id") Long sellerId) {
         return reportSessionBeanLocal.hasBuyerReportedSeller(buyerId, sellerId);
     } // end hasExistingReport
+    
+    @PUT
+    @Path("/{buyer_id}/changePassword")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateBuyerPassword(@PathParam("buyer_id") Long buyerId, @QueryParam("currentPassword") String currentPassword, @QueryParam("newPassword") String newPassword, @QueryParam("confirmPassword") String confirmPassword) {
+        try {
+            buyerSessionBeanLocal.updateBuyerPassword(buyerId, currentPassword, newPassword, confirmPassword);
+            return Response.status(204).build();
+        } catch (InputDataValidationException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Input data validation exception")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (NewAndConfirmPasswordsDoNotMatchException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "New password and confirm password does not match!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (BuyerNotFoundException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Buyer id given does not exist!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (CurrentPasswordDoesNotMatchException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "Current password entered does not match user's password!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        }
+    } //end updateBuyerPassword
 }

@@ -304,13 +304,6 @@ export const BuyerViewOfSellers = () => {
     setSearch(searchLowerCase);
   };
 
-  // routeChangeToListing
-  const routeChangeToListing = (listingId) => {
-    console.log("routechangetolisting: ", listingId);
-    let path = "listing/";
-    navigate(path + listingId);
-  };
-
   // handleListingsToLikes
   const [likeListingError, setLikeListingError] = useState(null);
   const handleListingToLikes = async (lId) => {

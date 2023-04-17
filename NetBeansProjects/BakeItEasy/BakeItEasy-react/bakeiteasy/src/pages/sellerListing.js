@@ -136,7 +136,7 @@ function SellerListing() {
           // handle successful update
           setTimeout(() => {
             window.location.reload();
-          }, 3000);
+          }, 1000);
         })
         .catch((error) => {
           /* handle other errors */
@@ -160,14 +160,14 @@ function SellerListing() {
           setDeleteFailed(true);
           setTimeout(() => {
             setDeleteFailed(false);
-          }, 5000); // 1000 milliseconds = 1 second
+          }, 2000); // 1000 milliseconds = 1 second
         } else {
           console.log("response ok");
 
           toast.success("Listing deleted successfully");
           setTimeout(() => {
             routeChangeToSellerProfile();
-          }, 5000); // 1000 milliseconds = 1 second
+          }, 1000); // 1000 milliseconds = 1 second
         }
         return response.json();
       })

@@ -168,7 +168,7 @@ function SellerViewOrder() {
         toast.success("Order accepted successfully! Reloading...");
         setTimeout(() => {
           window.location.reload();
-        }, 5000);
+        }, 1000);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -193,7 +193,7 @@ function SellerViewOrder() {
         toast.success("Order rejected successfully! Reloading...");
         setTimeout(() => {
           window.location.reload();
-        }, 5000);
+        }, 1000);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -217,7 +217,7 @@ function SellerViewOrder() {
         toast.success("Order completed successfully! Reloading...");
         setTimeout(() => {
           window.location.reload();
-        }, 5000);
+        }, 1000);
       }
     } catch (error) {
       console.error("Error:", error);

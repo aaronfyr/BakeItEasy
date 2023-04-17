@@ -11,8 +11,10 @@ import entity.Order;
 import entity.Report;
 import entity.Seller;
 import enumeration.OrderStatus;
+import error.exception.CurrentPasswordDoesNotMatchException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
+import error.exception.NewAndConfirmPasswordsDoNotMatchException;
 import error.exception.OrderIsNotAcceptedException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
@@ -112,13 +114,13 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
             if (sellerToUpdate.getPhoneNo().equals(updatedSeller.getPhoneNo())
                     && sellerToUpdate.getUsername().equals(updatedSeller.getUsername())) {
                 sellerToUpdate.setName(updatedSeller.getName());
-                sellerToUpdate.setPassword(updatedSeller.getPassword());
+//                sellerToUpdate.setPassword(updatedSeller.getPassword());
                 sellerToUpdate.setImagePath(updatedSeller.getImagePath());
             } else if (!sellerToUpdate.getPhoneNo().equals(updatedSeller.getPhoneNo())
                     && sellerToUpdate.getUsername().equals(updatedSeller.getUsername())) { // phone change, username same
                 if (isPhoneNumberAvailable(updatedSeller.getPhoneNo())) {
                     sellerToUpdate.setName(updatedSeller.getName());
-                    sellerToUpdate.setPassword(updatedSeller.getPassword());
+//                    sellerToUpdate.setPassword(updatedSeller.getPassword());
                     sellerToUpdate.setPhoneNo(updatedSeller.getPhoneNo());
                     sellerToUpdate.setImagePath(updatedSeller.getImagePath());
                 } else {
@@ -128,7 +130,7 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
                     && !sellerToUpdate.getUsername().equals(updatedSeller.getUsername())) { // phone same, username change
                 if (isUsernameAvailable(updatedSeller.getUsername())) {
                     sellerToUpdate.setName(updatedSeller.getName());
-                    sellerToUpdate.setPassword(updatedSeller.getPassword());
+//                    sellerToUpdate.setPassword(updatedSeller.getPassword());
                     sellerToUpdate.setUsername(updatedSeller.getUsername());
                     sellerToUpdate.setImagePath(updatedSeller.getImagePath());
                 } else {
@@ -139,7 +141,7 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
                 if (isPhoneNumberAvailable(updatedSeller.getPhoneNo())) {
                     if (isUsernameAvailable(updatedSeller.getUsername())) {
                         sellerToUpdate.setName(updatedSeller.getName());
-                        sellerToUpdate.setPassword(updatedSeller.getPassword());
+//                        sellerToUpdate.setPassword(updatedSeller.getPassword());
                         sellerToUpdate.setPhoneNo(updatedSeller.getPhoneNo());
                         sellerToUpdate.setUsername(updatedSeller.getUsername());
                         sellerToUpdate.setImagePath(updatedSeller.getImagePath());
@@ -152,6 +154,27 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
             }
 
         } else {
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+        }
+    }
+    
+    @Override
+    public void updateSellerPassword(Long sellerId, String currentPassword, String newPassword, String confirmPassword) throws SellerNotFoundException, NewAndConfirmPasswordsDoNotMatchException, CurrentPasswordDoesNotMatchException, InputDataValidationException {
+        Seller sellerToUpdate = retrieveSellerBySellerId(sellerId);
+        if (currentPassword.equals(sellerToUpdate.getPassword())) {
+            if (newPassword.equals(confirmPassword)) {
+                sellerToUpdate.setPassword(newPassword);
+            } else {
+                throw new NewAndConfirmPasswordsDoNotMatchException("New password and confirm password does not match!");
+            }
+            
+        } else {
+            throw new CurrentPasswordDoesNotMatchException("Current password entered does not match user's password!");
+        }
+        
+        Set<ConstraintViolation<Seller>> constraintViolations = validator.validate(sellerToUpdate);
+        
+        if (!constraintViolations.isEmpty()) {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }

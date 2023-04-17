@@ -64,6 +64,7 @@ function Signup() {
           toast.error(errorData.error);
         }
       } else {
+        toast.dismiss();
         toast.error("Invalid picture format. Please try again.");
         setProfilePic(null);
       }

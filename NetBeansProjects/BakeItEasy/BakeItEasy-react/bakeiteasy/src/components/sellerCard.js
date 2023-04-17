@@ -168,7 +168,9 @@ const Seller = ({ sellerId, name, username, profilePhoto }) => {
 
         <div className="sellerCardContentGrid_right">
           <div className="sellerCardHeader">
-            <h1>@{username}</h1>
+            <h1 className="seller" onClick={() => routeChangeToSellerProfile()}>
+              @{username}
+            </h1>
           </div>
           <div className="sellerCardDetails">
             <div className="postFooterContent">

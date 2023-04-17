@@ -255,7 +255,7 @@ function BuyerListingPage() {
       // redirect to homepage
       console.log("likedListing# ", lId);
       console.log("reported seller!");
-      toast.success(`Liked listing # ${lId}.`);
+      toast.success(`Liked listing!`);
       //recolor liked button
       document.getElementById("btn").style.backgroundColor = "black";
     } else {
@@ -393,6 +393,7 @@ function BuyerListingPage() {
               value={
                 dateOfCollection === null ? datePickerMinDate : dateOfCollection
               }
+              required
             />
 
             <Box mt={4} display="flex" alignItems="center">

@@ -167,6 +167,7 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
 
             List<Order> ordersTaggedToListing = retrieveOrdersByListingId(listingId);
             for (Order order : ordersTaggedToListing) { // orders have cascade to remove other children
+                order.getBuyer().getOrders().remove(order);
                 listingToRemove.getOrders().remove(order);
                 em.remove(order);
             }

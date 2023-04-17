@@ -230,7 +230,7 @@ function ForumPost() {
           toast.success("buyer comment created! refreshing...");
           setTimeout(() => {
             window.location.reload();
-          }, 3000);
+          }, 1000);
         }
       });
     } catch (error) {
@@ -260,7 +260,7 @@ function ForumPost() {
             toast.success("seller comment created! refreshing...");
             setTimeout(() => {
               window.location.reload();
-            }, 3000);
+            }, 1000);
           }
         });
       } catch (error) {
@@ -282,7 +282,7 @@ function ForumPost() {
           setDeleteFailed(true);
           setTimeout(() => {
             setDeleteFailed(false);
-          }, 5000); // 1000 milliseconds = 1 second
+          }, 2000); // 1000 milliseconds = 1 second
         } else {
           console.log("response ok");
 
@@ -378,9 +378,7 @@ useEffect(() => {
             <h3>Done</h3>
           </div>
           <div className="editPostBtn" onClick={handleCloseCommentPopup}>
-            <FaRegEdit style={{ alignSelf: "center" }} />
-            <div style={{ width: 5 }}></div>
-            <h3>close</h3>
+            <h3>Close</h3>
           </div>
         </Flex>
       </div>
