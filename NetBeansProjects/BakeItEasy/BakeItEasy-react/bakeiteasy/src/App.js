@@ -44,6 +44,7 @@ import ForumCreatePost from "./pages/forumCreatePost";
 import ForumEditPost from "./pages/forumEditPost";
 
 import SellerChangePassword from "./pages/sellerChangePassword";
+import BuyerChangePassword from "./pages/buyerChangePassword";
 
 function App() {
   return (
@@ -101,8 +102,10 @@ function App() {
             path="/sellerChangePassword"
             element={<SellerChangePassword />}
           />
+          <Route path="/buyerChangePassword" element={<BuyerChangePassword />} />
         </Routes>
       </Router>
+
     </ChakraProvider>
   );
 }
