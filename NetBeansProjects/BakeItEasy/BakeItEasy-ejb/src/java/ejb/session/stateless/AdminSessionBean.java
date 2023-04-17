@@ -124,7 +124,10 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
     public void updateAdmin(Admin a) throws NoResultException, AdminNotFoundException, AdminEmailExistException {
         Admin oldA = retrieveAdminById(a.getAdminId());
 
-        if (isEmailAvailable(a.getEmail())) {
+        if (a.getEmail().equals(oldA.getEmail())) {
+            oldA.setName(a.getName());
+            oldA.setPassword(a.getPassword());
+        } else if (isEmailAvailable(a.getEmail())) {
             oldA.setName(a.getName());
             oldA.setEmail(a.getEmail());
             oldA.setPassword(a.getPassword());
