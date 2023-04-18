@@ -6,11 +6,20 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -24,18 +33,84 @@ public class Seller implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sellerId;
 
-    @Column
+    @Column(nullable = false, length = 64)
+    @NotNull
+    @Size(min = 1, max = 64)
     private String name;
-    @Column
+    
+    @Column(nullable = false, length = 128, unique = true)
+    @NotNull
+    @Size(min = 1, max = 128)
     private String email;
-    @Column
+    
+    @Column(nullable = false, length = 16, unique = true)
+    @NotNull
+    @Size(min = 1, max = 16)
     private String username;
-    @Column
+    
+    @Column(nullable = false, length = 64)
+    @NotNull
+    @Size(min = 1, max = 64)
     private String password;
-    @Column
+    
+    @Column(nullable = false, length = 128, unique = true)
+    @NotNull
+    @Size(min = 1, max = 128)
     private String phoneNo;
-    @Column
+    
+    @NotNull
     private boolean isBanned;
+    
+    @Column(nullable = true)
+    private String imagePath;
+
+    @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
+    @JsonbTransient
+    private List<Listing> listings;
+    
+    @OneToMany(mappedBy = "reportee", fetch = FetchType.EAGER)
+    @JsonbTransient
+    private List<Report> reports;
+    
+    @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
+    @JsonbTransient
+    private List<Post> posts;
+    
+    @ManyToMany
+    @JsonbTransient
+    private List<Buyer> followers;
+    
+    @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
+    @JsonbTransient
+    private List<Comment> comments;
+    
+    public Seller() {
+        this.isBanned = false;
+        this.listings = new ArrayList<>();
+        this.reports = new ArrayList<>();
+        this.posts = new ArrayList<>();
+        this.followers = new ArrayList<>();
+        this.comments = new ArrayList<>();
+    }
+
+    public Seller(String name, String email, String username, String password, String phoneNo, String imagePath) {
+        this();
+        
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.phoneNo = phoneNo;
+        this.imagePath = imagePath;
+    }
+    
+    public Long getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
+    }
 
     public String getName() {
         return name;
@@ -77,7 +152,7 @@ public class Seller implements Serializable {
         this.phoneNo = phoneNo;
     }
 
-    public boolean isIsBanned() {
+    public boolean getIsBanned() {
         return isBanned;
     }
 
@@ -85,12 +160,52 @@ public class Seller implements Serializable {
         this.isBanned = isBanned;
     }
 
-    public Long getSellerId() {
-        return sellerId;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setSellerId(Long sellerId) {
-        this.sellerId = sellerId;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public List<Listing> getListings() {
+        return listings;
+    }
+
+    public void setListings(List<Listing> listings) {
+        this.listings = listings;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public List<Buyer> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Buyer> followers) {
+        this.followers = followers;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override

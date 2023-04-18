@@ -1,0 +1,52 @@
+.viewOrderPage {
+    display: flex;
+    justify-content: center;
+    background-color: #F8F5EF;
+}
+
+.viewOrderRight {
+    width: 300px;
+    padding: 2%;
+}
+
+.viewOrderLeft {
+    width: 550px;
+    padding: 2%;
+}
+
+.img {
+    width: 550px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 2%;
+}
+
+.orderButtonRow {
+    display: flex;
+    justify-content: left;
+}
+
+.orderButton {
+    height: 30px;
+    width: 150px;
+    left: 15px;
+    top: 409px;
+    border-radius: 30px;
+    padding: 5px 20px 10px 20px;
+    border-color: darkgray;
+    border-width: 1px;
+    margin-right: 20px;
+    margin-top: 20px;
+    text-align: center;
+
+}
+
+h1 {
+    font-family: 'Montserrat',sans-serif;
+}
+
+.iconStyle {
+        height: 10px;
+        margin: 2px;
+        justify-content: center;
+    }

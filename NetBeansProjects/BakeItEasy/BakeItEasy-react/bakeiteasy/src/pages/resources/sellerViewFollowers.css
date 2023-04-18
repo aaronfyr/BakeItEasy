@@ -1,0 +1,295 @@
+:root {
+    --reg-font-family: Helvetica;
+
+    --beige-bg: #F8F5EF;
+    --logo: #7D7373;
+
+    --beige-text: #7D7373;
+    --dark-text: #3D3D3D;
+    --light-text: #676A6C;
+
+    --mid-orange: #E2725B;
+    --light-orange: #E9AEA2;
+    --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+h1 {
+    font-weight: bolder;
+}
+
+.seller {
+color:#3D3D3D;
+cursor: pointer;
+}
+
+.seller:hover {
+    color: var(--mid-orange);
+}
+
+.dropdownRow {
+    display: flex;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.statusStyle h3 {
+    width: 100%;
+    justify-content: right;
+}
+
+.heading {
+    margin-right: 600px;
+    margin-left: 210px;
+}
+
+.heading h1 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.searchBarSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #F8F5EF;
+}
+
+.searchBar {
+    align-items: center;
+    background-color: white;
+    border: 1px solid;
+    border-radius: 20px;
+    width: 400px;
+    overflow-y: visible;
+}
+
+.searchBar2 {
+    display: flex;
+    align-items: start;
+    background-color: white;
+    border: 1px solid;
+    border-radius: 20px;
+}
+
+.input {
+    margin-top: 10px;
+    width: 400px;
+    border: none;
+    border-radius: 20px;
+    height: 30px;
+}
+
+.inputMyOrdersSearch {
+    margin-top: 10px;
+    width: 340px;
+    height: 30px;
+    border: none;
+    border-radius: 20px;
+}
+
+.myOrdersSearchIcon {
+    background-color: transparent;
+    border: none;
+    color: black;
+    height: 20px;
+    width: 20px;
+    margin-left: 80px;
+    justify-self: start;
+}
+
+.profileSearchInput {
+    width: 100%;
+    border: none;
+    border-radius: 20px;
+    height: 38px;
+    margin: 2px;
+    padding-right: 80px;
+}
+
+.button {
+    background-color: transparent;
+    border: none;
+    width: 25px;
+    border-radius: 20px;
+}
+.searchIcon {
+    background-color: transparent;
+    border: none;
+    width: 25px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+}
+
+.orderDisplay {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px;
+    justify-content: center;
+    width:550px;
+}
+
+.listingComponent {
+    padding: 10px;
+    border-radius: 20px;
+    filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.15));
+    background: white;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+    width: 500px;
+    margin: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 55px;
+
+}
+
+.image {
+    height: 150;
+    width: 150;
+    object-fit: cover;
+}
+
+h2 {
+    color: black;
+    font-size: 16px;
+    padding-left: 5px;
+}
+
+h3 {
+    color: #8B3A3A;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+body {
+    padding: 10px;
+    background-color: white;
+}
+
+.cardTextBlock h2 {
+    color: #8B3A3A;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    padding-left: 5px;
+}
+
+.cardTextBlock h3 {
+    color: black;
+    margin: 10px;
+}
+
+.cardTextBlock h4 {
+    color: black;
+    font-weight: bolder;
+    font-family: 'Montserrat', sans-serif;
+    margin: 10px;
+}
+
+.commentTextBlock h2 {
+    color: #8B3A3A;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    padding-left: 5px;
+    width: 450px;
+}
+
+.commentTextBlock h3 {
+    color: black;
+    margin: 10px;
+    font-weight: lighter;
+}
+
+.commentTextBlock h4 {
+    color: black;
+    font-weight: bolder;
+    font-family: 'Montserrat', sans-serif;
+    margin: 10px;
+}
+
+.commentTextBlock{
+    width: 500px;
+}
+
+.sellerOrderCardHeader h3 {
+    color: #8B3A3A;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+.searchBarButton1 {
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-style: solid;
+    border-color: var(--dark-text);
+    color: var(--dark-text);
+    border-width: 1px;
+    padding: 0px 20px 0px 20px;
+    margin: 10px;
+    background-color: #ebeced;
+    width: 170px;
+}
+
+.searchBarButton1:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.flex {
+    display:flex;
+}
+
+.postDiv {
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+    filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.15));
+    border-color: #8B3A3A;
+    border-width: 0.1px;
+}
+
+.postDiv h3 {
+    font-size: 15px;
+    color:grey;
+}
+
+.commentCard {
+    padding: 10px;
+    border-radius: 20px;
+    filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.15));
+    background: white;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+    width: 500px;
+    margin: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    height: fit-content;
+
+}
+
+.editPostBtn {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    border-radius: 20px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-style: solid;
+    border-color: var(--dark-text);
+    color: var(--dark-text);
+    border-width: 1px;
+    padding: 0px 20px 0px 20px;
+    margin: 10px;
+    background-color: #ebeced;
+    width: 150px;
+    min-width: 150px;
+}
+
+.editPostBtn:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}

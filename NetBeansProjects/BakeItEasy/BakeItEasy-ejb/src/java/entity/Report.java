@@ -6,11 +6,19 @@
 package entity;
 
 import java.io.Serializable;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -24,10 +32,41 @@ public class Report implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportId;
     
-    @Column
+    @Column(nullable = false, length = 128)
+    @NotNull
+    @Size(min = 1, max = 128)
     private String title;
-    @Column
+    
+    @Column(nullable = false, length = 256)
+    @NotNull
+    @Size(min = 1, max = 256)
     private String reason;
+    
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    @JsonbTransient
+    private Buyer reporter;
+    
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    @JsonbTransient
+    private Seller reportee;
+
+    public Report() {
+    }
+
+    public Report(String title, String reason) {
+        this.title = title;
+        this.reason = reason;
+    }
+
+    public Long getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(Long reportId) {
+        this.reportId = reportId;
+    }
 
     public String getTitle() {
         return title;
@@ -44,15 +83,21 @@ public class Report implements Serializable {
     public void setReason(String reason) {
         this.reason = reason;
     }
-    
-    
 
-    public Long getReportId() {
-        return reportId;
+    public Buyer getReporter() {
+        return reporter;
     }
 
-    public void setReportId(Long reportId) {
-        this.reportId = reportId;
+    public void setReporter(Buyer reporter) {
+        this.reporter = reporter;
+    }
+
+    public Seller getReportee() {
+        return reportee;
+    }
+
+    public void setReportee(Seller reportee) {
+        this.reportee = reportee;
     }
 
     @Override

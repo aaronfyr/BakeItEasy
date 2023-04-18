@@ -1,0 +1,48 @@
+.sellerOrderCard {
+    background: white;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    margin:auto;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.sellerOrderCardBodyFlex {
+    display: flex;
+    align-items: flex-start;
+
+}
+
+.sellerOrderCardBodyStatus {
+    width: 400px;
+}
+
+.sellerOrderCardBodyStatus h2 {
+    text-align: right;
+    color: green;
+    font-family: 'Montserrat',sans-serif;
+}
+
+.sellerOrderCardHeader {
+    display: flex;
+    align-items: flex-start;
+}
+
+.cardBody {
+    background-color: white;
+}
+
+.buyerName {
+    font-size:large;
+    justify-content: top;
+    padding-left: 10px;
+}
+
+.cardTitle {
+color: blue;
+}
+
+body {
+    padding: 10px;
+    background-color: white;
+}

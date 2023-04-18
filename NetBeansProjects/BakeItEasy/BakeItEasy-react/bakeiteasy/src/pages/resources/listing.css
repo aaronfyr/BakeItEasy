@@ -1,0 +1,214 @@
+:root {
+  --reg-font-family: Helvetica;
+
+  --beige-bg: #F8F5EF;
+  --logo: #7D7373;
+
+  --beige-text: #7D7373;
+  --dark-text: #3D3D3D;
+  --light-text: #676A6C;
+
+  --mid-orange: #E2725B;
+  --light-orange: #E9AEA2;
+  --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#listingContainer {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  grid-column-gap: 10px;
+  margin-top: 20px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#buyerLeftListingContainer {
+  width: 100%;
+  justify-content: flex-end;
+}
+
+#rightListingContainer {
+  width: 100%;
+  padding-left: 10px;
+}
+
+h2 {
+    font-size: 10px;
+}
+
+.listingH2 {
+    font-size: 17px;
+}
+
+.listingH3 {
+    font-size: 20px;
+    font-family: 'Montserrat';
+    font-weight: bolder;
+}
+
+.listingH4 {
+    font-size: 20px;
+    font-family: 'Montserrat';
+    font-weight: lighter;
+}
+
+.listingLabel h3 {
+    font-size: 20px;
+}
+
+
+
+
+
+.inputStyle {
+    width: 400px;
+    height: 20px;
+    font-size: 5px;
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+.button1 {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--dark-text);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 0px 20px 0px 0px;
+  cursor: pointer;
+}
+
+.button2:hover {
+  background: var(--dark-text);
+  color: white;
+}
+
+h1 {
+  font-family: var(--reg-font-family);
+  font-size: 20px;
+  font-weight: 500px;
+  color: var(--dark-text);
+}
+
+h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500px;
+  color: var(--dark-text);
+}
+
+.italic {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500px;
+  color: var(--dark-text);
+  font-style: italic;
+}
+
+buyer_h4 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 500px;
+  color: var(--dark-text);
+
+}
+
+.details {
+  font-family: var(--reg-font-family);
+  font-size: 13px;
+  font-weight: 600px;
+  color: var(--dark-text);
+
+}
+
+.orange {
+  font-family: var(--reg-font-family);
+  font-size: 13px;
+  font-weight: 600px;
+  color: var(--dark-text);
+}
+
+#buyerListingDetailsGrid {
+  display: grid;
+  grid-template-columns:50% 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+#customisationInput {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500px;
+  color: var(--dark-text);
+  width: 100%;
+  height: 100px;
+  padding: 5px 10px 5px 10px;
+  background: white;
+  border-color: rgba(0, 0, 0, 0);
+  border-radius: 5px;
+}
+
+#oneLineInput {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500px;
+  color: var(--dark-text);
+  width: 100%;
+  padding: 5px 10px 5px 10px;
+  background: white;
+  border-color: rgba(0, 0, 0, 0);
+  border-radius: 5px;
+}

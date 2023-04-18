@@ -1,0 +1,541 @@
+:root {
+  --reg-font-family: Helvetica;
+
+  --beige-bg: #f8f5ef;
+  --logo: #7d7373;
+
+  --beige-text: #7d7373;
+  --dark-text: #3d3d3d;
+  --light-text: #676a6c;
+
+  --mid-orange: #e2725b;
+  --light-orange: #e9aea2;
+  --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 20px;
+  height: 40px;
+  padding: 0px 30px 0px 30px;
+  margin-top: 5px;
+}
+
+.input {
+  width: 100%;
+  border: none;
+  border-radius: 20px;
+  border-radius: 20px;
+  height: 40px;
+  padding: 0px 30px 0px 30px;
+  color: var(--dark-text);
+  font-family: var(--reg-font-family);
+  font-size: 18px;
+  background-color: white;
+}
+
+.button {
+  background-color: transparent;
+  border: none;
+  width: 25px;
+  border-radius: 20px;
+}
+
+.ordersDisplay {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-x: scroll;
+  height: 100vh;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.product {
+  margin: 20px;
+  width: 200px;
+  height: 250px;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: white;
+  filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1));
+}
+
+.productSeller {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.productBottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  align-self: end;
+}
+
+h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  margin-top: 5px;
+}
+
+h4 {
+  font-family: var(--reg-font-family);
+  font-weight: 400;
+  font-size: 15px;
+}
+
+h5 {
+  font-family: var(--reg-font-family);
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--light-text);
+}
+
+.search {
+  font-family: var(--reg-font-family);
+  color: var(--dark-text);
+  font-size: 15px;
+  margin-top: 15px;
+}
+
+.shoppingHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  border-width: 1px;
+  border-radius: 20px;
+  height: 30px;
+  padding: 0px 30px 0px 30px;
+  margin-top: 5px;
+
+  font-family: var(--reg-font-family);
+  color: var(--dark-text);
+  font-size: 16px;
+  margin-top: 5px;
+  font-weight: 00;
+}
+
+.categoriesContainer {
+  display: flex;
+  height: 50px;
+  margin-top: 5px;
+}
+
+.categoriesDisplay {
+  display: flex;
+  overflow-x: scroll;
+  /*justify-content: center; delete this if not necessary*/
+}
+
+/*the following supposed to make sure scroll bar is seen at all times
+  but apparently this method doesn't work anymore since 2021 idk what to do
+*/
+.categoriesDisplay ::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+.categoriesDisplay ::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+/*scrollbar:done*/
+
+.category {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--dark-text);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 0px 20px 0px 0px;
+}
+
+.category:hover {
+  background: var(--dark-text);
+  color: white;
+  cursor: pointer;
+}
+
+img {
+}
+
+img.productImg {
+  width: 100%;
+  height: 100%;
+}
+
+.buyerProductImg {
+  margin-left: auto;
+  margin-right: auto;
+  width: 180px;
+  height: 130px;
+  border-radius: 10px;
+  object-fit: fill;
+  float: left;
+  margin-top: 5px;
+}
+
+#coverPhoto {
+  background-color: var(--light-orange);
+  height: 160px;
+  border-radius: 20px;
+  width: 100%;
+}
+
+#profilePhoto {
+  background-color: var(--mid-orange);
+  height: 120px;
+  width: 120px;
+  border-radius: 60px;
+  transform: translate(40px, 100px);
+}
+
+#userDetails {
+  transform: translate(170px, 0px);
+  height: 60px;
+}
+
+#display {
+  display: flex;
+  flex-wrap: wrap;
+  height: 70vh;
+  overflow-y: scroll;
+  justify-content: center; /*delete this if not necessary*/
+}
+
+h1 {
+  font-family: var(--reg-font-family);
+  font-size: 16px;
+  font-weight: 500px;
+  color: var(--dark-text);
+}
+
+h2 {
+  font-family: var(--reg-font-family);
+  font-size: 14px;
+  font-weight: 500px;
+  color: var(--dark-text);
+}
+
+h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  font-weight: 500px;
+  color: var(--dark-text);
+}
+
+.italic {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500px;
+  color: var(--dark-text);
+  font-style: italic;
+}
+
+h4 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  font-weight: 500px;
+  color: var(--dark-text);
+}
+
+.details {
+  font-family: var(--reg-font-family);
+  font-size: 9px;
+  font-weight: 600px;
+  color: var(--dark-text);
+}
+
+.italic {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  font-weight: 500px;
+  color: var(--light-text);
+  font-style: italic;
+}
+
+#buyerOrderCard {
+  display: flex;
+  background-color: white;
+  width: 900px;
+  height: 160px;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
+  padding: 0px 10px 10px 10px;
+  overflow: hidden;
+  /* for horizontal aligning of child divs */
+  justify-content: center;
+  filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1));
+}
+
+#buyerOrderDetailsGrid {
+  display: grid;
+  grid-template-columns: 45% 25% 30%;
+  width: 710px;
+  height: 150px;
+  float: left;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.orderDetails_left {
+}
+
+.orderDetails_right {
+}
+
+/*modal*/
+.modal {
+  font-size: 12px;
+  border-radius: 10px;
+}
+.modal > .header {
+  width: 100%;
+  border-bottom: 1px solid gray;
+  font-size: 18px;
+  text-align: center;
+  padding: 5px;
+}
+.modal > .content {
+  width: 100%;
+  padding: 10px 5px;
+}
+.modal > .actions {
+  width: 100%;
+  padding: 10px 5px;
+  margin: auto;
+  text-align: center;
+}
+.modal > .close {
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  padding: 2px 5px;
+  line-height: 20px;
+  right: -10px;
+  top: -10px;
+  font-size: 24px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #cfcece;
+  color: #000;
+}
+
+.button1_editAccount {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--dark-text);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+  cursor: pointer;
+}
+.button1_editAccount:hover {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--beige-bg);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+  background-color: var(--dark-text);
+  cursor: pointer;
+}
+
+.button1_report {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--dark-text);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+  cursor: pointer;
+}
+
+.button1_reviewed {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  color: #d1a000;
+  padding: 0px 5px 0px 0px;
+  margin: 10px 20px 0px 0px;
+}
+
+.button1_reported {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  color: #d13b00;
+  padding: 0px 5px 0px 0px;
+  margin: 10px 20px 0px 0px;
+}
+
+.button1_report:hover {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--beige-bg);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+  background-color: var(--mid-orange);
+  cursor: pointer;
+}
+
+.button1_cancel {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--dark-text);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+}
+
+.button1_cancel:hover {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--beige-bg);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+  background-color: var(--dark-text);
+  cursor: pointer;
+}
+
+.button1_follow {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--dark-text);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+}
+
+.button1_follow:hover {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--dark-text);
+  color: var(--beige-bg);
+  border-width: 1px;
+  padding: 0px 20px 0px 20px;
+  margin: 10px 20px 0px 0px;
+  background-color: var(--mid-orange);
+  cursor: pointer;
+}
+
+svg.star-svg {
+  display: inline;
+}
+
+.closeButton {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: 500px;
+  color: var(--mid-orange);
+  height: 22px;
+  width: 18px;
+  cursor: pointer;
+}
+
+.each-slide-effect > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  height: 350px;
+}
+
+.each-slide-effect span {
+  padding: 20px;
+  font-size: 20px;
+  background: #efefef;
+  text-align: center;
+}
+
+.pointerButton {
+  cursor: pointer;
+}
+
+.CANCELLED {
+  color: var(--light-text);
+}
+
+.COMPLETED {
+  color: #64b476;
+}
+
+.PENDING {
+  color: #507659;
+}
+
+.REJECTED {
+  color: #7e3232;
+}

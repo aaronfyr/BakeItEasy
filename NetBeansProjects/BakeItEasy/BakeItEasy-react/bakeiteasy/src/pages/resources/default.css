@@ -1,0 +1,48 @@
+:root {
+  --reg-font-family: Helvetica;
+
+  --beige-bg: #F8F5EF;
+  --logo: #7D7373;
+
+  --beige-text: #7D7373;
+  --dark-text: #3D3D3D;
+  --light-text: #676A6C;
+
+  --mid-orange: #E2725B;
+  --light-orange: #E9AEA2;
+  --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+body { /* background */
+  background-color: var(--beige-bg) !important;
+  padding: 15px 100px 0px 100px !important;;
+}
+
+a { 
+  text-decoration: none;
+}
+
+h4 {
+  font-family: var(--reg-font-family);
+  font-weight: 400;
+  font-size: 15px;
+}
+
+.search {
+  font-family: var(--reg-font-family);
+  color: var(--dark-text);
+  font-size: 20px;
+  font-weight: 500;
+  margin-top: 30px;
+}
+
+.calendarContainer {
+  width:90%;
+  background-color: white;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  border-radius:20px;
+  margin-bottom: 40px;
+  filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1));
+}

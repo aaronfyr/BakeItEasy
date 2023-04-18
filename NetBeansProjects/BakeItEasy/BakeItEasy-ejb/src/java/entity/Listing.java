@@ -5,15 +5,32 @@
  */
 package entity;
 
-import java.awt.Image;
+import enumeration.ListingCategory;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -27,18 +44,80 @@ public class Listing implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long listingId;
 
-    @Column
+    @Column(nullable = false, length = 64)
+    @NotNull
+    @Size(min = 1, max = 64)
     private String name;
-    @Column
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @NotNull
+    private ListingCategory listingCategory;
+
+    @Column(nullable = false)
+    @NotNull
+    @DecimalMin("0.00")
     private BigDecimal price;
-    @Column
-    private Integer quantityLeft;
-    @Column
+
+    @Min(0)
+    @NotNull
+    private Integer maxQuantity;
+
+    @Column(nullable = false, length = 512)
+    @NotNull
+    @Size(min = 1, max = 512)
     private String description;
+
     @Column
     private List<String> imagePaths; // might need to change or swap to front end?
     /*@Column
     private String videoPath;    */
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column
+    private Date dateOfCreation;
+
+    @Min(0)
+    @NotNull
+    private Integer minPrepDays;
+
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    @JsonbTransient
+    private Seller seller;
+
+    @OneToMany(mappedBy = "listing", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonbTransient
+    private List<Order> orders;
+
+    @ManyToMany
+    @JsonbTransient
+    private List<Buyer> likers;
+
+    public Listing() {
+        this.dateOfCreation = new Date(System.currentTimeMillis());
+        this.orders = new ArrayList<>();
+        this.likers = new ArrayList<>();
+    }
+
+    public Listing(String name, ListingCategory listingCategory, BigDecimal price, Integer maxQuantity, String description, List<String> imagePaths, Integer minPrepDays) {
+        this();
+        this.name = name;
+        this.listingCategory = listingCategory;
+        this.price = price;
+        this.maxQuantity = maxQuantity;
+        this.description = description;
+        this.imagePaths = imagePaths;
+        this.minPrepDays = minPrepDays;
+    }
+
+    public Long getListingId() {
+        return listingId;
+    }
+
+    public void setListingId(Long listingId) {
+        this.listingId = listingId;
+    }
 
     public String getName() {
         return name;
@@ -46,6 +125,14 @@ public class Listing implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ListingCategory getListingCategory() {
+        return listingCategory;
+    }
+
+    public void setListingCategory(ListingCategory listingCategory) {
+        this.listingCategory = listingCategory;
     }
 
     public BigDecimal getPrice() {
@@ -56,12 +143,12 @@ public class Listing implements Serializable {
         this.price = price;
     }
 
-    public Integer getQuantityLeft() {
-        return quantityLeft;
+    public Integer getMaxQuantity() {
+        return maxQuantity;
     }
 
-    public void setQuantityLeft(Integer quantityLeft) {
-        this.quantityLeft = quantityLeft;
+    public void setMaxQuantity(Integer maxQuantity) {
+        this.maxQuantity = maxQuantity;
     }
 
     public String getDescription() {
@@ -72,20 +159,52 @@ public class Listing implements Serializable {
         this.description = description;
     }
 
-    public List<String> getImages() {
+    public List<String> getImagePaths() {
         return imagePaths;
     }
 
-    public void setImages(List<String> images) {
-        this.imagePaths = images;
+    public void setImagePaths(List<String> imagePaths) {
+        this.imagePaths = imagePaths;
     }
 
-    public Long getListingId() {
-        return listingId;
+    public Date getDateOfCreation() {
+        return dateOfCreation;
     }
 
-    public void setListingId(Long listingId) {
-        this.listingId = listingId;
+    public void setDateOfCreation(Date dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
+    }
+
+    public Integer getMinPrepDays() {
+        return minPrepDays;
+    }
+
+    public void setMinPrepDays(Integer minPrepDays) {
+        this.minPrepDays = minPrepDays;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public List<Buyer> getLikers() {
+        return likers;
+    }
+
+    public void setLikers(List<Buyer> likers) {
+        this.likers = likers;
     }
 
     @Override
