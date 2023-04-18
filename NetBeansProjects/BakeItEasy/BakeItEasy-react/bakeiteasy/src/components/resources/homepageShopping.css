@@ -62,6 +62,16 @@
   align-content: flex-start;
 }
 
+.followedListingsDisplay {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-x: visible;
+    height: 100vh;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
 .sellersDisplay {
   display: grid;
   row-gap: 10px;
@@ -156,7 +166,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-  
+
 
 .productContent {
   color: var(--dark-text);

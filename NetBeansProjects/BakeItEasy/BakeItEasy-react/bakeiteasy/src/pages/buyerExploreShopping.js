@@ -329,7 +329,7 @@ function BuyerExploreShopping() {
           <h1>Explore More Bakers</h1>
         </HStack>
       </div>
-      <div className="listingsDisplay">
+      <div className="followedListingsDisplay">
         {listings
           .filter((product) => {
             if (
