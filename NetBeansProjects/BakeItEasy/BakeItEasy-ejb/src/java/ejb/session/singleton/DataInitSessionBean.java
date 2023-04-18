@@ -111,15 +111,15 @@ public class DataInitSessionBean {
                     
                         Buyer buyer1 = new Buyer("Andy", "andy@gmail.com", "andy", "password", "99999991", "123 building", image);
                         buyerSessionBeanLocal.createNewBuyer(buyer1);
-                        Buyer buyer2 = new Buyer("Bob", "bob@gmail.com", "bob", "password", "99999992", "345 building", image);
+                        Buyer buyer2 = new Buyer("Bob", "bob@gmail.com", "bob", "password", "99999992", "345 building", "https://images.unsplash.com/photo-1564564244660-5d73c057f2d2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80");
                         buyerSessionBeanLocal.createNewBuyer(buyer2);
-                        Buyer buyer3 = new Buyer("Charlie", "charlie@gmail.com", "charlie", "password", "99999993", "45 building", image);
+                        Buyer buyer3 = new Buyer("Charlie", "charlie@gmail.com", "charlie", "password", "99999993", "45 building", "https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80");
                         buyerSessionBeanLocal.createNewBuyer(buyer3);
 
-                        Seller seller1 = new Seller("Sam", "sam@gmail.com", "sam", "password", "88888881", image);
-                        Seller seller2 = new Seller("Tom", "tom@gmail.com", "tom", "password", "88888882", image);
-                        Seller seller3 = new Seller("Rachel", "rachel@gmail.com", "rachel", "password", "88888883", image);
-                        Seller seller4 = new Seller("Oliver", "oliver@gmail.com", "oliver", "password", "88888884", image);
+                        Seller seller1 = new Seller("Sam", "sam@gmail.com", "sam", "password", "88888881", "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=934&q=80");
+                        Seller seller2 = new Seller("Tom", "tom@gmail.com", "tom", "password", "88888882", "https://images.unsplash.com/photo-1543324402-c711a3d43289?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80");
+                        Seller seller3 = new Seller("Rachel", "rachel@gmail.com", "rachel", "password", "88888883", "https://images.unsplash.com/photo-1620039423059-58fe9a0ca20a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=673&q=80");
+                        Seller seller4 = new Seller("Oliver", "oliver@gmail.com", "oliver", "password", "88888884", "https://images.unsplash.com/photo-1629782846636-775bbb3b4967?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80");
                         sellerSessionBeanLocal.createNewSeller(seller1);
                         sellerSessionBeanLocal.createNewSeller(seller2);
                         sellerSessionBeanLocal.createNewSeller(seller3);
