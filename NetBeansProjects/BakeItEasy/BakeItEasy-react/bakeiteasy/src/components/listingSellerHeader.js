@@ -72,7 +72,6 @@ export function ListingSellerHeaderNonMemo({ lId }) {
             )}
           </div>
           <p>{listingSellers[lId]}</p>
-          <p>{listingSellers[lId]}</p>
         </HStack>
       </div>}
       </div>
