@@ -76,7 +76,6 @@
   display: grid;
   row-gap: 10px;
   flex-wrap: wrap;
-  overflow-y: scroll;
   justify-content: center; /*delete this if not necessary*/
 }
 
@@ -110,12 +109,10 @@
 }
 
 .postsDisplay {
-  max-width: 50%;
   display: flex;
   flex-wrap: wrap;
-  overflow-y: scroll;
   margin: auto;
-  width: 550px;
+  width: 70%;
 }
 
 
