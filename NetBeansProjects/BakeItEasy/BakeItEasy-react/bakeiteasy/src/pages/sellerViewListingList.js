@@ -123,14 +123,15 @@ const SellerViewListingList = () => {
         <div class="searchBar">
           <input
             className="inputMyOrdersSearch"
+            placeholder="Search for listings..."
             onChange={(e) => {
               setSearch(e.target.value.toLowerCase());
             }}
           />
-          <img
+         {/*  <img
             style={{ width: 15, marginLeft: 10 }}
             src="https://uxwing.com/wp-content/themes/uxwing/download/user-interface/search-icon.png"
-          ></img>
+          ></img> */}
         </div>
         <div className="listingDisplay">
           {filteredListings.map((listing) => (
