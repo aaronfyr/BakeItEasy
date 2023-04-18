@@ -331,7 +331,7 @@ function BuyerFollowedShopping() {
         </HStack>
       </div>
 
-      <div className="listingsDisplay">
+      <div className="followedListingsDisplay">
         {fListings
           .filter((product) => {
             if (
