@@ -196,7 +196,7 @@ export const SellerCalendar = () => {
       }
     };
     fetchData();
-  }, [navigate, orders]);
+  }, []);
 
   const [state, setState] = useState({
     event: {
