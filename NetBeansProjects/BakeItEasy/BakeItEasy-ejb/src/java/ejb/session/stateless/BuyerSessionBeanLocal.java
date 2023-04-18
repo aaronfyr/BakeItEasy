@@ -20,6 +20,7 @@ import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
 import error.exception.ListingNotFoundException;
 import error.exception.NewAndConfirmPasswordsDoNotMatchException;
+import error.exception.NewPasswordIsSameAsCurrentPasswordException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
@@ -60,6 +61,6 @@ public interface BuyerSessionBeanLocal {
 
     public void unfollowSellerThroughProfile(Long buyerId, Long sellerId) throws SellerNotFoundException, BuyerNotFoundException, BuyerIsNotFollowingSellerException;
 
-    public void updateBuyerPassword(Long buyerId, String currentPassword, String newPassword, String confirmPassword) throws BuyerNotFoundException, NewAndConfirmPasswordsDoNotMatchException, CurrentPasswordDoesNotMatchException, InputDataValidationException;
+    public void updateBuyerPassword(Long buyerId, String currentPassword, String newPassword, String confirmPassword) throws BuyerNotFoundException, NewPasswordIsSameAsCurrentPasswordException, NewAndConfirmPasswordsDoNotMatchException, CurrentPasswordDoesNotMatchException, InputDataValidationException;
 
 }

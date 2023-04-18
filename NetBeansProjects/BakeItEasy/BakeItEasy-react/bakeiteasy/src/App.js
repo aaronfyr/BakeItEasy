@@ -12,6 +12,12 @@ import ResetPassword from "./pages/resetPassword";
 
 import BuyerHomepage from "./pages/buyerHomepage";
 import AdminProfilePage from "./pages/adminProfilePage";
+import AdminViewBuyerProfile from "./pages/adminViewBuyerProfile";
+import AdminViewSellerProfile from "./pages/adminViewSellerProfile";
+import AdminViewSellerListing from "./pages/adminViewSellerListing";
+import AdminViewSellerOrderMgmt from "./pages/adminViewSellerOrderMgmt";
+import AdminViewSellerViewOrder from "./pages/adminViewSellerViewOrder";
+import AdminViewSellerViewOrderByListing from "./pages/adminViewSellerViewOrderByListing";
 
 import BuyerFollowedShopping from "./pages/buyerFollowedShopping";
 import BuyerExploreShopping from "./pages/buyerExploreShopping";
@@ -74,6 +80,30 @@ function App() {
           <Route path="/viewAllSellers" element={<ViewAllSellers />} />
           <Route path="/viewAllReports" element={<ViewAllReports />} />
           <Route path="/makeReview" element={<MakeReview />} />
+          <Route
+            path="/adminViewBuyerProfile"
+            element={<AdminViewBuyerProfile />}
+          />
+          <Route
+            path="/adminViewSellerProfile"
+            element={<AdminViewSellerProfile />}
+          />
+          <Route
+            path="/adminViewSellerListing/:id"
+            element={<AdminViewSellerListing />}
+          />
+          <Route
+            path="/adminViewSellerOrderMgmt"
+            element={<AdminViewSellerOrderMgmt />}
+          />
+          <Route
+            path="/adminViewSellerOrderMgmt/listing/:id"
+            element={<AdminViewSellerViewOrderByListing />}
+          />
+          <Route
+            path="adminViewSellerViewOrder/:id"
+            element={<AdminViewSellerViewOrder />}
+          />
 
           <Route path="/sellerProfile" element={<SellerProfile />} />
           <Route path="/editSellerProfile" element={<SellerEditProfile />} />
@@ -97,15 +127,16 @@ function App() {
           <Route path="/forum/post/:id" element={<ForumPost />} />
           <Route path="/forum/createPost" element={<ForumCreatePost />} />
           <Route path="/forum/editPost/:id" element={<ForumEditPost />} />
-
           <Route
             path="/sellerChangePassword"
             element={<SellerChangePassword />}
           />
-          <Route path="/buyerChangePassword" element={<BuyerChangePassword />} />
+          <Route
+            path="/buyerChangePassword"
+            element={<BuyerChangePassword />}
+          />
         </Routes>
       </Router>
-
     </ChakraProvider>
   );
 }

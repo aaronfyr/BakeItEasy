@@ -7,8 +7,6 @@ package ejb.session.stateless;
 
 import entity.Buyer;
 import entity.Comment;
-import entity.Listing;
-import entity.Order;
 import entity.Post;
 import entity.Seller;
 import error.exception.BuyerNotFoundException;
@@ -16,6 +14,7 @@ import error.exception.InputDataValidationException;
 import error.exception.PostNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -172,8 +171,22 @@ public class PostSessionBean implements PostSessionBeanLocal {
     @Override
     public List<Post> retrieveAllPosts() {
         Query query = em.createQuery("SELECT p FROM Post p");
+        
+        List<Post> results = new ArrayList<>();
+        
+        List<Post> existingPosts = query.getResultList();
+        
+        for (Post post : existingPosts) {
+            if (!post.isIsBuyer()) {
+                if (!post.getSeller().getIsBanned()) {
+                    results.add(post);
+                }
+            } else {
+                results.add(post);
+            }
+        }
 
-        return query.getResultList();
+        return results;
     }
     
     @Override

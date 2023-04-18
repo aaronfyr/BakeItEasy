@@ -10,7 +10,7 @@ function ViewAllSellers() {
   useEffect(() => {
     async function fetchData() {
       const response = await fetch(
-        `http://localhost:8080/BakeItEasy-war/webresources/sellers`,
+        `http://localhost:8080/BakeItEasy-war/webresources/sellers/admin`,
         {
           method: "GET",
           headers: {

@@ -27,6 +27,7 @@ import error.exception.CurrentPasswordDoesNotMatchException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
 import error.exception.NewAndConfirmPasswordsDoNotMatchException;
+import error.exception.NewPasswordIsSameAsCurrentPasswordException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.PostNotFoundException;
@@ -34,6 +35,8 @@ import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -378,6 +381,12 @@ public class BuyersResource {
         } catch (CurrentPasswordDoesNotMatchException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Current password entered does not match user's password!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (NewPasswordIsSameAsCurrentPasswordException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "New password is same as current password! Please choose another password!")
                     .build();
 
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();

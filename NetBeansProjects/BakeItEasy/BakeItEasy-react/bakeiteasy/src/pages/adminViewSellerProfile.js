@@ -5,50 +5,18 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { formatPrice } from "../components/formatter";
-import { SellerNavigationBar } from "../components/sellerNavigationBar";
+import AdminMenuBar from "../components/adminMenuBar";
 import "./resources/sellerProfile.css";
+import { useLocation } from "react-router-dom";
 
-function SellerProfile(props) {
+function AdminViewSellerProfile() {
+  const sellerId = new URLSearchParams(useLocation().search).get("id");
   const [search, setSearch] = useState("");
-
-  const [seller, setSeller] = useState(null);
-  const [sellerName, setSellerName] = useState("Log In");
-  const [sellerUsername, setSellerUsername] = useState("");
-  const [sellerId, setSellerId] = useState(null);
   const [sellerObj, setSellerObj] = useState([]);
   const [followerCount, setFollowerCount] = useState(404);
 
   const navigate = useNavigate();
-
-  const { review } = props;
   const stars = [];
-
-  useEffect(() => {
-    async function fetchData() {
-      const fetchedSeller = localStorage.getItem("seller");
-      /*if (!fetchedBuyer) {
-        console.log("navbar", "no buyer");
-        navigate("/login");
-      } else {*/
-      if (!fetchedSeller) {
-        console.log("sellerProfile", "no seller");
-        navigate("/login");
-      } else {
-        console.log("sellerProfile", "has seller");
-        try {
-          const parsedUser = JSON.parse(fetchedSeller);
-          setSeller(parsedUser);
-          console.log("parsedUser: ", parsedUser);
-          console.log("parsedUser.id: ", parsedUser.sellerId);
-          setSellerId(parsedUser.sellerId);
-          setSellerName(parsedUser.name);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-    fetchData();
-  }, []);
 
   // fetch listings
   const [listings, setListings] = useState([]);
@@ -135,7 +103,7 @@ function SellerProfile(props) {
   );
 
   const routeChangeToListing = (id) => {
-    let path = "/sellerListing/";
+    let path = "/adminViewSellerListing/";
     navigate(path + id);
   };
 
@@ -154,10 +122,15 @@ function SellerProfile(props) {
     navigate(path);
   };
 
+  const routeToOrderMgmt = () => {
+    console.log("Navigate to: ", "orderManagement");
+    navigate("/adminViewSellerOrderMgmt?id=" + sellerId);
+  };
+
   return (
     <div>
       <ToastContainer />
-      <SellerNavigationBar />
+      <AdminMenuBar />
       <br />
       <div id="coverPhoto">
         <div id="profilePhoto">
@@ -180,23 +153,16 @@ function SellerProfile(props) {
         <Spacer />
         <div
           className="editProfileBtn"
-          onClick={() => routeChangeToSellerEditProfile()}
+          onClick={() => routeToOrderMgmt()}
         >
           <FaRegEdit style={{ marginRight: 5 }} />
-          Edit profile
-        </div>
-        <div
-          className="followersBtn"
-          onClick={() => routeChangeToViewFollowers()}
-        >
-          <FaRegUser style={{ marginRight: 5 }} />
-          {followerCount} Follower(s)
+          View orders
         </div>
       </HStack>
+      <h2>Search listings:</h2>
       <div class="searchBar2">
         <input
           className="profileSearchInput"
-          placeholder="Search for my listings"
           onChange={(e) => {
             setSearch(e.target.value.toLowerCase());
           }}
@@ -207,15 +173,6 @@ function SellerProfile(props) {
         <div div className="flexGrowBox">
           <div div className="flexGrowBox_header">
             <h1>Seller Products</h1>
-            <div
-              className="newListBtn"
-              onClick={() => routeChangeToCreateListing()}
-            >
-              <HStack>
-                <FaPlus />
-                <div>Create listing </div>
-              </HStack>
-            </div>
           </div>
           <div className="profileListingsDisplay">
             {filteredListings.map((listing) => (
@@ -266,4 +223,4 @@ function SellerProfile(props) {
   );
 }
 
-export default SellerProfile;
+export default AdminViewSellerProfile;

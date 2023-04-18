@@ -1,50 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { FaListUl } from "react-icons/fa";
-import {
-  useNavigate
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import AdminMenuBar from "../components/adminMenuBar";
 import { formatPrice } from "../components/formatter";
 import { ListingStatsMemo } from "../components/listingStatsText";
-import { SellerNavigationBar } from "../components/sellerNavigationBar";
 import "./resources/searchBarSection.css";
 import SellerOrderCard from "./sellerOrderCard.js";
 
 /*const orderResponse = await fetch(``)*/
 
-const SellerViewListingList = () => {
+const AdminViewSellerViewListingList = (props) => {
   const [search, setSearch] = useState("");
   const [listings, setListings] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filteredListings, setFilteredListings] = useState([]);
 
   const [seller, setSeller] = useState(null);
-  const [sellerId, setSellerId] = useState(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      const fetchedSeller = localStorage.getItem("seller");
-      /*if (!fetchedBuyer) {
-        console.log("navbar", "no buyer");
-        navigate("/login");
-      } else {*/
-      if (!fetchedSeller) {
-        console.log("sellerProfile", "no seller");
-        navigate("/sellerlogin");
-      } else {
-        console.log("sellerProfile", "has seller");
-        try {
-          const parsedUser = JSON.parse(fetchedSeller);
-          setSeller(parsedUser);
-          console.log("parsedUser: ", parsedUser);
-          console.log("parsedUser.id: ", parsedUser.sellerId);
-          setSellerId(parsedUser.sellerId);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-    fetchData();
-  }, []);
+  const { sellerId } = props;
 
   //get listings of seller
   async function fetchListings() {
@@ -96,13 +68,6 @@ const SellerViewListingList = () => {
     }
   }, [listings, search]);
 
-  const handleCategoryChange = (category) => {
-    const newSelectedCategory = category.toLowerCase();
-    setSelectedCategory(newSelectedCategory);
-    const filteredData = filterListings(listings, "", newSelectedCategory);
-    setFilteredListings(filteredData);
-  };
-
   let navigate = useNavigate();
   const routeChangeToOrder = (id) => {
     let path = "listing/";
@@ -111,10 +76,10 @@ const SellerViewListingList = () => {
 
   return (
     <div>
-      <SellerNavigationBar />
+      <AdminMenuBar />
       <div className="dropdownRow">
         <div className="heading">
-          <h1>My Orders</h1>
+          <h1>Orders</h1>
         </div>
         {/*<CategoryDropdown onCategoryChange={handleCategoryChange}/>
         <body style={{fontFamily: 'Montserrat'}}>Selected category: {selectedCategory}</body>*/}
@@ -123,15 +88,14 @@ const SellerViewListingList = () => {
         <div class="searchBar">
           <input
             className="inputMyOrdersSearch"
-            placeholder="Search for listings..."
             onChange={(e) => {
               setSearch(e.target.value.toLowerCase());
             }}
           />
-         {/*  <img
+          <img
             style={{ width: 15, marginLeft: 10 }}
             src="https://uxwing.com/wp-content/themes/uxwing/download/user-interface/search-icon.png"
-          ></img> */}
+          ></img>
         </div>
         <div className="listingDisplay">
           {filteredListings.map((listing) => (
@@ -201,4 +165,4 @@ const imgStyle = {
   marginRight: 20,
 };
 
-export default SellerViewListingList;
+export default AdminViewSellerViewListingList;

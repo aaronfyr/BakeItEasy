@@ -11,6 +11,7 @@ import error.exception.CurrentPasswordDoesNotMatchException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
 import error.exception.NewAndConfirmPasswordsDoNotMatchException;
+import error.exception.NewPasswordIsSameAsCurrentPasswordException;
 import error.exception.OrderIsNotAcceptedException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
@@ -57,7 +58,7 @@ public interface SellerSessionBeanLocal {
 
     public List<Buyer> retrieveListOfFollowers(Long sellerId) throws SellerNotFoundException;
 
-    public void updateSellerPassword(Long sellerId, String currentPassword, String newPassword, String confirmPassword) throws SellerNotFoundException, NewAndConfirmPasswordsDoNotMatchException, CurrentPasswordDoesNotMatchException, InputDataValidationException;
+    public void updateSellerPassword(Long sellerId, String currentPassword, String newPassword, String confirmPassword) throws SellerNotFoundException, NewPasswordIsSameAsCurrentPasswordException, NewAndConfirmPasswordsDoNotMatchException, CurrentPasswordDoesNotMatchException, InputDataValidationException;
 
     public List<Seller> retrieveAllSellersAdmin();
     
