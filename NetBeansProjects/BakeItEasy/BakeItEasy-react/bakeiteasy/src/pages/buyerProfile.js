@@ -26,6 +26,7 @@ import {
 import { FaEdit, FaPhone } from "react-icons/fa";
 import { MdOutlineCancel } from "react-icons/md";
 import "reactjs-popup/dist/index.css";
+import { formatDate, formatPrice } from "../components/formatter";
 
 function BuyerProfile() {
   const { id } = useParams();
@@ -369,7 +370,7 @@ function BuyerProfile() {
                 <h4 className="details">
                   Quantity: {order.quantity} <br />
                   Unit Price: ${order.price} <br />
-                  Total: ${order.price * order.quantity}
+                  Total: ${formatPrice(order.price * order.quantity)}
                 </h4>
               </div>
               <div className="orderDetails_right">
