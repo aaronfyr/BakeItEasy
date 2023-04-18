@@ -1,4 +1,4 @@
-# BakeItEasy
+# BakeItEasy (NUS IS3106 Project)
 
 # Description
 BakeItEasy is an application that seeks to connect small baking businesses in Singapore with customers looking to purchase freshly baked goods for any occasion. Our user-friendly platform simplifies the traditional process of informal orders and enquiries on social media by providing a one-stop-shop experience that streamlines information management and expands businesses' reach.
@@ -18,19 +18,19 @@ BakeItEasy consists of 3 portals, namely the buyer, seller, and admin portal. Be
 
 ## Buyer Portal
 
-<u> User authentication </u>
+** User authentication **
 
 Buyers are able to sign in with their registered email and password. They can create a new account with a unique username, email and phone number. They can also upload a profile picture. A forget password feature also links them to their local email application to send a request to BakeItEasy administrators to change their password. If users are trying to access the buyer pages without logging in, they will be redirected to the buyer login page.
 
-<u> Profile </u>
+** Profile **
 
 Buyers are able to view and edit their personal details. They can also change their password.
 
-<u> Home Page </u>
+** Home Page **
 
 Their home page will be populated with seller’s listings, where they can explore different bakes created by sellers. Buyers are able to filter the listings according to categories (e.g. cake, tart, pie), and a search bar allows them to search by keywords. Buyers can also view listings created by sellers they follow.
 
-<u> Orders </u>
+** Orders **
 
 When buyers would like to buy a product, they can create an order from a listing. Customisation options (e.g. colour, quantity, customisation notes) allow buyers to be specific in their requests. They can also choose a preferred date of completion (that automatically takes into account the seller’s minimum preparation time).
 
@@ -38,49 +38,49 @@ Order statuses (pending, accepted, rejected, completed, cancelled) can be viewed
 
 Buyers can create a review for every unique order, that rates the seller and provides constructive feedback to the seller and future buyers. Should the interaction between a buyer and seller be undesirable, the buyer can also create a report against the seller, and BakeItEasy administrators will provide follow-up actions.
 
-<u> Forum </u>
+** Forum **
 
 A common forum between buyers and sellers allows all BakeItEasy users to communicate and share information concurrently. Users are able to search for posts by different categories (e.g. #sharingIngredients, #discussion) and create their own posts. They can build onto different posts by commenting on them, thus creating a convenient social feature that promotes baking-related information sharing and learning.
 
 ## Seller Portal
 
-<u> User Authentication </u>
+** User Authentication **
 
 Sellers are able to sign in with their registered email and password. They can create a new account with a unique username, email and phone number. They can also upload a profile picture. A forget password feature also links them to their local email to send a request to BakeItEasy administrators to change their password. If users are trying to access the seller pages without logging in, they will be redirected to the seller login page.
 
-<u> Profile </u>
+** Profile **
 
 Sellers are able to view and edit their personal details. They can also change their password.
 
-<u> Listings </u>
+** Listings **
 
 Sellers are able to create their listings where they can state the name, category, price, max quantity per order, description, minimum preparation time, and upload pictures of their product. They can then make edits to their listings any time they want. These listings will be viewed by potential customers and order creation will be through the individual listing.
 
-<u> Appointments </u>
+** Appointments **
 
 Sellers are able to view their appointments in a calendar format, which are automatically created once an order is created. This is to provide easy reference for the seller to manage his or her orders.
 
-<u> Orders </u>
+** Orders **
 
 After buyers make an order, sellers will be able to see that they have an incoming order. They can view the order’s details and decide whether to accept or reject the order. The buyer will be updated accordingly depending on the seller’s action. For orders that are accepted, the seller can prepare and deliver it on the expected collection date and proceed to mark the order as completed.
 
 Order statuses (pending, accepted, rejected, completed, cancelled) can be viewed at a glance, thus keeping sellers updated and giving them a seamless view of their order progress.
 
-<u> Forum </u>
+** Forum **
 
-A common forum between buyers and sellers allows all BakeItEasy users to communicate and share information concurrently. Users are able to search for posts by different categories (e.g. #sharingIngredients, #discussion) and create their own posts. They can build onto different posts by commenting on them, thus creating a convenient social feature that promotes baking-related information sharing and learning.
+A common forum between buyers and sellers allows all BakeItEasy users to communicate and share information concurrently. Users are able to search for posts by different categories (e.g. #SharingIngredients, #discussion) and create their own posts. They can build onto different posts by commenting on them, thus creating a convenient social feature that promotes baking-related information sharing and learning.
 
 ## Admin Portal
 
-<u> User Authentication </u>
+** User Authentication **
 
 Admins are able to log in with their given email and password. If users are trying to access the admin pages without logging in, they will be redirected to the admin login page.
 
-<u> Profile </u>
+** Profile **
 
 Admins are able to view and edit their personal details. They can also change their password.
 
-<u> Reports </u>
+** Reports **
 
 Admins are able to review reports and do the necessary investigation before opting to ban the user or dismiss the report.
 
