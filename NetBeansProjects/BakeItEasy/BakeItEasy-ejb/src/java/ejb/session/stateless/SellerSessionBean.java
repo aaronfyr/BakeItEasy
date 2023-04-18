@@ -286,7 +286,13 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
 
     @Override
     public List<Seller> retrieveAllSellers() {
-        Query query = em.createQuery("SELECT s FROM Seller s");
+        Query query = em.createQuery("SELECT s FROM Seller s WHERE s.isBanned = false ORDER BY s.username");
+        return query.getResultList();
+    }
+    
+    @Override
+    public List<Seller> retrieveAllSellersAdmin() {
+        Query query = em.createQuery("SELECT s FROM Seller s ORDER BY s.username");
         return query.getResultList();
     }
 

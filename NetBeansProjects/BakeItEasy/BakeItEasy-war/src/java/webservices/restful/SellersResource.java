@@ -222,6 +222,14 @@ public class SellersResource {
     public List<Seller> getAllSellers() {
         return sellerSessionBeanLocal.retrieveAllSellers();
     } // end get all sellers
+    
+    // CHECKED: AARON
+    @GET
+    @Path("/admin")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Seller> getAllSellersAdmin() {
+        return sellerSessionBeanLocal.retrieveAllSellersAdmin();
+    } // end get all sellers
 
     // CHECKED: AARON
     @GET

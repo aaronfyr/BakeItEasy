@@ -26,6 +26,7 @@ import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
 import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -239,7 +240,7 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+
     @Override
     public void updateBuyerPassword(Long buyerId, String currentPassword, String newPassword, String confirmPassword) throws BuyerNotFoundException, NewAndConfirmPasswordsDoNotMatchException, CurrentPasswordDoesNotMatchException, InputDataValidationException {
         Buyer buyerToUpdate = retrieveBuyerById(buyerId);
@@ -249,13 +250,13 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
             } else {
                 throw new NewAndConfirmPasswordsDoNotMatchException("New password and confirm password does not match!");
             }
-            
+
         } else {
             throw new CurrentPasswordDoesNotMatchException("Current password entered does not match user's password!");
         }
-        
+
         Set<ConstraintViolation<Buyer>> constraintViolations = validator.validate(buyerToUpdate);
-        
+
         if (!constraintViolations.isEmpty()) {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
@@ -264,7 +265,15 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
     @Override
     public List<Seller> retrieveListOfFollowing(Long buyerId) throws BuyerNotFoundException {
         Buyer buyerFollower = retrieveBuyerById(buyerId);
-        return buyerFollower.getFollowings();
+        List<Seller> listOfFollowings = buyerFollower.getFollowings();
+        List<Seller> result = new ArrayList<>();
+
+        for (Seller seller : listOfFollowings) {
+            if (!seller.getIsBanned()) {
+                result.add(seller);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -324,7 +333,16 @@ public class BuyerSessionBean implements BuyerSessionBeanLocal {
         try {
             Buyer buyer = retrieveBuyerById(buyerId);
 
-            return buyer.getLikedListings();
+            List<Listing> listOfLikedListings = buyer.getLikedListings();
+            List<Listing> result = new ArrayList<>();
+
+            for (Listing listing : listOfLikedListings) {
+                if (!listing.getSeller().getIsBanned()) {
+                    result.add(listing);
+                }
+            }
+
+            return result;
         } catch (BuyerNotFoundException ex) {
             throw new BuyerNotFoundException(ex.getMessage());
         }

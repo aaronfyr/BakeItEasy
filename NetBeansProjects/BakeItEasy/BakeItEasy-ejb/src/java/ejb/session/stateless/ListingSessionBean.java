@@ -208,6 +208,13 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
 
     @Override
     public List<Listing> retrieveAllListings() {
+        Query query = em.createQuery("SELECT l FROM Listing l WHERE l.seller.isBanned = false ORDER BY l.dateOfCreation DESC");
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Listing> retrieveAllListingsAdmin() {
         Query query = em.createQuery("SELECT l FROM Listing l ORDER BY l.dateOfCreation DESC");
 
         return query.getResultList();
@@ -309,7 +316,9 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
 
         List<Listing> allFollowedSellerListings = new ArrayList<>();
         for (Seller followedSeller : buyer.getFollowings()) {
-            allFollowedSellerListings.addAll(followedSeller.getListings());
+            if (!followedSeller.getIsBanned()) {
+                allFollowedSellerListings.addAll(followedSeller.getListings());
+            }
         }
         return allFollowedSellerListings;
     }
@@ -323,11 +332,11 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         return listing.getLikers().contains(buyer);
     }
     // Add isListingLiked with buyer id and listing id
-    
+
     @Override
     public Integer getNumberOfPendingOrdersByListingId(Long listingId) throws ListingNotFoundException {
         Listing currentListing = retrieveListingByListingId(listingId);
-        
+
         int quantity = 0;
         for (Order order : currentListing.getOrders()) {
             if (order.getOrderStatus() == OrderStatus.PENDING) {
@@ -336,11 +345,11 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         }
         return quantity;
     }
-    
+
     @Override
     public Integer getNumberOfAcceptedOrdersByListingId(Long listingId) throws ListingNotFoundException {
         Listing currentListing = retrieveListingByListingId(listingId);
-        
+
         int quantity = 0;
         for (Order order : currentListing.getOrders()) {
             if (order.getOrderStatus() == OrderStatus.ACCEPTED) {
@@ -349,11 +358,11 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         }
         return quantity;
     }
-    
+
     @Override
     public Integer getNumberOfRejectedOrdersByListingId(Long listingId) throws ListingNotFoundException {
         Listing currentListing = retrieveListingByListingId(listingId);
-        
+
         int quantity = 0;
         for (Order order : currentListing.getOrders()) {
             if (order.getOrderStatus() == OrderStatus.REJECTED) {
@@ -362,11 +371,11 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         }
         return quantity;
     }
-    
+
     @Override
     public Integer getNumberOfCompletedOrdersByListingId(Long listingId) throws ListingNotFoundException {
         Listing currentListing = retrieveListingByListingId(listingId);
-        
+
         int quantity = 0;
         for (Order order : currentListing.getOrders()) {
             if (order.getOrderStatus() == OrderStatus.COMPLETED) {
@@ -375,11 +384,11 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         }
         return quantity;
     }
-    
+
     @Override
     public Integer getNumberOfCancelledOrdersByListingId(Long listingId) throws ListingNotFoundException {
         Listing currentListing = retrieveListingByListingId(listingId);
-        
+
         int quantity = 0;
         for (Order order : currentListing.getOrders()) {
             if (order.getOrderStatus() == OrderStatus.CANCELLED) {
@@ -388,16 +397,17 @@ public class ListingSessionBean implements ListingSessionBeanLocal {
         }
         return quantity;
     }
-    
+
     @Override
     public String getSellerPhoneNoByListingId(Long listingId) throws ListingNotFoundException {
         Listing currentListing = retrieveListingByListingId(listingId);
-        
+
         Seller seller = currentListing.getSeller();
-        
+
         return seller.getPhoneNo();
 
     }
+
     // Get phone number through listing and order
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Listing>> constraintViolations) {
         String msg = "Input data validation error!:";

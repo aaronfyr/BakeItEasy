@@ -84,5 +84,7 @@ public interface ListingSessionBeanLocal {
     public Integer getNumberOfCancelledOrdersByListingId(Long listingId) throws ListingNotFoundException;
 
     public String getSellerPhoneNoByListingId(Long listingId) throws ListingNotFoundException;
+
+    public List<Listing> retrieveAllListingsAdmin();
     
 }

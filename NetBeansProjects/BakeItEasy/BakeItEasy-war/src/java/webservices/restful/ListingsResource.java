@@ -24,8 +24,6 @@ import error.exception.SellerNotFoundException;
 import error.exception.UnknownPersistenceException;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
@@ -33,9 +31,6 @@ import javax.ws.rs.Path;
 import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
@@ -67,6 +62,14 @@ public class ListingsResource {
     public List<Listing> getAllListings() {
         return listingSessionBeanLocal.retrieveAllListings();
     } // end get all listings
+    
+    // CHECKED: AARON
+    @GET
+    @Path("/admin")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Listing> getAllListingsAdmin() {
+        return listingSessionBeanLocal.retrieveAllListingsAdmin();
+    } // end get all listings for admin
 
     // CHECKED: AARON
     @GET

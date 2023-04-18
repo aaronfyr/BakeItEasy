@@ -58,5 +58,7 @@ public interface SellerSessionBeanLocal {
     public List<Buyer> retrieveListOfFollowers(Long sellerId) throws SellerNotFoundException;
 
     public void updateSellerPassword(Long sellerId, String currentPassword, String newPassword, String confirmPassword) throws SellerNotFoundException, NewAndConfirmPasswordsDoNotMatchException, CurrentPasswordDoesNotMatchException, InputDataValidationException;
+
+    public List<Seller> retrieveAllSellersAdmin();
     
 }
