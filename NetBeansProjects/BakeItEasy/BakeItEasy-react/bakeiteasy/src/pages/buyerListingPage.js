@@ -323,6 +323,7 @@ function BuyerListingPage() {
               <Select
                 placeholder="Select Variant"
                 onChange={(event) => addOrderFieldValue(event.target.value)}
+                required
               >
                 <option>Red</option>
                 <option>Orange</option>
@@ -336,6 +337,7 @@ function BuyerListingPage() {
               <Select
                 placeholder="Select Decoration Colour"
                 onChange={(event) => addOrderFieldValue(event.target.value)}
+                required
               >
                 <option>Red</option>
                 <option>Orange</option>
