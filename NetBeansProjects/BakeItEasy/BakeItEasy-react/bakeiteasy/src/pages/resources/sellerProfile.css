@@ -48,8 +48,6 @@
 .ordersDisplay {
     display: flex;
     flex-wrap: wrap;
-    overflow-y: scroll;
-    height: 50vh;
     justify-content: center;
     /*delete this if not necessary*/
 }
