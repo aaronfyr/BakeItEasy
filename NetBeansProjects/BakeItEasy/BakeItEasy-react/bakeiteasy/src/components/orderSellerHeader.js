@@ -7,6 +7,7 @@ export function OrderSellerHeaderNonMemo({ oId }) {
   const [orderSellers, setOrderSellers] = useState({});
   const [orderSellerImages, setOrderSellerImages] = useState({});
   const [orderSellerIds, setOrderSellerIds] = useState({});
+  const [orderSellerBanned, setOrderSellerBanned] = useState({});
 
   const getSellerByOId = async (oId) => {
     try {
@@ -24,6 +25,7 @@ export function OrderSellerHeaderNonMemo({ oId }) {
       setOrderSellers({ ...orderSellers, [oId]: data.username });
       setOrderSellerImages({ ...orderSellerImages, [oId]: data.imagePath });
       setOrderSellerIds({ ...orderSellerIds, [oId]: data.sellerId });
+      setOrderSellerBanned({ ...orderSellerBanned, [oId]: data.isBanned });
       return data.username;
     } catch (error) {
       if (error instanceof SyntaxError) {
@@ -46,8 +48,13 @@ export function OrderSellerHeaderNonMemo({ oId }) {
     return (
       <div
         className="listingSellerHeader"
-        onClick={() => routeChangeToSellerProfile(orderSellerIds[oId])}
+        style={orderSellerBanned[oId] ? { cursor: "not-allowed" } : {}}
+        onClick={() => {
+            if (!orderSellerBanned[oId]) {
+            routeChangeToSellerProfile(orderSellerIds[oId])}
+            }}
       >
+
         <HStack>
           <div className="homepageProfilePhoto">
             {orderSellerImages[oId] && (

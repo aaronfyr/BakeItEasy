@@ -8,6 +8,7 @@ export function ListingSellerHeaderNonMemo({ lId }) {
   const [listingSellers, setListingSellers] = useState({});
   const [listingSellerImages, setListingSellerImages] = useState({});
   const [listingSellerIds, setListingSellerIds] = useState({});
+  const [listingSellerBanned, setListingSellerBanned] = useState({});
 
   const getSellerByLId = async (lId) => {
     try {
@@ -25,6 +26,7 @@ export function ListingSellerHeaderNonMemo({ lId }) {
       setListingSellers({ ...listingSellers, [lId]: data.username });
       setListingSellerImages({ ...listingSellerImages, [lId]: data.imagePath });
       setListingSellerIds({ ...listingSellerIds, [lId]: data.sellerId });
+      setListingSellerBanned({ ...listingSellerBanned, [lId]: data.isBanned });
       return data.username;
     } catch (error) {
       if (error instanceof SyntaxError) {
@@ -44,8 +46,10 @@ export function ListingSellerHeaderNonMemo({ lId }) {
 
   // return render statements
   if (listingSellers[lId]) {
+    console.log("banned", listingSellerBanned[lId])
     return (
-      <div
+        <div>
+      {!listingSellerBanned[lId] && <div
         className="listingSellerHeader"
         onClick={() => routeChangeToSellerProfile(listingSellerIds[lId])}
       >
@@ -68,7 +72,9 @@ export function ListingSellerHeaderNonMemo({ lId }) {
             )}
           </div>
           <p>{listingSellers[lId]}</p>
+          <p>{listingSellers[lId]}</p>
         </HStack>
+      </div>}
       </div>
     );
   } else {

@@ -28,6 +28,7 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
   const [commenterId, setCommenterId] = useState();
   const [commenterUsername, setCommenterUsername] = useState();
   const [commenterProfilePhoto, setCommenterProfilePhoto] = useState();
+  const [commenterIsBanned, setCommenterIsBanned] = useState(false);
   useEffect(() => {
     fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/comments/${commentId}/${
@@ -51,6 +52,10 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
         }
         setCommenterUsername(data.username);
         setCommenterProfilePhoto(data.imagePath);
+        if (!isBuyer && data.isBanned) {
+            console.log("seller is banned");
+            setCommenterIsBanned(true);
+        }
       });
   }, [commentId, isBuyer]);
 
@@ -259,7 +264,7 @@ const Comment = ({ commentId, currentTitle, dateCreated, isBuyer }) => {
                         alt="baked listing"
                       />
                     </div>
-                    <div className="postSellerHeader">{commenterUsername}</div>
+                    <div className="postSellerHeader" style={commenterIsBanned ? { cursor: "not-allowed" } : {}}>{commenterUsername}</div>
                   </HStack>
                   <Spacer />
                   {isCurrentUserABuyer && !isFollowing && (

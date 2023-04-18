@@ -20,6 +20,7 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer, categoryImage
   const [userId, setUserId] = useState();
   const [userUsername, setUserUsername] = useState();
   const [userProfilePhoto, setUserProfilePhoto] = useState();
+    const [userIsBanned, setUserIsBanned] = useState(false);
   useEffect(() => {
     fetch(
       `http://localhost:8080/BakeItEasy-war/webresources/posts/${postId}/${
@@ -43,6 +44,10 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer, categoryImage
         }
         setUserUsername(data.username);
         setUserProfilePhoto(data.imagePath);
+        if (!isBuyer && data.isBanned) {
+            console.log("seller is banned");
+            setUserIsBanned(true);
+        }
       });
   }, [isBuyer, postId]);
 
@@ -240,7 +245,11 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer, categoryImage
                   </div>
                   <div
                     className="postSellerHeader"
-                    onClick={() => routeChangeToSellerProfile(userId)}
+                    style={userIsBanned ? { cursor: "not-allowed" } : {}}
+                    onClick={() => {
+                        if (!userIsBanned) {
+                            routeChangeToSellerProfile(userId)
+                        }}}
                   >
                     {userUsername}
                   </div>
