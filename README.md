@@ -89,7 +89,7 @@ Frontend: React.js, Chakra UI
 
 Backend: Java EE, MySQL, Cloudinary
 
-Prototype & Style Guide: Figma *[View here](https://tinyurl.com/BakeItEasyStyleGuide)
+Prototype & Style Guide: Figma *[View here](https://tinyurl.com/BakeItEasyStyleGuide)*
 
 # Setup Instructions
 
