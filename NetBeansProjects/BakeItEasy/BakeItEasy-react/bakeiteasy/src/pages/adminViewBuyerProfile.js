@@ -1,4 +1,5 @@
 import { React, useEffect, useState } from "react";
+import { AdminOrderSellerHeader } from "../components/adminOrderSellerHeader";
 import { OrderListingHeader } from "../components/orderListingHeader";
 import { OrderListingImage } from "../components/orderListingImage";
 import { OrderSellerHeader } from "../components/orderSellerHeader";
@@ -114,7 +115,7 @@ function AdminViewBuyerProfile() {
             </div>
             <div id="buyerOrderDetailsGrid">
               <div className="orderDetails_left">
-                <OrderSellerHeader oId={order.orderId} />
+                <AdminOrderSellerHeader oId={order.orderId} />
                 <OrderListingHeader oId={order.orderId} />
                 <h4 className="italic">Order ID #{order.orderId}</h4>
 
