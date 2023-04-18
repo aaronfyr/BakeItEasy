@@ -369,7 +369,7 @@ function BuyerProfile() {
                 {/* <h4 className="italic">Price:</h4> */}
                 <h4 className="details">
                   Quantity: {order.quantity} <br />
-                  Unit Price: ${order.price} <br />
+                  Unit Price: ${formatPrice(order.price)} <br />
                   Total: ${formatPrice(order.price * order.quantity)}
                 </h4>
               </div>
