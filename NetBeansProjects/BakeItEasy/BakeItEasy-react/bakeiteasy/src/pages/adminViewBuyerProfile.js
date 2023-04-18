@@ -2,10 +2,9 @@ import { React, useEffect, useState } from "react";
 import { AdminOrderSellerHeader } from "../components/adminOrderSellerHeader";
 import { OrderListingHeader } from "../components/orderListingHeader";
 import { OrderListingImage } from "../components/orderListingImage";
-import { OrderSellerHeader } from "../components/orderSellerHeader";
 import "./resources/profile.css";
 
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { Flex } from "@chakra-ui/react";
 import "reactjs-popup/dist/index.css";
@@ -48,36 +47,19 @@ function AdminViewBuyerProfile() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        let buyerId = null;
-        const fetchedBuyer = localStorage.getItem("buyer");
-        if (!fetchedBuyer) {
-          console.log("profile", "no buyer");
-          navigate("/login");
-        } else {
-          const parsedUser = JSON.parse(fetchedBuyer);
-          buyerId = parsedUser.buyerId;
+      const response = await fetch(
+        `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/orders/`,
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-
-        const response = await fetch(
-          `http://localhost:8080/BakeItEasy-war/webresources/buyers/${buyerId}/orders/`,
-          {
-            method: "GET",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await response.json();
-        setOrders(data);
-        console.log(`HTTP Response Code: ${response?.status}`);
-      } catch (error) {
-        if (error instanceof SyntaxError) {
-          // Unexpected token < in JSON
-          console.log("There was a SyntaxError", error);
-        }
-      }
+      );
+      const data = await response.json();
+      setOrders(data);
+      console.log(`HTTP Response Code: ${response?.status}`);
     };
     fetchData();
   }, [navigate]);
