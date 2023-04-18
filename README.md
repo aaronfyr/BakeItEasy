@@ -103,6 +103,6 @@ Lastly, start GlassFish Server 5.1.0.
 Go back into the Projects folder, right-click BakeItEasy’. Select ```Clean and Build```, then click ```Run```.
 
 ## Frontend
-After cloning the project, open BakeItEasy-react in VSCode and run npm install to download the dependencies from ```package.json```.
+After cloning the project, open BakeItEasy-react in VSCode and run ```npm install``` to download the dependencies from ```package.json```.
 
 To run the project on the frontend, run ```npm start```.
