@@ -108,7 +108,7 @@ const Post = ({ postId, title, dateCreated, postCategory, isBuyer, categoryImage
           const data = await response.json();
           //console.log("sellerProfile, followings: ", followings);
           const checkIsFollowing = data.some(
-            (val) => val.sellerId.toString() === userId
+            (val) => val.sellerId === userId
           );
 
           setIsFollowing(checkIsFollowing);
