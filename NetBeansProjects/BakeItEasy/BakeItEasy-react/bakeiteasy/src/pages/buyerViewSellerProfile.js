@@ -36,6 +36,7 @@ function BuyerViewSellerProfile() {
 
   const [sellerName, setSellerName] = useState("Log In");
   const [sellerUsername, setSellerUsername] = useState("");
+  const [sellerImagePath, setSellerImagePath] = useState(null);
 
   // fetch current buyer followings
   const [followings, setFollowings] = useState();
@@ -96,6 +97,7 @@ function BuyerViewSellerProfile() {
       .then((data) => {
         setSellerName(data.name);
         setSellerUsername(data.username);
+        setSellerImagePath(data.imagePath);
       });
   }, [id]);
 
@@ -229,8 +231,8 @@ function BuyerViewSellerProfile() {
           <img
             className="homepageProfilePhotoImg"
             src={
-              buyerProfilePhoto
-                ? buyerProfilePhoto
+              sellerImagePath
+                ? sellerImagePath
                 : "https://www.homemadeinterest.com/wp-content/uploads/2021/10/Easy-Chocolate-Croissant_IG-3.jpg"
             }
             alt="baked listing"
