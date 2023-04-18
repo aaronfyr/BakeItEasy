@@ -47,8 +47,7 @@ export function OrderSellerHeaderNonMemo({ oId }) {
   if (orderSellers[oId]) {
     return (
       <div
-        className="listingSellerHeader"
-        style={orderSellerBanned[oId] ? { cursor: "not-allowed" } : {}}
+        className={orderSellerBanned[oId] ? "" : "listingSellerHeader"}
         onClick={() => {
             if (!orderSellerBanned[oId]) {
             routeChangeToSellerProfile(orderSellerIds[oId])}
