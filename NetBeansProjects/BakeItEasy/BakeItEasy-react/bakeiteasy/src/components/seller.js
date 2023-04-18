@@ -7,6 +7,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 const Seller = ({
   sellerId,
@@ -73,9 +74,20 @@ const Seller = ({
               Unban seller
             </Button>
           ) : (
-            <Button bg="#E2725B" colorScheme="white" onClick={handleBan}>
-              Ban seller
-            </Button>
+            <>
+              <Link to={"/adminViewSellerProfile?id=" + sellerId}>
+                <Button
+                  bg="#E2725B"
+                  colorScheme="white"
+                  style={{ width: "100%" }}
+                >
+                  View seller
+                </Button>
+              </Link>
+              <Button bg="#E2725B" colorScheme="white" onClick={handleBan}>
+                Ban seller
+              </Button>
+            </>
           )}
         </Stack>
       </CardBody>
