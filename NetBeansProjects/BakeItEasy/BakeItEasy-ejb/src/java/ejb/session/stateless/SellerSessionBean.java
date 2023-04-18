@@ -15,6 +15,7 @@ import error.exception.CurrentPasswordDoesNotMatchException;
 import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
 import error.exception.NewAndConfirmPasswordsDoNotMatchException;
+import error.exception.NewPasswordIsSameAsCurrentPasswordException;
 import error.exception.OrderIsNotAcceptedException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
@@ -159,11 +160,15 @@ public class SellerSessionBean implements SellerSessionBeanLocal {
     }
     
     @Override
-    public void updateSellerPassword(Long sellerId, String currentPassword, String newPassword, String confirmPassword) throws SellerNotFoundException, NewAndConfirmPasswordsDoNotMatchException, CurrentPasswordDoesNotMatchException, InputDataValidationException {
+    public void updateSellerPassword(Long sellerId, String currentPassword, String newPassword, String confirmPassword) throws SellerNotFoundException, NewPasswordIsSameAsCurrentPasswordException, NewAndConfirmPasswordsDoNotMatchException, CurrentPasswordDoesNotMatchException, InputDataValidationException {
         Seller sellerToUpdate = retrieveSellerBySellerId(sellerId);
         if (currentPassword.equals(sellerToUpdate.getPassword())) {
             if (newPassword.equals(confirmPassword)) {
-                sellerToUpdate.setPassword(newPassword);
+                if (!currentPassword.equals(newPassword)) {
+                    sellerToUpdate.setPassword(newPassword);
+                } else {
+                    throw new NewPasswordIsSameAsCurrentPasswordException("New password is same as current password! Please choose another password!");
+                }
             } else {
                 throw new NewAndConfirmPasswordsDoNotMatchException("New password and confirm password does not match!");
             }

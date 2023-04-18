@@ -29,6 +29,7 @@ import error.exception.InputDataValidationException;
 import error.exception.InvalidLoginCredentialException;
 import error.exception.ListingNotFoundException;
 import error.exception.NewAndConfirmPasswordsDoNotMatchException;
+import error.exception.NewPasswordIsSameAsCurrentPasswordException;
 import error.exception.OrderIsNotAcceptedException;
 import error.exception.OrderIsNotPendingException;
 import error.exception.OrderNotFoundException;
@@ -625,6 +626,12 @@ public class SellersResource {
         } catch (CurrentPasswordDoesNotMatchException ex) {
             JsonObject exception = Json.createObjectBuilder()
                     .add("error", "Current password entered does not match user's password!")
+                    .build();
+
+            return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
+        } catch (NewPasswordIsSameAsCurrentPasswordException ex) {
+            JsonObject exception = Json.createObjectBuilder()
+                    .add("error", "New password is same as current password! Please choose another password!")
                     .build();
 
             return Response.status(404).entity(exception).type(MediaType.APPLICATION_JSON).build();
